@@ -1,0 +1,33 @@
+/* Простой CSS для оформления */
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+#deal-steps div {
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+span {
+    font-weight: bold;
+}
+
+p {
+    color: green;
+    font-weight: bold;
+}
+
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

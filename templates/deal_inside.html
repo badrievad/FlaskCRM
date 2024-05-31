@@ -1,0 +1,22 @@
+<div id="deal-steps">
+    {% if session.get('username') %}
+        <h2>User: {{ session['username'] }} ({{ session['position'] }})</h2>
+        <div>
+            <button id="step1" onclick="approveStep('step1')">Approve Step 1</button>
+            <button onclick="revokeStep('step1')">Revoke Step 1</button>
+            <span id="status-step1">{{ 'Approved by ' + deal.step1_user + ' at ' + deal.step1_time if deal.step1_approved else 'Not Approved' }}</span>
+        </div>
+        <div>
+            <button id="step2" onclick="approveStep('step2')">Approve Step 2</button>
+            <button onclick="revokeStep('step2')">Revoke Step 2</button>
+            <span id="status-step2">{{ 'Approved by ' + deal.step2_user + ' at ' + deal.step2_time if deal.step2_approved else 'Not Approved' }}</span>
+        </div>
+        <div>
+            <button id="step3" disabled>Step 3</button>
+            <span id="status-step3">{{ 'Approved by ' + deal.step3_user + ' at ' + deal.step3_time if deal.step3_approved else 'Not Approved' }}</span>
+        </div>
+        {% if deal.step3_approved %}
+            <p id="deal-message">The deal can be completed!</p>
+        {% endif %}
+    {% endif %}
+</div>

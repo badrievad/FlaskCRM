@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/crm.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>CRM System</h2>
+    <ul>
+        <li onclick="showForm('deal')"><i class="fas fa-handshake"></i> Сделки</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <div id="deal" class="card">
+        <h2>Активные сделки</h2>
+        <form id="create-deal-form">
+            <label for="deal-title">Название сделки</label>
+            <input type="text" id="deal-title" placeholder="Введите название сделки" required>
+            <button type="submit">Добавить сделку</button>
+        </form>
+        <ul id="deals-list">
+            {% for deal in deals %}
+                <li id="deal-{{ deal.id }}" onclick="showDeal({{ deal.id }}, '{{ deal.title }}')" class="list-group-item">
+                    {{ deal.title }}
+                    <button onclick="event.stopPropagation(); deleteDeal({{ deal.id }})" class="btn btn-danger btn-sm float-right">Удалить</button>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="deal-modal" tabindex="-1" aria-labelledby="deal-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deal-modal-title">Детали сделки</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="modal-deal-title"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showForm(formId) {
+        document.querySelectorAll('.main-content .card').forEach(card => {
+            card.classList.add('hidden');
+        });
+        document.getElementById(formId).classList.remove('hidden');
+    }
+
+    function showDeal(dealId, dealTitle) {
+        console.log("showDeal called with:", dealId, dealTitle);
+        document.getElementById('modal-deal-title').innerText = dealTitle;
+        $('#deal-modal').modal('show');
+    }
+
+    function closeModal() {
+        $('#deal-modal').modal('hide');
+    }
+
+    showForm('deal'); // Show deals by default
+
+    var socket = io();
+
+    socket.on('new_deal', function(data) {
+        var dealItem = `<li id="deal-${data.id}" onclick="showDeal(${data.id}, '${data.title}')" class="list-group-item">
+            ${data.title}
+            <button onclick="event.stopPropagation(); deleteDeal(${data.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
+        </li>`;
+        document.getElementById('deals-list').insertAdjacentHTML('beforeend', dealItem);
+    });
+
+    socket.on('delete_deal', function(data) {
+        var dealItem = document.getElementById(`deal-${data.id}`);
+        if (dealItem) {
+            dealItem.remove();
+        }
+    });
+
+    document.getElementById('create-deal-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var title = document.getElementById('deal-title').value;
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/crm/create_deal', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 201) {
+                document.getElementById('deal-title').value = '';
+            }
+        };
+        xhr.send('title=' + encodeURIComponent(title));
+    });
+
+    function deleteDeal(dealId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', `/crm/delete_deal/${dealId}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function() {
+            if (xhr.status === 200) {
+                var dealItem = document.getElementById(`deal-${dealId}`);
+                if (dealItem) {
+                    dealItem.remove();
+                }
+            }
+        };
+        xhr.send();
+    }
+</script>
+</body>
+</html>

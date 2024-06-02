@@ -6,6 +6,7 @@ from flask import (
     jsonify,
 )
 from flask_socketio import SocketIO
+from flask_migrate import Migrate
 from db import db
 from models import Deal
 
@@ -14,6 +15,7 @@ app.config.from_pyfile("config.py")
 
 db.init_app(app)
 socketio = SocketIO(app)
+migrate = Migrate(app, db)
 
 crm_static_bp = Blueprint(
     "crm", __name__, static_folder="static", static_url_path="/crm/static"

@@ -2,6 +2,8 @@ from db import db
 
 
 class DealSteps(db.Model):
+    __tablename__ = "deal_steps"
+
     id = db.Column(db.Integer, primary_key=True)
     step1_approved = db.Column(db.Boolean, default=False)
     step1_time = db.Column(db.String(50))
@@ -15,5 +17,10 @@ class DealSteps(db.Model):
 
 
 class Deal(db.Model):
+    __tablename__ = "deals"
+
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(200))
+    title = db.Column(db.String(200), nullable=False)
+    company_inn = db.Column(db.String(20), nullable=False)
+    created_by = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)

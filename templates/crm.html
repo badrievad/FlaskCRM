@@ -16,6 +16,10 @@
 <body>
 
 <div class="sidebar">
+    <div class="user-photo">
+        <img src="{{ user_url }}" alt="User Photo" class="profile-image">
+    </div>
+    <h6>{{ current_user }}</h6>
     <h2>CRM System</h2>
     <ul>
         <li onclick="showForm('deal')"><i class="fas fa-handshake"></i> Сделки</li>
@@ -26,8 +30,7 @@
     <div id="deal" class="card">
         <h2>Активные сделки</h2>
         <form id="create-deal-form">
-            <label for="deal-title">Название сделки</label>
-            <input type="text" id="deal-title" placeholder="Введите название сделки" required>
+            <input type="text" id="deal-title" placeholder="Введите наименование лизингополучателя" required>
             <button type="submit">Добавить сделку</button>
         </form>
         <ul id="deals-list">

@@ -66,7 +66,7 @@
 
 <script>
     function showForm(formId) {
-        document.querySelectorAll('.main-content .card').forEach(card => {
+        document.querySelectorAll('.deal-content .card').forEach(card => {
             card.classList.add('hidden');
         });
         document.getElementById(formId).classList.remove('hidden');
@@ -105,7 +105,7 @@
         event.preventDefault();
         var title = document.getElementById('deal-title').value;
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', '/crm/create_deal', true);
+        xhr.open('POST', '/crm/deal/create_deal', true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if (xhr.status === 201) {
@@ -117,7 +117,7 @@
 
     function deleteDeal(dealId) {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', `/crm/delete_deal/${dealId}`, true);
+        xhr.open('POST', `/crm/deal/delete_deal/${dealId}`, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function() {
             if (xhr.status === 200) {

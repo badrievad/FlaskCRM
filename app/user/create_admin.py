@@ -1,7 +1,8 @@
-from app import app
-from db import db
-from user.models import User
+from .. import create_app, db
 
+from app.user.models import User
+
+app = create_app()
 
 with app.app_context():
     user = User(

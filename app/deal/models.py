@@ -1,4 +1,4 @@
-from db import db
+from .. import db
 
 
 class DealSteps(db.Model):

@@ -1,5 +1,5 @@
 import logging
-from config import PATH_FOR_LOG
+from app.config import PATH_FOR_LOG
 
 logger = logging.getLogger(__name__)
 

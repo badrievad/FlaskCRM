@@ -1,20 +1,21 @@
-from flask import Blueprint, flash, render_template, redirect, url_for
+from flask import flash, render_template, redirect, url_for
 from flask_login import login_user, logout_user, current_user
 
-from user.forms import LoginForm
-from user.models import User
+from app.user.forms import LoginForm
+from app.user.models import User
 from logger import logging
 
-blueprint = Blueprint("user", __name__, url_prefix="/crm/users")
+from . import user_bp
+from .. import login_manager
 
 
-@blueprint.route("/login")
+@user_bp.route("/crm/user/login")
 def login():
     login_form = LoginForm()
     return render_template("login_page.html", form=login_form)
 
 
-@blueprint.route("/process-login", methods=["POST"])
+@user_bp.route("/crm/user/process-login", methods=["POST"])
 def process_login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -23,12 +24,17 @@ def process_login():
             login_user(user, remember=form.remember_me.data)
             flash("Вы вошли на сайт", "success")
             logging.info(f"{current_user} зашел на сайт.")
-            return redirect(url_for("index_crm"))
+            return redirect(url_for("deal.index_crm"))
     flash("Неправильное имя пользователя или пароль", "info")
     return redirect(url_for("user.login"))
 
 
-@blueprint.route("/logout")
+@user_bp.route("/crm/user/logout")
 def exit_user():
     logout_user()
     return redirect(url_for("user.login"))
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)

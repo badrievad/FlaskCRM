@@ -3,10 +3,10 @@
 <head>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-KQX5FDFY5F"></script>
-{#    <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}" type="image/png">#}
+    <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
 
 
-    <script src="{{ url_for('static', filename='js/google_tag.js') }}"></script>
+    <script src="{{ url_for('crm.static', filename='js/google_tag.js') }}"></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Авторизация</title>
@@ -28,7 +28,7 @@
     </symbol>
 </svg>
 <div class="top-container">
-    <img src="{{ url_for('static', filename='images/logo7.png') }}" class="img-fluid" alt="...">
+    <img src="{{ url_for('crm.static', filename='images/logo7.png') }}" class="img-fluid" alt="...">
 </div>
 <div class="centered-container">
     <div class="row justify-content-center">

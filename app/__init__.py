@@ -7,6 +7,11 @@ from flask_sqlalchemy import SQLAlchemy
 socketio = SocketIO()
 db = SQLAlchemy()
 login_manager = LoginManager()
+login_manager.login_view = "user.login"
+
+crm_static_bp = Blueprint(
+    "crm", __name__, static_folder="static", static_url_path="/crm/static"
+)
 
 
 def create_app(debug=False):
@@ -16,11 +21,6 @@ def create_app(debug=False):
     app.config.from_pyfile("config.py")
 
     Migrate(app, db)
-    login_manager.login_view = "user.login"
-
-    crm_static_bp = Blueprint(
-        "crm", __name__, static_folder="static", static_url_path="/crm/static"
-    )
 
     from .deal import deal_bp as deal_blueprint
     from .user import user_bp as user_blueprint

@@ -8,6 +8,7 @@ from flask_login import current_user, login_required
 from logger import logging
 from app.deal.models import Deal
 from app.user.models import User
+from app.config import suggestions_token
 
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
@@ -58,4 +59,5 @@ def index_crm():
         user_url=current_user.url_photo,
         user_work_number=current_user.worknumber,
         user_mobile_number=current_user.mobilenumber,
+        suggestions_token=suggestions_token,
     )

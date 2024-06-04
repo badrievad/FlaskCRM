@@ -72,14 +72,7 @@ def create_deal():
     )
     db.session.add(new_deal)
     db.session.commit()
-    #  TODO: Добавит в класс JSON сериализацию.
-    deal_data = {
-        "id": new_deal.id,
-        "title": new_deal.title,
-        "company_inn": new_deal.company_inn,
-        "created_by": new_deal.created_by,
-        "created_at": new_deal.created_at.strftime("%d.%m.%Y %H:%M"),
-    }
+    deal_data = new_deal.to_json()
     logging.info(
         f"{current_user} создал новую сделку. Название сделки: {company_name}. "
         f"ID сделки: {new_deal.id}. Дата создания: {new_deal.created_at}."

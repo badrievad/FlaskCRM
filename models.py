@@ -24,3 +24,12 @@ class Deal(db.Model):
     company_inn = db.Column(db.String(20), nullable=False)
     created_by = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
+
+    def to_json(self) -> dict:
+        return {
+            "id": self.id,
+            "title": self.title,
+            "company_inn": self.company_inn,
+            "created_by": self.created_by,
+            "created_at": self.created_at.strftime("%d.%m.%Y %H:%M"),
+        }

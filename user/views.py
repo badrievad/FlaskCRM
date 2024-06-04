@@ -14,10 +14,6 @@ def login():
     return render_template("login_page.html", form=login_form)
 
 
-def agree():
-    return redirect()
-
-
 @blueprint.route("/process-login", methods=["POST"])
 def process_login():
     form = LoginForm()

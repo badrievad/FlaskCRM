@@ -24,6 +24,7 @@ class Deal(db.Model):
     company_inn = db.Column(db.String(20), nullable=False)
     created_by = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(20), nullable=False)
 
     def to_json(self) -> dict:
         return {

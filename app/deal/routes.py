@@ -44,7 +44,6 @@ def delete_deal(deal_id):
 @deal_bp.route("/crm", methods=["GET"])
 @login_required
 def index_crm():
-    #  TODO: Нужно сделать, чтобы не только Title (название компании) выводился на странице CRM, но и остальные данные.
     deals = Deal.query.all()
     users = User.query.all()
     return render_template(
@@ -65,6 +64,8 @@ def index_crm():
 @deal_bp.route("/crm/deals", methods=["GET"])
 def get_deals():
     deals = Deal.query.all()
+    active_deals_count = Deal.query.filter_by(status="active").count()
+    archived_deals_count = Deal.query.filter_by(status="archived").count()
     return jsonify(
         {
             "deals": [
@@ -76,6 +77,8 @@ def get_deals():
                     "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
                 }
                 for deal in deals
-            ]
+            ],
+            "deals_active": active_deals_count,
+            "deals_archived": archived_deals_count,
         }
     )

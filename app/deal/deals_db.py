@@ -9,6 +9,7 @@ def write_deal_to_db(title, company_inn, created_by, created_at) -> dict:
         company_inn=company_inn,
         created_by=created_by,
         created_at=created_at,
+        status="active",
     )
     db.session.add(new_deal)
     db.session.commit()

@@ -17,7 +17,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet"/>
     <script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
+    <style>
+        .list-group-item {
+            display: flex;
+            align-items: center;
+        }
 
+        .list-group-item .index {
+            width: 2em; /* Adjust this width as needed */
+            text-align: right;
+            margin-right: 1em;
+        }
+
+        .list-group-item .content {
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
 
@@ -46,12 +61,19 @@
         <script src="{{ url_for('crm.static', filename='js/inn_dada.js') }}"></script>
         <ul id="deals-list">
             {% for deal in deals %}
-                <li id="deal-{{ deal.id }}" onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
+                <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
                     class="list-group-item">
-                    {{ deal.title }}
-                    <button onclick="event.stopPropagation(); deleteDeal({{ deal.id }})"
-                            class="btn btn-danger btn-sm float-right">Удалить
-                    </button>
+                    <div class="index">{{ loop.index }}</div>
+                    <div class="content">
+                        Краткое описание сделки: <br><br>
+                        Лизингополучатель: {{ deal.title }}<br>
+                        ИНН: {{ deal.company_inn }}<br>
+                        Менеджер: {{ deal.created_by }}<br>
+                        Дата создания сделки: {{ deal.created_at.strftime("%d.%m.%Y %H:%M") }}
+                        <button onclick="event.stopPropagation(); deleteDeal({{ deal.id }})"
+                                class="btn btn-danger btn-sm float-right">Удалить
+                        </button>
+                    </div>
                 </li>
             {% endfor %}
         </ul>
@@ -79,39 +101,61 @@
 </div>
 
 <script>
-    function showForm(formId) {
-        document.querySelectorAll('.deal-content .card').forEach(card => {
-            card.classList.add('hidden');
-        });
-        document.getElementById(formId).classList.remove('hidden');
-    }
-
-    function showDeal(dealId, dealTitle) {
-        console.log("showDeal called with:", dealId, dealTitle);
-        document.getElementById('modal-deal-title').innerText = dealTitle;
-        $('#deal-modal').modal('show');
-    }
-
-    function closeModal() {
-        $('#deal-modal').modal('hide');
-    }
-
-    showForm('deal'); // Show deals by default
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/crm/deals')
+            .then(response => response.json())
+            .then(data => {
+                var dealsList = document.getElementById('deals-list');
+                dealsList.innerHTML = ''; // Очистить существующие элементы
+                data.deals.forEach((deal, index) => {
+                    var dealItem = `<li id="deal-${deal.id}" onclick="showDeal(${deal.id}, '${deal.title}')" class="list-group-item">
+                        <div class="index">${index + 1}</div>
+                        <div class="content">
+                            Краткое описание сделки: <br><br>
+                            Лизингополучатель: ${deal.title}<br>
+                            ИНН: ${deal.company_inn}<br>
+                            Менеджер: ${deal.created_by}<br>
+                            Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
+                            <button onclick="event.stopPropagation(); deleteDeal(${deal.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
+                        </div>
+                    </li>`;
+                    dealsList.insertAdjacentHTML('beforeend', dealItem);
+                });
+            });
+    });
 
     var socket = io();
 
+    socket.on('connect', function () {
+        console.log('Connected to SocketIO server');
+    });
+
     socket.on('new_deal', function (data) {
+        console.log(data);
+        var dealsList = document.getElementById('deals-list');
+        var currentIndex = dealsList.children.length + 1; // Calculate the new index
         var dealItem = `<li id="deal-${data.id}" onclick="showDeal(${data.id}, '${data.title}')" class="list-group-item">
-            ${data.title}
-            <button onclick="event.stopPropagation(); deleteDeal(${data.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
+            <div class="index">${currentIndex}</div>
+            <div class="content">
+                Краткое описание сделки: <br><br>
+                Лизингополучатель: ${data.title}<br>
+                ИНН: ${data.company_inn}<br>
+                Менеджер: ${data.created_by}<br>
+                Дата создания сделки: ${new Date(data.created_at).toLocaleString()}
+                <button onclick="event.stopPropagation(); deleteDeal(${data.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
+            </div>
         </li>`;
-        document.getElementById('deals-list').insertAdjacentHTML('beforeend', dealItem);
+        dealsList.insertAdjacentHTML('beforeend', dealItem);
     });
 
     socket.on('delete_deal', function (data) {
+        console.log('Deleting deal:', data);
         var dealItem = document.getElementById(`deal-${data.id}`);
         if (dealItem) {
             dealItem.remove();
+            updateIndexes(); // Recalculate indexes
+        } else {
+            console.log('Deal item not found:', data.id);
         }
     });
 
@@ -141,14 +185,23 @@
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
             if (xhr.status === 200) {
-                var dealItem = document.getElementById(`deal-${dealId}`);
-                if (dealItem) {
-                    dealItem.remove();
-                }
+                console.log(`Deal ${dealId} deleted successfully.`);
+                // Emit delete_deal event to notify other clients
+                socket.emit('delete_deal', {id: dealId});
             }
         };
         xhr.send();
     }
+
+    function updateIndexes() {
+        var dealsList = document.getElementById('deals-list');
+        var dealItems = dealsList.children;
+        for (var i = 0; i < dealItems.length; i++) {
+            var indexElement = dealItems[i].querySelector('.index');
+            indexElement.textContent = i + 1;
+        }
+    }
 </script>
+
 </body>
 </html>

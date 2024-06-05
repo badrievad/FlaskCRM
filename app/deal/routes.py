@@ -20,7 +20,7 @@ def create_deal():
     company_name: str = deal.get_company_name
     company_inn: str = deal.get_company_inn
     deal_data: dict = write_deal_to_db(
-        company_name, company_inn, current_user.id, datetime.datetime.now()
+        company_name, company_inn, current_user.fullname, datetime.datetime.now()
     )
     logging.info(
         f"{current_user} создал новую сделку. Название сделки: {company_name}. "
@@ -59,4 +59,23 @@ def index_crm():
         user_work_number=current_user.worknumber,
         user_mobile_number=current_user.mobilenumber,
         suggestions_token=suggestions_token,
+    )
+
+
+@deal_bp.route("/crm/deals", methods=["GET"])
+def get_deals():
+    deals = Deal.query.all()
+    return jsonify(
+        {
+            "deals": [
+                {
+                    "id": deal.id,
+                    "title": deal.title,
+                    "company_inn": deal.company_inn,
+                    "created_by": deal.created_by,
+                    "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                }
+                for deal in deals
+            ]
+        }
     )

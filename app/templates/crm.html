@@ -32,6 +32,32 @@
         .list-group-item .content {
             flex-grow: 1;
         }
+
+        .hidden {
+            display: none;
+        }
+
+        .submenu {
+            list-style-type: none;
+            padding-left: 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+
+        .submenu.show {
+            max-height: 150px; /* Увеличьте это значение в зависимости от количества элементов */
+            opacity: 1;
+        }
+
+        .submenu li {
+            margin-top: 5px;
+        }
+
+        .submenu li:hover {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -43,22 +69,18 @@
     <h6>{{ current_user }}</h6>
     <h2>CRM System</h2>
     <ul>
-        <li onclick="showForm('deal')"><i class="fas fa-handshake"></i> Сделки</li>
+        <li onclick="toggleSubmenu('deals-submenu')"><i class="fas fa-handshake"></i> Список сделок</li>
+        <ul id="deals-submenu" class="submenu">
+            <li onclick="showForm('active-deals')"> - Активные сделки</li>
+            <li onclick="showForm('archived-deals')">- Архивные сделки</li>
+        </ul>
+        <li onclick="showForm('task')"><i class="fas fa-tasks"></i> Создать сделку</li>
     </ul>
 </div>
 
 <div class="main-content">
-    <div id="deal" class="card">
+    <div id="active-deals" class="card hidden">
         <h2>Активные сделки</h2>
-        <form id="create-deal-form">
-            <input type="text" id="deal-title" placeholder="Введите наименование лизингополучателя" required>
-            <input type="hidden" id="deal-info" placeholder="" required>
-            <button type="submit">Добавить сделку</button>
-        </form>
-        <script>
-            var suggestionsToken = "{{ suggestions_token }}";
-        </script>
-        <script src="{{ url_for('crm.static', filename='js/inn_dada.js') }}"></script>
         <ul id="deals-list">
             {% for deal in deals %}
                 <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
@@ -77,6 +99,39 @@
                 </li>
             {% endfor %}
         </ul>
+    </div>
+    <div id="archived-deals" class="card hidden">
+        <h2>Архивные сделки</h2>
+        <ul id="deals-list">
+            {% for deal in deals %}
+                <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
+                    class="list-group-item">
+                    <div class="index">{{ loop.index }}</div>
+                    <div class="content">
+                        Краткое описание сделки: <br><br>
+                        Лизингополучатель: {{ deal.title }}<br>
+                        ИНН: {{ deal.company_inn }}<br>
+                        Менеджер: {{ deal.created_by }}<br>
+                        Дата создания сделки: {{ deal.created_at.strftime("%d.%m.%Y %H:%M") }}
+                        <button onclick="event.stopPropagation(); deleteDeal({{ deal.id }})"
+                                class="btn btn-danger btn-sm float-right">Удалить
+                        </button>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="task" class="card hidden">
+        <h2>Создать сделку</h2>
+        <form id="create-deal-form">
+            <input type="text" id="deal-title" placeholder="Введите наименование лизингополучателя" required>
+            <input type="hidden" id="deal-info" placeholder="" required>
+            <button type="submit">Добавить сделку</button>
+        </form>
+        <script>
+            var suggestionsToken = "{{ suggestions_token }}";
+        </script>
+        <script src="{{ url_for('crm.static', filename='js/inn_dada.js') }}"></script>
     </div>
 </div>
 
@@ -99,7 +154,37 @@
         </div>
     </div>
 </div>
+<script>
+    function toggleSubmenu(id) {
+        var submenu = document.getElementById(id);
+        if (submenu.classList.contains('show')) {
+            submenu.classList.remove('show');
+        } else {
+            submenu.classList.add('show');
+        }
+    }
 
+    function showForm(formId) {
+        document.querySelectorAll('.deal-content .card').forEach(card => {
+            card.classList.add('hidden');
+        });
+        document.getElementById(formId).classList.remove('hidden');
+    }
+</script>
+
+<script>
+    function showForm(formId) {
+        document.querySelectorAll('.main-content .card').forEach(card => {
+            card.classList.add('hidden');
+        });
+        document.getElementById(formId).classList.remove('hidden');
+        localStorage.setItem('currentView', formId);
+    }
+
+    // Показать форму на основе сохраненного состояния при загрузке страницы
+    const currentView = localStorage.getItem('currentView') || 'active-deals'; // Показать 'active-deals' по умолчанию
+    showForm(currentView);
+</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         fetch('/crm/deals')
@@ -170,6 +255,7 @@
             if (xhr.status === 201) {
                 document.getElementById('deal-title').value = '';
                 document.getElementById('deal-info').value = '';
+                showForm('active-deals');
             }
         };
         var data = JSON.stringify({

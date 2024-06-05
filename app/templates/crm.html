@@ -63,16 +63,16 @@
 <body>
 
 <div class="sidebar">
+    <h2>CRM System</h2>
     <div class="user-photo">
         <img src="{{ user_url }}" alt="User Photo" class="profile-image">
     </div>
     <h6>{{ current_user }}</h6>
-    <h2>CRM System</h2>
     <ul>
         <li onclick="toggleSubmenu('deals-submenu')"><i class="fas fa-handshake"></i> Список сделок</li>
         <ul id="deals-submenu" class="submenu">
-            <li onclick="showForm('active-deals')"> - Активные сделки</li>
-            <li onclick="showForm('archived-deals')">- Архивные сделки</li>
+            <li id="active-deals-link" onclick="showForm('active-deals')"> - Активные сделки (0)</li>
+            <li id="archived-deals-link" onclick="showForm('archived-deals')">- Архивные сделки (0)</li>
         </ul>
         <li onclick="showForm('task')"><i class="fas fa-tasks"></i> Создать сделку</li>
     </ul>
@@ -155,6 +155,19 @@
     </div>
 </div>
 <script>
+    function updateDealCounts(activeCount, archivedCount) {
+        var activeDealsLink = document.getElementById('active-deals-link');
+        var archivedDealsLink = document.getElementById('archived-deals-link');
+
+        if (activeDealsLink && archivedDealsLink) {
+            activeDealsLink.innerHTML = `Активные сделки (${activeCount})`;
+            archivedDealsLink.innerHTML = `Архивные сделки (${archivedCount})`;
+        } else {
+            console.error('Elements with IDs "active-deals-link" and "archived-deals-link" not found.');
+        }
+    }
+</script>
+<script>
     function toggleSubmenu(id) {
         var submenu = document.getElementById(id);
         if (submenu.classList.contains('show')) {
@@ -190,6 +203,7 @@
         fetch('/crm/deals')
             .then(response => response.json())
             .then(data => {
+                updateDealCounts(data.deals_active, data.deals_archived);
                 var dealsList = document.getElementById('deals-list');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {

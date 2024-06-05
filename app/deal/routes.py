@@ -3,6 +3,9 @@ import datetime
 from . import deal_bp
 from .. import socketio, db
 
+from .deals_db import write_deal_to_db
+from .deals_validate import DealsValidate
+
 from flask import request, jsonify, render_template
 from flask_login import current_user, login_required
 from logger import logging
@@ -13,19 +16,15 @@ from app.config import suggestions_token
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
 def create_deal():
-    company_name = request.form.get("title")
-    new_deal = Deal(
-        title=company_name,
-        company_inn="1234567890",
-        created_by=current_user.fullname,
-        created_at=datetime.datetime.now(),
+    deal: DealsValidate = DealsValidate(request.get_json())
+    company_name: str = deal.get_company_name
+    company_inn: str = deal.get_company_inn
+    deal_data: dict = write_deal_to_db(
+        company_name, company_inn, current_user.id, datetime.datetime.now()
     )
-    db.session.add(new_deal)
-    db.session.commit()
-    deal_data = new_deal.to_json()
     logging.info(
         f"{current_user} создал новую сделку. Название сделки: {company_name}. "
-        f"ID сделки: {new_deal.id}. Дата создания: {new_deal.created_at}."
+        f"ID сделки: {deal_data['id']}. Дата создания: {deal_data['created_at']}."
     )
     socketio.emit("new_deal", deal_data)  # Send to all connected clients
     return jsonify(deal_data), 201

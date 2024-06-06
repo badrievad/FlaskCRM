@@ -25,12 +25,18 @@ class Deal(db.Model):
     created_by = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(20), nullable=False)
+    archived_at = db.Column(db.DateTime, nullable=True)
 
     def to_json(self) -> dict:
+        if self.archived_at is None:
+            archived_at = ""
+        else:
+            archived_at = self.archived_at.strftime("%d.%m.%Y %H:%M:%S")
         return {
             "id": self.id,
             "title": self.title,
             "company_inn": self.company_inn,
             "created_by": self.created_by,
             "created_at": self.created_at.strftime("%d.%m.%Y %H:%M:%S"),
+            "archived_at": archived_at,
         }

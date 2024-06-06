@@ -46,6 +46,7 @@ def deal_to_archive(deal_id):
     deal: Deal = Deal.query.get(deal_id)
     if deal:
         deal.status = "archived"
+        deal.archived_at = datetime.datetime.now()
         db.session.commit()
         socketio.emit("deal_to_archive", deal.to_json())
         return jsonify({"result": "success"}), 200
@@ -109,6 +110,7 @@ def get_deals_archived():
                     "company_inn": deal.company_inn,
                     "created_by": deal.created_by,
                     "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                    "archived_at": deal.archived_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
                 }
                 for deal in archived_deals
             ],

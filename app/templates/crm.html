@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/crm.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -34,8 +35,8 @@
     <ul>
         <li onclick="toggleSubmenu('deals-submenu')"><i class="fas fa-handshake"></i> Список сделок</li>
         <ul id="deals-submenu" class="submenu">
-            <li id="active-deals-link" onclick="showForm('active-deals')"> - Активные сделки (0)</li>
-            <li id="archived-deals-link" onclick="showForm('archived-deals')">- Архивные сделки (0)</li>
+            <li id="active-deals-link" onclick="showForm('active-deals')">Активные сделки (0)</li>
+            <li id="archived-deals-link" onclick="showForm('archived-deals')">Архивные сделки (0)</li>
         </ul>
         <li onclick="showForm('task')"><i class="fas fa-tasks"></i> Создать сделку</li>
     </ul>
@@ -129,7 +130,7 @@
                     </div>
                     <div class="btn-container">
                         <button onclick="event.stopPropagation(); dealToArchive(${deal.id})">
-                            &#8681; <!-- Down arrow symbol for archive -->
+                            <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
                         </button>
                     </div>
                 </li>`;
@@ -153,11 +154,12 @@
                         Лизингополучатель: ${deal.title}<br>
                         ИНН: ${deal.company_inn}<br>
                         Менеджер: ${deal.created_by}<br>
-                        Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
+                        Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}<br>
+                        Дата добавления в архив: ${new Date(deal.archived_at).toLocaleString()}
                     </div>
                     <div class="btn-container">
                         <button onclick="event.stopPropagation(); deleteDeal(${deal.id})">
-                            &#10006; <!-- Cross symbol for delete -->
+                            <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
                         </button>
                     </div>
                 </li>`;
@@ -187,7 +189,7 @@
         </div>
         <div class="btn-container">
             <button onclick="event.stopPropagation(); dealToArchive(${data.id})">
-                &#8681; <!-- Down arrow symbol for archive -->
+                <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
             </button>
         </div>
     </li>`;
@@ -230,11 +232,12 @@
                 Лизингополучатель: ${data.title}<br>
                 ИНН: ${data.company_inn}<br>
                 Менеджер: ${data.created_by}<br>
-                Дата создания сделки: ${new Date(data.created_at).toLocaleString()}
+                Дата создания сделки: ${new Date(data.created_at).toLocaleString()}<br>
+                Дата добавления в архив: ${new Date(data.archived_at).toLocaleString()}
             </div>
             <div class="btn-container">
                 <button onclick="event.stopPropagation(); deleteDeal(${data.id})">
-                    &#10006; <!-- Cross symbol for delete -->
+                    <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
                 </button>
             </div>
         </li>`;

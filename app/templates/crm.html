@@ -126,7 +126,11 @@
                         ИНН: ${deal.company_inn}<br>
                         Менеджер: ${deal.created_by}<br>
                         Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
-                        <button onclick="event.stopPropagation(); dealToArchive(${deal.id})" class="btn btn-danger btn-sm float-right">В архив</button>
+                    </div>
+                    <div class="btn-container">
+                        <button onclick="event.stopPropagation(); dealToArchive(${deal.id})">
+                            &#8681; <!-- Down arrow symbol for archive -->
+                        </button>
                     </div>
                 </li>`;
                     dealsList.insertAdjacentHTML('beforeend', dealItem);
@@ -150,7 +154,11 @@
                         ИНН: ${deal.company_inn}<br>
                         Менеджер: ${deal.created_by}<br>
                         Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
-                        <button onclick="event.stopPropagation(); deleteDeal(${deal.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
+                    </div>
+                    <div class="btn-container">
+                        <button onclick="event.stopPropagation(); deleteDeal(${deal.id})">
+                            &#10006; <!-- Cross symbol for delete -->
+                        </button>
                     </div>
                 </li>`;
                     dealsList.insertAdjacentHTML('beforeend', dealItem);
@@ -176,7 +184,11 @@
             ИНН: ${data.company_inn}<br>
             Менеджер: ${data.created_by}<br>
             Дата создания сделки: ${new Date(data.created_at).toLocaleString()}
-            <button onclick="event.stopPropagation(); dealToArchive(${data.id})" class="btn btn-danger btn-sm float-right">В архив</button>
+        </div>
+        <div class="btn-container">
+            <button onclick="event.stopPropagation(); dealToArchive(${data.id})">
+                &#8681; <!-- Down arrow symbol for archive -->
+            </button>
         </div>
     </li>`;
         dealsList.insertAdjacentHTML('beforeend', dealItem);
@@ -219,7 +231,11 @@
                 ИНН: ${data.company_inn}<br>
                 Менеджер: ${data.created_by}<br>
                 Дата создания сделки: ${new Date(data.created_at).toLocaleString()}
-                <button onclick="event.stopPropagation(); deleteDeal(${data.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
+            </div>
+            <div class="btn-container">
+                <button onclick="event.stopPropagation(); deleteDeal(${data.id})">
+                    &#10006; <!-- Cross symbol for delete -->
+                </button>
             </div>
         </li>`;
             archivedDealsList.insertAdjacentHTML('beforeend', archivedDealItem);

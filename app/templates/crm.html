@@ -81,43 +81,47 @@
 <div class="main-content">
     <div id="active-deals" class="card hidden">
         <h2>Активные сделки</h2>
-        <ul id="deals-list">
+        <ul id="active-deals-list">
             {% for deal in deals %}
-                <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
-                    class="list-group-item">
-                    <div class="index">{{ loop.index }}</div>
-                    <div class="content">
-                        Краткое описание сделки: <br><br>
-                        Лизингополучатель: {{ deal.title }}<br>
-                        ИНН: {{ deal.company_inn }}<br>
-                        Менеджер: {{ deal.created_by }}<br>
-                        Дата создания сделки: {{ deal.created_at.strftime("%d.%m.%Y %H:%M") }}
-                        <button onclick="event.stopPropagation(); deleteDeal({{ deal.id }})"
-                                class="btn btn-danger btn-sm float-right">Удалить
-                        </button>
-                    </div>
-                </li>
+                {% if deal.status == "active" %}
+                    <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
+                        class="list-group-item">
+                        <div class="index">{{ loop.index }}</div>
+                        <div class="content">
+                            Краткое описание сделки: <br><br>
+                            Лизингополучатель: {{ deal.title }}<br>
+                            ИНН: {{ deal.company_inn }}<br>
+                            Менеджер: {{ deal.created_by }}<br>
+                            Дата создания сделки: {{ deal.created_at.strftime("%d.%m.%Y %H:%M") }}
+                            <button onclick="event.stopPropagation(); dealToArchive({{ deal.id }})"
+                                    class="btn btn-danger btn-sm float-right">В архив
+                            </button>
+                        </div>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
     <div id="archived-deals" class="card hidden">
         <h2>Архивные сделки</h2>
-        <ul id="deals-list">
+        <ul id="archived-deals-list">
             {% for deal in deals %}
-                <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
-                    class="list-group-item">
-                    <div class="index">{{ loop.index }}</div>
-                    <div class="content">
-                        Краткое описание сделки: <br><br>
-                        Лизингополучатель: {{ deal.title }}<br>
-                        ИНН: {{ deal.company_inn }}<br>
-                        Менеджер: {{ deal.created_by }}<br>
-                        Дата создания сделки: {{ deal.created_at.strftime("%d.%m.%Y %H:%M") }}
-                        <button onclick="event.stopPropagation(); deleteDeal({{ deal.id }})"
-                                class="btn btn-danger btn-sm float-right">Удалить
-                        </button>
-                    </div>
-                </li>
+                {% if deal.status == "archived" %}
+                    <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
+                        class="list-group-item">
+                        <div class="index">{{ loop.index }}</div>
+                        <div class="content">
+                            Краткое описание сделки: <br><br>
+                            Лизингополучатель: {{ deal.title }}<br>
+                            ИНН: {{ deal.company_inn }}<br>
+                            Менеджер: {{ deal.created_by }}<br>
+                            Дата создания сделки: {{ deal.created_at.strftime("%d.%m.%Y %H:%M") }}
+                            <button onclick="event.stopPropagation(); deleteDeal({{ deal.id }})"
+                                    class="btn btn-danger btn-sm float-right">Удалить
+                            </button>
+                        </div>
+                    </li>
+                {% endif %}
             {% endfor %}
         </ul>
     </div>
@@ -135,25 +139,6 @@
     </div>
 </div>
 
-<!-- Bootstrap Modal -->
-<div class="modal fade" id="deal-modal" tabindex="-1" aria-labelledby="deal-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deal-modal-title">Детали сделки</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p id="modal-deal-title"></p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-            </div>
-        </div>
-    </div>
-</div>
 <script>
     function updateDealCounts(activeCount, archivedCount) {
         var activeDealsLink = document.getElementById('active-deals-link');
@@ -184,7 +169,6 @@
         document.getElementById(formId).classList.remove('hidden');
     }
 </script>
-
 <script>
     function showForm(formId) {
         document.querySelectorAll('.main-content .card').forEach(card => {
@@ -200,24 +184,48 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        fetch('/crm/deals')
+        fetch('/crm/deals/active')
             .then(response => response.json())
             .then(data => {
                 updateDealCounts(data.deals_active, data.deals_archived);
-                var dealsList = document.getElementById('deals-list');
+                var dealsList = document.getElementById('active-deals-list');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
                     var dealItem = `<li id="deal-${deal.id}" onclick="showDeal(${deal.id}, '${deal.title}')" class="list-group-item">
-                        <div class="index">${index + 1}</div>
-                        <div class="content">
-                            Краткое описание сделки: <br><br>
-                            Лизингополучатель: ${deal.title}<br>
-                            ИНН: ${deal.company_inn}<br>
-                            Менеджер: ${deal.created_by}<br>
-                            Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
-                            <button onclick="event.stopPropagation(); deleteDeal(${deal.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
-                        </div>
-                    </li>`;
+                    <div class="index">${index + 1}</div>
+                    <div class="content">
+                        Краткое описание сделки: <br><br>
+                        Лизингополучатель: ${deal.title}<br>
+                        ИНН: ${deal.company_inn}<br>
+                        Менеджер: ${deal.created_by}<br>
+                        Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
+                        <button onclick="event.stopPropagation(); dealToArchive(${deal.id})" class="btn btn-danger btn-sm float-right">В архив</button>
+                    </div>
+                </li>`;
+                    dealsList.insertAdjacentHTML('beforeend', dealItem);
+                });
+            });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        fetch('/crm/deals/archived')
+            .then(response => response.json())
+            .then(data => {
+                updateDealCounts(data.deals_active, data.deals_archived);
+                var dealsList = document.getElementById('archived-deals-list');
+                dealsList.innerHTML = ''; // Очистить существующие элементы
+                data.deals.forEach((deal, index) => {
+                    var dealItem = `<li id="deal-${deal.id}" onclick="showDeal(${deal.id}, '${deal.title}')" class="list-group-item">
+                    <div class="index">${index + 1}</div>
+                    <div class="content">
+                        Краткое описание сделки: <br><br>
+                        Лизингополучатель: ${deal.title}<br>
+                        ИНН: ${deal.company_inn}<br>
+                        Менеджер: ${deal.created_by}<br>
+                        Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
+                        <button onclick="event.stopPropagation(); deleteDeal(${deal.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
+                    </div>
+                </li>`;
                     dealsList.insertAdjacentHTML('beforeend', dealItem);
                 });
             });
@@ -231,10 +239,53 @@
 
     socket.on('new_deal', function (data) {
         console.log(data);
-        var dealsList = document.getElementById('deals-list');
+        var dealsList = document.getElementById('active-deals-list');
         var currentIndex = dealsList.children.length + 1; // Calculate the new index
         var dealItem = `<li id="deal-${data.id}" onclick="showDeal(${data.id}, '${data.title}')" class="list-group-item">
-            <div class="index">${currentIndex}</div>
+        <div class="index">${currentIndex}</div>
+        <div class="content">
+            Краткое описание сделки: <br><br>
+            Лизингополучатель: ${data.title}<br>
+            ИНН: ${data.company_inn}<br>
+            Менеджер: ${data.created_by}<br>
+            Дата создания сделки: ${new Date(data.created_at).toLocaleString()}
+            <button onclick="event.stopPropagation(); dealToArchive(${data.id})" class="btn btn-danger btn-sm float-right">В архив</button>
+        </div>
+    </li>`;
+        dealsList.insertAdjacentHTML('beforeend', dealItem);
+
+        // Обновить количество активных сделок
+        var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
+        updateDealCounts(parseInt(activeDealsCount) + 1, parseInt(document.getElementById('archived-deals-link').textContent.match(/\d+/)[0]));
+    });
+
+    socket.on('delete_deal', function (data) {
+        console.log('Deleting deal:', data);
+        var dealItem = document.getElementById(`deal-${data.id}`);
+        if (dealItem) {
+            dealItem.remove();
+            updateIndexes('archived-deals-list'); // Recalculate indexes
+        } else {
+            console.log('Deal item not found:', data.id);
+        }
+
+        // Обновить количество архивных сделок
+        var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
+        var archivedDealsCount = document.getElementById('archived-deals-link').textContent.match(/\d+/)[0];
+        updateDealCounts(parseInt(activeDealsCount), parseInt(archivedDealsCount) - 1);
+    });
+
+    socket.on('deal_to_archive', function (data) {
+        console.log('Archiving deal:', data);
+        var dealItem = document.getElementById(`deal-${data.id}`);
+        if (dealItem) {
+            dealItem.remove();
+            updateIndexes('active-deals-list'); // Recalculate indexes
+
+            // Переместить сделку в архивный список
+            var archivedDealsList = document.getElementById('archived-deals-list');
+            var archivedDealItem = `<li id="deal-${data.id}" onclick="showDeal(${data.id}, '${data.title}')" class="list-group-item">
+            <div class="index">${archivedDealsList.children.length + 1}</div>
             <div class="content">
                 Краткое описание сделки: <br><br>
                 Лизингополучатель: ${data.title}<br>
@@ -244,18 +295,15 @@
                 <button onclick="event.stopPropagation(); deleteDeal(${data.id})" class="btn btn-danger btn-sm float-right">Удалить</button>
             </div>
         </li>`;
-        dealsList.insertAdjacentHTML('beforeend', dealItem);
-    });
-
-    socket.on('delete_deal', function (data) {
-        console.log('Deleting deal:', data);
-        var dealItem = document.getElementById(`deal-${data.id}`);
-        if (dealItem) {
-            dealItem.remove();
-            updateIndexes(); // Recalculate indexes
+            archivedDealsList.insertAdjacentHTML('beforeend', archivedDealItem);
         } else {
             console.log('Deal item not found:', data.id);
         }
+
+        // Обновить количество активных и архивных сделок
+        var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
+        var archivedDealsCount = document.getElementById('archived-deals-link').textContent.match(/\d+/)[0];
+        updateDealCounts(parseInt(activeDealsCount) - 1, parseInt(archivedDealsCount) + 1);
     });
 
     document.getElementById('create-deal-form').addEventListener('submit', function (event) {
@@ -269,6 +317,8 @@
             if (xhr.status === 201) {
                 document.getElementById('deal-title').value = '';
                 document.getElementById('deal-info').value = '';
+                var newDeal = JSON.parse(xhr.responseText);
+                socket.emit('new_deal', newDeal);
                 showForm('active-deals');
             }
         };
@@ -293,15 +343,29 @@
         xhr.send();
     }
 
-    function updateIndexes() {
-        var dealsList = document.getElementById('deals-list');
+    function dealToArchive(dealId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', `/crm/deal/deal_to_archive/${dealId}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log(`Deal ${dealId} archived successfully.`);
+                // Emit deal_to_archive event to notify other clients
+                socket.emit('deal_to_archive', {id: dealId});
+            }
+        };
+        xhr.send();
+    }
+
+    function updateIndexes(listId) {
+        var dealsList = document.getElementById(listId);
         var dealItems = dealsList.children;
         for (var i = 0; i < dealItems.length; i++) {
             var indexElement = dealItems[i].querySelector('.index');
             indexElement.textContent = i + 1;
         }
     }
-</script>
 
+</script>
 </body>
 </html>

@@ -41,6 +41,17 @@ def delete_deal(deal_id):
     return jsonify({"result": "error", "message": "Deal not found"}), 404
 
 
+@deal_bp.route("/crm/deal/deal_to_archive/<int:deal_id>", methods=["POST"])
+def deal_to_archive(deal_id):
+    deal: Deal = Deal.query.get(deal_id)
+    if deal:
+        deal.status = "archived"
+        db.session.commit()
+        socketio.emit("deal_to_archive", deal.to_json())
+        return jsonify({"result": "success"}), 200
+    return jsonify({"result": "error", "message": "Deal not found"}), 404
+
+
 @deal_bp.route("/crm", methods=["GET"])
 @login_required
 def index_crm():
@@ -61,10 +72,10 @@ def index_crm():
     )
 
 
-@deal_bp.route("/crm/deals", methods=["GET"])
-def get_deals():
-    deals = Deal.query.all()
-    active_deals_count = Deal.query.filter_by(status="active").count()
+@deal_bp.route("/crm/deals/active", methods=["GET"])
+def get_deals_active():
+    active_deals = Deal.query.filter_by(status="active").all()
+    active_deals_count = len(active_deals)
     archived_deals_count = Deal.query.filter_by(status="archived").count()
     return jsonify(
         {
@@ -76,7 +87,30 @@ def get_deals():
                     "created_by": deal.created_by,
                     "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
                 }
-                for deal in deals
+                for deal in active_deals
+            ],
+            "deals_active": active_deals_count,
+            "deals_archived": archived_deals_count,
+        }
+    )
+
+
+@deal_bp.route("/crm/deals/archived", methods=["GET"])
+def get_deals_archived():
+    archived_deals = Deal.query.filter_by(status="archived").all()
+    active_deals_count = Deal.query.filter_by(status="active").count()
+    archived_deals_count = len(archived_deals)
+    return jsonify(
+        {
+            "deals": [
+                {
+                    "id": deal.id,
+                    "title": deal.title,
+                    "company_inn": deal.company_inn,
+                    "created_by": deal.created_by,
+                    "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                }
+                for deal in archived_deals
             ],
             "deals_active": active_deals_count,
             "deals_archived": archived_deals_count,

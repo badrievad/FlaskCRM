@@ -132,13 +132,13 @@ body {
     display: none;
 }
 
-#deals-list {
+#active-deals-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-#deals-list li {
+#active-deals-list li {
     padding: 10px;
     background-color: #ecf0f1;
     margin-bottom: 5px;
@@ -150,7 +150,29 @@ body {
     align-items: center;
 }
 
-#deals-list li:hover {
+#active-deals-list li:hover {
+    background-color: #bdc3c7;
+}
+
+#archived-deals-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#archived-deals-list li {
+    padding: 10px;
+    background-color: #ecf0f1;
+    margin-bottom: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#archived-deals-list li:hover {
     background-color: #bdc3c7;
 }
 

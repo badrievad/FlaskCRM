@@ -18,45 +18,8 @@
     <link href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet"/>
     <script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
     <style>
-        .list-group-item {
-            display: flex;
-            align-items: center;
-        }
-
-        .list-group-item .index {
-            width: 2em; /* Adjust this width as needed */
-            text-align: right;
-            margin-right: 1em;
-        }
-
-        .list-group-item .content {
-            flex-grow: 1;
-        }
-
         .hidden {
             display: none;
-        }
-
-        .submenu {
-            list-style-type: none;
-            padding-left: 20px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
-            opacity: 0;
-        }
-
-        .submenu.show {
-            max-height: 150px; /* Увеличьте это значение в зависимости от количества элементов */
-            opacity: 1;
-        }
-
-        .submenu li {
-            margin-top: 5px;
-        }
-
-        .submenu li:hover {
-            cursor: pointer;
         }
     </style>
 </head>
@@ -82,47 +45,11 @@
     <div id="active-deals" class="card hidden">
         <h2>Активные сделки</h2>
         <ul id="active-deals-list">
-            {% for deal in deals %}
-                {% if deal.status == "active" %}
-                    <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
-                        class="list-group-item">
-                        <div class="index">{{ loop.index }}</div>
-                        <div class="content">
-                            Краткое описание сделки: <br><br>
-                            Лизингополучатель: {{ deal.title }}<br>
-                            ИНН: {{ deal.company_inn }}<br>
-                            Менеджер: {{ deal.created_by }}<br>
-                            Дата создания сделки: {{ deal.created_at.strftime("%d.%m.%Y %H:%M") }}
-                            <button onclick="event.stopPropagation(); dealToArchive({{ deal.id }})"
-                                    class="btn btn-danger btn-sm float-right">В архив
-                            </button>
-                        </div>
-                    </li>
-                {% endif %}
-            {% endfor %}
         </ul>
     </div>
     <div id="archived-deals" class="card hidden">
         <h2>Архивные сделки</h2>
         <ul id="archived-deals-list">
-            {% for deal in deals %}
-                {% if deal.status == "archived" %}
-                    <li onclick="showDeal({{ deal.id }}, '{{ deal.title }}')"
-                        class="list-group-item">
-                        <div class="index">{{ loop.index }}</div>
-                        <div class="content">
-                            Краткое описание сделки: <br><br>
-                            Лизингополучатель: {{ deal.title }}<br>
-                            ИНН: {{ deal.company_inn }}<br>
-                            Менеджер: {{ deal.created_by }}<br>
-                            Дата создания сделки: {{ deal.created_at.strftime("%d.%m.%Y %H:%M") }}
-                            <button onclick="event.stopPropagation(); deleteDeal({{ deal.id }})"
-                                    class="btn btn-danger btn-sm float-right">Удалить
-                            </button>
-                        </div>
-                    </li>
-                {% endif %}
-            {% endfor %}
         </ul>
     </div>
     <div id="task" class="card hidden">

@@ -32,5 +32,5 @@ class Deal(db.Model):
             "title": self.title,
             "company_inn": self.company_inn,
             "created_by": self.created_by,
-            "created_at": self.created_at.strftime("%d.%m.%Y %H:%M"),
+            "created_at": self.created_at.strftime("%d.%m.%Y %H:%M:%S"),
         }

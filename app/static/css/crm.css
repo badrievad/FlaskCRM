@@ -41,13 +41,13 @@ body {
 }
 
 .user-photo img {
-    width: 90px;  /* Adjust the size as needed */
+    width: 90px; /* Adjust the size as needed */
     height: 90px; /* Adjust the size as needed */
     border-radius: 50%;
     object-fit: cover;
     margin-bottom: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
-                0 6px 20px rgba(0, 0, 0, 0.1);
+    0 6px 20px rgba(0, 0, 0, 0.1);
 }
 
 .sidebar ul {
@@ -222,5 +222,42 @@ body {
 .close-button:focus {
     color: black;
     text-decoration: none;
+    cursor: pointer;
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+}
+
+.list-group-item .index {
+    width: 2em; /* Adjust this width as needed */
+    text-align: right;
+    margin-right: 1em;
+}
+
+.list-group-item .content {
+    flex-grow: 1;
+}
+
+.submenu {
+    list-style-type: none;
+    padding-left: 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    opacity: 0;
+}
+
+.submenu.show {
+    max-height: 150px; /* Увеличьте это значение в зависимости от количества элементов */
+    opacity: 1;
+}
+
+.submenu li {
+    margin-top: 5px;
+}
+
+.submenu li:hover {
     cursor: pointer;
 }

@@ -231,13 +231,49 @@ body {
 }
 
 .list-group-item .index {
-    width: 2em; /* Adjust this width as needed */
+    height: 5em;
+    width: 1em; /* Adjust this width as needed */
     text-align: right;
     margin-right: 1em;
+    color: #333; /* Dark text color */
+    padding: 2em; /* Add padding for better spacing */
+    border-radius: 4px; /* Rounded corners */
 }
 
 .list-group-item .content {
     flex-grow: 1;
+}
+
+.list-group-item .btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #dc3545; /* Red background */
+    color: white;
+    border-radius: 4px;
+    height: 10em;
+    width: 3.5em; /* Adjust width as needed */
+}
+
+.list-group-item .btn-container button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-group-item .btn-container button:hover {
+    background-color: #850c18; /* Darker shade on hover */
+    border-radius: 4px;
 }
 
 .submenu {
@@ -260,4 +296,24 @@ body {
 
 .submenu li:hover {
     cursor: pointer;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%; /* Make button full height */
+    width: 6em; /* Adjust width as needed */
+    background-color: #ff6573; /* Bootstrap danger color */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.875em; /* Adjust font size as needed */
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.btn:hover {
+    background-color: #c82333; /* Darker shade on hover */
 }

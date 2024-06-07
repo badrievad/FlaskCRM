@@ -1,144 +1,10 @@
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-}
-
-.sidebar {
-    width: 250px;
-    background-color: #2c3e50;
-    color: white;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: fixed;
-    padding-top: 20px;
-}
-
-.sidebar h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.sidebar h6 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.user-photo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.user-photo img {
-    width: 90px; /* Adjust the size as needed */
-    height: 90px; /* Adjust the size as needed */
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
-    0 6px 20px rgba(0, 0, 0, 0.1);
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-}
-
-.sidebar ul li {
-    padding: 15px;
-    text-align: center;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.sidebar ul li:hover {
-    background-color: #34495e;
-}
-
-.sidebar ul li i {
-    margin-right: 10px;
-}
-
-.main-content {
-    margin-left: 250px;
-    padding: 20px;
-    flex-grow: 1;
-    overflow-y: auto;
-    background-color: #ecf0f1;
-}
-
-.main-content h1 {
-    margin-bottom: 20px;
-    font-size: 32px;
-}
-
-.card {
-    background-color: white;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
-
-.card h2 {
-    margin-top: 0;
-    font-size: 24px;
-}
-
-.card form {
-    display: flex;
-    flex-direction: column;
-}
-
-.card form label {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.card form input, .card form textarea, .card form button {
-    margin-bottom: 15px;
-    padding: 10px;
-    border: 1px solid #bdc3c7;
-    border-radius: 4px;
-    font-size: 16px;
-}
-
-.card form button {
-    background-color: #2c3e50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.card form button:hover {
-    background-color: #34495e;
-}
-
-.hidden {
-    display: none;
-}
-
-#active-deals-list {
+#active-deals-list, #archived-deals-list {
     list-style: none;
     padding: 0;
     margin: 0;
 }
 
-#active-deals-list li {
+#active-deals-list li, #archived-deals-list li {
     padding: 10px;
     background-color: #ecf0f1;
     margin-bottom: 5px;
@@ -150,79 +16,8 @@ body {
     align-items: center;
 }
 
-#active-deals-list li:hover {
+#active-deals-list li:hover, #archived-deals-list li:hover {
     background-color: #bdc3c7;
-}
-
-#archived-deals-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#archived-deals-list li {
-    padding: 10px;
-    background-color: #ecf0f1;
-    margin-bottom: 5px;
-    cursor: pointer;
-    border-radius: 4px;
-    transition: background 0.3s;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-#archived-deals-list li:hover {
-    background-color: #bdc3c7;
-}
-
-.delete-button {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.delete-button:hover {
-    background-color: #c0392b;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 80%;
-    border-radius: 8px;
-}
-
-.close-button {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close-button:hover,
-.close-button:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
 }
 
 .list-group-item {
@@ -242,21 +37,33 @@ body {
 
 .list-group-item .content {
     flex-grow: 1;
+    padding-right: 1em; /* Add padding to the right to ensure space for buttons */
+    white-space: nowrap; /* Prevent text wrap */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Add ellipsis for overflow text */
 }
 
-.list-group-item .btn-container {
+.list-group-item .btn-container, .list-group-item .btn-container-to-active {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #dc3545; /* Red background */
     color: white;
     border-radius: 4px;
     height: 10em;
-    width: 3.5em; /* Adjust width as needed */
+    width: 3.5em; /* Fixed width */
+    margin-left: 0.2em; /* Add margin for spacing */
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
-.list-group-item .btn-container button {
+.list-group-item .btn-container {
+    background-color: #dc3545; /* Red background */
+}
+
+.list-group-item .btn-container-to-active {
+    background-color: #4a9a38; /* Green background */
+}
+
+.list-group-item .btn-container button, .list-group-item .btn-container-to-active button {
     background: none;
     border: none;
     color: white;
@@ -265,55 +72,20 @@ body {
     outline: none;
     padding: 0;
     width: 100%;
-    height: 100%;
+    height: 100%; /* Make button full height */
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.list-group-item .btn-container button:hover, .list-group-item .btn-container-to-active button:hover {
+    border-radius: 4px;
 }
 
 .list-group-item .btn-container button:hover {
     background-color: #850c18; /* Darker shade on hover */
-    border-radius: 4px;
 }
 
-.submenu {
-    list-style-type: none;
-    padding-left: 20px;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
-    opacity: 0;
-}
-
-.submenu.show {
-    max-height: 150px; /* Увеличьте это значение в зависимости от количества элементов */
-    opacity: 1;
-}
-
-.submenu li {
-    margin-top: 5px;
-}
-
-.submenu li:hover {
-    cursor: pointer;
-}
-
-.btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%; /* Make button full height */
-    width: 6em; /* Adjust width as needed */
-    background-color: #ff6573; /* Bootstrap danger color */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.875em; /* Adjust font size as needed */
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease; /* Smooth transition */
-}
-
-.btn:hover {
-    background-color: #c82333; /* Darker shade on hover */
+.list-group-item .btn-container-to-active button:hover {
+    background-color: #02490e; /* Darker green shade on hover */
 }

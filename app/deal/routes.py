@@ -53,6 +53,21 @@ def deal_to_archive(deal_id):
     return jsonify({"result": "error", "message": "Deal not found"}), 404
 
 
+@deal_bp.route("/crm/deal/deal_to_active/<int:deal_id>", methods=["POST"])
+def deal_to_active(deal_id):
+    """Изменить статус сделки на активную."""
+
+    deal: Deal = Deal.query.get(deal_id)
+    if deal:
+        deal.status = "active"
+        deal.archived_at = None
+        deal.created_at = datetime.datetime.now()
+        db.session.commit()
+        socketio.emit("deal_to_active", deal.to_json())
+        return jsonify({"result": "success"}), 200
+    return jsonify({"result": "error", "message": "Deal not found"}), 404
+
+
 @deal_bp.route("/crm", methods=["GET"])
 @login_required
 def index_crm():

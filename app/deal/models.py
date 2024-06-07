@@ -29,7 +29,7 @@ class Deal(db.Model):
 
     def to_json(self) -> dict:
         if self.archived_at is None:
-            archived_at = ""
+            archived_at = None
         else:
             archived_at = self.archived_at.strftime("%d.%m.%Y %H:%M:%S")
         return {

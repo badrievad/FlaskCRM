@@ -1,33 +1,157 @@
-/* Простой CSS для оформления */
 body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
 
-h1, h2 {
-    color: #333;
+.sidebar {
+    font-family: 'Roboto', sans-serif;
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    padding-top: 20px;
 }
 
-#deal-steps div {
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebar h6 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.user-photo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 10px;
 }
 
-button {
-    padding: 5px 10px;
-    margin-right: 10px;
+.user-photo img {
+    width: 90px; /* Adjust the size as needed */
+    height: 90px; /* Adjust the size as needed */
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
+    0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.sidebar ul li {
+    padding: 15px;
+    text-align: center;
     cursor: pointer;
+    transition: background 0.3s;
 }
 
-span {
+.sidebar ul li:hover {
+    background-color: #34495e;
+}
+
+.sidebar ul li i {
+    margin-right: 10px;
+}
+
+.main-content {
+    font-family: 'Roboto', sans-serif;
+    margin-left: 250px;
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    background-color: #ecf0f1;
+}
+
+.main-content h1 {
+    margin-bottom: 20px;
+    font-size: 32px;
+}
+
+.card {
+    background-color: white;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.card h2 {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+.card form {
+    display: flex;
+    flex-direction: column;
+}
+
+.card form label {
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-p {
-    color: green;
-    font-weight: bold;
+.card form input, .card form textarea, .card form button {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.card form button {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.card form button:hover {
+    background-color: #34495e;
+}
+
+.hidden {
+    display: none;
+}
+
+.submenu {
+    list-style-type: none;
+    padding-left: 20px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+    opacity: 0;
+}
+
+.submenu.show {
+    max-height: 150px; /* Увеличьте это значение в зависимости от количества элементов */
+    opacity: 1;
+}
+
+.submenu li {
+    margin-top: 5px;
+}
+
+.submenu li:hover {
+    cursor: pointer;
 }

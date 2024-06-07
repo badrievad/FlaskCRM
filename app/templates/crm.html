@@ -6,9 +6,12 @@
     <title>CRM System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/crm.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/style-crm.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -129,7 +132,7 @@
                         Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
                     </div>
                     <div class="btn-container">
-                        <button onclick="event.stopPropagation(); dealToArchive(${deal.id})">
+                        <button onclick="event.stopPropagation(); confirmArchive(${deal.id})">
                             <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
                         </button>
                     </div>
@@ -157,8 +160,13 @@
                         Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}<br>
                         Дата добавления в архив: ${new Date(deal.archived_at).toLocaleString()}
                     </div>
+                    <div class="btn-container-to-active">
+                        <button onclick="event.stopPropagation(); confirmActive(${deal.id})">
+                            <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
+                        </button>
+                    </div>
                     <div class="btn-container">
-                        <button onclick="event.stopPropagation(); deleteDeal(${deal.id})">
+                        <button onclick="event.stopPropagation(); confirmDelete(${deal.id})">
                             <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
                         </button>
                     </div>
@@ -188,7 +196,7 @@
             Дата создания сделки: ${new Date(data.created_at).toLocaleString()}
         </div>
         <div class="btn-container">
-            <button onclick="event.stopPropagation(); dealToArchive(${data.id})">
+            <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
                 <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
             </button>
         </div>
@@ -235,8 +243,13 @@
                 Дата создания сделки: ${new Date(data.created_at).toLocaleString()}<br>
                 Дата добавления в архив: ${new Date(data.archived_at).toLocaleString()}
             </div>
+            <div class="btn-container-to-active">
+                <button onclick="event.stopPropagation(); confirmActive(${data.id})">
+                    <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
+                </button>
+            </div>
             <div class="btn-container">
-                <button onclick="event.stopPropagation(); deleteDeal(${data.id})">
+                <button onclick="event.stopPropagation(); confirmDelete(${data.id})">
                     <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
                 </button>
             </div>
@@ -250,6 +263,41 @@
         var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
         var archivedDealsCount = document.getElementById('archived-deals-link').textContent.match(/\d+/)[0];
         updateDealCounts(parseInt(activeDealsCount) - 1, parseInt(archivedDealsCount) + 1);
+    });
+
+    socket.on('deal_to_active', function (data) {
+        console.log('Deal to active:', data);
+        var dealItem = document.getElementById(`deal-${data.id}`);
+        if (dealItem) {
+            dealItem.remove();
+            updateIndexes('active-deals-list'); // Recalculate indexes
+
+            // Переместить сделку в архивный список
+            var activeDealsList = document.getElementById('active-deals-list');
+            var activedDealItem = `<li id="deal-${data.id}" onclick="showDeal(${data.id}, '${data.title}')" class="list-group-item">
+            <div class="index">${activeDealsList.children.length + 1}</div>
+            <div class="content">
+                Краткое описание сделки: <br><br>
+                Лизингополучатель: ${data.title}<br>
+                ИНН: ${data.company_inn}<br>
+                Менеджер: ${data.created_by}<br>
+                Дата создания сделки: ${new Date(data.created_at).toLocaleString()}<br>
+            </div>
+            <div class="btn-container">
+                <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
+                    <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
+                </button>
+            </div>
+        </li>`;
+            activeDealsList.insertAdjacentHTML('beforeend', activedDealItem);
+        } else {
+            console.log('Deal item not found:', data.id);
+        }
+
+        // Обновить количество активных и архивных сделок
+        var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
+        var archivedDealsCount = document.getElementById('archived-deals-link').textContent.match(/\d+/)[0];
+        updateDealCounts(parseInt(activeDealsCount) + 1, parseInt(archivedDealsCount) - 1);
     });
 
     document.getElementById('create-deal-form').addEventListener('submit', function (event) {
@@ -303,6 +351,20 @@
         xhr.send();
     }
 
+    function dealToActive(dealId) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', `/crm/deal/deal_to_active/${dealId}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                console.log(`Deal ${dealId} active successfully.`);
+                // Emit deal_to_archive event to notify other clients
+                socket.emit('deal_to_active', {id: dealId});
+            }
+        };
+        xhr.send();
+    }
+
     function updateIndexes(listId) {
         var dealsList = document.getElementById(listId);
         var dealItems = dealsList.children;
@@ -312,6 +374,23 @@
         }
     }
 
+    function confirmDelete(dealId) {
+        if (confirm("Вы уверены, что хотите удалить сделку?")) {
+            deleteDeal(dealId);
+        }
+    }
+
+    function confirmArchive(dealId) {
+        if (confirm("Вы уверены, что хотите переместить сделку в архив?")) {
+            dealToArchive(dealId);
+        }
+    }
+
+    function confirmActive(dealId) {
+        if (confirm("Вы уверены, что хотите вернуть сделку в активные?")) {
+            dealToActive(dealId);
+        }
+    }
 </script>
 </body>
 </html>

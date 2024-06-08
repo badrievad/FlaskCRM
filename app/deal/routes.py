@@ -98,6 +98,7 @@ def get_deals_active():
             "deals": [
                 {
                     "id": deal.id,
+                    "product": deal.product,
                     "title": deal.title,
                     "company_inn": deal.company_inn,
                     "created_by": deal.created_by,
@@ -122,6 +123,7 @@ def get_deals_archived():
                 {
                     "id": deal.id,
                     "title": deal.title,
+                    "product": deal.product,
                     "company_inn": deal.company_inn,
                     "created_by": deal.created_by,
                     "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),

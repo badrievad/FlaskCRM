@@ -26,14 +26,19 @@ class Deal(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(20), nullable=False)
     archived_at = db.Column(db.DateTime, nullable=True)
+    product = db.Column(
+        db.String(50), nullable=False, default="Статус продукта еще не определен"
+    )
 
     def to_json(self) -> dict:
+        """При добавлении или удалении столбца в модели всегда корректируем эту функцию!"""
         if self.archived_at is None:
             archived_at = None
         else:
             archived_at = self.archived_at.strftime("%d.%m.%Y %H:%M:%S")
         return {
             "id": self.id,
+            "product": self.product,
             "title": self.title,
             "company_inn": self.company_inn,
             "created_by": self.created_by,

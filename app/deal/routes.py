@@ -17,10 +17,16 @@ from app.config import suggestions_token
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
 def create_deal():
     deal: DealsValidate = DealsValidate(request.get_json())
+    print(request.get_json())
     company_name: str = deal.get_company_name
+    name_without_special_symbols: str = deal.get_name_without_special_symbols
     company_inn: str = deal.get_company_inn
     deal_data: dict = write_deal_to_db(
-        company_name, company_inn, current_user.fullname, datetime.datetime.now()
+        company_name,
+        name_without_special_symbols,
+        company_inn,
+        current_user.fullname,
+        datetime.datetime.now(),
     )
     logging.info(
         f"{current_user} создал новую сделку. Название сделки: {company_name}. "

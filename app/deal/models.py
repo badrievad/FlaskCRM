@@ -21,6 +21,7 @@ class Deal(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
+    name_without_special_symbols = db.Column(db.String(200), nullable=False)
     company_inn = db.Column(db.String(20), nullable=False)
     created_by = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)

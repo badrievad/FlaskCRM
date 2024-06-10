@@ -9,7 +9,17 @@ class DealsValidate:
 
     @property
     def get_company_name(self) -> str:
-        return self._data.get("title", "")
+        name: str = self._data.get("title", "")
+        formatted_name: str = name.split(",")[0].strip()
+        return formatted_name
+
+    @property
+    def get_name_without_special_symbols(self) -> str:
+        forbidden_chars = {"\\", "/", ":", "*", "?", '"', "<", ">", "|"}
+        name_without_special_symbols = "".join(
+            char for char in self.get_company_name if char not in forbidden_chars
+        )
+        return name_without_special_symbols
 
     @property
     def get_company_inn(self) -> str:

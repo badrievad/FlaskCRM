@@ -1,7 +1,13 @@
 import json
 import pytest
 
-from app.deal.deals_validate import DealsValidate
+from unittest.mock import patch
+
+# Патчим зависимости, которые не нужны для теста
+with patch("app.deal.routes"), patch("app.deal.events"), patch("logger.logging"), patch(
+    "app.config.PATH_FOR_LOG"
+):
+    from app.deal.deals_validate import DealsValidate
 
 
 @pytest.fixture(

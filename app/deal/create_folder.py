@@ -1,7 +1,7 @@
 # Основной путь для директорий
 import os
 
-BASE_PATH: str = "/mnt/c/Users/badrievad/Desktop/Deals"
+BASE_PATH: str = "/mnt/c/Users/badrievad/Desktop/Deals"  # test path
 
 
 def create_company_folders(company_name: str, company_id: str) -> None:

@@ -5,19 +5,20 @@ from .. import socketio, db
 
 from .deals_db import write_deal_to_db
 from .deals_validate import DealsValidate
+from .create_folder import create_company_folders
+
+from ..deal.models import Deal
+from ..user.models import User
+from ..config import suggestions_token
 
 from flask import request, jsonify, render_template
 from flask_login import current_user, login_required
 from logger import logging
-from app.deal.models import Deal
-from app.user.models import User
-from app.config import suggestions_token
 
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
 def create_deal():
     deal: DealsValidate = DealsValidate(request.get_json())
-    print(request.get_json())
     company_name: str = deal.get_company_name
     name_without_special_symbols: str = deal.get_name_without_special_symbols
     company_inn: str = deal.get_company_inn
@@ -28,9 +29,11 @@ def create_deal():
         current_user.fullname,
         datetime.datetime.now(),
     )
+    deal_id = deal_data["id"]
+    create_company_folders(name_without_special_symbols, deal_id)
     logging.info(
         f"{current_user} создал новую сделку. Название сделки: {company_name}. "
-        f"ID сделки: {deal_data['id']}. Дата создания: {deal_data['created_at']}."
+        f"ID сделки: {deal_id}. Дата создания: {deal_data['created_at']}."
     )
     socketio.emit("new_deal", deal_data)  # Send to all connected clients
     return jsonify(deal_data), 201
@@ -38,7 +41,7 @@ def create_deal():
 
 @deal_bp.route("/crm/deal/delete_deal/<int:deal_id>", methods=["POST"])
 def delete_deal(deal_id):
-    deal = Deal.query.get(deal_id)
+    deal: Deal = Deal.query.get(deal_id)
     if deal:
         db.session.delete(deal)
         db.session.commit()
@@ -77,8 +80,8 @@ def deal_to_active(deal_id):
 @deal_bp.route("/crm", methods=["GET"])
 @login_required
 def index_crm():
-    deals = Deal.query.all()
-    users = User.query.all()
+    deals: list[Deal] = Deal.query.all()
+    users: list[User] = User.query.all()
     return render_template(
         "crm.html",
         deals=deals,
@@ -96,9 +99,9 @@ def index_crm():
 
 @deal_bp.route("/crm/deals/active", methods=["GET"])
 def get_deals_active():
-    active_deals = Deal.query.filter_by(status="active").all()
-    active_deals_count = len(active_deals)
-    archived_deals_count = Deal.query.filter_by(status="archived").count()
+    active_deals: list[Deal] = Deal.query.filter_by(status="active").all()
+    active_deals_count: int = len(active_deals)
+    archived_deals_count: int = Deal.query.filter_by(status="archived").count()
     return jsonify(
         {
             "deals": [
@@ -120,9 +123,9 @@ def get_deals_active():
 
 @deal_bp.route("/crm/deals/archived", methods=["GET"])
 def get_deals_archived():
-    archived_deals = Deal.query.filter_by(status="archived").all()
-    active_deals_count = Deal.query.filter_by(status="active").count()
-    archived_deals_count = len(archived_deals)
+    archived_deals: list[Deal] = Deal.query.filter_by(status="archived").all()
+    active_deals_count: int = Deal.query.filter_by(status="active").count()
+    archived_deals_count: int = len(archived_deals)
     return jsonify(
         {
             "deals": [

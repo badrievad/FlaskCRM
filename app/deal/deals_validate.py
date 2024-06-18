@@ -15,8 +15,8 @@ class DealsValidate:
 
     @property
     def get_name_without_special_symbols(self) -> str:
-        forbidden_chars = {"\\", "/", ":", "*", "?", '"', "<", ">", "|"}
-        name_without_special_symbols = "".join(
+        forbidden_chars: set = {"\\", "/", ":", "*", "?", '"', "<", ">", "|"}
+        name_without_special_symbols: str = "".join(
             char for char in self.get_company_name if char not in forbidden_chars
         )
         return name_without_special_symbols

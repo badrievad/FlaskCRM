@@ -17,6 +17,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
     <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+
+    <!-- toastr -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css">
+
     <!-- DADATA -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet"/>
@@ -184,6 +190,30 @@
         console.log('Connected to SocketIO server');
     });
 
+    socket.on('notification_new_deal', function (data) {
+        // Настройки для toastr
+        toastr.options = {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-right",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "3000",
+            extendedTimeOut: "1000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut"
+        };
+
+        // Показываем уведомление
+        toastr.success(data.message, 'Создана сделка');
+    });
+
     socket.on('new_deal', function (data) {
         console.log(data);
         var dealsList = document.getElementById('active-deals-list');
@@ -196,7 +226,7 @@
             Лизингополучатель: ${data.title}<br>
             ИНН: ${data.company_inn}<br>
             Менеджер: ${data.created_by}<br>
-            Дата создания сделки: ${new Date(data.created_at).toLocaleString()}
+            Дата создания сделки: ${data.created_at}
         </div>
         <div class="btn-container">
             <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
@@ -244,8 +274,8 @@
                 Лизингополучатель: ${data.title}<br>
                 ИНН: ${data.company_inn}<br>
                 Менеджер: ${data.created_by}<br>
-                Дата создания сделки: ${new Date(data.created_at).toLocaleString()}<br>
-                Дата добавления в архив: ${new Date(data.archived_at).toLocaleString()}
+                Дата создания сделки: ${data.created_at}<br>
+                Дата добавления в архив: ${data.archived_at}
             </div>
             <div class="btn-container-to-active">
                 <button onclick="event.stopPropagation(); confirmActive(${data.id})">
@@ -286,7 +316,7 @@
                 Лизингополучатель: ${data.title}<br>
                 ИНН: ${data.company_inn}<br>
                 Менеджер: ${data.created_by}<br>
-                Дата создания сделки: ${new Date(data.created_at).toLocaleString()}<br>
+                Дата создания сделки: ${data.created_at}<br>
             </div>
             <div class="btn-container">
                 <button onclick="event.stopPropagation(); confirmArchive(${data.id})">

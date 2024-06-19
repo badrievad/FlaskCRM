@@ -1,17 +1,19 @@
 import datetime
 
+from sqlalchemy.exc import SQLAlchemyError
+
 from . import deal_bp
 from .. import socketio, db
 
 from .deals_db import write_deal_to_db
 from .deals_validate import DealsValidate
-from .create_folder import create_company_folders
+from .work_with_folders import create_company_folder, delete_company_folder
 
 from ..deal.models import Deal
 from ..user.models import User
 from ..config import suggestions_token
 
-from flask import request, jsonify, render_template
+from flask import request, jsonify, render_template, session
 from flask_login import current_user, login_required
 from logger import logging
 
@@ -30,12 +32,23 @@ def create_deal():
         datetime.datetime.now(),
     )
     deal_id = deal_data["id"]
-    create_company_folders(name_without_special_symbols, deal_id)
+    create_company_folder(name_without_special_symbols, deal_id)
     logging.info(
         f"{current_user} создал новую сделку. Название сделки: {company_name}. "
         f"ID сделки: {deal_id}. Дата создания: {deal_data['created_at']}."
     )
     socketio.emit("new_deal", deal_data)  # Send to all connected clients
+    #  TODO: Нужно доделать (пока не работает)
+    session["username"] = current_user.login
+    # Определяем, куда отправлять уведомление
+    session_username = session.get("username")
+    logging.info(f"session_username: {session_username}")
+    if session_username:
+        socketio.emit(
+            "notification_new_deal", {"message": company_name}, room=session_username
+        )
+    else:
+        logging.info("Не удалось отправить уведомление: session_username не найден.")
     return jsonify(deal_data), 201
 
 
@@ -43,11 +56,46 @@ def create_deal():
 def delete_deal(deal_id):
     deal: Deal = Deal.query.get(deal_id)
     if deal:
-        db.session.delete(deal)
-        db.session.commit()
-        socketio.emit("delete_deal", {"id": deal_id})
-        return jsonify({"result": "success"}), 200
-    return jsonify({"result": "error", "message": "Deal not found"}), 404
+        try:
+            # Начинаем транзакцию
+            db.session.delete(deal)
+            delete_company_folder(deal_id)
+            db.session.commit()
+
+            # Уведомление через socketio
+            socketio.emit("delete_deal", {"id": deal_id})
+            return jsonify({"result": "success"}), 200
+
+        except PermissionError as e:
+            #  TODO: Нужно сделать отправку уведомления об ошибке пользователю
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(f"Permission error while deleting deal {deal_id}: {e}")
+            return jsonify({"result": "error", "message": str(e)}), 500
+
+        except SQLAlchemyError as e:
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(f"Database error while deleting deal {deal_id}: {e}")
+            return (
+                jsonify(
+                    {
+                        "result": "error",
+                        "message": "Failed to delete deal from database",
+                    }
+                ),
+                500,
+            )
+
+        except Exception as e:
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(f"Error while deleting deal {deal_id} or company folder: {e}")
+            return (
+                jsonify(
+                    {"result": "error", "message": "Failed to delete company folder"}
+                ),
+                500,
+            )
+    else:
+        return jsonify({"result": "error", "message": "Deal not found"}), 404
 
 
 @deal_bp.route("/crm/deal/deal_to_archive/<int:deal_id>", methods=["POST"])
@@ -64,7 +112,7 @@ def deal_to_archive(deal_id):
 
 @deal_bp.route("/crm/deal/deal_to_active/<int:deal_id>", methods=["POST"])
 def deal_to_active(deal_id):
-    """Изменить статус сделки на активную."""
+    """Изменить статус сделки на активную"""
 
     deal: Deal = Deal.query.get(deal_id)
     if deal:

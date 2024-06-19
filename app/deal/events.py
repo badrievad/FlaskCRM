@@ -1,9 +1,34 @@
 from .. import socketio, db
 
 from datetime import datetime
-from flask_socketio import emit
-from flask import session
+from flask_socketio import emit, join_room
+from flask import session, request
 from app.deal.models import DealSteps
+from logger import logging
+from flask_login import current_user
+
+
+# Словарь для хранения сопоставления username и socket.id
+user_sessions = {}
+
+
+@socketio.on("connect")
+def handle_connect():
+    username = session.get("username")
+    if username:
+        user_sessions[username] = (
+            current_user.login
+        )  # Сохраняем socket.id для пользователя
+        join_room(username)  # Присоединяем пользователя к комнате с его именем
+        logging.info(f"User {username} connected with session ID {current_user.login}")
+
+
+@socketio.on("disconnect")
+def handle_disconnect():
+    username = session.get("username")
+    if username and username in user_sessions:
+        del user_sessions[username]  # Удаляем запись при отключении
+        logging.info(f"User {username} disconnected")
 
 
 @socketio.on("approve_step")

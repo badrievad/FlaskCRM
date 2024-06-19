@@ -7,7 +7,11 @@ from .. import socketio, db
 
 from .deals_db import write_deal_to_db
 from .deals_validate import DealsValidate
-from .work_with_folders import create_company_folder, delete_company_folder
+from .work_with_folders import (
+    create_company_folder,
+    delete_company_folder,
+    update_to_archive_company_folder,
+)
 
 from ..deal.models import Deal
 from ..user.models import User
@@ -16,6 +20,20 @@ from ..config import suggestions_token
 from flask import request, jsonify, render_template, session
 from flask_login import current_user, login_required
 from logger import logging
+
+
+def send_notification(socket_path: str, error_message: str) -> jsonify:
+    session_username = session.get("username")
+    logging.info(f"session_username: {session_username}")
+    if session_username:
+        socketio.emit(
+            socket_path,
+            {"message": error_message},
+            room=session_username,
+        )
+    else:
+        logging.info("Не удалось отправить уведомление: session_username не найден.")
+    return jsonify({"result": "error", "message": error_message}), 500
 
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
@@ -38,8 +56,6 @@ def create_deal():
         f"ID сделки: {deal_id}. Дата создания: {deal_data['created_at']}."
     )
     socketio.emit("new_deal", deal_data)  # Send to all connected clients
-    #  TODO: Нужно доделать (пока не работает)
-    session["username"] = current_user.login
     # Определяем, куда отправлять уведомление
     session_username = session.get("username")
     logging.info(f"session_username: {session_username}")
@@ -67,10 +83,10 @@ def delete_deal(deal_id):
             return jsonify({"result": "success"}), 200
 
         except PermissionError as e:
-            #  TODO: Нужно сделать отправку уведомления об ошибке пользователю
             db.session.rollback()  # Откат транзакции в случае ошибки
             logging.error(f"Permission error while deleting deal {deal_id}: {e}")
-            return jsonify({"result": "error", "message": str(e)}), 500
+            error_message: str = str(e).replace("[Errno 13] Permission denied: ", "")
+            send_notification("notification_delete_deal", error_message)
 
         except SQLAlchemyError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
@@ -102,11 +118,20 @@ def delete_deal(deal_id):
 def deal_to_archive(deal_id):
     deal: Deal = Deal.query.get(deal_id)
     if deal:
-        deal.status = "archived"
-        deal.archived_at = datetime.datetime.now()
-        db.session.commit()
-        socketio.emit("deal_to_archive", deal.to_json())
-        return jsonify({"result": "success"}), 200
+        try:
+            # Начинаем транзакцию
+            deal.status = "archived"
+            deal.archived_at = datetime.datetime.now()
+            db.session.commit()
+            update_to_archive_company_folder(deal_id)
+            socketio.emit("deal_to_archive", deal.to_json())
+            return jsonify({"result": "success"}), 200
+        except PermissionError as e:
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(f"Permission error while archiving deal {deal_id}: {e}")
+            error_message: str = str(e).replace("[Errno 13] Permission denied: ", "")
+            #  TODO: Нужно доделать сообщение об ошибке
+            # send_notification("notification_delete_deal", error_message)
     return jsonify({"result": "error", "message": "Deal not found"}), 404
 
 

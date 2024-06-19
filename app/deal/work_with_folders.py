@@ -39,3 +39,25 @@ def delete_company_folder(company_id: str) -> None:
 
     if not found:
         logging.info(f"Папка с id_{company_id} не найдена.")
+
+
+def update_to_archive_company_folder(company_id: str) -> None:
+    # Шаблон для поиска папки по идентификатору компании
+    pattern: str = os.path.join(BASE_PATH, f"*(id_{company_id})*")
+
+    found: bool = False
+    for folder_path in glob.glob(pattern, recursive=True):
+        if os.path.isdir(folder_path):
+            folder_name = os.path.basename(folder_path)  # Текущее имя папки
+            parent_dir = os.path.dirname(folder_path)  # Родительская директория
+            new_folder_name = f"(Архив) {folder_name}"  # Новое имя папки
+            new_folder_path = os.path.join(parent_dir, new_folder_name)
+
+            os.rename(folder_path, new_folder_path)  # Переименовать папку
+
+            logging.info(f"Папка {folder_path} успешно обновлена до {new_folder_path}.")
+            found = True
+            break
+
+    if not found:
+        logging.info(f"Папка с id_{company_id} не найдена.")

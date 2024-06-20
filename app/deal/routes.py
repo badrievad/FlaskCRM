@@ -11,6 +11,7 @@ from .work_with_folders import (
     create_company_folder,
     delete_company_folder,
     update_to_archive_company_folder,
+    update_to_active_company_folder,
 )
 
 from ..deal.models import Deal
@@ -23,6 +24,7 @@ from logger import logging
 
 
 def send_notification(socket_path: str, error_message: str) -> jsonify:
+    logging.info(f"Session now: {session}")
     session_username = session.get("username")
     logging.info(f"session_username: {session_username}")
     if session_username:
@@ -58,7 +60,8 @@ def create_deal():
     socketio.emit("new_deal", deal_data)  # Send to all connected clients
     # Определяем, куда отправлять уведомление
     session_username = session.get("username")
-    logging.info(f"session_username: {session_username}")
+    logging.info(f"session: {session}")
+    logging.info(f"session_username (create deal): {session_username}")
     if session_username:
         socketio.emit(
             "notification_new_deal", {"message": company_name}, room=session_username
@@ -164,12 +167,46 @@ def deal_to_active(deal_id) -> jsonify:
 
     deal: Deal = Deal.query.get(deal_id)
     if deal:
-        deal.status = "active"
-        deal.archived_at = None
-        deal.created_at = datetime.datetime.now()
-        db.session.commit()
-        socketio.emit("deal_to_active", deal.to_json())
-        return jsonify({"result": "success"}), 200
+        try:
+            # Начинаем транзакцию
+            deal.status = "active"
+            deal.archived_at = None
+            deal.created_at = datetime.datetime.now()
+            db.session.commit()
+            update_to_active_company_folder(deal_id)
+            socketio.emit("deal_to_active", deal.to_json())
+            return jsonify({"result": "success"}), 200
+        except PermissionError as e:
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(f"Permission error while return active deal {deal_id}: {e}")
+            error_message: str = str(e).replace("[Errno 13] Permission denied: ", "")
+            return send_notification("notification_to_active_deal", error_message)
+        except SQLAlchemyError as e:
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(f"Database error while return active deal {deal_id}: {e}")
+            return (
+                jsonify(
+                    {
+                        "result": "error",
+                        "message": "Failed to return active deal from database",
+                    }
+                ),
+                500,
+            )
+        except Exception as e:
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(
+                f"Error while return active deal {deal_id} or company folder: {e}"
+            )
+            return (
+                jsonify(
+                    {
+                        "result": "error",
+                        "message": "Failed to return active company folder",
+                    }
+                ),
+                500,
+            )
     return jsonify({"result": "error", "message": "Deal not found"}), 404
 
 

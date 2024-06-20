@@ -6,8 +6,13 @@ from logger import logging
 BASE_PATH: str = "/mnt/c/Users/badrievad/Desktop/Deals"  # test path
 
 
+def get_id_pattern(company_id: str) -> str:
+    return os.path.join(BASE_PATH, f"*(id_{company_id})*")
+
+
 def create_company_folder(company_name: str, company_id: str) -> None:
-    # Создание основной директории
+    """Создает папку для сделки с id_{company_id}"""
+
     main_dir: str = os.path.join(BASE_PATH, f"{company_name} (id_{company_id})")
     os.makedirs(main_dir, exist_ok=True)
 
@@ -26,9 +31,9 @@ def create_company_folder(company_name: str, company_id: str) -> None:
 
 
 def delete_company_folder(company_id: str) -> None:
-    # Шаблон для поиска папки по идентификатору компании
-    pattern: str = os.path.join(BASE_PATH, f"*(id_{company_id})*")
+    """Удаляет папку сделки с id_{company_id}"""
 
+    pattern: str = get_id_pattern(company_id)
     found: bool = False
     for folder_path in glob.glob(pattern, recursive=True):
         if os.path.isdir(folder_path):
@@ -42,9 +47,9 @@ def delete_company_folder(company_id: str) -> None:
 
 
 def update_to_archive_company_folder(company_id: str) -> None:
-    # Шаблон для поиска папки по идентификатору компании
-    pattern: str = os.path.join(BASE_PATH, f"*(id_{company_id})*")
+    """Добавляет в название папки тег (Архив)"""
 
+    pattern: str = get_id_pattern(company_id)
     found: bool = False
     for folder_path in glob.glob(pattern, recursive=True):
         if os.path.isdir(folder_path):
@@ -52,9 +57,29 @@ def update_to_archive_company_folder(company_id: str) -> None:
             parent_dir = os.path.dirname(folder_path)  # Родительская директория
             new_folder_name = f"(Архив) {folder_name}"  # Новое имя папки
             new_folder_path = os.path.join(parent_dir, new_folder_name)
-
             os.rename(folder_path, new_folder_path)  # Переименовать папку
+            logging.info(f"Папка {folder_path} успешно обновлена до {new_folder_path}.")
+            found = True
+            break
 
+    if not found:
+        logging.info(f"Папка с id_{company_id} не найдена.")
+
+
+def update_to_active_company_folder(company_id: str) -> None:
+    """Удаляет из названия папки тег (Архив)"""
+
+    pattern: str = get_id_pattern(company_id)
+    found: bool = False
+    for folder_path in glob.glob(pattern, recursive=True):
+        if os.path.isdir(folder_path):
+            folder_name = os.path.basename(folder_path)  # Текущее имя папки
+            parent_dir = os.path.dirname(folder_path)  # Родительская директория
+            new_folder_name = f"{folder_name}".replace(
+                "(Архив) ", ""
+            )  # Новое имя папки
+            new_folder_path = os.path.join(parent_dir, new_folder_name)
+            os.rename(folder_path, new_folder_path)  # Переименовать папку
             logging.info(f"Папка {folder_path} успешно обновлена до {new_folder_path}.")
             found = True
             break

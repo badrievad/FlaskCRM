@@ -262,6 +262,30 @@
         toastr.error(data.message, 'Сделку невозможно отправить в архив. Открыт файл:');
     });
 
+    socket.on('notification_to_active_deal', function (data) {
+        // Настройки для toastr
+        toastr.options = {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-right",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "1000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut"
+        };
+
+        // Показываем уведомление
+        toastr.error(data.message, 'Сделку невозможно вернуть в активные. Открыт файл:');
+    });
+
     socket.on('new_deal', function (data) {
         console.log(data);
         var dealsList = document.getElementById('active-deals-list');

@@ -214,6 +214,8 @@
         toastr.success(data.message, 'Создана сделка');
     });
 
+
+
     socket.on('notification_delete_deal', function (data) {
         // Настройки для toastr
         toastr.options = {
@@ -236,6 +238,30 @@
 
         // Показываем уведомление
         toastr.error(data.message, 'Сделку удалить невозможно. Открыт файл:');
+    });
+
+    socket.on('notification_archive_deal_well', function (data) {
+        // Настройки для toastr
+        toastr.options = {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-right",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "3000",
+            extendedTimeOut: "1000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut"
+        };
+
+        // Показываем уведомление
+        toastr.info(data.message, 'Сделка успешно отправлена в архив');
     });
 
     socket.on('notification_to_archive_deal', function (data) {

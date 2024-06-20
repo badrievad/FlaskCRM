@@ -128,6 +128,17 @@ def deal_to_archive(deal_id) -> jsonify:
             db.session.commit()
             update_to_archive_company_folder(deal_id)
             socketio.emit("deal_to_archive", deal.to_json())
+            session_username = session.get("username")
+            if session_username:
+                socketio.emit(
+                    "notification_archive_deal_well",
+                    {"message": deal.title},
+                    room=session_username,
+                )
+            else:
+                logging.info(
+                    "Не удалось отправить уведомление: session_username не найден."
+                )
             return jsonify({"result": "success"}), 200
         except PermissionError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки

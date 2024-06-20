@@ -69,7 +69,7 @@ def create_deal():
 
 
 @deal_bp.route("/crm/deal/delete_deal/<int:deal_id>", methods=["POST"])
-def delete_deal(deal_id):
+def delete_deal(deal_id) -> jsonify:
     deal: Deal = Deal.query.get(deal_id)
     if deal:
         try:
@@ -86,7 +86,7 @@ def delete_deal(deal_id):
             db.session.rollback()  # Откат транзакции в случае ошибки
             logging.error(f"Permission error while deleting deal {deal_id}: {e}")
             error_message: str = str(e).replace("[Errno 13] Permission denied: ", "")
-            send_notification("notification_delete_deal", error_message)
+            return send_notification("notification_delete_deal", error_message)
 
         except SQLAlchemyError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
@@ -115,7 +115,7 @@ def delete_deal(deal_id):
 
 
 @deal_bp.route("/crm/deal/deal_to_archive/<int:deal_id>", methods=["POST"])
-def deal_to_archive(deal_id):
+def deal_to_archive(deal_id) -> jsonify:
     deal: Deal = Deal.query.get(deal_id)
     if deal:
         try:
@@ -130,13 +130,36 @@ def deal_to_archive(deal_id):
             db.session.rollback()  # Откат транзакции в случае ошибки
             logging.error(f"Permission error while archiving deal {deal_id}: {e}")
             error_message: str = str(e).replace("[Errno 13] Permission denied: ", "")
-            #  TODO: Нужно доделать сообщение об ошибке
-            # send_notification("notification_delete_deal", error_message)
-    return jsonify({"result": "error", "message": "Deal not found"}), 404
+            return send_notification("notification_to_archive_deal", error_message)
+        except SQLAlchemyError as e:
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(f"Database error while archiving deal {deal_id}: {e}")
+            return (
+                jsonify(
+                    {
+                        "result": "error",
+                        "message": "Failed to archive deal from database",
+                    }
+                ),
+                500,
+            )
+        except Exception as e:
+            db.session.rollback()  # Откат транзакции в случае ошибки
+            logging.error(
+                f"Error while archiving deal {deal_id} or company folder: {e}"
+            )
+            return (
+                jsonify(
+                    {"result": "error", "message": "Failed to archive company folder"}
+                ),
+                500,
+            )
+    else:
+        return jsonify({"result": "error", "message": "Deal not found"}), 404
 
 
 @deal_bp.route("/crm/deal/deal_to_active/<int:deal_id>", methods=["POST"])
-def deal_to_active(deal_id):
+def deal_to_active(deal_id) -> jsonify:
     """Изменить статус сделки на активную"""
 
     deal: Deal = Deal.query.get(deal_id)
@@ -171,7 +194,7 @@ def index_crm():
 
 
 @deal_bp.route("/crm/deals/active", methods=["GET"])
-def get_deals_active():
+def get_deals_active() -> jsonify:
     active_deals: list[Deal] = Deal.query.filter_by(status="active").all()
     active_deals_count: int = len(active_deals)
     archived_deals_count: int = Deal.query.filter_by(status="archived").count()
@@ -195,7 +218,7 @@ def get_deals_active():
 
 
 @deal_bp.route("/crm/deals/archived", methods=["GET"])
-def get_deals_archived():
+def get_deals_archived() -> jsonify:
     archived_deals: list[Deal] = Deal.query.filter_by(status="archived").all()
     active_deals_count: int = Deal.query.filter_by(status="active").count()
     archived_deals_count: int = len(archived_deals)

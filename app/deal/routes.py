@@ -83,6 +83,17 @@ def delete_deal(deal_id) -> jsonify:
 
             # Уведомление через socketio
             socketio.emit("delete_deal", {"id": deal_id})
+            session_username = session.get("username")
+            if session_username:
+                socketio.emit(
+                    "notification_delete_deal_well",
+                    {"message": deal.title},
+                    room=session_username,
+                )
+            else:
+                logging.info(
+                    "Не удалось отправить уведомление: session_username не найден."
+                )
             return jsonify({"result": "success"}), 200
 
         except PermissionError as e:
@@ -186,6 +197,17 @@ def deal_to_active(deal_id) -> jsonify:
             db.session.commit()
             update_to_active_company_folder(deal_id)
             socketio.emit("deal_to_active", deal.to_json())
+            session_username = session.get("username")
+            if session_username:
+                socketio.emit(
+                    "notification_active_deal_well",
+                    {"message": deal.title},
+                    room=session_username,
+                )
+            else:
+                logging.info(
+                    "Не удалось отправить уведомление: session_username не найден."
+                )
             return jsonify({"result": "success"}), 200
         except PermissionError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
@@ -224,6 +246,8 @@ def deal_to_active(deal_id) -> jsonify:
 @deal_bp.route("/crm", methods=["GET"])
 @login_required
 def index_crm():
+    session["username"] = current_user.login  # Устанавливаем username в сессию
+    logging.info(f"Socket connected: {session}")
     deals: list[Deal] = Deal.query.all()
     users: list[User] = User.query.all()
     return render_template(

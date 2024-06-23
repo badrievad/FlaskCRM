@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ deal.title }}</title>
+</head>
+<body>
+    <div>
+        Deal ID: {{ deal.id }}
+        <button type="button" id="back-home">Вернуться</button>
+    </div>
+
+    <script>
+        document.getElementById('back-home').addEventListener('click', function() {
+            window.location.href = '/crm';
+        });
+    </script>
+</body>
+</html>

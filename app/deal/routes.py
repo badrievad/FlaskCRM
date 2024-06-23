@@ -39,7 +39,7 @@ def send_notification(socket_path: str, error_message: str) -> jsonify:
 
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
-def create_deal():
+def create_deal() -> jsonify:
     deal: DealsValidate = DealsValidate(request.get_json())
     company_name: str = deal.get_company_name
     name_without_special_symbols: str = deal.get_name_without_special_symbols
@@ -245,7 +245,7 @@ def deal_to_active(deal_id) -> jsonify:
 
 @deal_bp.route("/crm", methods=["GET"])
 @login_required
-def index_crm():
+def index_crm() -> render_template:
     session["username"] = current_user.login  # Устанавливаем username в сессию
     logging.info(f"Socket connected: {session}")
     deals: list[Deal] = Deal.query.all()
@@ -312,3 +312,9 @@ def get_deals_archived() -> jsonify:
             "deals_archived": archived_deals_count,
         }
     )
+
+
+@deal_bp.route("/crm/deal/<deal_id>", methods=["GET"])
+def enter_into_deal(deal_id: int) -> render_template:
+    deal: Deal = Deal.query.get(deal_id)
+    return render_template("deal.html", deal=deal)

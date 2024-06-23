@@ -128,7 +128,7 @@
                 var dealsList = document.getElementById('active-deals-list');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
-                    var dealItem = `<li id="deal-${deal.id}" onclick="showDeal(${deal.id}, '${deal.title}')" class="list-group-item">
+                    var dealItem = `<li id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})" class="list-group-item">
                     <div class="index">${index + 1}</div>
                     <div class="content">
                         Краткое описание сделки: <br><br>
@@ -157,7 +157,7 @@
                 var dealsList = document.getElementById('archived-deals-list');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
-                    var dealItem = `<li id="deal-${deal.id}" onclick="showDeal(${deal.id}, '${deal.title}')" class="list-group-item">
+                    var dealItem = `<li id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})" class="list-group-item">
                     <div class="index">${index + 1}</div>
                     <div class="content">
                         Краткое описание сделки: <br><br>
@@ -183,6 +183,10 @@
                 });
             });
     });
+
+    function enterIntoDeal(dealId) {
+        window.location.href = `/crm/deal/${dealId}`;
+    }
 
     var socket = io();
 
@@ -213,7 +217,6 @@
         // Показываем уведомление
         toastr.success(data.message, 'Создана сделка');
     });
-
 
 
     socket.on('notification_delete_deal', function (data) {
@@ -365,7 +368,7 @@
         console.log(data);
         var dealsList = document.getElementById('active-deals-list');
         var currentIndex = dealsList.children.length + 1; // Calculate the new index
-        var dealItem = `<li id="deal-${data.id}" onclick="showDeal(${data.id}, '${data.title}')" class="list-group-item">
+        var dealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
         <div class="index">${currentIndex}</div>
         <div class="content">
             Краткое описание сделки: <br><br>
@@ -413,7 +416,7 @@
 
             // Переместить сделку в архивный список
             var archivedDealsList = document.getElementById('archived-deals-list');
-            var archivedDealItem = `<li id="deal-${data.id}" onclick="showDeal(${data.id}, '${data.title}')" class="list-group-item">
+            var archivedDealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
             <div class="index">${archivedDealsList.children.length + 1}</div>
             <div class="content">
                 Краткое описание сделки: <br><br>
@@ -455,7 +458,7 @@
 
             // Переместить сделку в архивный список
             var activeDealsList = document.getElementById('active-deals-list');
-            var activedDealItem = `<li id="deal-${data.id}" onclick="showDeal(${data.id}, '${data.title}')" class="list-group-item">
+            var activedDealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
             <div class="index">${activeDealsList.children.length + 1}</div>
             <div class="content">
                 Краткое описание сделки: <br><br>

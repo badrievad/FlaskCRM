@@ -1,11 +1,11 @@
 import requests
-from app.config import URL_FOLDER_API_TEST
+from app.config import URL_FOLDER_API
 from logger import logging
 
 
 class CompanyFolderAPI:
     def __init__(self):
-        self.base_url = URL_FOLDER_API_TEST
+        self.base_url = URL_FOLDER_API
 
     def create_folder(self, company_name: str, company_id: str):
         url = f"{self.base_url}/create"

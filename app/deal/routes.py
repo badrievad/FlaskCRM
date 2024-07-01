@@ -35,6 +35,7 @@ def send_notification(socket_path: str, error_message: str) -> jsonify:
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
 def create_deal() -> jsonify:
+    # TODO: добавить проверку на доступность API (CompanyFolderAPI). Нужно откатывать в случае ошибки
     api_folder: CompanyFolderAPI = CompanyFolderAPI()
     deal: DealsValidate = DealsValidate(request.get_json())
     company_name: str = deal.get_company_name

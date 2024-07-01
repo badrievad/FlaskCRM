@@ -7,12 +7,7 @@ from .. import socketio, db
 
 from .deals_db import write_deal_to_db
 from .deals_validate import DealsValidate
-from .work_with_folders import (
-    create_company_folder,
-    delete_company_folder,
-    update_to_archive_company_folder,
-    update_to_active_company_folder,
-)
+from .work_with_folders import CompanyFolderAPI
 
 from ..deal.models import Deal
 from ..user.models import User
@@ -40,6 +35,7 @@ def send_notification(socket_path: str, error_message: str) -> jsonify:
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
 def create_deal() -> jsonify:
+    api_folder: CompanyFolderAPI = CompanyFolderAPI()
     deal: DealsValidate = DealsValidate(request.get_json())
     company_name: str = deal.get_company_name
     name_without_special_symbols: str = deal.get_name_without_special_symbols
@@ -51,8 +47,8 @@ def create_deal() -> jsonify:
         current_user.fullname,
         datetime.datetime.now(),
     )
-    deal_id = deal_data["id"]
-    create_company_folder(name_without_special_symbols, deal_id)
+    deal_id = str(deal_data["id"])
+    api_folder.create_folder(name_without_special_symbols, deal_id)
     logging.info(
         f"{current_user} создал новую сделку. Название сделки: {company_name}. "
         f"ID сделки: {deal_id}. Дата создания: {deal_data['created_at']}."
@@ -74,11 +70,12 @@ def create_deal() -> jsonify:
 @deal_bp.route("/crm/deal/delete_deal/<int:deal_id>", methods=["POST"])
 def delete_deal(deal_id) -> jsonify:
     deal: Deal = Deal.query.get(deal_id)
+    api_folder: CompanyFolderAPI = CompanyFolderAPI()
     if deal:
         try:
             # Начинаем транзакцию
             db.session.delete(deal)
-            delete_company_folder(deal_id)
+            api_folder.delete_folder(deal_id)
             db.session.commit()
 
             # Уведомление через socketio
@@ -131,13 +128,14 @@ def delete_deal(deal_id) -> jsonify:
 @deal_bp.route("/crm/deal/deal_to_archive/<int:deal_id>", methods=["POST"])
 def deal_to_archive(deal_id) -> jsonify:
     deal: Deal = Deal.query.get(deal_id)
+    api_folder: CompanyFolderAPI = CompanyFolderAPI()
     if deal:
         try:
             # Начинаем транзакцию
             deal.status = "archived"
             deal.archived_at = datetime.datetime.now()
             db.session.commit()
-            update_to_archive_company_folder(deal_id)
+            api_folder.archive_folder(deal_id)
             socketio.emit("deal_to_archive", deal.to_json())
             session_username = session.get("username")
             if session_username:
@@ -188,6 +186,7 @@ def deal_to_active(deal_id) -> jsonify:
     """Изменить статус сделки на активную"""
 
     deal: Deal = Deal.query.get(deal_id)
+    api_folder: CompanyFolderAPI = CompanyFolderAPI()
     if deal:
         try:
             # Начинаем транзакцию
@@ -195,7 +194,7 @@ def deal_to_active(deal_id) -> jsonify:
             deal.archived_at = None
             deal.created_at = datetime.datetime.now()
             db.session.commit()
-            update_to_active_company_folder(deal_id)
+            api_folder.activate_folder(deal_id)
             socketio.emit("deal_to_active", deal.to_json())
             session_username = session.get("username")
             if session_username:

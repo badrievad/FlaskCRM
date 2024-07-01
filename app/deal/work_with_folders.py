@@ -1,88 +1,53 @@
-import glob
-import os
-import shutil
+import requests
+from app.config import URL_FOLDER_API_TEST
 from logger import logging
 
-BASE_PATH: str = "/mnt/c/Users/badrievad/Desktop/Deals"  # test path
 
+class CompanyFolderAPI:
+    def __init__(self):
+        self.base_url = URL_FOLDER_API_TEST
 
-def get_id_pattern(company_id: str) -> str:
-    return os.path.join(BASE_PATH, f"*(id_{company_id})*")
+    def create_folder(self, company_name: str, company_id: str):
+        url = f"{self.base_url}/create"
+        data = {"company_name": company_name, "company_id": company_id}
+        logging.info(f"Sending POST request to {url} with data: {data}")
+        try:
+            response = requests.post(url, json=data)
+            response.raise_for_status()  # Проверка на ошибки HTTP
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logging.error(f"An error occurred: {e}")
+            raise
 
+    def delete_folder(self, company_id: str):
+        url = f"{self.base_url}/delete/{company_id}"
+        logging.info(f"Sending DELETE request to {url}")
+        try:
+            response = requests.delete(url)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logging.error(f"An error occurred: {e}")
+            raise
 
-def create_company_folder(company_name: str, company_id: str) -> None:
-    """Создает папку для сделки с id_{company_id}"""
+    def archive_folder(self, company_id: str):
+        url = f"{self.base_url}/archive/{company_id}"
+        logging.info(f"Sending PUT request to {url}")
+        try:
+            response = requests.put(url)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logging.error(f"An error occurred: {e}")
+            raise
 
-    main_dir: str = os.path.join(BASE_PATH, f"{company_name} (id_{company_id})")
-    os.makedirs(main_dir, exist_ok=True)
-
-    # Список поддиректорий, которые будут созданы внутри основной директории
-    subdirectories: list = [
-        "БКИ",
-        "Договоры",
-        "Документы клиента",
-        "Документы продавца",
-        "Заключение",
-        "Расчет",
-    ]
-
-    for subdirectory in subdirectories:
-        os.makedirs(os.path.join(main_dir, subdirectory), exist_ok=True)
-
-
-def delete_company_folder(company_id: str) -> None:
-    """Удаляет папку сделки с id_{company_id}"""
-
-    pattern: str = get_id_pattern(company_id)
-    found: bool = False
-    for folder_path in glob.glob(pattern, recursive=True):
-        if os.path.isdir(folder_path):
-            shutil.rmtree(folder_path)
-            logging.info(f"Папка {folder_path} успешно удалена.")
-            found: bool = True
-            break
-
-    if not found:
-        logging.info(f"Папка с id_{company_id} не найдена.")
-
-
-def update_to_archive_company_folder(company_id: str) -> None:
-    """Добавляет в название папки тег (Архив)"""
-
-    pattern: str = get_id_pattern(company_id)
-    found: bool = False
-    for folder_path in glob.glob(pattern, recursive=True):
-        if os.path.isdir(folder_path):
-            folder_name = os.path.basename(folder_path)  # Текущее имя папки
-            parent_dir = os.path.dirname(folder_path)  # Родительская директория
-            new_folder_name = f"(Архив) {folder_name}"  # Новое имя папки
-            new_folder_path = os.path.join(parent_dir, new_folder_name)
-            os.rename(folder_path, new_folder_path)  # Переименовать папку
-            logging.info(f"Папка {folder_path} успешно обновлена до {new_folder_path}.")
-            found = True
-            break
-
-    if not found:
-        logging.info(f"Папка с id_{company_id} не найдена.")
-
-
-def update_to_active_company_folder(company_id: str) -> None:
-    """Удаляет из названия папки тег (Архив)"""
-
-    pattern: str = get_id_pattern(company_id)
-    found: bool = False
-    for folder_path in glob.glob(pattern, recursive=True):
-        if os.path.isdir(folder_path):
-            folder_name = os.path.basename(folder_path)  # Текущее имя папки
-            parent_dir = os.path.dirname(folder_path)  # Родительская директория
-            new_folder_name = f"{folder_name}".replace(
-                "(Архив) ", ""
-            )  # Новое имя папки
-            new_folder_path = os.path.join(parent_dir, new_folder_name)
-            os.rename(folder_path, new_folder_path)  # Переименовать папку
-            logging.info(f"Папка {folder_path} успешно обновлена до {new_folder_path}.")
-            found = True
-            break
-
-    if not found:
-        logging.info(f"Папка с id_{company_id} не найдена.")
+    def activate_folder(self, company_id: str):
+        url = f"{self.base_url}/activate/{company_id}"
+        logging.info(f"Sending PUT request to {url}")
+        try:
+            response = requests.put(url)
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as e:
+            logging.error(f"An error occurred: {e}")
+            raise

@@ -3,18 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ deal.title }}</title>
+    <title>Deal Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .step {
+            display: flex;
+            align-items: center;
+        }
+        .step:not(:last-child)::after {
+            content: '>';
+            margin: 0 10px;
+        }
+        .step-completed {
+            color: green;
+        }
+        .step-current {
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
-    <div>
-        Deal ID: {{ deal.id }}
-        <button type="button" id="back-home">Вернуться</button>
+    <div class="container mt-5">
+        <h1 class="mb-4">Детали сделки</h1>
+        <div class="card mb-4">
+            <div class="card-header">
+                Статус сделки
+            </div>
+            <div class="card-body">
+                <div id="deal-steps" class="d-flex justify-content-between">
+                    <div class="step step-completed">Шаг 1</div>
+                    <div class="step step-current">Шаг 2</div>
+                    <div class="step">Шаг 3</div>
+                    <div class="step">Шаг 4</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header">
+                Информация о сделке
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Название компании: {{ company_name }}</h5>
+                <p class="card-text">Продукт: {{ product }}</p>
+                <p class="card-text">Лизингополучатель: {{ title }}</p>
+                <p class="card-text">ИНН: {{ company_inn }}</p>
+                <p class="card-text">Менеджер: {{ created_by }}</p>
+                <p class="card-text">Дата создания: {{ created_at }}</p>
+            </div>
+        </div>
     </div>
-
-    <script>
-        document.getElementById('back-home').addEventListener('click', function() {
-            window.location.href = '/crm';
-        });
-    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

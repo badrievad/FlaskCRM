@@ -5,11 +5,11 @@
 }
 
 #active-deals-list li, #archived-deals-list li {
-    padding: 10px;
+    padding: 1px;
     background-color: #ecf0f1;
-    margin-bottom: 5px;
+    margin-bottom: 1px;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 1px;
     transition: background 0.3s;
     display: flex;
     justify-content: space-between;
@@ -36,12 +36,16 @@
 }
 
 .list-group-item .index {
-    height: 5em;
+    background-color: #d5d9e5;
+    height: 10em;
     width: 1em;
-    text-align: right;
-    margin-right: 1em;
+    text-align: center;
+    margin-right: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #333;
-    padding: 2em;
+    padding: 1em;
     border-radius: 4px;
 }
 
@@ -69,10 +73,12 @@
 
 .list-group-item .btn-container {
     background-color: #dc3545;
+    opacity: 1;
 }
 
 .list-group-item .btn-container-to-active {
     background-color: #4a9a38;
+    opacity: 0.8;
 }
 
 .list-group-item .btn-container button, .list-group-item .btn-container-to-active button {
@@ -130,4 +136,25 @@
 
 .list-group-item .btn-container-to-active button:hover {
     color: white;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+.deal-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.deal-table th, .deal-table td {
+    padding: 8px;
+    text-align: left;
+    width: 14%; /* Пропорциональное распределение */
 }

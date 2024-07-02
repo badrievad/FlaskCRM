@@ -130,14 +130,24 @@
                 data.deals.forEach((deal, index) => {
                     var dealItem = `<li id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})" class="list-group-item">
                     <div class="index">${index + 1}</div>
-                    <div class="content">
-                        Краткое описание сделки: <br><br>
-                        Продукт: ${deal.product}<br>
-                        Лизингополучатель: ${deal.title}<br>
-                        ИНН: ${deal.company_inn}<br>
-                        Менеджер: ${deal.created_by}<br>
-                        Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}
-                    </div>
+                    <table class="deal-table">
+                        <thead>
+                            <tr>
+                                <th>Лизингополучатель</th>
+                                <th>Продукт</th>
+                                <th>Менеджер</th>
+                                <th>Дата создания сделки</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${deal.title}</td>
+                                <td>${deal.product}</td>
+                                <td>${deal.created_by}</td>
+                                <td>${new Date(deal.created_at).toLocaleString()}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <div class="btn-container">
                         <button onclick="event.stopPropagation(); confirmArchive(${deal.id})">
                             <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
@@ -159,15 +169,26 @@
                 data.deals.forEach((deal, index) => {
                     var dealItem = `<li id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})" class="list-group-item">
                     <div class="index">${index + 1}</div>
-                    <div class="content">
-                        Краткое описание сделки: <br><br>
-                        Продукт: ${deal.product}<br>
-                        Лизингополучатель: ${deal.title}<br>
-                        ИНН: ${deal.company_inn}<br>
-                        Менеджер: ${deal.created_by}<br>
-                        Дата создания сделки: ${new Date(deal.created_at).toLocaleString()}<br>
-                        Дата добавления в архив: ${new Date(deal.archived_at).toLocaleString()}
-                    </div>
+                    <table class="deal-table">
+                        <thead>
+                            <tr>
+                                <th>Лизингополучатель</th>
+                                <th>Продукт</th>
+                                <th>Менеджер</th>
+                                <th>Дата создания сделки</th>
+                                <th>Дата добавления в архив</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>${deal.title}</td>
+                                <td>${deal.product}</td>
+                                <td>${deal.created_by}</td>
+                                <td>${new Date(deal.created_at).toLocaleString()}</td>
+                                <td>${new Date(deal.archived_at).toLocaleString()}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <div class="btn-container-to-active">
                         <button onclick="event.stopPropagation(); confirmActive(${deal.id})">
                             <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
@@ -370,14 +391,24 @@
         var currentIndex = dealsList.children.length + 1; // Calculate the new index
         var dealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
         <div class="index">${currentIndex}</div>
-        <div class="content">
-            Краткое описание сделки: <br><br>
-            Продукт: ${data.product}<br>
-            Лизингополучатель: ${data.title}<br>
-            ИНН: ${data.company_inn}<br>
-            Менеджер: ${data.created_by}<br>
-            Дата создания сделки: ${data.created_at}
-        </div>
+        <table class="deal-table">
+            <thead>
+                <tr>
+                    <th>Лизингополучатель</th>
+                    <th>Продукт</th>
+                    <th>Менеджер</th>
+                    <th>Дата создания сделки</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>${data.title}</td>
+                    <td>${data.product}</td>
+                    <td>${data.created_by}</td>
+                    <td>${new Date(data.created_at).toLocaleString()}</td>
+                </tr>
+            </tbody>
+        </table>
         <div class="btn-container">
             <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
                 <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
@@ -418,15 +449,26 @@
             var archivedDealsList = document.getElementById('archived-deals-list');
             var archivedDealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
             <div class="index">${archivedDealsList.children.length + 1}</div>
-            <div class="content">
-                Краткое описание сделки: <br><br>
-                Продукт: ${data.product}<br>
-                Лизингополучатель: ${data.title}<br>
-                ИНН: ${data.company_inn}<br>
-                Менеджер: ${data.created_by}<br>
-                Дата создания сделки: ${data.created_at}<br>
-                Дата добавления в архив: ${data.archived_at}
-            </div>
+                <table class="deal-table">
+                <thead>
+                    <tr>
+                        <th>Лизингополучатель</th>
+                        <th>Продукт</th>
+                        <th>Менеджер</th>
+                        <th>Дата создания сделки</th>
+                        <th>Дата добавления в архив</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${data.title}</td>
+                        <td>${data.product}</td>
+                        <td>${data.created_by}</td>
+                        <td>${new Date(data.created_at).toLocaleString()}</td>
+                        <td>${new Date(data.archived_at).toLocaleString()}</td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="btn-container-to-active">
                 <button onclick="event.stopPropagation(); confirmActive(${data.id})">
                     <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
@@ -460,14 +502,24 @@
             var activeDealsList = document.getElementById('active-deals-list');
             var activedDealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
             <div class="index">${activeDealsList.children.length + 1}</div>
-            <div class="content">
-                Краткое описание сделки: <br><br>
-                Продукт: ${data.product}<br>
-                Лизингополучатель: ${data.title}<br>
-                ИНН: ${data.company_inn}<br>
-                Менеджер: ${data.created_by}<br>
-                Дата создания сделки: ${data.created_at}<br>
-            </div>
+                <table class="deal-table">
+                <thead>
+                    <tr>
+                        <th>Лизингополучатель</th>
+                        <th>Продукт</th>
+                        <th>Менеджер</th>
+                        <th>Дата создания сделки</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>${data.title}</td>
+                        <td>${data.product}</td>
+                        <td>${data.created_by}</td>
+                        <td>${new Date(data.created_at).toLocaleString()}</td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="btn-container">
                 <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
                     <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->

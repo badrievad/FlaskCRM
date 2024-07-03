@@ -115,3 +115,30 @@ body {
 .tab-content.active {
     display: block;
 }
+
+.deal-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+}
+
+.deal-info .left,
+.deal-info .right {
+    width: 48%;
+}
+
+.deal-info .section {
+    margin-bottom: 20px;
+}
+
+.deal-info .section h3 {
+    margin-bottom: 10px;
+}
+
+.deal-info .section p {
+    margin: 5px 0;
+}

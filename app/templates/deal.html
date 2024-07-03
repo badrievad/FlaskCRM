@@ -62,7 +62,47 @@
             <div class="step">Каюмов А. Д.</div>
             <div class="step">Завершить сделку</div>
         </div>
-        <h2>{{ deal.title }}</h2>
+        <h4>Основные сведения по сделке</h4>
+        <div class="deal-info">
+            <div class="left">
+                <div class="section">
+                    <h3>Продукт</h3>
+                    <p>{{ deal.product }}</p>
+                </div>
+                <div class="section">
+                    <h3>Предмет лизинга</h3>
+                    <p>Снегоболотоход AODES Pathcross 1000L, 2023 г.в., новый.</p>
+                </div>
+                <div class="section">
+                    <h3>Стоимость предмета лизинга</h3>
+                    <p>11 855 744 ₽</p>
+                </div>
+                <div class="section">
+                    <h3>Аванс</h3>
+                    <p>0 ₽</p>
+                </div>
+                <div class="section">
+                    <h3>Срок лизинга</h3>
+                    <p>60 мес.</p>
+                </div>
+            </div>
+            <div class="right">
+                <div class="section">
+                    <h3>Клиент</h3>
+                    <p>Наименование: {{ deal.title }}</p>
+                    <p>ИНН: {{ deal.company_inn }}</p>
+                </div>
+                <div class="section">
+                    <h3>Поставщик</h3>
+                    <p>Наименование: {{ deal.seller_name }}</p>
+                    <p>ИНН: {{ deal.seller_inn }}</p>
+                </div>
+                <div class="section">
+                    <h3>Ответственный</h3>
+                    <p>{{ deal.created_by }}</p>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="history" class="tab-content">
         <h2>История</h2>

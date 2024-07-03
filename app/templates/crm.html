@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM System</title>
+    <title>Сделки ООО «ЛКМБ-РТ»</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/crm.css') }}">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/style-crm.css') }}">
@@ -36,11 +36,7 @@
 <body>
 
 <div class="sidebar">
-    <h2>CRM System</h2>
-    <div class="user-photo">
-        <img src="{{ user_url }}" alt="User Photo" class="profile-image">
-    </div>
-    <h6>{{ current_user }}</h6>
+    <h2>StellarCRM</h2><br><br><br>
     <ul>
         <li onclick="toggleSubmenu('deals-submenu')"><i class="fas fa-handshake"></i> Список сделок</li>
         <ul id="deals-submenu" class="submenu">
@@ -49,6 +45,11 @@
         </ul>
         <li onclick="showForm('task')"><i class="fas fa-tasks"></i> Создать сделку</li>
     </ul>
+    <div class="user-photo">
+        <img src="{{ user_url }}" alt="User Photo" class="profile-image">
+    </div>
+    <h6>{{ current_user }}</h6>
+    <h6>Должность: Тестировщик</h6>
 </div>
 
 <div class="main-content">

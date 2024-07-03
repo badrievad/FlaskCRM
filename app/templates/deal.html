@@ -36,7 +36,6 @@
 </head>
 <body>
 <div class="sidebar" id="sidebar">
-    <h6>{{ current_user }}</h6>
     <ul>
         <li><a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
             Вернуться к сделкам</a></li>
@@ -45,6 +44,7 @@
         <li class="nav-link" onclick="showForm('some1')"><i class="fa-solid fa-calculator"></i> Лизинговый калькулятор
         </li>
     </ul>
+    <h6>{{ current_user }}</h6>
 </div>
 <div class="main-content" id="main-content">
     <div class="tabs">
@@ -105,8 +105,6 @@
         document.getElementById("main-content").classList.remove("shrink");
 
     }
-
-
 </script>
 </body>
 </html>

@@ -3,57 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deal Details</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>{{ deal.title }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-stepper.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-sidebar.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+
+    <!-- toastr -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css">
+
+    <!-- DADATA -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet"/>
+    <script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
     <style>
-        .step {
-            display: flex;
-            align-items: center;
-        }
-        .step:not(:last-child)::after {
-            content: '>';
-            margin: 0 10px;
-        }
-        .step-completed {
-            color: green;
-        }
-        .step-current {
-            font-weight: bold;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="mb-4">Детали сделки</h1>
-        <div class="card mb-4">
-            <div class="card-header">
-                Статус сделки
-            </div>
-            <div class="card-body">
-                <div id="deal-steps" class="d-flex justify-content-between">
-                    <div class="step step-completed">Шаг 1</div>
-                    <div class="step step-current">Шаг 2</div>
-                    <div class="step">Шаг 3</div>
-                    <div class="step">Шаг 4</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-4">
-            <div class="card-header">
-                Информация о сделке
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">Название компании: {{ company_name }}</h5>
-                <p class="card-text">Продукт: {{ product }}</p>
-                <p class="card-text">Лизингополучатель: {{ title }}</p>
-                <p class="card-text">ИНН: {{ company_inn }}</p>
-                <p class="card-text">Менеджер: {{ created_by }}</p>
-                <p class="card-text">Дата создания: {{ created_at }}</p>
-            </div>
-        </div>
+<div class="sidebar" id="sidebar">
+    <h6>{{ current_user }}</h6>
+    <ul>
+        <li><a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
+            Вернуться к сделкам</a></li>
+        <br>
+        <li class="nav-link" onclick="showForm('some')"><i class="fa-solid fa-database"></i> Данные по сделке</li>
+        <li class="nav-link" onclick="showForm('some1')"><i class="fa-solid fa-calculator"></i> Лизинговый калькулятор
+        </li>
+    </ul>
+</div>
+<div class="main-content" id="main-content">
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('general')"><i class="fa-solid fa-info-circle"></i> Общие</div>
+        <div class="tab" onclick="showTab('history')"><i class="fa-solid fa-clock-rotate-left"></i> История</div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <div id="general" class="tab-content active">
+        <div class="stepper">
+            <div class="step completed">Отдел безопасности</div>
+            <div class="step">Юридический отдел</div>
+            <div class="step">Отдел рисков</div>
+            <div class="step">Завершить сделку</div>
+        </div>
+        <h2>{{ deal.title }}</h2>
+    </div>
+    <div id="history" class="tab-content">
+        <h2>История</h2>
+        <!-- Your comments tab content here -->
+    </div>
+</div>
+<script>
+    function showTab(tabId) {
+        var tabs = document.getElementsByClassName('tab-content');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove('active');
+        }
+        document.getElementById(tabId).classList.add('active');
+
+        var tabButtons = document.getElementsByClassName('tab');
+        for (var i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].classList.remove('active');
+        }
+        event.target.classList.add('active');
+    }
+
+    function toggleSubmenu(id) {
+        var submenu = document.getElementById(id);
+        if (submenu.classList.contains('show')) {
+            submenu.classList.remove('show');
+        } else {
+            submenu.classList.add('show');
+        }
+    }
+
+    function showForm(formId) {
+        document.querySelectorAll('.deal-content .card').forEach(card => {
+            card.classList.add('hidden');
+        });
+        document.getElementById(formId).classList.remove('hidden');
+    }
+
+    window.onload = function () {
+        document.getElementById("sidebar").classList.add("open");
+        document.getElementById("main-content").classList.remove("shrink");
+
+    }
+
+
+</script>
 </body>
 </html>

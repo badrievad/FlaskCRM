@@ -1,0 +1,30 @@
+.stepper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding: 10px 0;
+    margin-bottom: 20px;
+}
+
+.stepper .step {
+    flex: 0 0 auto;
+    padding: 10px 30px;
+    margin-right: -10px;
+    background-color: #9f9f9f;
+    color: white;
+    border-radius: 5px;
+    transition: background 0.3s;
+    clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%, 10% 50%);
+    min-width: 200px; /* Установите минимальную ширину для всех степеров */
+    text-align: center;
+}
+
+
+.stepper .step.completed {
+    background-color: #16a085;
+}
+
+.stepper .step:hover {
+    background-color: #bebdbd;
+    cursor: pointer;
+}

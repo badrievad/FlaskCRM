@@ -1,0 +1,66 @@
+.sidebar {
+    font-family: 'Roboto', sans-serif;
+    width: 250px;
+    background-color: rgb(35, 63, 89);
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    padding-top: 20px;
+    transition: left 0.5s ease-in-out; /* Увеличено время перехода */
+    left: -250px; /* Изначально скрытый */
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebar h6 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+}
+
+.sidebar ul li {
+    padding: 15px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.sidebar ul li:hover {
+    background-color: #34495e;
+}
+
+.sidebar ul li i {
+    margin-right: 10px;
+}
+
+/* Добавляем общий стиль для элементов <a> и <li> с классом nav-link */
+.sidebar ul li a.nav-link,
+.sidebar ul li.nav-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.sidebar ul li a.nav-link:hover,
+.sidebar ul li.nav-link:hover {
+    background-color: #34495e;
+}

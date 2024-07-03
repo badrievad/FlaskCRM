@@ -17,7 +17,7 @@ class CompanyFolderAPI:
             return response.json()
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
-            raise PermissionError
+            raise PermissionError from e
 
     def delete_folder(self, company_id: str):
         url = f"{self.base_url}/delete/{company_id}"
@@ -28,7 +28,7 @@ class CompanyFolderAPI:
             return response.json()
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
-            raise PermissionError
+            raise PermissionError from e
 
     def archive_folder(self, company_id: str):
         url = f"{self.base_url}/archive/{company_id}"
@@ -39,7 +39,7 @@ class CompanyFolderAPI:
             return response.json()
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
-            raise PermissionError
+            raise PermissionError from e
 
     def activate_folder(self, company_id: str):
         url = f"{self.base_url}/activate/{company_id}"
@@ -50,4 +50,4 @@ class CompanyFolderAPI:
             return response.json()
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
-            raise PermissionError
+            raise PermissionError from e

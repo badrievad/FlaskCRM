@@ -155,3 +155,10 @@ body {
 .submenu li:hover {
     cursor: pointer;
 }
+.nav-link {
+    color: white;
+}
+
+.nav-link:hover {
+    color: white;
+}

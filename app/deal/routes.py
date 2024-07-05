@@ -318,3 +318,8 @@ def get_deals_archived() -> jsonify:
 def enter_into_deal(deal_id: int) -> render_template:
     deal: Deal = Deal.query.get(deal_id)
     return render_template("deal.html", deal=deal)
+
+
+@deal_bp.route("/crm/calculator", methods=["GET"])
+def get_leasing_calculator() -> render_template:
+    return render_template("leasing_calculator.html")

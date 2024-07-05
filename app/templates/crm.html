@@ -44,6 +44,14 @@
             <li id="archived-deals-link" onclick="showForm('archived-deals')">Архивные сделки (0)</li>
         </ul>
         <li onclick="showForm('task')"><i class="fas fa-tasks"></i> Создать сделку</li>
+        <br><br><br><br>
+        <ul>
+            <li><a class="nav-link" href="{{ url_for('deal.get_leasing_calculator') }}"><i
+                    class="fa-solid fa-calculator"></i>
+                Лизинговый
+                калькулятор</a>
+            </li>
+        </ul>
     </ul>
     <div class="user-photo">
         <img src="{{ user_url }}" alt="User Photo" class="profile-image">

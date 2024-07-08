@@ -6,12 +6,15 @@ body {
     display: flex;
     height: 100vh;
     overflow: hidden;
+    background-image: url('https://images.wallpaperscraft.ru/image/single/mercedesbenz_amg_gt_s_102048_2048x1338.jpg'); /* Укажите путь к вашему изображению */
+    background-position: center; /* Изображение будет центрировано */
+    background-repeat: no-repeat; /* Изображение не будет повторяться */
 }
 
 .sidebar {
     font-family: 'Roboto', sans-serif;
     width: 250px;
-    background-color: #2c3e50;
+    background-color: rgba(44, 62, 80, 0.4);
     color: white;
     height: 100vh;
     display: flex;
@@ -66,7 +69,7 @@ body {
 }
 
 .sidebar ul li:hover {
-    background-color: #34495e;
+    background-color: rgba(52, 73, 94, 0.40);
 }
 
 .sidebar ul li i {
@@ -79,7 +82,6 @@ body {
     padding: 20px;
     flex-grow: 1;
     overflow-y: auto;
-    background-color: #ecf0f1;
 }
 
 .main-content h1 {

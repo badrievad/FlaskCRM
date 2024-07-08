@@ -1,7 +1,7 @@
 .sidebar {
     font-family: 'Roboto', sans-serif;
     width: 250px;
-    background-color: rgb(35, 63, 89);
+    background-color: rgba(44, 62, 80, 0.4);
     color: white;
     height: 100vh;
     display: flex;
@@ -45,7 +45,7 @@
 }
 
 .sidebar ul li:hover {
-    background-color: #34495e;
+    background-color: rgba(52, 73, 94, 0.40);
 }
 
 .sidebar ul li i {

@@ -43,80 +43,79 @@
     <h6>{{ current_user }}</h6>
 </div>
 <div class="main-content" id="main-content">
-    <h1>Укажите все параметры и получите точный расчет</h1>
-    <div class="vehicle-types">
-        <button class="vehicle-type">Легковые</button>
-        <button class="vehicle-type">Коммерческие</button>
-        <button class="vehicle-type">Грузовые</button>
-        <button class="vehicle-type">Спецтехника</button>
-        <button class="vehicle-type">Автобусы</button>
-        <button class="vehicle-type">Недвижимость</button>
-    </div>
-    <div class="form-section">
-        <div class="form-group">
-            <label for="property-value">Стоимость имущества</label>
-            <input type="range" id="property-value" name="property-value" min="500000" max="50000000" step="500000"
-                   value="500000">
-            <output for="property-value" id="property-value-output">500 000 ₽</output>
+    <div class="container">
+        <div class="header">
+            <h1>Укажите основные параметры сделки</h1>
         </div>
-        <div class="form-group">
-            <label for="initial-payment">Первоначальный взнос</label>
-            <input type="range" id="initial-payment" name="initial-payment" min="0" max="49" step="1" value="0">
-            <output for="initial-payment" id="initial-payment-output">0 ₽</output>
-            <output for="initial-payment" id="initial-payment-percent">0%</output>
+        <div class="tabs">
+            <button><i class="fas fa-car"></i>Легковые</button>
+            <button><i class="fas fa-truck"></i>Грузовые и прицепы</button>
+            <button><i class="fas fa-microchip"></i>Оборудование</button>
+            <button><i class="fas fa-snowplow"></i>Спецтехника</button>
+            <button><i class="fas fa-bus"></i>Автобусы</button>
+            <button><i class="fas fa-house"></i>Недвижимость</button>
         </div>
-        <div class="form-group">
-            <label for="contract-term">Срок договора</label>
-            <input type="range" id="contract-term" name="contract-term" min="12" max="60" step="12" value="36">
-            <output for="contract-term" id="contract-term-output">36 месяцев</output>
+        <div class="content">
+            <div class="input-section">
+                <div class="form-group">
+                    <div class="input-container">
+                        <label for="cost">Стоимость имущества</label>
+                        <input type="number" id="cost-value" name="cost-value" value="500000">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="cost" name="cost" min="100000" max="100000000" value="500000">
+                    </div>
+                    <div class="range-labels">
+                        <span>100 тыс. ₽</span>
+                        <span>100 млн ₽</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label for="initial-payment">Первоначальный взнос</label>
+                        <div class="input-group">
+                            <input type="number" id="initial-payment-value" name="initial-payment-value" value="0"
+                                   placeholder="₽">
+                            <input type="number" id="initial-payment-percent" name="initial-payment-percent" value="0"
+                                   placeholder="%" max="49.99">
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="initial-payment" name="initial-payment" min="0" max="50000000"
+                               value="0">
+                    </div>
+                    <div class="range-labels">
+                        <span>0%</span>
+                        <span>50%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label for="term">Срок договора</label>
+                        <input type="number" id="term-value" name="term-value" value="36">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="term" name="term" min="6" max="60" value="36">
+                    </div>
+                    <div class="range-labels">
+                        <span>6 мес.</span>
+                        <span>60 мес.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="results">
+                <div class="result">
+                    <p class="big">22 530 ₽</p>
+                    <p class="savings">Экономия по налогам: 273 688 ₽</p>
+                    <p>Годовое удорожание: 21.40%</p>
+                    <p>Сумма договора: 821 065 ₽</p>
+                </div>
+                <button class="calculate-button">Рассчитать</button>
+            </div>
         </div>
-        <button class="calculate-btn">Рассчитать</button>
-    </div>
-    <div class="result-section">
-        <h2>Ежемесячный платеж:</h2>
-        <p class="monthly-payment">22 530 ₽</p>
-        <p class="tax-saving">Экономия по налогам: 273 688 ₽</p>
-        <p class="annual-interest">Годовое удорожание: 21.40%</p>
-        <p class="contract-amount">Сумма договора: 821 065 ₽</p>
     </div>
 </div>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/leasing-calculator-sidebar.js') }}"></script>
 </body>
-<script>
-    function showTab(tabId) {
-        var tabs = document.getElementsByClassName('tab-content');
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].classList.remove('active');
-        }
-        document.getElementById(tabId).classList.add('active');
-
-        var tabButtons = document.getElementsByClassName('tab');
-        for (var i = 0; i < tabButtons.length; i++) {
-            tabButtons[i].classList.remove('active');
-        }
-        event.target.classList.add('active');
-    }
-
-    function toggleSubmenu(id) {
-        var submenu = document.getElementById(id);
-        if (submenu.classList.contains('show')) {
-            submenu.classList.remove('show');
-        } else {
-            submenu.classList.add('show');
-        }
-    }
-
-    function showForm(formId) {
-        document.querySelectorAll('.deal-content .card').forEach(card => {
-            card.classList.add('hidden');
-        });
-        document.getElementById(formId).classList.remove('hidden');
-    }
-
-    window.onload = function () {
-        document.getElementById("sidebar").classList.add("open");
-        document.getElementById("main-content").classList.remove("shrink");
-
-    }
-</script>
 </html>

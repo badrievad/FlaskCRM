@@ -6,6 +6,9 @@ body {
     display: flex;
     height: 100vh;
     overflow: hidden;
+    background-image: url('https://images.wallpaperscraft.ru/image/single/mercedesbenz_amg_gt_s_102048_2048x1338.jpg'); /* Укажите путь к вашему изображению */
+    background-position: center; /* Изображение будет центрировано */
+    background-repeat: no-repeat; /* Изображение не будет повторяться */
 }
 
 .main-content {
@@ -14,7 +17,7 @@ body {
     padding: 20px;
     flex-grow: 1;
     overflow-y: auto;
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
     transition: margin-left 0.5s ease-in-out;
 }
 
@@ -211,4 +214,193 @@ output {
     background-color: #007bff;
     color: #fff;
     border-color: #007bff;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tabs button {
+    background-color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.tabs button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.tabs button i {
+    margin-right: 8px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tabs button {
+    background-color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.tabs button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.form-group .input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-group .input-container .input-group {
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+}
+
+.form-group .input-container input {
+    width: 140px;
+    font-size: 14px;
+    padding: 5px;
+    -moz-appearance: textfield;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.form-group .input-container input::-webkit-outer-spin-button,
+.form-group .input-container input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.form-group .slider-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.form-group input[type="range"] {
+    flex-grow: 1;
+    margin: 0 10px;
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+.results {
+    width: 35%;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.result p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.result .big {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.result .savings {
+    color: green;
+    font-size: 16px;
+}
+
+.calculate-button {
+    display: block;
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.input-section {
+    width: 60%;
+    padding-right: 20px;
 }

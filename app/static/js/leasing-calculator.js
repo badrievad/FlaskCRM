@@ -1,35 +1,41 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const propertyValue = document.getElementById('property-value');
-    const propertyValueOutput = document.getElementById('property-value-output');
-    const initialPayment = document.getElementById('initial-payment');
-    const initialPaymentOutput = document.getElementById('initial-payment-output');
-    const initialPaymentPercent = document.getElementById('initial-payment-percent');
-    const contractTerm = document.getElementById('contract-term');
-    const contractTermOutput = document.getElementById('contract-term-output');
-    const finalPayment = document.getElementById('final-payment');
-    const finalPaymentOutput = document.getElementById('final-payment-output');
-    const calculateBtn = document.querySelector('.calculate-btn');
+document.getElementById('cost').addEventListener('input', function () {
+    document.getElementById('cost-value').value = this.value;
+});
+document.getElementById('cost-value').addEventListener('input', function () {
+    document.getElementById('cost').value = this.value;
+});
 
-    propertyValue.addEventListener('input', function () {
-        propertyValueOutput.textContent = `${Number(propertyValue.value).toLocaleString()} ₽`;
-    });
+document.getElementById('initial-payment').addEventListener('input', function () {
+    var totalCost = parseInt(document.getElementById('cost').value);
+    var percentValue = (this.value / totalCost) * 100;
+    document.getElementById('initial-payment-value').value = this.value;
+    document.getElementById('initial-payment-percent').value = percentValue.toFixed(2);
+});
 
-    initialPayment.addEventListener('input', function () {
-        const value = (propertyValue.value * initialPayment.value / 100).toLocaleString();
-        initialPaymentOutput.textContent = `${value} ₽`;
-        initialPaymentPercent.textContent = `${initialPayment.value}%`;
-    });
+document.getElementById('initial-payment-value').addEventListener('input', function () {
+    var totalCost = parseInt(document.getElementById('cost').value);
+    var percentValue = (this.value / totalCost) * 100;
+    document.getElementById('initial-payment').value = this.value;
+    document.getElementById('initial-payment-percent').value = percentValue.toFixed(2);
+});
 
-    contractTerm.addEventListener('input', function () {
-        contractTermOutput.textContent = `${contractTerm.value} месяцев`;
-    });
+document.getElementById('initial-payment-percent').addEventListener('input', function () {
+    var totalCost = parseInt(document.getElementById('cost').value);
+    var value = (this.value / 100) * totalCost;
+    document.getElementById('initial-payment').value = value;
+    document.getElementById('initial-payment-value').value = value.toFixed(0);
+});
 
-    finalPayment.addEventListener('input', function () {
-        finalPaymentOutput.textContent = `${finalPayment.value}%`;
-    });
+document.getElementById('term').addEventListener('input', function () {
+    document.getElementById('term-value').value = this.value;
+});
+document.getElementById('term-value').addEventListener('input', function () {
+    document.getElementById('term').value = this.value;
+});
 
-    calculateBtn.addEventListener('click', function () {
-        // Здесь можно добавить расчет на основе введенных данных
-        alert('Расчет произведен!');
-    });
+document.getElementById('final-payment').addEventListener('input', function () {
+    document.getElementById('final-payment-value').value = this.value;
+});
+document.getElementById('final-payment-value').addEventListener('input', function () {
+    document.getElementById('final-payment').value = this.value;
 });

@@ -32,10 +32,3 @@ document.getElementById('term').addEventListener('input', function () {
 document.getElementById('term-value').addEventListener('input', function () {
     document.getElementById('term').value = this.value;
 });
-
-document.getElementById('final-payment').addEventListener('input', function () {
-    document.getElementById('final-payment-value').value = this.value;
-});
-document.getElementById('final-payment-value').addEventListener('input', function () {
-    document.getElementById('final-payment').value = this.value;
-});

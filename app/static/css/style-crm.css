@@ -84,13 +84,48 @@ body {
     overflow-y: auto;
 }
 
+.main-content .card {
+    background: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Полупрозрачная граница */
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.main-content .card h2 {
+    color: rgba(255, 255, 255, 0.8); /* Полупрозрачный текст заголовка */
+}
+
+.main-content .card input[type="text"], .main-content .card input[type="hidden"] {
+    background: rgba(255, 255, 255, 0.15); /* Полупрозрачный фон поля ввода */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Полупрозрачная граница поля ввода */
+    padding: 10px;
+    margin-bottom: 10px;
+    width: calc(100% - 22px); /* Учитывает padding и border */
+    box-sizing: border-box; /* Учитывает padding и border в width */
+    color: rgba(0, 0, 0, 0.1); /* Полупрозрачный текст */
+}
+
+.main-content .card button {
+    background: rgba(0, 123, 255, 0.6); /* Полупрозрачный фон кнопки */
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.main-content .card button:hover {
+    background: rgba(0, 123, 255, 0.8); /* Менее прозрачный фон при наведении */
+}
+
 .main-content h1 {
     margin-bottom: 20px;
     font-size: 32px;
 }
 
 .card {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.54);
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -115,13 +150,13 @@ body {
 .card form input, .card form textarea, .card form button {
     margin-bottom: 15px;
     padding: 10px;
-    border: 1px solid #bdc3c7;
+    border: 1px solid rgba(189, 195, 199, 0.45);
     border-radius: 4px;
     font-size: 16px;
 }
 
 .card form button {
-    background-color: #2c3e50;
+    background-color: rgba(44, 62, 80, 0.85);
     color: white;
     border: none;
     cursor: pointer;
@@ -129,7 +164,7 @@ body {
 }
 
 .card form button:hover {
-    background-color: #34495e;
+    background-color: rgba(52, 73, 94, 0.7);
 }
 
 .hidden {
@@ -158,9 +193,23 @@ body {
     cursor: pointer;
 }
 .nav-link {
-    color: white;
+    color: rgb(255, 255, 255);
 }
 
 .nav-link:hover {
-    color: white;
+    color: rgb(255, 255, 255);
+}
+
+#deal-title {
+    background: rgba(255, 255, 255, 0.2); /* Менее прозрачный фон */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Полупрозрачная граница */
+    padding: 10px;
+    margin-bottom: 10px;
+    width: calc(100% - 22px); /* Учитывает padding и border */
+    box-sizing: border-box; /* Учитывает padding и border в width */
+    color: rgba(255, 255, 255, 0.9); /* Менее прозрачный текст */
+}
+
+#deal-title::placeholder {
+    color: rgba(255, 255, 255, 0.6); /* Менее прозрачный текст */
 }

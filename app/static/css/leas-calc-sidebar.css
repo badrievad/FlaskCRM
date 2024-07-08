@@ -52,15 +52,12 @@
     margin-right: 10px;
 }
 
-/* Добавляем общий стиль для элементов <a> и <li> с классом nav-link */
-.sidebar ul li a.nav-link,
-.sidebar ul li.nav-link {
-    display: block;
-    color: inherit;
-    text-decoration: none;
+.nav-link {
+    text-align: center;
+    color: rgb(255, 255, 255);
 }
 
-.sidebar ul li a.nav-link:hover,
-.sidebar ul li.nav-link:hover {
-    background-color: #34495e;
+.nav-link:hover {
+    text-align: center;
+    color: rgb(255, 255, 255);
 }

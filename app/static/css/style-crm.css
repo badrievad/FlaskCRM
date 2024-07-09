@@ -197,6 +197,7 @@
     width: 500px; /* Ширина карточки */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    backdrop-filter: blur(10px); /* Размытие фона */
 }
 
 #task h2 {

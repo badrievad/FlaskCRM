@@ -6,7 +6,7 @@
 
 #active-deals-list li, #archived-deals-list li {
     padding: 1px;
-    background-color: rgba(236, 240, 241, 0.8);
+    background-color: rgba(236, 240, 241, 0.05);
     margin-bottom: 1px;
     cursor: pointer;
     border-radius: 1px;
@@ -14,10 +14,13 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    backdrop-filter: blur(15px); /* Размытие фона */
+    color: rgba(255, 255, 255, 0.8);
 }
 
 #active-deals-list li:hover, #archived-deals-list li:hover {
-    background-color: rgba(189, 195, 199, 0.6);
+    background-color: rgba(236, 240, 241, 0.2);
+    backdrop-filter: blur(20px); /* Размытие фона */
 }
 
 .list-group-item {
@@ -36,7 +39,7 @@
 }
 
 .list-group-item .index {
-    background-color: rgba(213, 217, 229, 0.15);
+    background-color: rgba(255, 255, 255, 0.01);
     height: 10em;
     width: 1em;
     text-align: center;
@@ -44,7 +47,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #333;
+    color: rgba(255, 255, 255, 0.5);
     padding: 1em;
     border-radius: 4px;
 }

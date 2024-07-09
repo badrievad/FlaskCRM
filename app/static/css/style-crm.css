@@ -72,7 +72,7 @@
 }
 
 .main-content .card {
-    background: rgba(255, 255, 255, 0.2); /* Полупрозрачный белый фон */
+    background: rgba(255, 255, 255, 0.05); /* Полупрозрачный белый фон */
     border: 1px solid rgba(0, 0, 0, 0.1); /* Полупрозрачная граница */
     border-radius: 8px;
     padding: 20px;
@@ -179,6 +179,7 @@
 .submenu li:hover {
     cursor: pointer;
 }
+
 .nav-link {
     color: rgb(255, 255, 255);
 }
@@ -199,4 +200,44 @@
 
 #deal-title::placeholder {
     color: rgba(255, 255, 255, 0.6); /* Менее прозрачный текст */
+}
+
+#task {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    padding: 20px;
+    width: 500px; /* Ширина карточки */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#task h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+#task form input[type="text"],
+#task form input[type="hidden"] {
+    width: calc(100%); /* Учитывает padding и border */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    box-sizing: border-box;
+
+}
+
+#task form button {
+    background-color: rgba(55, 101, 86, 0.4);
+    width: calc(100%); /* Учитывает padding и border */
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+#task form button:hover {
+    background-color: rgba(55, 101, 86, 0.8);
 }

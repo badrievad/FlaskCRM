@@ -8,6 +8,7 @@
     flex-direction: column;
     position: fixed;
     padding-top: 20px;
+    backdrop-filter: blur(3px); /* Размытие фона */
 }
 
 .sidebar h2 {

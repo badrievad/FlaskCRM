@@ -82,7 +82,7 @@ input[type="range"]::-webkit-slider-thumb {
     appearance: none;
     width: 20px;
     height: 20px;
-    background: rgba(0, 123, 255, 0.55);
+    background-color: rgba(55, 101, 86, 0.8);
     border-radius: 50%;
     cursor: pointer;
 }
@@ -368,7 +368,7 @@ output {
 .calculate-button {
     display: block;
     width: 100%;
-    background-color: rgba(0, 123, 255, 0.65);
+    background-color: rgba(55, 101, 86, 0.8);
     color: white;
     padding: 10px;
     border: none;

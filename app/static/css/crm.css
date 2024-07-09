@@ -72,12 +72,12 @@
 }
 
 .list-group-item .btn-container {
-    background-color: rgba(255, 5, 5, 0.26);
+    background-color: rgba(155, 36, 36, 0.88);
     opacity: 1;
 }
 
 .list-group-item .btn-container-to-active {
-    background-color: rgba(74, 154, 56, 0.42);
+    background-color: rgba(18, 87, 49, 0.9);
     opacity: 0.8;
 }
 

@@ -93,19 +93,6 @@
     color: rgba(0, 0, 0, 0.1); /* Полупрозрачный текст */
 }
 
-.main-content .card button {
-    background: rgba(0, 123, 255, 0.6); /* Полупрозрачный фон кнопки */
-    border: none;
-    padding: 10px 20px;
-    color: white;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.main-content .card button:hover {
-    background: rgba(0, 123, 255, 0.8); /* Менее прозрачный фон при наведении */
-}
-
 .main-content h1 {
     margin-bottom: 20px;
     font-size: 32px;

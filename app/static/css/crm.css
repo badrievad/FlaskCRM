@@ -6,7 +6,7 @@
 
 #active-deals-list li, #archived-deals-list li {
     padding: 1px;
-    background-color: rgba(236, 240, 241, 0.6);
+    background-color: rgba(236, 240, 241, 0.8);
     margin-bottom: 1px;
     cursor: pointer;
     border-radius: 1px;

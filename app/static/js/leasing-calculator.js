@@ -32,3 +32,11 @@ document.getElementById('term').addEventListener('input', function () {
 document.getElementById('term-value').addEventListener('input', function () {
     document.getElementById('term').value = this.value;
 });
+
+
+document.querySelectorAll('.tabs button').forEach(button => {
+    button.addEventListener('click', function () {
+        document.querySelectorAll('.tabs button').forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+    });
+});

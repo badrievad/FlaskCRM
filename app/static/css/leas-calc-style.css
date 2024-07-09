@@ -236,6 +236,7 @@ output {
     font-size: 14px;
     display: flex;
     align-items: center;
+    outline: none; /* Убираем рамку */
 }
 
 .tabs button.active {
@@ -245,6 +246,10 @@ output {
 
 .tabs button i {
     margin-right: 8px;
+}
+
+.tabs button:focus {
+    outline: none; /* Убираем рамку при фокусе */
 }
 
 .header {
@@ -275,8 +280,8 @@ output {
 }
 
 .tabs button.active {
-    background-color: rgba(0, 123, 255, 0.53);
-    color: rgba(255, 255, 255, 0.47);
+    background-color: rgba(55, 101, 86, 0.8);
+    color: rgba(255, 255, 255);
 }
 
 .content {

@@ -84,7 +84,7 @@
 .list-group-item .btn-container button, .list-group-item .btn-container-to-active button {
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.44);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 1.2em;
     cursor: pointer;
     outline: none;

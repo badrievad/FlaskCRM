@@ -261,6 +261,7 @@ def index_crm() -> render_template:
         user_url=current_user.url_photo,
         user_work_number=current_user.worknumber,
         user_mobile_number=current_user.mobilenumber,
+        user_fon=current_user.fon_url,
         suggestions_token=suggestions_token,
     )
 
@@ -322,4 +323,7 @@ def enter_into_deal(deal_id: int) -> render_template:
 
 @deal_bp.route("/crm/calculator", methods=["GET"])
 def get_leasing_calculator() -> render_template:
-    return render_template("leasing_calculator.html")
+    return render_template(
+        "leasing_calculator.html",
+        user_fon=current_user.fon_url,
+    )

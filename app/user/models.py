@@ -17,6 +17,7 @@ class User(db.Model, UserMixin):
     url_photo = db.Column(db.String())
     worknumber = db.Column(db.String())
     mobilenumber = db.Column(db.String())
+    fon_url = db.Column(db.String())
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

@@ -1,20 +1,7 @@
-body {
-    font-family: 'Roboto', sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-    background-image: url('https://images.wallpaperscraft.ru/image/single/mercedesbenz_amg_gt_s_102048_2048x1338.jpg'); /* Укажите путь к вашему изображению */
-    background-position: center; /* Изображение будет центрировано */
-    background-repeat: no-repeat; /* Изображение не будет повторяться */
-}
-
 .sidebar {
     font-family: 'Roboto', sans-serif;
     width: 250px;
-    background-color: rgba(44, 62, 80, 0.4);
+    background-color: rgba(27, 42, 30, 0.4);
     color: white;
     height: 100vh;
     display: flex;
@@ -69,7 +56,7 @@ body {
 }
 
 .sidebar ul li:hover {
-    background-color: rgba(52, 73, 94, 0.40);
+    background-color: rgba(57, 77, 76, 0.3);
 }
 
 .sidebar ul li i {
@@ -201,7 +188,7 @@ body {
 }
 
 #deal-title {
-    background: rgba(255, 255, 255, 0.2); /* Менее прозрачный фон */
+    background: rgba(255, 255, 255, 0.1); /* Менее прозрачный фон */
     border: 1px solid rgba(0, 0, 0, 0.1); /* Полупрозрачная граница */
     padding: 10px;
     margin-bottom: 10px;

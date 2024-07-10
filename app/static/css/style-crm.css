@@ -70,6 +70,7 @@
     padding: 20px;
     flex-grow: 1;
     overflow-y: auto;
+
 }
 
 .main-content .card {
@@ -78,6 +79,7 @@
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
+
 }
 
 .main-content .card h2 {

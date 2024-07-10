@@ -13,7 +13,7 @@ from ..deal.models import Deal
 from ..user.models import User
 from ..config import suggestions_token
 
-from flask import request, jsonify, render_template, session
+from flask import request, jsonify, render_template, session, url_for
 from flask_login import current_user, login_required
 from logger import logging
 
@@ -248,8 +248,14 @@ def deal_to_active(deal_id) -> jsonify:
 def index_crm() -> render_template:
     session["username"] = current_user.login  # Устанавливаем username в сессию
     logging.info(f"Socket connected: {session}")
+    logging.info(f"FON: {current_user.fon_url}")
     deals: list[Deal] = Deal.query.all()
     users: list[User] = User.query.all()
+
+    # установка фона для пользователя
+    user_fon_filename = current_user.fon_url
+    user_fon_url = url_for("crm.static", filename=user_fon_filename)
+
     return render_template(
         "crm.html",
         deals=deals,
@@ -261,7 +267,7 @@ def index_crm() -> render_template:
         user_url=current_user.url_photo,
         user_work_number=current_user.worknumber,
         user_mobile_number=current_user.mobilenumber,
-        user_fon=current_user.fon_url,
+        user_fon=user_fon_url,
         suggestions_token=suggestions_token,
     )
 
@@ -323,7 +329,10 @@ def enter_into_deal(deal_id: int) -> render_template:
 
 @deal_bp.route("/crm/calculator", methods=["GET"])
 def get_leasing_calculator() -> render_template:
+    # установка фона для пользователя
+    user_fon_filename = current_user.fon_url
+    user_fon_url = url_for("crm.static", filename=user_fon_filename)
     return render_template(
         "leasing_calculator.html",
-        user_fon=current_user.fon_url,
+        user_fon=user_fon_url,
     )

@@ -22,11 +22,9 @@ def process_login():
         user = User.query.filter_by(login=form.username.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember_me.data)
-            flash("Вы вошли на сайт", "success")
             logging.info(f"{current_user} зашел на сайт.")
             session["username"] = current_user.login  # Устанавливаем username в сессию
             return redirect(url_for("deal.index_crm"))
-    flash("Неправильное имя пользователя или пароль", "info")
     return redirect(url_for("user.login"))
 
 

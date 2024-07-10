@@ -146,6 +146,8 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        const userName = '{{ user_name }}';
+        const userRole = '{{ user_role }}';
         fetch('/crm/deals/active')
             .then(response => response.json())
             .then(data => {
@@ -173,11 +175,13 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="btn-container">
-                        <button onclick="event.stopPropagation(); confirmArchive(${deal.id})">
-                            <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
-                        </button>
-                    </div>
+                    ${(deal.created_by === userName || userRole === 'admin') ? `
+                        <div class="btn-container">
+                            <button onclick="event.stopPropagation(); confirmArchive(${deal.id})">
+                                <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
+                            </button>
+                        </div>
+                    ` : '<div class="btn-container-empty"></div>'}
                 </li>`;
                     dealsList.insertAdjacentHTML('beforeend', dealItem);
                 });
@@ -185,6 +189,8 @@
     });
 
     document.addEventListener('DOMContentLoaded', function () {
+        const userName = '{{ user_name }}';
+        const userRole = '{{ user_role }}';
         fetch('/crm/deals/archived')
             .then(response => response.json())
             .then(data => {
@@ -214,7 +220,8 @@
                             </tr>
                         </tbody>
                     </table>
-                    <div class="btn-container-to-active">
+                    ${(deal.created_by === userName || userRole === 'admin') ? `
+                        <div class="btn-container-to-active">
                         <button onclick="event.stopPropagation(); confirmActive(${deal.id})">
                             <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
                         </button>
@@ -224,6 +231,7 @@
                             <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
                         </button>
                     </div>
+                    ` : '<div class="btn-container-empty"></div><div class="btn-container-empty"></div>'}
                 </li>`;
                     dealsList.insertAdjacentHTML('beforeend', dealItem);
                 });
@@ -411,6 +419,8 @@
     });
 
     socket.on('new_deal', function (data) {
+        const userName = '{{ user_name }}';
+        const userRole = '{{ user_role }}';
         console.log(data);
         var dealsList = document.getElementById('active-deals-list');
         var currentIndex = dealsList.children.length + 1; // Calculate the new index
@@ -434,11 +444,13 @@
                 </tr>
             </tbody>
         </table>
-        <div class="btn-container">
-            <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
-                <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
-            </button>
-        </div>
+        ${(data.created_by === userName || userRole === 'admin') ? `
+            <div class="btn-container">
+                <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
+                    <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
+                </button>
+            </div>
+        ` : '<div class="btn-container-empty"></div>'}
     </li>`;
         dealsList.insertAdjacentHTML('beforeend', dealItem);
 
@@ -464,6 +476,8 @@
     });
 
     socket.on('deal_to_archive', function (data) {
+        const userName = '{{ user_name }}';
+        const userRole = '{{ user_role }}';
         console.log('Archiving deal:', data);
         var dealItem = document.getElementById(`deal-${data.id}`);
         if (dealItem) {
@@ -494,16 +508,18 @@
                     </tr>
                 </tbody>
             </table>
-            <div class="btn-container-to-active">
+            ${(data.created_by === userName || userRole === 'admin') ? `
+                <div class="btn-container-to-active">
                 <button onclick="event.stopPropagation(); confirmActive(${data.id})">
                     <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
                 </button>
-            </div>
-            <div class="btn-container">
-                <button onclick="event.stopPropagation(); confirmDelete(${data.id})">
-                    <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
-                </button>
-            </div>
+                </div>
+                <div class="btn-container">
+                    <button onclick="event.stopPropagation(); confirmDelete(${data.id})">
+                        <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
+                    </button>
+                </div>
+            ` : '<div class="btn-container-empty"></div><div class="btn-container-empty"></div>'}
         </li>`;
             archivedDealsList.insertAdjacentHTML('beforeend', archivedDealItem);
         } else {
@@ -517,6 +533,8 @@
     });
 
     socket.on('deal_to_active', function (data) {
+        const userName = '{{ user_name }}';
+        const userRole = '{{ user_role }}';
         console.log('Deal to active:', data);
         var dealItem = document.getElementById(`deal-${data.id}`);
         if (dealItem) {
@@ -545,11 +563,13 @@
                     </tr>
                 </tbody>
             </table>
+            ${(data.created_by === userName || userRole === 'admin') ? `
             <div class="btn-container">
                 <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
                     <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
                 </button>
             </div>
+        ` : '<div class="btn-container-empty"></div>'}
         </li>`;
             activeDealsList.insertAdjacentHTML('beforeend', activedDealItem);
         } else {

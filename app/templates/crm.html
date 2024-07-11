@@ -84,6 +84,7 @@
             <thead>
             <tr>
                 <th>№</th>
+                <th>№ ДЛ</th>
                 <th id="filter-header">Лизингополучатель</th>
                 <th id="filter-header-product">Продукт</th>
                 <th id="filter-header-manager">Менеджер</th>
@@ -93,12 +94,14 @@
             </thead>
             <tr id="filter-row" class="hidden filter-row">
                 <th></th>
+                <th><input type="text" id="filter-input-dl" class="filter-input-dl" placeholder="Поиск..."></th>
                 <th><input type="text" id="filter-input" class="filter-input" placeholder="Поиск..."></th>
                 <th><input type="text" id="filter-input-product" class="filter-input-product" placeholder="Поиск...">
                 </th>
                 <th><input type="text" id="filter-input-manager" class="filter-input-manager" placeholder="Поиск...">
                 </th>
-                <th><input type="text" id="filter-input-created" class="filter-input-created" placeholder="Поиск..."></th>
+                <th><input type="text" id="filter-input-created" class="filter-input-created" placeholder="Поиск...">
+                </th>
                 <th></th>
             </tr>
             <tbody id="deal-rows">
@@ -113,6 +116,7 @@
             <thead>
             <tr>
                 <th>№</th>
+                <th>№ ДЛ</th>
                 <th id="filter-header-archived">Лизингополучатель</th>
                 <th id="filter-header-product-archived">Продукт</th>
                 <th id="filter-header-manager-archived">Менеджер</th>
@@ -123,6 +127,8 @@
             </thead>
             <tr id="filter-row-archived" class="hidden filter-row-archived">
                 <th></th>
+                <th><input type="text" id="filter-input-dl-archived" class="filter-input-dl-archived"
+                           placeholder="Поиск..."></th>
                 <th><input type="text" id="filter-input-archived" class="filter-input-archived" placeholder="Поиск...">
                 </th>
                 <th><input type="text" id="filter-input-product-archived" class="filter-input-product-archived"
@@ -212,6 +218,7 @@
                     var dealItem = `
                             <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
                                 <td>${index + 1}</td>
+                                <td class="deal-dl">б/н</td>
                                 <td class="deal-title">${deal.title}</td>
                                 <td class="deal-product">${deal.product}</td>
                                 <td class="deal-manager">${deal.created_by}</td>
@@ -244,6 +251,7 @@
                     var dealItem = `
                             <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
                                 <td>${index + 1}</td>
+                                <td class="deal-dl">б/н</td>
                                 <td class="deal-title">${deal.title}</td>
                                 <td class="deal-product">${deal.product}</td>
                                 <td class="deal-manager">${deal.created_by}</td>
@@ -459,6 +467,7 @@
         var dealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
+                                <td class="deal-dl">б/н</td>
                                 <td class="deal-title">${data.title}</td>
                                 <td class="deal-product">${data.product}</td>
                                 <td class="deal-manager">${data.created_by}</td>
@@ -512,6 +521,7 @@
             var archivedDealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
+                                <td class="deal-dl">б/н</td>
                                 <td class="deal-title">${data.title}</td>
                                 <td class="deal-product">${data.product}</td>
                                 <td class="deal-manager">${data.created_by}</td>
@@ -559,6 +569,7 @@
             var activedDealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
+                                <td class="deal-dl">б/н</td>
                                 <td class="deal-title">${data.title}</td>
                                 <td class="deal-product">${data.product}</td>
                                 <td class="deal-manager">${data.created_by}</td>

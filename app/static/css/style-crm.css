@@ -306,7 +306,9 @@ th, td {
 #archived-deals .deal-table .filter-input-manager-archived,
 #active-deals .deal-table .filter-input-created,
 #archived-deals .deal-table .filter-input-created-archived,
-#archived-deals .deal-table .filter-input-to-archive-archived
+#archived-deals .deal-table .filter-input-to-archive-archived,
+#active-deals .deal-table .filter-input-dl,
+#archived-deals .deal-table .filter-input-dl-archived
 {
     width: 100%;
     padding: 8px;

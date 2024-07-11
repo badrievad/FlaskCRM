@@ -23,6 +23,11 @@ filterSearchArchived.addEventListener('click', () => {
     filterRowArchived.classList.toggle('show');
 });
 
+
+// Фильтрация сделок по ДЛ
+const filterInputDl = document.getElementById('filter-input-dl');
+const filterInputDlArchived = document.getElementById('filter-input-dl-archived');
+
 // Фильтрация сделок по Лизингополучателю
 const filterInput = document.getElementById('filter-input');
 const filterInputArchived = document.getElementById('filter-input-archived');
@@ -149,6 +154,31 @@ filterInputArchivedDateArchived.addEventListener('input', function () {
     dealRows.forEach(row => {
         const archived = row.querySelector('.deal-archived').textContent.toLowerCase();
         if (archived.includes(filterValue)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+filterInputDl.addEventListener('input', function () {
+    const filterValue = filterInputDl.value.toLowerCase();
+    const dealRows = document.querySelectorAll('#deal-rows tr');
+    dealRows.forEach(row => {
+        const dl = row.querySelector('.deal-dl').textContent.toLowerCase();
+        if (dl.includes(filterValue)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+filterInputDlArchived.addEventListener('input', function () {
+    const filterValue = filterInputDlArchived.value.toLowerCase();
+    const dealRows = document.querySelectorAll('#deal-rows-archived tr');
+    dealRows.forEach(row => {
+        const dl = row.querySelector('.deal-dl').textContent.toLowerCase();
+        if (dl.includes(filterValue)) {
             row.style.display = '';
         } else {
             row.style.display = 'none';

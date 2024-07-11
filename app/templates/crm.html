@@ -79,17 +79,28 @@
 <div class="main-content">
     <div id="active-deals" class="card">
         <h2>Активные сделки</h2>
+        <h4 id="filter-search"><i class="fa-solid fa-magnifying-glass"></i></h4>
         <table class="deal-table">
             <thead>
             <tr>
                 <th>№</th>
-                <th>Лизингополучатель</th>
-                <th>Продукт</th>
-                <th>Менеджер</th>
-                <th>Дата создания сделки</th>
+                <th id="filter-header">Лизингополучатель</th>
+                <th id="filter-header-product">Продукт</th>
+                <th id="filter-header-manager">Менеджер</th>
+                <th id="filter-header-create">Дата создания сделки</th>
                 <th></th>
             </tr>
             </thead>
+            <tr id="filter-row" class="hidden filter-row">
+                <th></th>
+                <th><input type="text" id="filter-input" class="filter-input" placeholder="Поиск..."></th>
+                <th><input type="text" id="filter-input-product" class="filter-input-product" placeholder="Поиск...">
+                </th>
+                <th><input type="text" id="filter-input-manager" class="filter-input-manager" placeholder="Поиск...">
+                </th>
+                <th><input type="text" id="filter-input-created" class="filter-input-created" placeholder="Поиск..."></th>
+                <th></th>
+            </tr>
             <tbody id="deal-rows">
             <!-- Динамически добавленные строки -->
             </tbody>
@@ -97,18 +108,33 @@
     </div>
     <div id="archived-deals" class="card hidden">
         <h2>Архивные сделки</h2>
+        <h4 id="filter-search-archived"><i class="fa-solid fa-magnifying-glass"></i></h4>
         <table class="deal-table">
             <thead>
             <tr>
                 <th>№</th>
-                <th>Лизингополучатель</th>
-                <th>Продукт</th>
-                <th>Менеджер</th>
-                <th>Дата создания сделки</th>
-                <th>Дата добавления в архив</th>
+                <th id="filter-header-archived">Лизингополучатель</th>
+                <th id="filter-header-product-archived">Продукт</th>
+                <th id="filter-header-manager-archived">Менеджер</th>
+                <th id="filter-header-created-archived">Дата создания сделки</th>
+                <th id="filter-header-to-archive-archived">Дата добавления в архив</th>
                 <th></th>
             </tr>
             </thead>
+            <tr id="filter-row-archived" class="hidden filter-row-archived">
+                <th></th>
+                <th><input type="text" id="filter-input-archived" class="filter-input-archived" placeholder="Поиск...">
+                </th>
+                <th><input type="text" id="filter-input-product-archived" class="filter-input-product-archived"
+                           placeholder="Поиск..."></th>
+                <th><input type="text" id="filter-input-manager-archived" class="filter-input-manager-archived"
+                           placeholder="Поиск..."></th>
+                <th><input type="text" id="filter-input-created-archived" class="filter-input-created-archived"
+                           placeholder="Поиск..."></th>
+                <th><input type="text" id="filter-input-to-archive-archived" class="filter-input-to-archive-archived"
+                           placeholder="Поиск..."></th>
+                <th></th>
+            </tr>
             <tbody id="deal-rows-archived">
             <!-- Динамически добавленные строки -->
             </tbody>
@@ -125,6 +151,7 @@
             var suggestionsToken = "{{ suggestions_token }}";
         </script>
         <script src="{{ url_for('crm.static', filename='js/inn_dada.js') }}"></script>
+        <script src="{{ url_for('crm.static', filename='js/main-filter.js') }}"></script>
     </div>
 </div>
 
@@ -185,10 +212,10 @@
                     var dealItem = `
                             <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
                                 <td>${index + 1}</td>
-                                <td>${deal.title}</td>
-                                <td>${deal.product}</td>
-                                <td>${deal.created_by}</td>
-                                <td>${new Date(deal.created_at).toLocaleString()}</td>
+                                <td class="deal-title">${deal.title}</td>
+                                <td class="deal-product">${deal.product}</td>
+                                <td class="deal-manager">${deal.created_by}</td>
+                                <td class="deal-created">${new Date(deal.created_at).toLocaleString()}</td>
                                 <td>
                                     ${(deal.created_by === userName || userRole === 'admin') ? `
                                         <div class="btn-container">
@@ -217,11 +244,11 @@
                     var dealItem = `
                             <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
                                 <td>${index + 1}</td>
-                                <td>${deal.title}</td>
-                                <td>${deal.product}</td>
-                                <td>${deal.created_by}</td>
-                                <td>${new Date(deal.created_at).toLocaleString()}</td>
-                                <td>${new Date(deal.archived_at).toLocaleString()}</td>
+                                <td class="deal-title">${deal.title}</td>
+                                <td class="deal-product">${deal.product}</td>
+                                <td class="deal-manager">${deal.created_by}</td>
+                                <td class="deal-created">${new Date(deal.created_at).toLocaleString()}</td>
+                                <td class="deal-archived">${new Date(deal.archived_at).toLocaleString()}</td>
                                 ${(deal.created_by === userName || userRole === 'admin') ? `
                                     <td>
                                         <div class="btn-container">
@@ -432,10 +459,10 @@
         var dealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
-                                <td>${data.title}</td>
-                                <td>${data.product}</td>
-                                <td>${data.created_by}</td>
-                                <td>${data.created_at}</td>
+                                <td class="deal-title">${data.title}</td>
+                                <td class="deal-product">${data.product}</td>
+                                <td class="deal-manager">${data.created_by}</td>
+                                <td class="deal-created">${data.created_at}</td>
                                 <td>
                                     ${(data.created_by === userName || userRole === 'admin') ? `
                                         <div class="btn-container">
@@ -485,11 +512,11 @@
             var archivedDealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
-                                <td>${data.title}</td>
-                                <td>${data.product}</td>
-                                <td>${data.created_by}</td>
-                                <td>${data.created_at}</td>
-                                <td>${data.archived_at}</td>
+                                <td class="deal-title">${data.title}</td>
+                                <td class="deal-product">${data.product}</td>
+                                <td class="deal-manager">${data.created_by}</td>
+                                <td class="deal-created">${data.created_at}</td>
+                                <td class="deal-archived">${data.archived_at}</td>
                                 ${(data.created_by === userName || userRole === 'admin') ? `
                                     <td>
                                         <div class="btn-container">
@@ -532,10 +559,10 @@
             var activedDealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
-                                <td>${data.title}</td>
-                                <td>${data.product}</td>
-                                <td>${data.created_by}</td>
-                                <td>${data.created_at}</td>
+                                <td class="deal-title">${data.title}</td>
+                                <td class="deal-product">${data.product}</td>
+                                <td class="deal-manager">${data.created_by}</td>
+                                <td class="deal-created">${data.created_at}</td>
                                 <td>
                                     ${(data.created_by === userName || userRole === 'admin') ? `
                                         <div class="btn-container">

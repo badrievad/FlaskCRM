@@ -290,3 +290,52 @@ th, td {
 .icon-button:active {
     outline: none; /* Убирает рамку при нажатии */
 }
+
+/* Убрать hover-эффект */
+#active-deals .deal-table .filter-row:hover {
+    background-color: transparent;
+    cursor: auto;
+}
+
+/* Стили для инпута фильтрации внутри #active-deals */
+#active-deals .deal-table .filter-input,
+#archived-deals .deal-table .filter-input-archived,
+#active-deals .deal-table .filter-input-product,
+#archived-deals .deal-table .filter-input-product-archived,
+#active-deals .deal-table .filter-input-manager,
+#archived-deals .deal-table .filter-input-manager-archived,
+#active-deals .deal-table .filter-input-created,
+#archived-deals .deal-table .filter-input-created-archived,
+#archived-deals .deal-table .filter-input-to-archive-archived
+{
+    width: 100%;
+    padding: 8px;
+    margin: 4px 0;
+    box-sizing: border-box;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Стили для строки фильтрации внутри #archived-deals */
+#archived-deals .deal-table #filter-row-archived {
+    color: rgba(255, 255, 255, 0.8); /* Полупрозрачный текст */
+}
+
+/* Убрать hover-эффект */
+#archived-deals .deal-table .filter-row-archived:hover {
+    background-color: transparent;
+    cursor: auto;
+}
+
+#active-deals h4, #archived-deals h4 {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.6); /* Полупрозрачный текст */
+    right: 30px; /* Расположение справа */
+    top: 30px; /* Можно настроить по высоте */
+    cursor: pointer; /* Изменяет курсор на указатель при наведении */
+}
+
+#active-deals h4:hover, #archived-deals h4:hover {
+    color: #ffffff; /* Цвет при наведении, можно изменить на любой желаемый */
+}

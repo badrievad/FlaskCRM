@@ -263,11 +263,6 @@ th, td {
     cursor: pointer; /* Курсор при наведении */
 }
 
-.btn-container {
-    text-align: right;
-    padding: 10px;
-}
-
 .icon-button {
     text-align: right;
     background: none;

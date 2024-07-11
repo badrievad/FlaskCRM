@@ -269,6 +269,7 @@ th, td {
 }
 
 .icon-button {
+    text-align: right;
     background: none;
     border: none;
     cursor: pointer;

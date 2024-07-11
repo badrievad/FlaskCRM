@@ -79,7 +79,6 @@
     border-radius: 8px;
     padding: 20px;
     margin-bottom: 20px;
-
 }
 
 .main-content .card h2 {
@@ -231,4 +230,67 @@
 
 #task form button:hover {
     background-color: rgba(55, 101, 86, 0.8);
+}
+
+th, td {
+    padding: 15px;
+    text-align: left;
+}
+
+.deal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(60px); /* Размытие фона */
+    color: rgba(255, 255, 255, 0.8); /* Полупрозрачный текст заголовка */
+}
+
+.deal-table th {
+    background-color: rgba(255, 255, 255, 0.05);
+    text-align: center;
+    border-bottom: 1px solid rgba(221, 221, 221, 0.01); /* Нижняя граница для заголовков */
+}
+
+.deal-table tbody tr {
+    background-color: rgba(255, 255, 255, 0.01); /* Фон для строк таблицы */
+    transition: background-color 0.3s ease; /* Плавный переход для ховера */
+}
+
+.deal-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Фон при наведении */
+    cursor: pointer; /* Курсор при наведении */
+}
+
+.btn-container {
+    text-align: right;
+    padding: 10px;
+}
+
+.icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    outline: none; /* Убирает рамку при нажатии */
+}
+
+.icon-button i {
+    color: rgba(255, 255, 255, 0.7); /* Начальный цвет иконки */
+    font-size: 1.2em; /* Размер иконки */
+}
+
+.icon-button:hover {
+    background-color: rgba(255, 255, 255, 0.2); /* Фон кнопки при наведении */
+}
+
+.icon-button:hover i {
+    color: rgba(255, 255, 255, 1); /* Цвет иконки при наведении */
+}
+
+.icon-button:active {
+    outline: none; /* Убирает рамку при нажатии */
 }

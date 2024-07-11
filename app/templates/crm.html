@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Сделки ООО «ЛКМБ-РТ»</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/crm.css') }}">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/style-crm.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/toast-style.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
@@ -77,15 +77,42 @@
 </div>
 
 <div class="main-content">
-    <div id="active-deals" class="card hidden">
+    <div id="active-deals" class="card">
         <h2>Активные сделки</h2>
-        <ul id="active-deals-list">
-        </ul>
+        <table class="deal-table">
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>Лизингополучатель</th>
+                <th>Продукт</th>
+                <th>Менеджер</th>
+                <th>Дата создания сделки</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="deal-rows">
+            <!-- Динамически добавленные строки -->
+            </tbody>
+        </table>
     </div>
     <div id="archived-deals" class="card hidden">
         <h2>Архивные сделки</h2>
-        <ul id="archived-deals-list">
-        </ul>
+        <table class="deal-table">
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>Лизингополучатель</th>
+                <th>Продукт</th>
+                <th>Менеджер</th>
+                <th>Дата создания сделки</th>
+                <th>Дата добавления в архив</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="deal-rows-archived">
+            <!-- Динамически добавленные строки -->
+            </tbody>
+        </table>
     </div>
     <div id="task" class="card hidden">
         <h2>Создать сделку</h2>
@@ -152,37 +179,26 @@
             .then(response => response.json())
             .then(data => {
                 updateDealCounts(data.deals_active, data.deals_archived);
-                var dealsList = document.getElementById('active-deals-list');
+                var dealsList = document.getElementById('deal-rows');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
-                    var dealItem = `<li id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})" class="list-group-item">
-                    <div class="index">${index + 1}</div>
-                    <table class="deal-table">
-                        <thead>
-                            <tr>
-                                <th>Лизингополучатель</th>
-                                <th>Продукт</th>
-                                <th>Менеджер</th>
-                                <th>Дата создания сделки</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+                    var dealItem = `
+                            <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
+                                <td>${index + 1}</td>
                                 <td>${deal.title}</td>
                                 <td>${deal.product}</td>
                                 <td>${deal.created_by}</td>
                                 <td>${new Date(deal.created_at).toLocaleString()}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    ${(deal.created_by === userName || userRole === 'admin') ? `
-                        <div class="btn-container">
-                            <button onclick="event.stopPropagation(); confirmArchive(${deal.id})">
-                                <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
-                            </button>
-                        </div>
-                    ` : '<div class="btn-container-empty"></div>'}
-                </li>`;
+                                <td>
+                                    ${(deal.created_by === userName || userRole === 'admin') ? `
+                                        <div class="btn-container">
+                                            <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
+                                                <i class="fa-solid fa-box-open"></i>
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </td>
+                            </tr>`;
                     dealsList.insertAdjacentHTML('beforeend', dealItem);
                 });
             });
@@ -195,44 +211,33 @@
             .then(response => response.json())
             .then(data => {
                 updateDealCounts(data.deals_active, data.deals_archived);
-                var dealsList = document.getElementById('archived-deals-list');
+                var dealsList = document.getElementById('deal-rows-archived');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
-                    var dealItem = `<li id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})" class="list-group-item">
-                    <div class="index">${index + 1}</div>
-                    <table class="deal-table">
-                        <thead>
-                            <tr>
-                                <th>Лизингополучатель</th>
-                                <th>Продукт</th>
-                                <th>Менеджер</th>
-                                <th>Дата создания сделки</th>
-                                <th>Дата добавления в архив</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
+                    var dealItem = `
+                            <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
+                                <td>${index + 1}</td>
                                 <td>${deal.title}</td>
                                 <td>${deal.product}</td>
                                 <td>${deal.created_by}</td>
                                 <td>${new Date(deal.created_at).toLocaleString()}</td>
                                 <td>${new Date(deal.archived_at).toLocaleString()}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    ${(deal.created_by === userName || userRole === 'admin') ? `
-                        <div class="btn-container-to-active">
-                        <button onclick="event.stopPropagation(); confirmActive(${deal.id})">
-                            <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
-                        </button>
-                    </div>
-                    <div class="btn-container">
-                        <button onclick="event.stopPropagation(); confirmDelete(${deal.id})">
-                            <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
-                        </button>
-                    </div>
-                    ` : '<div class="btn-container-empty"></div><div class="btn-container-empty"></div>'}
-                </li>`;
+                                ${(deal.created_by === userName || userRole === 'admin') ? `
+                                    <td>
+                                        <div class="btn-container">
+                                        <button class="icon-button" onclick="event.stopPropagation(); confirmActive(${deal.id})">
+                                            <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
+                                        </button>
+                                    </div>
+                                    <div class="btn-container">
+                                        <button class="icon-button" onclick="event.stopPropagation(); confirmDelete(${deal.id})">
+                                            <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
+                                        </button>
+                                    </div>
+                                    </td>
+                                    ` : '<td></td>'}
+                                </td>
+                            </tr>`;
                     dealsList.insertAdjacentHTML('beforeend', dealItem);
                 });
             });
@@ -422,36 +427,25 @@
         const userName = '{{ user_name }}';
         const userRole = '{{ user_role }}';
         console.log(data);
-        var dealsList = document.getElementById('active-deals-list');
+        var dealsList = document.getElementById('deal-rows');
         var currentIndex = dealsList.children.length + 1; // Calculate the new index
-        var dealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
-        <div class="index">${currentIndex}</div>
-        <table class="deal-table">
-            <thead>
-                <tr>
-                    <th>Лизингополучатель</th>
-                    <th>Продукт</th>
-                    <th>Менеджер</th>
-                    <th>Дата создания сделки</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>${data.title}</td>
-                    <td>${data.product}</td>
-                    <td>${data.created_by}</td>
-                    <td>${data.created_at}</td>
-                </tr>
-            </tbody>
-        </table>
-        ${(data.created_by === userName || userRole === 'admin') ? `
-            <div class="btn-container">
-                <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
-                    <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
-                </button>
-            </div>
-        ` : '<div class="btn-container-empty"></div>'}
-    </li>`;
+        var dealItem = `
+                            <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
+                                <td>${currentIndex + 1}</td>
+                                <td>${data.title}</td>
+                                <td>${data.product}</td>
+                                <td>${data.created_by}</td>
+                                <td>${new Date(data.created_at).toLocaleString()}</td>
+                                <td>
+                                    ${(data.created_by === userName || userRole === 'admin') ? `
+                                        <div class="btn-container">
+                                            <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${data.id})">
+                                                <i class="fa-solid fa-box-open"></i>
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </td>
+                            </tr>`;
         dealsList.insertAdjacentHTML('beforeend', dealItem);
 
         // Обновить количество активных сделок
@@ -464,7 +458,7 @@
         var dealItem = document.getElementById(`deal-${data.id}`);
         if (dealItem) {
             dealItem.remove();
-            updateIndexes('archived-deals-list'); // Recalculate indexes
+            updateIndexes('deal-rows-archived'); // Recalculate indexes
         } else {
             console.log('Deal item not found:', data.id);
         }
@@ -479,48 +473,39 @@
         const userName = '{{ user_name }}';
         const userRole = '{{ user_role }}';
         console.log('Archiving deal:', data);
+
         var dealItem = document.getElementById(`deal-${data.id}`);
         if (dealItem) {
             dealItem.remove();
-            updateIndexes('active-deals-list'); // Recalculate indexes
+            updateIndexes('deal-rows'); // Recalculate indexes
 
             // Переместить сделку в архивный список
-            var archivedDealsList = document.getElementById('archived-deals-list');
-            var archivedDealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
-            <div class="index">${archivedDealsList.children.length + 1}</div>
-                <table class="deal-table">
-                <thead>
-                    <tr>
-                        <th>Лизингополучатель</th>
-                        <th>Продукт</th>
-                        <th>Менеджер</th>
-                        <th>Дата создания сделки</th>
-                        <th>Дата добавления в архив</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>${data.title}</td>
-                        <td>${data.product}</td>
-                        <td>${data.created_by}</td>
-                        <td>${data.created_at}</td>
-                        <td>${data.archived_at}</td>
-                    </tr>
-                </tbody>
-            </table>
-            ${(data.created_by === userName || userRole === 'admin') ? `
-                <div class="btn-container-to-active">
-                <button onclick="event.stopPropagation(); confirmActive(${data.id})">
-                    <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
-                </button>
-                </div>
-                <div class="btn-container">
-                    <button onclick="event.stopPropagation(); confirmDelete(${data.id})">
-                        <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
-                    </button>
-                </div>
-            ` : '<div class="btn-container-empty"></div><div class="btn-container-empty"></div>'}
-        </li>`;
+            var archivedDealsList = document.getElementById('deal-rows-archived');
+            var currentIndex = archivedDealsList.children.length + 1; // Calculate the new index
+            var archivedDealItem = `
+                            <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
+                                <td>${currentIndex + 1}</td>
+                                <td>${data.title}</td>
+                                <td>${data.product}</td>
+                                <td>${data.created_by}</td>
+                                <td>${new Date(data.created_at).toLocaleString()}</td>
+                                <td>${new Date(data.archived_at).toLocaleString()}</td>
+                                ${(data.created_by === userName || userRole === 'admin') ? `
+                                    <td>
+                                        <div class="btn-container">
+                                        <button class="icon-button" onclick="event.stopPropagation(); confirmActive(${data.id})">
+                                            <i class="fa-solid fa-arrow-rotate-right"></i> <!-- Cross symbol for active -->
+                                        </button>
+                                    </div
+                                    <div class="btn-container">
+                                        <button class="icon-button" onclick="event.stopPropagation(); confirmDelete(${data.id})">
+                                            <i class="fa-solid fa-trash-can"></i> <!-- Cross symbol for delete -->
+                                        </button>
+                                    </div>>
+                                    </td>
+                                    ` : '<td></td>'}
+                                </td>
+                            </tr>`;
             archivedDealsList.insertAdjacentHTML('beforeend', archivedDealItem);
         } else {
             console.log('Deal item not found:', data.id);
@@ -537,40 +522,30 @@
         const userRole = '{{ user_role }}';
         console.log('Deal to active:', data);
         var dealItem = document.getElementById(`deal-${data.id}`);
+        var currentIndex = dealItem.children.length + 1; // Calculate the new index
         if (dealItem) {
             dealItem.remove();
-            updateIndexes('active-deals-list'); // Recalculate indexes
+            updateIndexes('deal-rows'); // Recalculate indexes
 
             // Переместить сделку в архивный список
-            var activeDealsList = document.getElementById('active-deals-list');
-            var activedDealItem = `<li id="deal-${data.id}" onclick="enterIntoDeal(${data.id})" class="list-group-item">
-            <div class="index">${activeDealsList.children.length + 1}</div>
-                <table class="deal-table">
-                <thead>
-                    <tr>
-                        <th>Лизингополучатель</th>
-                        <th>Продукт</th>
-                        <th>Менеджер</th>
-                        <th>Дата создания сделки</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>${data.title}</td>
-                        <td>${data.product}</td>
-                        <td>${data.created_by}</td>
-                        <td>${data.created_at}</td>
-                    </tr>
-                </tbody>
-            </table>
-            ${(data.created_by === userName || userRole === 'admin') ? `
-            <div class="btn-container">
-                <button onclick="event.stopPropagation(); confirmArchive(${data.id})">
-                    <i class="fa-solid fa-box-open"></i> <!-- Down arrow symbol for archive -->
-                </button>
-            </div>
-        ` : '<div class="btn-container-empty"></div>'}
-        </li>`;
+            var activeDealsList = document.getElementById('deal-rows');
+            var activedDealItem = `
+                            <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
+                                <td>${currentIndex + 1}</td>
+                                <td>${data.title}</td>
+                                <td>${data.product}</td>
+                                <td>${data.created_by}</td>
+                                <td>${new Date(data.created_at).toLocaleString()}</td>
+                                <td>
+                                    ${(data.created_by === userName || userRole === 'admin') ? `
+                                        <div class="btn-container">
+                                            <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${data.id})">
+                                                <i class="fa-solid fa-box-open"></i>
+                                            </button>
+                                        </div>
+                                    ` : ''}
+                                </td>
+                            </tr>`;
             activeDealsList.insertAdjacentHTML('beforeend', activedDealItem);
         } else {
             console.log('Deal item not found:', data.id);
@@ -604,6 +579,15 @@
         });
         xhr.send(data);
     });
+
+    function updateIndexes(listId) {
+        var dealsList = document.getElementById(listId);
+        var dealItems = dealsList.children;
+        for (var i = 0; i < dealItems.length; i++) {
+            var indexElement = dealItems[i].querySelector('.index');
+            indexElement.textContent = i + 1;
+        }
+    }
 
     function deleteDeal(dealId) {
         var xhr = new XMLHttpRequest();
@@ -645,15 +629,6 @@
             }
         };
         xhr.send();
-    }
-
-    function updateIndexes(listId) {
-        var dealsList = document.getElementById(listId);
-        var dealItems = dealsList.children;
-        for (var i = 0; i < dealItems.length; i++) {
-            var indexElement = dealItems[i].querySelector('.index');
-            indexElement.textContent = i + 1;
-        }
     }
 
     function confirmDelete(dealId) {

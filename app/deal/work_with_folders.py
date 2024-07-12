@@ -34,22 +34,28 @@ class CompanyFolderAPI:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e
 
-    def archive_folder(self, company_id: str):
+    def archive_folder(self, company_id: str, dl_number: str):
         url = f"{self.base_url}/archive/{company_id}"
         logging.info(f"Sending PUT request to {url}")
+        data = {
+            "dl_number": dl_number,
+        }
         try:
-            response = requests.put(url)
+            response = requests.put(url, json=data)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e
 
-    def activate_folder(self, company_id: str):
+    def activate_folder(self, company_id: str, dl_number: str):
         url = f"{self.base_url}/activate/{company_id}"
         logging.info(f"Sending PUT request to {url}")
+        data = {
+            "dl_number": dl_number,
+        }
         try:
-            response = requests.put(url)
+            response = requests.put(url, json=data)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:

@@ -137,8 +137,11 @@ def deal_to_archive(deal_id) -> jsonify:
             # Начинаем транзакцию
             deal.status = "archived"
             deal.archived_at = datetime.datetime.now()
+            old_dl_number = deal.dl_number_windows
+            deal.dl_number = "б/н"
+            deal.dl_number_windows = "б-н"
             db.session.commit()
-            api_folder.archive_folder(deal_id)
+            api_folder.archive_folder(deal_id, old_dl_number)
             socketio.emit("deal_to_archive", deal.to_json())
             session_username = session.get("username")
             if session_username:
@@ -196,8 +199,9 @@ def deal_to_active(deal_id) -> jsonify:
             deal.status = "active"
             deal.archived_at = None
             deal.created_at = datetime.datetime.now()
+            deal.dl_number, deal.dl_number_windows = Deal.generate_dl_number()
             db.session.commit()
-            api_folder.activate_folder(deal_id)
+            api_folder.activate_folder(deal_id, deal.dl_number_windows)
             socketio.emit("deal_to_active", deal.to_json())
             session_username = session.get("username")
             if session_username:

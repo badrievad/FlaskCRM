@@ -218,7 +218,7 @@
                     var dealItem = `
                             <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
                                 <td>${index + 1}</td>
-                                <td class="deal-dl">б/н</td>
+                                <td class="deal-dl">${deal.dl_number}</td>
                                 <td class="deal-title">${deal.title}</td>
                                 <td class="deal-product">${deal.product}</td>
                                 <td class="deal-manager">${deal.created_by}</td>
@@ -251,7 +251,7 @@
                     var dealItem = `
                             <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
                                 <td>${index + 1}</td>
-                                <td class="deal-dl">б/н</td>
+                                <td class="deal-dl">${deal.dl_number}</td>
                                 <td class="deal-title">${deal.title}</td>
                                 <td class="deal-product">${deal.product}</td>
                                 <td class="deal-manager">${deal.created_by}</td>
@@ -467,7 +467,7 @@
         var dealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
-                                <td class="deal-dl">б/н</td>
+                                <td class="deal-dl">${data.dl_number}</td>
                                 <td class="deal-title">${data.title}</td>
                                 <td class="deal-product">${data.product}</td>
                                 <td class="deal-manager">${data.created_by}</td>
@@ -482,7 +482,7 @@
                                     ` : ''}
                                 </td>
                             </tr>`;
-        dealsList.insertAdjacentHTML('beforeend', dealItem);
+        dealsList.insertAdjacentHTML('afterbegin', dealItem);
 
         // Обновить количество активных сделок
         var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
@@ -521,7 +521,7 @@
             var archivedDealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
-                                <td class="deal-dl">б/н</td>
+                                <td class="deal-dl">${data.dl_number}</td>
                                 <td class="deal-title">${data.title}</td>
                                 <td class="deal-product">${data.product}</td>
                                 <td class="deal-manager">${data.created_by}</td>
@@ -543,7 +543,7 @@
                                     ` : '<td></td>'}
                                 </td>
                             </tr>`;
-            archivedDealsList.insertAdjacentHTML('beforeend', archivedDealItem);
+            archivedDealsList.insertAdjacentHTML('afterbegin', archivedDealItem);
         } else {
             console.log('Deal item not found:', data.id);
         }
@@ -569,7 +569,7 @@
             var activedDealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
-                                <td class="deal-dl">б/н</td>
+                                <td class="deal-dl">${data.dl_number}</td>
                                 <td class="deal-title">${data.title}</td>
                                 <td class="deal-product">${data.product}</td>
                                 <td class="deal-manager">${data.created_by}</td>
@@ -584,7 +584,7 @@
                                     ` : ''}
                                 </td>
                             </tr>`;
-            activeDealsList.insertAdjacentHTML('beforeend', activedDealItem);
+            activeDealsList.insertAdjacentHTML('afterbegin', activedDealItem);
         } else {
             console.log('Deal item not found:', data.id);
         }

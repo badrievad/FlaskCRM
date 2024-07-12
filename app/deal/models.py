@@ -27,6 +27,7 @@ class Deal(db.Model):
     created_at = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(20), nullable=False)
     archived_at = db.Column(db.DateTime, nullable=True)
+    dl_number = db.Column(db.String(20), nullable=True, default="б/н")
     product = db.Column(
         db.String(50), nullable=False, default="Статус продукта еще не определен"
     )
@@ -45,4 +46,5 @@ class Deal(db.Model):
             "created_by": self.created_by,
             "created_at": self.created_at.strftime("%d.%m.%Y %H:%M:%S"),
             "archived_at": archived_at,
+            "dl_number": self.dl_number,
         }

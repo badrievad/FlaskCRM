@@ -1,5 +1,6 @@
 import datetime
 
+from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
 
 from . import deal_bp
@@ -274,7 +275,9 @@ def index_crm() -> render_template:
 
 @deal_bp.route("/crm/deals/active", methods=["GET"])
 def get_deals_active() -> jsonify:
-    active_deals: list[Deal] = Deal.query.filter_by(status="active").all()
+    active_deals: list[Deal] = (
+        Deal.query.filter_by(status="active").order_by(desc(Deal.created_at)).all()
+    )
     active_deals_count: int = len(active_deals)
     archived_deals_count: int = Deal.query.filter_by(status="archived").count()
     return jsonify(
@@ -282,6 +285,7 @@ def get_deals_active() -> jsonify:
             "deals": [
                 {
                     "id": deal.id,
+                    "dl_number": deal.dl_number,
                     "product": deal.product,
                     "title": deal.title,
                     "company_inn": deal.company_inn,
@@ -298,7 +302,9 @@ def get_deals_active() -> jsonify:
 
 @deal_bp.route("/crm/deals/archived", methods=["GET"])
 def get_deals_archived() -> jsonify:
-    archived_deals: list[Deal] = Deal.query.filter_by(status="archived").all()
+    archived_deals: list[Deal] = (
+        Deal.query.filter_by(status="archived").order_by(desc(Deal.archived_at)).all()
+    )
     active_deals_count: int = Deal.query.filter_by(status="active").count()
     archived_deals_count: int = len(archived_deals)
     return jsonify(
@@ -306,6 +312,7 @@ def get_deals_archived() -> jsonify:
             "deals": [
                 {
                     "id": deal.id,
+                    "dl_number": deal.dl_number,
                     "title": deal.title,
                     "product": deal.product,
                     "company_inn": deal.company_inn,

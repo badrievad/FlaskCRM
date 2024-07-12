@@ -7,9 +7,13 @@ class CompanyFolderAPI:
     def __init__(self):
         self.base_url = URL_FOLDER_API
 
-    def create_folder(self, company_name: str, company_id: str):
+    def create_folder(self, company_name: str, company_id: str, dl_number: str):
         url = f"{self.base_url}/create"
-        data = {"company_name": company_name, "company_id": company_id}
+        data = {
+            "company_name": company_name,
+            "company_id": company_id,
+            "dl_number": dl_number,
+        }
         logging.info(f"Sending POST request to {url} with data: {data}")
         try:
             response = requests.post(url, json=data)

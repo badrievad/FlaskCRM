@@ -50,7 +50,8 @@ def create_deal() -> jsonify:
         datetime.datetime.now(),
     )
     deal_id = str(deal_data["id"])
-    api_folder.create_folder(name_without_special_symbols, deal_id)
+    dl_number = deal_data["dl_number_windows"]
+    api_folder.create_folder(name_without_special_symbols, deal_id, dl_number)
     logging.info(
         f"{current_user} создал новую сделку. Название сделки: {company_name}. "
         f"ID сделки: {deal_id}. Дата создания: {deal_data['created_at']}."

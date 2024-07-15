@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+    <script src="https://unpkg.com/htmx.org@2.0.1"></script>
 
     <!-- toastr -->
     <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" defer></script>
@@ -128,7 +128,9 @@
                     <p>Годовое удорожание: 21.40%</p>
                     <p>Сумма договора: 821 065 ₽</p>
                 </div>
-                <button class="calculate-button">Рассчитать</button>
+                <button class="calculate-button" hx-post="./calculate" hx-trigger="click">
+                    Рассчитать
+                </button>
             </div>
         </div>
     </div>

@@ -355,7 +355,7 @@ def get_leasing_calculator() -> render_template:
 # Эндпоинт для запуска фоновой задачи
 @deal_bp.route("/crm/calculator/start-task", methods=["POST"])
 def start_task():
-    task = long_task.delay()
+    task = long_task.delay(current_user.login)
     return jsonify({"task_id": task.id}), 202
 
 

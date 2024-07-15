@@ -11,6 +11,7 @@ from .deals_validate import DealsValidate
 from .work_with_folders import CompanyFolderAPI
 
 from ..deal.models import Deal
+from ..deal.celery_tasks import long_task
 from ..user.models import User
 from ..config import suggestions_token
 
@@ -348,3 +349,10 @@ def get_leasing_calculator() -> render_template:
         "leasing_calculator.html",
         user_fon=user_fon_url,
     )
+
+
+# Эндпоинт для запуска фоновой задачи
+@deal_bp.route("/crm/start-task", methods=["POST"])
+def start_task():
+    task = long_task.delay()
+    return jsonify({"task_id": task.id}), 202

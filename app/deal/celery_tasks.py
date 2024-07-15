@@ -1,7 +1,6 @@
 import time
 
-from . import deal_bp
-from .. import celery
+from celery import shared_task
 from logger import logging
 
 
@@ -16,8 +15,7 @@ def intensive_task_simulation():
     return "Task complete!"
 
 
-@celery.task
-@deal_bp.route("/crm/calculate", methods=["POST"])
+@shared_task(ignore_result=False)
 def long_task():
     start_time = time.perf_counter()
     result = intensive_task_simulation()

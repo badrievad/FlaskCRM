@@ -3,14 +3,14 @@ from flask_migrate import Migrate
 from flask_socketio import SocketIO
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-from celery import Celery
+
+from .celery_utils import celery_init_app
 
 
 socketio = SocketIO()
 db = SQLAlchemy()
 login_manager = LoginManager()
 login_manager.login_view = "user.login"
-celery = Celery()
 
 crm_static_bp = Blueprint(
     "crm", __name__, static_folder="static", static_url_path="/crm/static"
@@ -23,8 +23,13 @@ def create_app(debug=False):
     app.debug = debug
     app.config.from_pyfile("config.py")
 
-    Celery(app.name, broker=app.config["CELERY_BROKER_URL"])
-    celery.conf.update(app.config)
+    app.config.from_mapping(
+        CELERY=dict(
+            broker_url="redis://localhost:6379/0",
+            result_backend="redis://localhost:6379/0",
+            task_ignore_result=True,
+        ),
+    )
 
     Migrate(app, db)
 
@@ -38,5 +43,6 @@ def create_app(debug=False):
     socketio.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)
+    celery_init_app(app)
 
     return app

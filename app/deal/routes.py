@@ -377,7 +377,7 @@ def get_status(task_id):
 def download_result(task_id):
     task = long_task.AsyncResult(task_id)
     if task.state == "SUCCESS":
-        logging.info(f"status: SUCCESS")
+        logging.info("status: SUCCESS")
         file_path = task.result
         logging.info(f"file_path: {file_path}")
         if os.path.exists(file_path):

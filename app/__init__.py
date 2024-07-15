@@ -23,12 +23,12 @@ def create_app(debug=False):
     app.debug = debug
     app.config.from_pyfile("config.py")
 
-    app.config.from_mapping(
-        CELERY=dict(
-            broker_url="redis://localhost:6379/0",
-            result_backend="redis://localhost:6379/0",
-            task_ignore_result=True,
-        ),
+    app.config.update(
+        CELERY={
+            "broker_url": "redis://localhost:6379/0",
+            "result_backend": "redis://localhost:6379/0",
+            "task_ignore_result": True,
+        },
     )
 
     Migrate(app, db)

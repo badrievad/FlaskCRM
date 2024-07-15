@@ -2,6 +2,7 @@ import time
 
 from celery import shared_task
 from logger import logging
+from openpyxl import Workbook
 
 
 def intensive_task_simulation():
@@ -9,10 +10,18 @@ def intensive_task_simulation():
     import random
     import string
 
-    for _ in range(3000000):
-        "".join(random.choice(string.ascii_letters) for _ in range(10))
+    wb = Workbook()
+    ws = wb.active
 
-    return "Task complete!"
+    num_rows = 1000000
+    for _ in range(num_rows):
+        row = ["".join(random.choice(string.ascii_letters) for _ in range(10))]
+        ws.append(row)
+
+    file_path = "task_result.xlsx"
+    wb.save(file_path)
+
+    return file_path
 
 
 @shared_task(ignore_result=False)

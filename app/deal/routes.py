@@ -1,4 +1,5 @@
 import datetime
+import os
 
 from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
@@ -15,7 +16,7 @@ from ..deal.celery_tasks import long_task
 from ..user.models import User
 from ..config import suggestions_token
 
-from flask import request, jsonify, render_template, session, url_for
+from flask import request, jsonify, render_template, session, url_for, send_file
 from flask_login import current_user, login_required
 from logger import logging
 
@@ -352,7 +353,33 @@ def get_leasing_calculator() -> render_template:
 
 
 # Эндпоинт для запуска фоновой задачи
-@deal_bp.route("/crm/start-task", methods=["POST"])
+@deal_bp.route("/crm/calculator/start-task", methods=["POST"])
 def start_task():
     task = long_task.delay()
     return jsonify({"task_id": task.id}), 202
+
+
+@deal_bp.route("/crm/calculator/status/<task_id>", methods=["GET"])
+def get_status(task_id):
+    task = long_task.AsyncResult(task_id)
+    if task.state == "PENDING":
+        response = {"state": task.state, "status": "Pending..."}
+    elif task.state != "FAILURE":
+        response = {"state": task.state, "status": task.info}
+        if task.state == "SUCCESS" and task.result:
+            response["file_url"] = f"/crm/calculator/download/{task.id}"
+    else:
+        response = {"state": task.state, "status": str(task.info)}
+    return jsonify(response)
+
+
+@deal_bp.route("/crm/calculator/download/<task_id>", methods=["GET"])
+def download_result(task_id):
+    task = long_task.AsyncResult(task_id)
+    if task.state == "SUCCESS":
+        logging.info(f"status: SUCCESS")
+        file_path = task.result
+        logging.info(f"file_path: {file_path}")
+        if os.path.exists(file_path):
+            return send_file(file_path, as_attachment=True)
+    return "File not found or task not completed", 404

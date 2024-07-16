@@ -1,39 +1,63 @@
 import time
-from pathlib import Path
-
+from datetime import date
+from logger import logging
+from openpyxl import Workbook
 from celery import shared_task
 
 from ..config import PATH_TO_CALENDAR
-from logger import logging
-from openpyxl import Workbook
-from flask_login import current_user
+from .models import LeasCalculator
+from .. import db
 
 
 def intensive_task_simulation(login: str) -> str:
-    """Intensive task simulation"""
     import random
     import string
 
+    """Intensive task simulation"""
+
+    # Создаем директорию пользователя, если она не существует
+    user_dir = PATH_TO_CALENDAR / login
+    if not user_dir.exists():
+        user_dir.mkdir(parents=True, exist_ok=True)
+
+    # Создаем новый Excel файл
     wb = Workbook()
     ws = wb.active
 
-    num_rows: int = 1000000
+    # Заполняем файл случайными данными
+    num_rows = 1000000
     for _ in range(num_rows):
         row = ["".join(random.choice(string.ascii_letters) for _ in range(10))]
         ws.append(row)
 
-    logging.info(f"Path: {PATH_TO_CALENDAR}")
-    file_path: Path = PATH_TO_CALENDAR / login
+    # Записываем в базу данных
+    try:
+        new_calc = LeasCalculator(manager_login=login, date=date.today())
+        db.session.add(new_calc)
+        db.session.commit()
 
-    # Проверка существования папки, если нет - создаем
-    if not file_path.exists():
-        file_path.mkdir(parents=True)
+        new_title = f"Лизинговый калькулятор (id_{new_calc.id}).xlsx"
+        new_calc.title = new_title
+        new_calc.path_to_file = str(user_dir)
 
-    final_path: str = str(file_path / "calendar.xlsx")
+        db.session.commit()
+    except Exception as e:
+        db.session.rollback()
+        raise e
 
-    wb.save(str(final_path))
+    # Инициализируем путь к файлу
+    file_path = user_dir / new_title
 
-    return final_path
+    # Сохраняем файл
+    try:
+        wb.save(str(file_path))
+    except Exception as e:
+        # Если не удалось сохранить файл, откатываем транзакцию
+        db.session.delete(new_calc)
+        db.session.commit()
+        raise e
+
+    return str(file_path)
 
 
 @shared_task(ignore_result=False)

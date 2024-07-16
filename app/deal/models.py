@@ -65,3 +65,17 @@ class Deal(db.Model):
             "dl_number": self.dl_number,
             "dl_number_windows": self.dl_number_windows,
         }
+
+
+class LeasCalculator(db.Model):
+    __tablename__ = "leas_calculator"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=True)
+    manager_login = db.Column(db.String(200), nullable=False)
+    deal_id = db.Column(db.Integer, db.ForeignKey("deals.id"), nullable=True)
+    date = db.Column(db.Date, nullable=False)
+    path_to_file = db.Column(db.String(500), nullable=True)
+
+    def get_data_ru(self):
+        return self.date.strftime("%d.%m.%Y")

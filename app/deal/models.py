@@ -75,7 +75,5 @@ class LeasCalculator(db.Model):
     manager_login = db.Column(db.String(200), nullable=False)
     deal_id = db.Column(db.Integer, db.ForeignKey("deals.id"), nullable=True)
     date = db.Column(db.Date, nullable=False)
+    date_ru = db.Column(db.String(50), nullable=True)
     path_to_file = db.Column(db.String(500), nullable=True)
-
-    def get_data_ru(self):
-        return self.date.strftime("%d.%m.%Y")

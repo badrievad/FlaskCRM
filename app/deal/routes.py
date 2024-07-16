@@ -11,7 +11,7 @@ from .deals_db import write_deal_to_db
 from .deals_validate import DealsValidate
 from .work_with_folders import CompanyFolderAPI
 
-from ..deal.models import Deal
+from ..deal.models import Deal, LeasCalculator
 from ..deal.celery_tasks import long_task
 from ..user.models import User
 from ..config import suggestions_token
@@ -346,9 +346,13 @@ def get_leasing_calculator() -> render_template:
     # установка фона для пользователя
     user_fon_filename = current_user.fon_url
     user_fon_url = url_for("crm.static", filename=user_fon_filename)
+
+    # список расчетов
+    calc_list = LeasCalculator.query.all()
     return render_template(
         "leasing_calculator.html",
         user_fon=user_fon_url,
+        calc_list=calc_list,
     )
 
 

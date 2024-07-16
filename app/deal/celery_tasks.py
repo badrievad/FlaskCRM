@@ -32,7 +32,11 @@ def intensive_task_simulation(login: str) -> str:
 
     # Записываем в базу данных
     try:
-        new_calc = LeasCalculator(manager_login=login, date=date.today())
+        new_calc = LeasCalculator(
+            manager_login=login,
+            date=date.today(),
+            date_ru=date.today().strftime("%d.%m.%Y"),
+        )
         db.session.add(new_calc)
         db.session.commit()
 

@@ -114,6 +114,12 @@
         .custom-table tbody tr {
             transition: background-color 0.3s; /* Плавный переход цвета фона */
         }
+
+        .button-disabled {
+            background-color: #ccc; /* Серый цвет фона */
+            color: #666; /* Более темный серый цвет текста */
+            cursor: not-allowed; /* Указатель мыши */
+        }
     </style>
 </head>
 <body>
@@ -205,117 +211,141 @@
                 <script>
                     document.getElementById('calculate-button').addEventListener('click', function () {
                         var loader = document.getElementById('loader');
-                        loader.style.display = 'flex';  // Показать круг загрузки
+                        var calculateButton = document.getElementById('calculate-button');
 
-                        // Отправка задачи в Celery
+                        calculateButton.disabled = true; // Заблокировать кнопку
+                        calculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
+                        loader.style.display = 'flex'; // Показать круг загрузки
+
+                        // Найти активную вкладку
+                        var activeTab = document.querySelector('.tabs button.active');
+                        var activeTabText = activeTab ? activeTab.innerText.trim() : '';
+
+                        // Отправка задачи в Celery с активной вкладкой
                         fetch('./calculator/start-task', {
                             method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({activeTab: activeTabText})
                         })
                             .then(response => response.json())
                             .then(data => {
                                 if (data.task_id) {
                                     // Периодическая проверка состояния задачи
-                                    checkTaskStatus(data.task_id);
+                                    checkTaskStatus(data.task_id, activeTabText);
                                 } else {
-                                    loader.style.display = 'none';  // Скрыть круг загрузки в случае ошибки
-                                    // Настройки для toastr
-                                    toastr.options = {
-                                        closeButton: true,
-                                        debug: false,
-                                        newestOnTop: false,
-                                        progressBar: true,
-                                        positionClass: "toast-bottom-right",
-                                        preventDuplicates: false,
-                                        onclick: null,
-                                        showDuration: "300",
-                                        hideDuration: "1000",
-                                        timeOut: "5000",
-                                        extendedTimeOut: "1000",
-                                        showEasing: "swing",
-                                        hideEasing: "linear",
-                                        showMethod: "fadeIn",
-                                        hideMethod: "fadeOut"
-                                    };
-
-                                    // Показываем уведомление
-                                    toastr.error("Ошибка при отправке задачи. Попробуйте запустить расчет еще раз",
-                                        'Ошибка');
+                                    showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз', 'Ошибка');
+                                    loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                                    calculateButton.disabled = false; // Разблокировать кнопку
+                                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                                 }
                             })
                             .catch(error => {
                                 console.error('Ошибка:', error);
-                                loader.style.display = 'none';  // Скрыть круг загрузки в случае ошибки
+                                showError('Произошла ошибка при отправке задачи', 'Ошибка');
+                                loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                                calculateButton.disabled = false; // Разблокировать кнопку
+                                calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                             });
                     });
 
-                    function checkTaskStatus(taskId) {
+                    function checkTaskStatus(taskId, activeTabText) {
                         fetch(`./calculator/status/${taskId}`, {
                             method: 'GET',
                         })
                             .then(response => response.json())
                             .then(data => {
                                 if (data.state === 'SUCCESS') {
-                                    document.getElementById('loader').style.display = 'none';  // Скрыть круг загрузки
-                                    // Обработка успешного завершения задачи, например, обновление UI
-                                    // Настройки для toastr
-                                    toastr.options = {
-                                        closeButton: true,
-                                        debug: false,
-                                        newestOnTop: false,
-                                        progressBar: true,
-                                        positionClass: "toast-bottom-right",
-                                        preventDuplicates: false,
-                                        onclick: null,
-                                        showDuration: "300",
-                                        hideDuration: "1000",
-                                        timeOut: "3000",
-                                        extendedTimeOut: "1000",
-                                        showEasing: "swing",
-                                        hideEasing: "linear",
-                                        showMethod: "fadeIn",
-                                        hideMethod: "fadeOut"
-                                    };
+                                    document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
+                                    var calculateButton = document.getElementById('calculate-button');
+                                    calculateButton.disabled = false; // Разблокировать кнопку
+                                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                                    showSuccess('Расчет по лизингу создан', 'Успешно');
 
-                                    // Показываем уведомление
-                                    toastr.success("Расчет по лизингу создан", 'Успешно');
+                                    // Добавление нового расчета в начало списка
+                                    console.log(data.result);
+                                    addNewCalculation(data.result, activeTabText);
 
                                 } else if (data.state === 'FAILURE') {
-                                    document.getElementById('loader').style.display = 'none';  // Скрыть круг загрузки
-                                    // Настройки для toastr
-                                    toastr.options = {
-                                        closeButton: true,
-                                        debug: false,
-                                        newestOnTop: false,
-                                        progressBar: true,
-                                        positionClass: "toast-bottom-right",
-                                        preventDuplicates: false,
-                                        onclick: null,
-                                        showDuration: "300",
-                                        hideDuration: "1000",
-                                        timeOut: "5000",
-                                        extendedTimeOut: "1000",
-                                        showEasing: "swing",
-                                        hideEasing: "linear",
-                                        showMethod: "fadeIn",
-                                        hideMethod: "fadeOut"
-                                    };
-
-                                    // Показываем уведомление
-                                    toastr.error("Ошибка при выполнении расчета. Попробуйте запустить расчет еще раз",
-                                        'Ошибка');
+                                    document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
+                                    var calculateButton = document.getElementById('calculate-button');
+                                    calculateButton.disabled = false; // Разблокировать кнопку
+                                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                                    showError('Ошибка при выполнении расчета. Попробуйте запустить расчет еще раз', 'Ошибка');
                                 } else {
                                     // Если задача еще не завершена, проверка снова через некоторое время
                                     setTimeout(function () {
-                                        checkTaskStatus(taskId);
-                                    }, 2000);  // Повторная проверка через 2 секунды
+                                        checkTaskStatus(taskId, activeTabText);
+                                    }, 2000); // Повторная проверка через 2 секунды
                                 }
                             })
                             .catch(error => {
                                 console.error('Ошибка:', error);
-                                document.getElementById('loader').style.display = 'none';  // Скрыть круг загрузки в случае ошибки
+                                showError('Произошла ошибка при проверке состояния задачи', 'Ошибка');
+                                document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                                var calculateButton = document.getElementById('calculate-button');
+                                calculateButton.disabled = false; // Разблокировать кнопку
+                                calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                             });
                     }
+
+                    function addNewCalculation(calculation, activeTabText) {
+                        var calcListBody = document.getElementById('calc-list-body');
+                        var newRow = document.createElement('tr');
+                        newRow.innerHTML = `
+                <td>${calcListBody.rows.length + 1}</td>
+                <td>${calculation.title}</td>
+                <td>${calculation.date_ru}</td>
+                <td>${calculation.manager_login}</td>
+                <td>${activeTabText}</td>
+                `;
+                        calcListBody.insertBefore(newRow, calcListBody.firstChild);
+                    }
+
+                    function showSuccess(message, title) {
+                        toastr.options = {
+                            closeButton: true,
+                            debug: false,
+                            newestOnTop: false,
+                            progressBar: true,
+                            positionClass: "toast-bottom-right",
+                            preventDuplicates: false,
+                            onclick: null,
+                            showDuration: "300",
+                            hideDuration: "1000",
+                            timeOut: "3000",
+                            extendedTimeOut: "1000",
+                            showEasing: "swing",
+                            hideEasing: "linear",
+                            showMethod: "fadeIn",
+                            hideMethod: "fadeOut"
+                        };
+                        toastr.success(message, title);
+                    }
+
+                    function showError(message, title) {
+                        toastr.options = {
+                            closeButton: true,
+                            debug: false,
+                            newestOnTop: false,
+                            progressBar: true,
+                            positionClass: "toast-bottom-right",
+                            preventDuplicates: false,
+                            onclick: null,
+                            showDuration: "300",
+                            hideDuration: "1000",
+                            timeOut: "5000",
+                            extendedTimeOut: "1000",
+                            showEasing: "swing",
+                            hideEasing: "linear",
+                            showMethod: "fadeIn",
+                            hideMethod: "fadeOut"
+                        };
+                        toastr.error(message, title);
+                    }
                 </script>
+
             </div>
         </div>
     </div>
@@ -329,15 +359,17 @@
                 <th scope="col">Название</th>
                 <th scope="col">Дата</th>
                 <th scope="col">Менеджер</th>
+                <th scope="col">Тип ПЛ</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="calc-list-body">
             {% for calc in calc_list %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>{{ calc.title }}</td>
                     <td>{{ calc.date_ru }}</td>
                     <td>{{ calc.manager_login }}</td>
+                    <td>{{ calc.item_type }}</td>
                 </tr>
             {% endfor %}
             </tbody>

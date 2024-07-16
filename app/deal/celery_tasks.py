@@ -1,3 +1,4 @@
+import datetime
 import time
 from datetime import date
 from logger import logging
@@ -9,7 +10,7 @@ from .models import LeasCalculator
 from .. import db
 
 
-def intensive_task_simulation(login: str) -> str:
+def intensive_task_simulation(login: str, item_type: str) -> dict:
     import random
     import string
 
@@ -34,8 +35,9 @@ def intensive_task_simulation(login: str) -> str:
     try:
         new_calc = LeasCalculator(
             manager_login=login,
-            date=date.today(),
+            date=datetime.datetime.now(),
             date_ru=date.today().strftime("%d.%m.%Y"),
+            item_type=item_type,
         )
         db.session.add(new_calc)
         db.session.commit()
@@ -60,13 +62,18 @@ def intensive_task_simulation(login: str) -> str:
         db.session.delete(new_calc)
         db.session.commit()
         raise e
-
-    return str(file_path)
+    result = {
+        "title": new_title,
+        "date_ru": new_calc.date_ru,
+        "manager_login": new_calc.manager_login,
+        "item_type": new_calc.item_type,
+    }
+    return result
 
 
 @shared_task(ignore_result=False)
-def long_task(login) -> str:
+def long_task(login: str, item_type: str) -> str:
     start_time = time.perf_counter()
-    result = intensive_task_simulation(login)
+    result = intensive_task_simulation(login, item_type)
     logging.info(f"Время выполнения функции: {time.perf_counter() - start_time}")
     return result

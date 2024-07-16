@@ -16,7 +16,15 @@ from ..deal.celery_tasks import long_task
 from ..user.models import User
 from ..config import suggestions_token
 
-from flask import request, jsonify, render_template, session, url_for, send_file
+from flask import (
+    request,
+    jsonify,
+    render_template,
+    session,
+    url_for,
+    send_file,
+    current_app,
+)
 from flask_login import current_user, login_required
 from logger import logging
 
@@ -348,33 +356,58 @@ def get_leasing_calculator() -> render_template:
     user_fon_url = url_for("crm.static", filename=user_fon_filename)
 
     # список расчетов
-    calc_list = LeasCalculator.query.all()
+    user_login = current_user.login
+    calc_list = (
+        LeasCalculator.query.filter_by(manager_login=user_login)
+        .order_by(desc(LeasCalculator.id))
+        .all()
+    )
     return render_template(
         "leasing_calculator.html",
         user_fon=user_fon_url,
         calc_list=calc_list,
+        login=user_login,
     )
 
 
 # Эндпоинт для запуска фоновой задачи
 @deal_bp.route("/crm/calculator/start-task", methods=["POST"])
 def start_task():
-    task = long_task.delay(current_user.login)
-    return jsonify({"task_id": task.id}), 202
+    try:
+        data = request.get_json()
+        active_tab = data.get(
+            "activeTab", "Unknown"
+        )  # Получаем значение активной вкладки
+        task = long_task.delay(
+            current_user.login, active_tab
+        )  # Передаем активную вкладку в задачу Celery
+        return jsonify({"task_id": task.id}), 202
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @deal_bp.route("/crm/calculator/status/<task_id>", methods=["GET"])
 def get_status(task_id):
-    task = long_task.AsyncResult(task_id)
-    if task.state == "PENDING":
-        response = {"state": task.state, "status": "Pending..."}
-    elif task.state != "FAILURE":
-        response = {"state": task.state, "status": task.info}
-        if task.state == "SUCCESS" and task.result:
-            response["file_url"] = f"/crm/calculator/download/{task.id}"
-    else:
-        response = {"state": task.state, "status": str(task.info)}
-    return jsonify(response)
+    try:
+        task = long_task.AsyncResult(task_id)
+        if task.state == "PENDING":
+            response = {"state": task.state, "status": "Pending..."}
+        elif task.state != "FAILURE":
+            response = {"state": task.state, "status": task.info}
+            if task.state == "SUCCESS" and task.result:
+                response["result"] = {
+                    "title": task.result.get("title"),
+                    "date_ru": task.result.get("date_ru"),
+                    "manager_login": task.result.get("manager_login"),
+                    "item_type": task.result.get("item_type"),
+                }
+        else:
+            response = {"state": task.state, "status": str(task.info)}
+        current_app.logger.info(f"Task {task_id} status: {response}")
+        return jsonify(response)
+    except Exception as e:
+        current_app.logger.error(f"Error fetching status for task {task_id}: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 @deal_bp.route("/crm/calculator/download/<task_id>", methods=["GET"])

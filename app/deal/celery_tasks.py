@@ -10,7 +10,7 @@ from .models import LeasCalculator
 from .. import db
 
 
-def intensive_task_simulation(login: str, item_type: str) -> dict:
+def intensive_task_simulation(login: str, item_type: str, active_price: str) -> dict:
     import random
     import string
 
@@ -38,6 +38,7 @@ def intensive_task_simulation(login: str, item_type: str) -> dict:
             date=datetime.datetime.now(),
             date_ru=date.today().strftime("%d.%m.%Y"),
             item_type=item_type,
+            item_price=active_price,
         )
         db.session.add(new_calc)
         db.session.commit()
@@ -62,18 +63,21 @@ def intensive_task_simulation(login: str, item_type: str) -> dict:
         db.session.delete(new_calc)
         db.session.commit()
         raise e
+
     result = {
         "title": new_title,
         "date_ru": new_calc.date_ru,
         "manager_login": new_calc.manager_login,
         "item_type": new_calc.item_type,
+        "item_price": new_calc.item_price,
     }
+
     return result
 
 
 @shared_task(ignore_result=False)
-def long_task(login: str, item_type: str) -> str:
+def long_task(login: str, item_type: str, active_price: str) -> dict:
     start_time = time.perf_counter()
-    result = intensive_task_simulation(login, item_type)
+    result = intensive_task_simulation(login, item_type, active_price)
     logging.info(f"Время выполнения функции: {time.perf_counter() - start_time}")
     return result

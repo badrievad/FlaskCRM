@@ -78,3 +78,4 @@ class LeasCalculator(db.Model):
     date_ru = db.Column(db.String(50), nullable=True)
     path_to_file = db.Column(db.String(500), nullable=True)
     item_type = db.Column(db.String(150), nullable=True)
+    item_price = db.Column(db.Integer, nullable=True)

@@ -378,8 +378,9 @@ def start_task():
         active_tab = data.get(
             "activeTab", "Unknown"
         )  # Получаем значение активной вкладки
+        active_price = data.get("activePrice", "Unknown")
         task = long_task.delay(
-            current_user.login, active_tab
+            current_user.login, active_tab, active_price
         )  # Передаем активную вкладку в задачу Celery
         return jsonify({"task_id": task.id}), 202
     except Exception as e:
@@ -400,6 +401,7 @@ def get_status(task_id):
                     "date_ru": task.result.get("date_ru"),
                     "manager_login": task.result.get("manager_login"),
                     "item_type": task.result.get("item_type"),
+                    "item_price": task.result.get("item_price"),
                 }
         else:
             response = {"state": task.state, "status": str(task.info)}

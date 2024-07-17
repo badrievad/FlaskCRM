@@ -121,8 +121,57 @@
             cursor: not-allowed; /* Указатель мыши */
         }
     </style>
+
+    <!-- CSS Modal-->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
+
+<!-- Modal -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <p id="modal-text">Some text in the Modal..</p>
+    </div>
+</div>
+
 <div class="sidebar" id="sidebar">
     <ul>
         <li><a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
@@ -221,19 +270,23 @@
                         var activeTab = document.querySelector('.tabs button.active');
                         var activeTabText = activeTab ? activeTab.innerText.trim() : '';
 
+                        // Найти цену ПЛ
+                        var activePrice = document.getElementById('cost-value').value;
+                        var activeTabPrice = document.getElementById('cost-value').value;
+
                         // Отправка задачи в Celery с активной вкладкой
                         fetch('./calculator/start-task', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({activeTab: activeTabText})
+                            body: JSON.stringify({activeTab: activeTabText, activePrice: activeTabPrice})
                         })
                             .then(response => response.json())
                             .then(data => {
                                 if (data.task_id) {
                                     // Периодическая проверка состояния задачи
-                                    checkTaskStatus(data.task_id, activeTabText);
+                                    checkTaskStatus(data.task_id, activeTabText, activeTabPrice);
                                 } else {
                                     showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз', 'Ошибка');
                                     loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
@@ -250,7 +303,7 @@
                             });
                     });
 
-                    function checkTaskStatus(taskId, activeTabText) {
+                    function checkTaskStatus(taskId, activeTabText, activeTabPrice) {
                         fetch(`./calculator/status/${taskId}`, {
                             method: 'GET',
                         })
@@ -265,7 +318,7 @@
 
                                     // Добавление нового расчета в начало списка
                                     console.log(data.result);
-                                    addNewCalculation(data.result, activeTabText);
+                                    addNewCalculation(data.result, activeTabText, activeTabPrice);
 
                                 } else if (data.state === 'FAILURE') {
                                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
@@ -276,7 +329,7 @@
                                 } else {
                                     // Если задача еще не завершена, проверка снова через некоторое время
                                     setTimeout(function () {
-                                        checkTaskStatus(taskId, activeTabText);
+                                        checkTaskStatus(taskId, activeTabText, activeTabPrice);
                                     }, 2000); // Повторная проверка через 2 секунды
                                 }
                             })
@@ -290,15 +343,16 @@
                             });
                     }
 
-                    function addNewCalculation(calculation, activeTabText) {
+                    function addNewCalculation(calculation, activeTabText, activeTabPrice) {
                         var calcListBody = document.getElementById('calc-list-body');
                         var newRow = document.createElement('tr');
                         newRow.innerHTML = `
                 <td>${calcListBody.rows.length + 1}</td>
                 <td>${calculation.title}</td>
+                <td>${activeTabPrice}</td>
+                <td>${activeTabText}</td>
                 <td>${calculation.date_ru}</td>
                 <td>${calculation.manager_login}</td>
-                <td>${activeTabText}</td>
                 `;
                         calcListBody.insertBefore(newRow, calcListBody.firstChild);
                     }
@@ -345,7 +399,38 @@
                         toastr.error(message, title);
                     }
                 </script>
+                <script>
+                    // Получить модальное окно
+                    var modal = document.getElementById("modal");
 
+                    // Получить элемент <span>, который закрывает модальное окно
+                    var span = document.getElementsByClassName("close")[0];
+
+                    // Функция открытия модального окна
+                    function openModal(title, date, manager, itemType) {
+                        var modalText = document.getElementById("modal-text");
+                        modalText.innerHTML = `
+        <strong>Название:</strong> ${title}<br>
+        <strong>Дата:</strong> ${date}<br>
+        <strong>Менеджер:</strong> ${manager}<br>
+        <strong>Тип:</strong> ${itemType}
+    `;
+                        modal.style.display = "block";
+                    }
+
+                    // Когда пользователь нажимает на <span> (x), закрыть модальное окно
+                    span.onclick = function () {
+                        modal.style.display = "none";
+                    }
+
+                    // Когда пользователь нажимает в любом месте вне модального окна, закрыть его
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+
+                </script>
             </div>
         </div>
     </div>
@@ -357,19 +442,21 @@
             <tr>
                 <th scope="col">№</th>
                 <th scope="col">Название</th>
+                <th scope="col">Цена ПЛ</th>
+                <th scope="col">Тип ПЛ</th>
                 <th scope="col">Дата</th>
                 <th scope="col">Менеджер</th>
-                <th scope="col">Тип ПЛ</th>
             </tr>
             </thead>
             <tbody id="calc-list-body">
             {% for calc in calc_list %}
-                <tr>
+                <tr onclick="openModal('{{ calc.title }}', '{{ calc.date_ru }}', '{{ calc.manager_login }}', '{{ calc.item_type }}')">
                     <td>{{ loop.index }}</td>
                     <td>{{ calc.title }}</td>
+                    <td>{{ calc.item_price }}</td>
+                    <td>{{ calc.item_type }}</td>
                     <td>{{ calc.date_ru }}</td>
                     <td>{{ calc.manager_login }}</td>
-                    <td>{{ calc.item_type }}</td>
                 </tr>
             {% endfor %}
             </tbody>

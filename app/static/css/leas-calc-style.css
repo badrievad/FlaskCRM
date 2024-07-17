@@ -301,7 +301,7 @@ output {
     margin-bottom: 5px;
 }
 
-.form-group .input-container {
+.form-group .input-container, .input-container-item-name {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -315,6 +315,16 @@ output {
 
 .form-group .input-container input {
     width: 140px;
+    font-size: 14px;
+    padding: 5px;
+    -moz-appearance: textfield;
+    text-align: center;
+    border: 1px solid rgba(204, 204, 204, 0.4);
+    border-radius: 4px;
+}
+
+.form-group .input-container-item-name input {
+    width: 500px;
     font-size: 14px;
     padding: 5px;
     -moz-appearance: textfield;
@@ -389,6 +399,11 @@ output {
 }
 
 input[type="number"] {
+    background: rgba(255, 255, 255, 0.56);
+    border: none;
+}
+
+input[type="text"] {
     background: rgba(255, 255, 255, 0.56);
     border: none;
 }

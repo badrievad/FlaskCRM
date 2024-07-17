@@ -1,5 +1,6 @@
 import datetime
 import time
+
 from datetime import date
 from logger import logging
 from openpyxl import Workbook
@@ -7,6 +8,7 @@ from celery import shared_task
 
 from ..config import PATH_TO_CALENDAR
 from .models import LeasCalculator
+from .other_utils import validate_item_price
 from .. import db
 
 
@@ -39,6 +41,7 @@ def intensive_task_simulation(login: str, item_type: str, active_price: str) -> 
             date_ru=date.today().strftime("%d.%m.%Y"),
             item_type=item_type,
             item_price=active_price,
+            item_price_str=validate_item_price(active_price),
         )
         db.session.add(new_calc)
         db.session.commit()
@@ -70,6 +73,7 @@ def intensive_task_simulation(login: str, item_type: str, active_price: str) -> 
         "manager_login": new_calc.manager_login,
         "item_type": new_calc.item_type,
         "item_price": new_calc.item_price,
+        "item_price_str": new_calc.item_price_str,
     }
 
     return result

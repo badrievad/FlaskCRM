@@ -11,7 +11,7 @@ from .deals_db import write_deal_to_db
 from .deals_validate import DealsValidate
 from .work_with_folders import CompanyFolderAPI
 
-from ..deal.models import Deal, LeasCalculator
+from ..deal.models import Deal, LeasCalculator, LeasingItem
 from ..deal.celery_tasks import long_task
 from ..user.models import User
 from ..config import suggestions_token
@@ -372,7 +372,7 @@ def get_leasing_calculator() -> render_template:
 
 # Эндпоинт для запуска фоновой задачи
 @deal_bp.route("/crm/calculator/start-task", methods=["POST"])
-def start_task():
+def start_task() -> jsonify:
     try:
         data = request.get_json()
         active_tab = data.get(
@@ -388,7 +388,7 @@ def start_task():
 
 
 @deal_bp.route("/crm/calculator/status/<task_id>", methods=["GET"])
-def get_status(task_id):
+def get_status(task_id) -> jsonify:
     try:
         task = long_task.AsyncResult(task_id)
         if task.state == "PENDING":
@@ -402,6 +402,7 @@ def get_status(task_id):
                     "manager_login": task.result.get("manager_login"),
                     "item_type": task.result.get("item_type"),
                     "item_price": task.result.get("item_price"),
+                    "item_price_str": task.result.get("item_price_str"),
                 }
         else:
             response = {"state": task.state, "status": str(task.info)}
@@ -422,3 +423,13 @@ def download_result(task_id):
         if os.path.exists(file_path):
             return send_file(file_path, as_attachment=True)
     return "File not found or task not completed", 404
+
+
+@deal_bp.route("/crm/calculator/autocomplete", methods=["GET"])
+def autocomplete():
+    query = request.args.get("query", "")
+    suggestions = (
+        LeasingItem.query.filter(LeasingItem.name.ilike(f"%{query}%")).limit(10).all()
+    )
+    results = [item.name for item in suggestions]
+    return jsonify(results)

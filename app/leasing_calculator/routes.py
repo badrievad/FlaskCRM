@@ -1,0 +1,90 @@
+from sqlalchemy import desc
+from . import leas_calc_bp
+from .other_utils import ValidateFields
+from ..leasing_calculator.models import LeasCalculator, LeasingItem
+from ..leasing_calculator.celery_tasks import long_task
+
+from flask import (
+    request,
+    jsonify,
+    render_template,
+    url_for,
+    current_app,
+)
+from flask_login import current_user, login_required
+from logger import logging
+
+
+@leas_calc_bp.route("/crm/calculator", methods=["GET"])
+@login_required
+def get_leasing_calculator() -> render_template:
+    # установка фона для пользователя
+    user_fon_filename = current_user.fon_url
+    user_fon_url = url_for("crm.static", filename=user_fon_filename)
+
+    # список расчетов
+    user_login = current_user.login
+    calc_list = (
+        LeasCalculator.query.filter_by(manager_login=user_login)
+        .order_by(desc(LeasCalculator.id))
+        .all()
+    )
+    return render_template(
+        "leasing_calculator.html",
+        user_fon=user_fon_url,
+        calc_list=calc_list,
+        login=user_login,
+    )
+
+
+# Эндпоинт для запуска фоновой задачи
+@leas_calc_bp.route("/crm/calculator/start-task", methods=["POST"])
+def start_task() -> jsonify:
+    try:
+        data: dict = ValidateFields(request.get_json()).get_dict()
+        logging.info(f"Поля из сайта (лизинговый калькулятор): {data}")
+        user_login: dict = {"login": current_user.login}
+        task = long_task.delay({**user_login, **data})
+        return jsonify({"task_id": task.id}), 202
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@leas_calc_bp.route("/crm/calculator/status/<task_id>", methods=["GET"])
+def get_status(task_id) -> jsonify:
+    try:
+        task = long_task.AsyncResult(task_id)
+        if task.state == "PENDING":
+            response = {"state": task.state, "status": "Pending..."}
+        elif task.state != "FAILURE":
+            response = {"state": task.state, "status": task.info}
+            if task.state == "SUCCESS" and task.result:
+                response["result"] = {
+                    "title": task.result.get("title"),
+                    "date_ru": task.result.get("date_ru"),
+                    "manager_login": task.result.get("manager_login"),
+                    "item_type": task.result.get("item_type"),
+                    "item_name": task.result.get("item_name"),
+                    "item_price": task.result.get("item_price"),
+                    "item_price_str": task.result.get("item_price_str"),
+                    "term": task.result.get("term"),
+                    "prepaid_expense": task.result.get("prepaid_expense"),
+                    "interest_rate": task.result.get("interest_rate"),
+                }
+        else:
+            response = {"state": task.state, "status": str(task.info)}
+        current_app.logger.info(f"Task {task_id} status: {response}")
+        return jsonify(response)
+    except Exception as e:
+        current_app.logger.error(f"Error fetching status for task {task_id}: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+@leas_calc_bp.route("/crm/calculator/autocomplete", methods=["GET"])
+def autocomplete():
+    query = request.args.get("query", "")
+    suggestions = (
+        LeasingItem.query.filter(LeasingItem.name.ilike(f"%{query}%")).limit(10).all()
+    )
+    results = [item.name for item in suggestions]
+    return jsonify(results)

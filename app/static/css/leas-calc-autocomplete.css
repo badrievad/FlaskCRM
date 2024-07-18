@@ -1,0 +1,40 @@
+/* Основные стили для выпадающего списка */
+.ui-autocomplete {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+}
+
+.ui-menu-item {
+    padding: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border 0.3s ease;
+}
+
+.ui-menu-item:hover {
+    background-color: #f8f8f8;
+}
+
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+    background-color: #ececec;
+    color: #333;
+}
+
+/* Дополнительные стили для улучшения */
+.ui-autocomplete .ui-menu-item {
+    transition: background-color 0.3s ease;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper {
+    display: block;
+    color: #333;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper.ui-state-active {
+    background-color: rgba(26, 100, 73, 0.6);
+    color: #fff;
+    border: rgba(255, 255, 255, 1);
+}

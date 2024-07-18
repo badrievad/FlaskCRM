@@ -1,5 +1,4 @@
 import datetime
-import os
 
 from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
@@ -11,8 +10,7 @@ from .deals_db import write_deal_to_db
 from .deals_validate import DealsValidate
 from .work_with_folders import CompanyFolderAPI
 
-from ..deal.models import Deal, LeasCalculator, LeasingItem
-from ..deal.celery_tasks import long_task
+from ..deal.models import Deal
 from ..user.models import User
 from ..config import suggestions_token
 
@@ -22,8 +20,6 @@ from flask import (
     render_template,
     session,
     url_for,
-    send_file,
-    current_app,
 )
 from flask_login import current_user, login_required
 from logger import logging
@@ -347,89 +343,3 @@ def get_deals_archived() -> jsonify:
 def enter_into_deal(deal_id: int) -> render_template:
     deal: Deal = Deal.query.get(deal_id)
     return render_template("deal.html", deal=deal)
-
-
-@deal_bp.route("/crm/calculator", methods=["GET"])
-def get_leasing_calculator() -> render_template:
-    # установка фона для пользователя
-    user_fon_filename = current_user.fon_url
-    user_fon_url = url_for("crm.static", filename=user_fon_filename)
-
-    # список расчетов
-    user_login = current_user.login
-    calc_list = (
-        LeasCalculator.query.filter_by(manager_login=user_login)
-        .order_by(desc(LeasCalculator.id))
-        .all()
-    )
-    return render_template(
-        "leasing_calculator.html",
-        user_fon=user_fon_url,
-        calc_list=calc_list,
-        login=user_login,
-    )
-
-
-# Эндпоинт для запуска фоновой задачи
-@deal_bp.route("/crm/calculator/start-task", methods=["POST"])
-def start_task() -> jsonify:
-    try:
-        data = request.get_json()
-        active_tab = data.get(
-            "activeTab", "Unknown"
-        )  # Получаем значение активной вкладки
-        active_price = data.get("activePrice", "Unknown")
-        task = long_task.delay(
-            current_user.login, active_tab, active_price
-        )  # Передаем активную вкладку в задачу Celery
-        return jsonify({"task_id": task.id}), 202
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-@deal_bp.route("/crm/calculator/status/<task_id>", methods=["GET"])
-def get_status(task_id) -> jsonify:
-    try:
-        task = long_task.AsyncResult(task_id)
-        if task.state == "PENDING":
-            response = {"state": task.state, "status": "Pending..."}
-        elif task.state != "FAILURE":
-            response = {"state": task.state, "status": task.info}
-            if task.state == "SUCCESS" and task.result:
-                response["result"] = {
-                    "title": task.result.get("title"),
-                    "date_ru": task.result.get("date_ru"),
-                    "manager_login": task.result.get("manager_login"),
-                    "item_type": task.result.get("item_type"),
-                    "item_price": task.result.get("item_price"),
-                    "item_price_str": task.result.get("item_price_str"),
-                }
-        else:
-            response = {"state": task.state, "status": str(task.info)}
-        current_app.logger.info(f"Task {task_id} status: {response}")
-        return jsonify(response)
-    except Exception as e:
-        current_app.logger.error(f"Error fetching status for task {task_id}: {e}")
-        return jsonify({"error": str(e)}), 500
-
-
-@deal_bp.route("/crm/calculator/download/<task_id>", methods=["GET"])
-def download_result(task_id):
-    task = long_task.AsyncResult(task_id)
-    if task.state == "SUCCESS":
-        logging.info("status: SUCCESS")
-        file_path = task.result
-        logging.info(f"file_path: {file_path}")
-        if os.path.exists(file_path):
-            return send_file(file_path, as_attachment=True)
-    return "File not found or task not completed", 404
-
-
-@deal_bp.route("/crm/calculator/autocomplete", methods=["GET"])
-def autocomplete():
-    query = request.args.get("query", "")
-    suggestions = (
-        LeasingItem.query.filter(LeasingItem.name.ilike(f"%{query}%")).limit(10).all()
-    )
-    results = [item.name for item in suggestions]
-    return jsonify(results)

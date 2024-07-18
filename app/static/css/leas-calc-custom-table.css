@@ -1,0 +1,25 @@
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(248, 249, 250, 0.4); /* Фон всей таблицы */
+    color: #333; /* Цвет текста */
+}
+
+.custom-table th,
+.custom-table td {
+    padding: 12px;
+    border: 1px solid #dee2e6; /* Границы ячеек */
+}
+
+.custom-table tbody tr {
+    background-color: rgba(233, 236, 239, 0.1); /* Фон четных строк */
+    cursor: pointer; /* Курсор на строках */
+}
+
+.custom-table tbody tr:hover {
+    background-color: rgba(214, 216, 219, 1); /* Фон при наведении */
+}
+
+.custom-table tbody tr {
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}

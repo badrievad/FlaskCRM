@@ -33,6 +33,12 @@ document.getElementById('term-value').addEventListener('input', function () {
     document.getElementById('term').value = this.value;
 });
 
+document.getElementById('percent').addEventListener('input', function () {
+    document.getElementById('percent-value').value = this.value;
+});
+document.getElementById('percent-value').addEventListener('input', function () {
+    document.getElementById('percent').value = this.value;
+});
 
 document.querySelectorAll('.tabs button').forEach(button => {
     button.addEventListener('click', function () {

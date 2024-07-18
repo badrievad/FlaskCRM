@@ -7,30 +7,95 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.7);
     padding-top: 60px;
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 5% auto;
+    background-color: rgba(254, 254, 254, 0.6);
+    margin: 15% auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 80%;
+    width: 100%;
     max-width: 500px;
+    line-height: 30px;
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
 }
 
-.close:hover,
-.close:focus {
-    color: black;
-    text-decoration: none;
+.modal-footer button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.modal-footer .close-btn {
+    background-color: #ccc;
+}
+
+.modal-footer .save-btn {
+    background-color: #69a86a;
+    color: white;
+}
+
+.modal-footer .close-btn:hover {
+    background-color: #b7b7b7;
+}
+
+.modal-footer .save-btn:hover {
+    background-color: #45a049;
+}
+
+.fa-pen-to-square:hover {
+    color: #3c7c2b; /* Измените цвет на тот, который вам нравится */
+    cursor: pointer;
+}
+
+.editable {
+    border: 1px dashed #ccc;
+    padding: 10px;
+}
+
+@keyframes shake {
+    0% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.05);
+    }
+    50% {
+        transform: scale(1);
+    }
+    75% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+.modal-shake {
+    animation: shake 0.7s;
+}
+
+.modal-body-right .download-btn {
+    background-color: #91c1f3;
+    color: white;
+}
+
+.modal-body-right .download-btn:hover {
+    background-color: #638eb0;
+}
+
+.modal-body-right button {
+    padding: 5px 20px;
+    border: none;
+    border-radius: 3px;
     cursor: pointer;
 }

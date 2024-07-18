@@ -73,8 +73,35 @@
 <!-- Modal -->
 <div id="modal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
-        <p id="modal-text">Some text in the Modal...</p>
+        <h4 class="modal-header">Основные параметры</h4>
+        <div class="modal-body">
+            <div class="modal-body-left">
+                <p id="modal-text">
+                    <strong>Наименование ПЛ:</strong> <span id="item-name-modal">${name}</span> <i
+                        class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i><br>
+                    <strong>Дата:</strong> ${date}<br>
+                    <strong>Цена ПЛ:</strong> ${itemPrice} руб.<br>
+                    <strong>Тип ПЛ:</strong> <span id="item-type-modal">${itemType}</span>
+                    <select id="item-type-modal-select" class="hidden">
+                        <option value="Легковые">Легковые</option>
+                        <option value="Грузовые и прицепы">Грузовые и прицепы</option>
+                        <option value="Оборудование">Оборудование</option>
+                        <option value="Спецтехника">Спецтехника</option>
+                        <option value="Автобусы">Автобусы</option>
+                        <option value="Недвижимость">Недвижимость</option>
+                    </select> <i class="fa-regular fa-pen-to-square"
+                                 onclick="makeEditable('item-type-modal', true)"></i><br>
+                    <strong>Привязать к сделке:</strong> <span id="item-deal-modal">${itemDeal}</span>
+                </p>
+            </div>
+            <div class="modal-body-right">
+                <button class="download-btn" onclick="downloadKP()"><i class="fa-regular fa-circle-down"></i> Скачать КП</button>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="save-btn"><i class="fa-regular fa-floppy-disk"></i> Сохранить изменения</button>
+            <button class="close-btn" onclick="closeModal()"><i class="fa-regular fa-circle-xmark"></i> Закрыть</button>
+        </div>
     </div>
 </div>
 
@@ -288,7 +315,8 @@
                                                term, interestRate, itemName) {
                         var calcListBody = document.getElementById('calc-list-body');
                         var newRow = document.createElement('tr');
-                        newRow.setAttribute('onclick', `openModal('${calculation.item_name}', '${calculation.date_ru}', '${calculation.item_price_str}')`);
+                        newRow.setAttribute('onclick', `openModal('${calculation.item_name}', '${calculation.date_ru}',
+                        '${calculation.item_price_str}'. '${calculation.item_type}')`);
                         newRow.innerHTML = `
                 <td>${calcListBody.rows.length + 1}</td>
                 <td>${calculation.item_name}</td>
@@ -344,31 +372,63 @@
                 </script>
                 <script>
                     // Получить модальное окно
-                    var modal = document.getElementById("modal");
-
-                    // Получить элемент <span>, который закрывает модальное окно
-                    var span = document.getElementsByClassName("close")[0];
-
-                    // Функция открытия модального окна
-                    function openModal(name, date, itemPrice) {
+                    function openModal(name, date, itemPrice, itemType, itemDeal) {
                         var modalText = document.getElementById("modal-text");
                         modalText.innerHTML = `
-                            <strong>Наименование ПЛ:</strong> ${name}<br>
+                            <strong>Наименование ПЛ:</strong> <span id="item-name-modal">${name}</span> <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i><br>
                             <strong>Дата:</strong> ${date}<br>
-                            <strong>Цена ПЛ:</strong> ${itemPrice} руб.
+                            <strong>Цена ПЛ:</strong> ${itemPrice} руб.<br>
+                            <strong>Тип ПЛ:</strong> <span id="item-type-modal">${itemType}</span>
+                            <select id="item-type-modal-select" class="hidden">
+                                <option value="Легковые">Легковые</option>
+                                <option value="Грузовые и прицепы">Грузовые и прицепы</option>
+                                <option value="Оборудование">Оборудование</option>
+                                <option value="Спецтехника">Спецтехника</option>
+                                <option value="Автобусы">Автобусы</option>
+                                <option value="Недвижимость">Недвижимость</option>
+                            </select> <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-type-modal', true)"></i><br>
+                            <strong>Привязать к сделке:</strong> <span id="item-deal-modal">${itemDeal}</span> <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-deal-modal', true)"></i>
                         `;
-                        modal.style.display = "block";
+                        document.getElementById('modal').style.display = "block";
+                        document.getElementById('item-type-modal-select').value = itemType;
                     }
 
-                    // Когда пользователь нажимает на <span> (x), закрыть модальное окно
-                    span.onclick = function () {
-                        modal.style.display = "none";
+                    function closeModal() {
+                        document.getElementById('modal').style.display = 'none';
                     }
 
-                    // Когда пользователь нажимает в любом месте вне модального окна, закрыть его
+                    // Закрыть модальное окно при нажатии клавиши ESC
+                    document.addEventListener('keydown', function (event) {
+                        var modal = document.getElementById('modal');
+                        if (event.key === "Escape" && modal.style.display === "block") {
+                            closeModal();
+                        }
+                    });
+
+                    // Когда пользователь нажимает в любом месте вне модального окна, увеличить и уменьшить его
                     window.onclick = function (event) {
+                        var modal = document.getElementById('modal');
+                        var modalContent = document.querySelector('.modal-content');
                         if (event.target == modal) {
-                            modal.style.display = "none";
+                            modalContent.classList.add('modal-shake');
+                            setTimeout(() => {
+                                modalContent.classList.remove('modal-shake');
+                            }, 300);
+                        }
+                    }
+
+                    function makeEditable(id, isSelect = false) {
+                        if (isSelect) {
+                            var span = document.getElementById(id);
+                            var select = document.getElementById(id + '-select');
+                            span.classList.add('hidden');
+                            select.classList.remove('hidden');
+                            select.focus();
+                        } else {
+                            var element = document.getElementById(id);
+                            element.contentEditable = true;
+                            element.classList.add('editable');
+                            element.focus();
                         }
                     }
                 </script>
@@ -391,7 +451,8 @@
             </thead>
             <tbody id="calc-list-body">
             {% for calc in calc_list %}
-                <tr onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}', '{{ calc.item_price_str }}')">
+                <tr onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}',
+                        '{{ calc.item_price_str }}', '{{ calc.item_type }}')">
                     <td>{{ loop.index }}</td>
                     <td>{{ calc.item_name }}</td>
                     <td>{{ calc.item_price_str }}</td>

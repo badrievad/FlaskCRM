@@ -66,6 +66,16 @@
             color: #666; /* Более темный серый цвет текста */
             cursor: not-allowed; /* Указатель мыши */
         }
+
+        .fa-trash-can {
+            cursor: pointer;
+            color: #c55c5c;
+            transition: color 0.3s;
+        }
+
+        td:hover .fa-trash-can {
+            color: #4b0404;
+        }
     </style>
 </head>
 <body>
@@ -95,7 +105,8 @@
                 </p>
             </div>
             <div class="modal-body-right">
-                <button class="download-btn" onclick="downloadKP()"><i class="fa-regular fa-circle-down"></i> Скачать КП</button>
+                <button class="download-btn" onclick="downloadKP()"><i class="fa-regular fa-circle-down"></i> Скачать КП
+                </button>
             </div>
         </div>
         <div class="modal-footer">
@@ -315,16 +326,20 @@
                                                term, interestRate, itemName) {
                         var calcListBody = document.getElementById('calc-list-body');
                         var newRow = document.createElement('tr');
+                        console.log(calculation);
                         newRow.setAttribute('onclick', `openModal('${calculation.item_name}', '${calculation.date_ru}',
                         '${calculation.item_price_str}'. '${calculation.item_type}')`);
                         newRow.innerHTML = `
-                <td>${calcListBody.rows.length + 1}</td>
-                <td>${calculation.item_name}</td>
-                <td>${calculation.item_price_str}</td>
-                <td>${activeTabText}</td>
-                <td>${calculation.date_ru}</td>
-                <td>${calculation.manager_login}</td>
-                `;
+                            <td>${calcListBody.rows.length + 1}</td>
+                            <td>${calculation.item_name}</td>
+                            <td>${calculation.item_price_str}</td>
+                            <td>${activeTabText}</td>
+                            <td>${calculation.date_ru}</td>
+                            <td>${calculation.manager_login}</td>
+                            <td onclick="deleteCalculation(event, '${calculation.id}')">
+                                <i class="fa-regular fa-trash-can" data-id="${calculation.id}"></i>
+                            </td>
+                            `;
                         calcListBody.insertBefore(newRow, calcListBody.firstChild);
                     }
 
@@ -431,6 +446,27 @@
                             element.focus();
                         }
                     }
+
+                    function deleteCalculation(event, calcId) {
+                        event.stopPropagation(); // Остановить всплытие события, чтобы не вызывать openModal
+                        if (confirm("Вы уверены, что хотите удалить этот расчет?")) {
+                            fetch(`./calculator/delete/${calcId}`, {
+                                method: 'POST',
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        document.querySelector(`i[data-id='${calcId}']`).closest('tr').remove();
+                                    } else {
+                                        alert('Ошибка при удалении расчета: ' + data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Ошибка:', error);
+                                    alert('Произошла ошибка при удалении расчета.');
+                                });
+                        }
+                    }
                 </script>
             </div>
         </div>
@@ -447,6 +483,7 @@
                 <th scope="col">Тип ПЛ</th>
                 <th scope="col">Дата</th>
                 <th scope="col">Менеджер</th>
+                <th scope="col"></th>
             </tr>
             </thead>
             <tbody id="calc-list-body">
@@ -459,6 +496,8 @@
                     <td>{{ calc.item_type }}</td>
                     <td>{{ calc.date_ru }}</td>
                     <td>{{ calc.manager_login }}</td>
+                    <td onclick="deleteCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-trash-can"
+                                                                               data-id="{{ calc.id }}"></i></td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -72,6 +72,7 @@ def intensive_task_simulation(data: dict) -> dict:
         raise e
 
     result = {
+        "id": new_calc.id,
         "title": new_title,
         "date_ru": new_calc.date_ru,
         "manager_login": new_calc.manager_login,

@@ -1,6 +1,7 @@
 from sqlalchemy import desc
 from . import leas_calc_bp
 from .other_utils import ValidateFields
+from .. import db
 from ..leasing_calculator.models import LeasCalculator, LeasingItem
 from ..leasing_calculator.celery_tasks import long_task
 
@@ -60,6 +61,7 @@ def get_status(task_id) -> jsonify:
             response = {"state": task.state, "status": task.info}
             if task.state == "SUCCESS" and task.result:
                 response["result"] = {
+                    "id": task.result.get("id"),
                     "title": task.result.get("title"),
                     "date_ru": task.result.get("date_ru"),
                     "manager_login": task.result.get("manager_login"),
@@ -78,6 +80,31 @@ def get_status(task_id) -> jsonify:
     except Exception as e:
         current_app.logger.error(f"Error fetching status for task {task_id}: {e}")
         return jsonify({"error": str(e)}), 500
+
+
+@leas_calc_bp.route("/crm/calculator/delete/<int:calc_id>", methods=["POST"])
+def delete_calculation(calc_id):
+    try:
+        calc = LeasCalculator.query.filter_by(id=calc_id).first()
+        if calc is None:
+            return jsonify({"success": False, "message": "Calculation not found"}), 404
+
+        db.session.delete(calc)
+        db.session.commit()
+        return jsonify({"success": True, "message": "Calculation deleted successfully"})
+
+    except Exception as e:
+        db.session.rollback()
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "An error occurred while deleting the calculation",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )
 
 
 @leas_calc_bp.route("/crm/calculator/autocomplete", methods=["GET"])

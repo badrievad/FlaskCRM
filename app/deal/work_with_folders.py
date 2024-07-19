@@ -68,9 +68,7 @@ class CompanyFolderAPI:
         try:
             response = requests.get(url)
             response.raise_for_status()
-            return response.json().get(
-                "available", False
-            )
+            return response.json().get("available", False)
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e

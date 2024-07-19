@@ -77,14 +77,58 @@
             color: #4b0404;
         }
 
-        .fa-circle-down {
+        .fa-file-pdf {
             cursor: pointer;
             color: #75a17e;
             transition: color 0.3s;
         }
 
-        td:hover .fa-circle-down {
+        td:hover .fa-file-pdf {
             color: #23412b;
+        }
+    </style>
+    <style>
+        .exchange-rates {
+            max-width: 400px;
+            margin: auto;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .exchange-rates-title {
+            background-color: rgba(247, 247, 247, 0.13);
+            padding: 15px;
+            font-size: 18px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .exchange-rates-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .exchange-rates-table th, .exchange-rates-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .exchange-rates-table th {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .exchange-rates-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .currency-icon {
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
         }
     </style>
 </head>
@@ -95,28 +139,50 @@
     <div class="modal-content">
         <h4 class="modal-header">Основные параметры</h4>
         <div class="modal-body">
-            <div class="modal-body-left">
-                <p id="modal-text">
-                    <strong>Наименование ПЛ:</strong> <span id="item-name-modal">${name}</span> <i
-                        class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i><br>
-                    <strong>Дата:</strong> ${date}<br>
-                    <strong>Цена ПЛ:</strong> ${itemPrice} руб.<br>
-                    <strong>Тип ПЛ:</strong> <span id="item-type-modal">${itemType}</span>
-                    <select id="item-type-modal-select" class="hidden">
-                        <option value="Легковые">Легковые</option>
-                        <option value="Грузовые и прицепы">Грузовые и прицепы</option>
-                        <option value="Оборудование">Оборудование</option>
-                        <option value="Спецтехника">Спецтехника</option>
-                        <option value="Автобусы">Автобусы</option>
-                        <option value="Недвижимость">Недвижимость</option>
-                    </select> <i class="fa-regular fa-pen-to-square"
-                                 onclick="makeEditable('item-type-modal', true)"></i><br>
-                    <strong>Привязать к сделке:</strong> <span id="item-deal-modal">${itemDeal}</span>
-                </p>
-            </div>
+            <table class="modal-table">
+                <tr>
+                    <th>Наименование ПЛ</th>
+                    <td>
+                        <span id="item-name-modal">${name}</span>
+                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Дата</th>
+                    <td>${date}</td>
+                </tr>
+                <tr>
+                    <th>Цена ПЛ</th>
+                    <td>${itemPrice}</td> руб.
+                </tr>
+                <tr>
+                    <th>Тип ПЛ</th>
+                    <td>
+                        <span id="item-type-modal">${itemType}</span>
+                        <select id="item-type-modal-select" class="hidden">
+                            <option value="Легковые">Легковые</option>
+                            <option value="Грузовые и прицепы">Грузовые и прицепы</option>
+                            <option value="Оборудование">Оборудование</option>
+                            <option value="Спецтехника">Спецтехника</option>
+                            <option value="Автобусы">Автобусы</option>
+                            <option value="Недвижимость">Недвижимость</option>
+                        </select>
+                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-type-modal', true)"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Привязать к сделке</th>
+                    <td>
+                        <span id="item-deal-modal">${itemDeal}</span>
+                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-deal-modal')"></i>
+                    </td>
+                </tr>
+            </table>
         </div>
         <div class="modal-footer">
-            <button class="save-btn"><i class="fa-regular fa-floppy-disk"></i> Сохранить изменения</button>
+            <button class="save-btn" onclick="saveChanges()"><i class="fa-regular fa-floppy-disk"></i> Сохранить
+                изменения
+            </button>
             <button class="close-btn" onclick="closeModal()"><i class="fa-regular fa-circle-xmark"></i> Закрыть</button>
         </div>
     </div>
@@ -210,14 +276,40 @@
                 </div>
             </div>
             <div class="results">
-                <div class="result">
-                    <p class="big">22 530 ₽</p>
-                    <p class="savings">Экономия по налогам: 273 688 ₽</p>
-                    <p>Годовое удорожание: 21.40%</p>
-                    <p>Сумма договора: 821 065 ₽</p>
+                <div class="exchange-rates">
+                    <table class="exchange-rates-table">
+                        <tr>
+                            <th>Валюта</th>
+                            <th>18.07.2024</th>
+                            <th>19.07.2024</th>
+                        </tr>
+                        <tr>
+                            <td><img src="https://img.icons8.com/color/48/000000/china-circular.png" alt="CNY"
+                                     class="currency-icon"> CNY, 1¥
+                            </td>
+                            <td>12,0537 ₽</td>
+                            <td>12,0227 ₽</td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://img.icons8.com/color/48/000000/usa-circular.png" alt="USD"
+                                     class="currency-icon"> USD, 1$
+                            </td>
+                            <td>88,0872 ₽</td>
+                            <td>87,8754 ₽</td>
+                        </tr>
+                        <tr>
+                            <td><img src="https://img.icons8.com/?size=100&id=Y76SzpmxslW4&format=png&color=000000"
+                                     alt="EUR"
+                                     class="currency-icon"> EUR, 1€
+                            </td>
+                            <td>96,3046 ₽</td>
+                            <td>96,1018 ₽</td>
+                        </tr>
+                    </table>
                 </div>
+                <br><br><br><br><br><br>
                 <button class="calculate-button" id="calculate-button">
-                    Рассчитать
+                    Сформировать КП
                 </button>
                 <div class="loader" id="loader"></div>
                 <script>
@@ -346,7 +438,7 @@
                                 <i class="fa-regular fa-trash-can" data-id="${calculation.id}"></i>
                             </td>
                             <td onclick="downloadCalculation(event, '${calculation.id}')">
-                                <i class="fa-regular fa-circle-down" data-id="${calculation.id}"></i></td>
+                                <i class="fa-regular fa-file-pdf" data-id="${calculation.id}"></i></td>
                             `;
                         calcListBody.insertBefore(newRow, calcListBody.firstChild);
                     }
@@ -396,25 +488,55 @@
                 <script>
                     // Получить модальное окно
                     function openModal(name, date, itemPrice, itemType, itemDeal) {
-                        var modalText = document.getElementById("modal-text");
-                        modalText.innerHTML = `
-                            <strong>Наименование ПЛ:</strong> <span id="item-name-modal">${name}</span> <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i><br>
-                            <strong>Дата:</strong> ${date}<br>
-                            <strong>Цена ПЛ:</strong> ${itemPrice} руб.<br>
-                            <strong>Тип ПЛ:</strong> <span id="item-type-modal">${itemType}</span>
-                            <select id="item-type-modal-select" class="hidden">
-                                <option value="Легковые">Легковые</option>
-                                <option value="Грузовые и прицепы">Грузовые и прицепы</option>
-                                <option value="Оборудование">Оборудование</option>
-                                <option value="Спецтехника">Спецтехника</option>
-                                <option value="Автобусы">Автобусы</option>
-                                <option value="Недвижимость">Недвижимость</option>
-                            </select> <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-type-modal', true)"></i><br>
-                            <strong>Привязать к сделке:</strong> <span id="item-deal-modal">${itemDeal}</span> <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-deal-modal', true)"></i>
-                        `;
+                        var modalContent = `
+                        <table class="modal-table">
+                            <tr>
+                                <th>Наименование ПЛ</th>
+                                <td>
+                                    <span id="item-name-modal">${name}</span>
+                                    <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Дата</th>
+                                <td>${date}</td>
+                            </tr>
+                            <tr>
+                                <th>Цена ПЛ</th>
+                                <td>${itemPrice} руб.</td>
+                            </tr>
+                            <tr>
+                                <th>Тип ПЛ</th>
+                                <td>
+                                    <span id="item-type-modal">${itemType}</span>
+                                    <select id="item-type-modal-select" class="hidden">
+                                        <option value="Легковые">Легковые</option>
+                                        <option value="Грузовые и прицепы">Грузовые и прицепы</option>
+                                        <option value="Оборудование">Оборудование</option>
+                                        <option value="Спецтехника">Спецтехника</option>
+                                        <option value="Автобусы">Автобусы</option>
+                                        <option value="Недвижимость">Недвижимость</option>
+                                    </select>
+                                    <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-type-modal', true)"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Привязать к сделке</th>
+                                <td>
+                                    <span id="item-deal-modal">${itemDeal}</span>
+                                    <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-deal-modal')"></i>
+                                </td>
+                            </tr>
+                        </table>
+                    `;
+
+                        var modalBody = document.querySelector('.modal-body');
+                        modalBody.innerHTML = modalContent;
+
                         document.getElementById('modal').style.display = "block";
                         document.getElementById('item-type-modal-select').value = itemType;
                     }
+
 
                     function closeModal() {
                         document.getElementById('modal').style.display = 'none';
@@ -488,7 +610,7 @@
     </div>
     <br>
     <div class="container">
-        <h4>Созданные расчеты</h4>
+        <h4>Созданные коммерческие предложения</h4>
         <table class="custom-table">
             <thead>
             <tr>
@@ -513,7 +635,7 @@
                     <td>{{ calc.manager_login }}</td>
                     <td onclick="deleteCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-trash-can"
                                                                                data-id="{{ calc.id }}"></i></td>
-                    <td onclick="downloadCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-circle-down"
+                    <td onclick="downloadCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-file-pdf"
                                                                                  data-id="{{ calc.id }}"></i></td>
                 </tr>
             {% endfor %}

@@ -150,3 +150,30 @@ def autocomplete():
     )
     results = [item.name for item in suggestions]
     return jsonify(results)
+
+
+@leas_calc_bp.route("/crm/calculator/update/<int:calc_id>", methods=["POST"])
+def update_calculation(calc_id):
+    try:
+        data = request.get_json()
+        calc = LeasCalculator.query.filter_by(id=calc_id).first()
+        if calc is None:
+            return jsonify({"success": False, "message": "Calculation not found"}), 404
+
+        for key, value in data.items():
+            setattr(calc, key, value)
+        db.session.commit()
+        return jsonify({"success": True, "message": "Calculation updated successfully"})
+
+    except Exception as e:
+        db.session.rollback()
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "An error occurred while updating the calculation",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )

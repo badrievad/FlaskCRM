@@ -42,38 +42,60 @@ def send_notification(socket_path: str, error_message: str) -> jsonify:
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
 def create_deal() -> jsonify:
-    # TODO: добавить проверку на доступность API (CompanyFolderAPI). Нужно откатывать в случае ошибки
-    api_folder: CompanyFolderAPI = CompanyFolderAPI()
-    deal: DealsValidate = DealsValidate(request.get_json())
-    company_name: str = deal.get_company_name
-    name_without_special_symbols: str = deal.get_name_without_special_symbols
-    company_inn: str = deal.get_company_inn
-    deal_data: dict = write_deal_to_db(
-        company_name,
-        name_without_special_symbols,
-        company_inn,
-        current_user.fullname,
-        datetime.datetime.now(),
-    )
-    deal_id = str(deal_data["id"])
-    dl_number = deal_data["dl_number_windows"]
-    api_folder.create_folder(name_without_special_symbols, deal_id, dl_number)
-    logging.info(
-        f"{current_user} создал новую сделку. Название сделки: {company_name}. "
-        f"ID сделки: {deal_id}. Дата создания: {deal_data['created_at']}."
-    )
-    socketio.emit("new_deal", deal_data)  # Send to all connected clients
-    # Определяем, куда отправлять уведомление
-    session_username = session.get("username")
-    logging.info(f"session: {session}")
-    logging.info(f"session_username (create deal): {session_username}")
-    if session_username:
-        socketio.emit(
-            "notification_new_deal", {"message": company_name}, room=session_username
+    api_folder = CompanyFolderAPI()
+    deal = DealsValidate(request.get_json())
+    company_name = deal.get_company_name
+    name_without_special_symbols = deal.get_name_without_special_symbols
+    company_inn = deal.get_company_inn
+
+    try:
+        # Проверка доступности API
+        if not api_folder.is_available():
+            raise Exception("CompanyFolderAPI недоступен")
+
+        # Запись сделки в базу данных
+        deal_data = write_deal_to_db(
+            company_name,
+            name_without_special_symbols,
+            company_inn,
+            current_user.fullname,
+            datetime.datetime.now(),
         )
-    else:
-        logging.info("Не удалось отправить уведомление: session_username не найден.")
-    return jsonify(deal_data), 201
+        deal_id = str(deal_data["id"])
+        dl_number = deal_data["dl_number_windows"]
+
+        # Создание папки через API
+        api_folder.create_folder(name_without_special_symbols, deal_id, dl_number)
+
+        # Логирование и уведомление
+        logging.info(
+            f"{current_user} создал новую сделку. Название сделки: {company_name}. "
+            f"ID сделки: {deal_id}. Дата создания: {deal_data['created_at']}."
+        )
+        socketio.emit("new_deal", deal_data)  # Send to all connected clients
+
+        # Определяем, куда отправлять уведомление
+        session_username = session.get("username")
+        logging.info(f"session: {session}")
+        logging.info(f"session_username (create deal): {session_username}")
+        if session_username:
+            socketio.emit(
+                "notification_new_deal",
+                {"message": company_name},
+                room=session_username,
+            )
+        else:
+            logging.info(
+                "Не удалось отправить уведомление: session_username не найден."
+            )
+
+        return jsonify(deal_data), 201
+
+    except Exception as e:
+        # Откат транзакции в случае ошибки
+        db.session.rollback()
+        logging.error(f"Ошибка при создании сделки: {e}")
+        return jsonify({"success": False, "message": str(e)}), 500
 
 
 @deal_bp.route("/crm/deal/delete_deal/<int:deal_id>", methods=["POST"])

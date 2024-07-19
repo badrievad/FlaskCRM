@@ -61,3 +61,16 @@ class CompanyFolderAPI:
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e
+
+    def is_available(self) -> bool:
+        url = f"{self.base_url}/is_available"
+        logging.info(f"Sending GET request to {url}")
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            return response.json().get(
+                "available", False
+            )
+        except requests.exceptions.RequestException as e:
+            logging.error(f"An error occurred: {e}")
+            raise PermissionError from e

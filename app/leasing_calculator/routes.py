@@ -1,3 +1,6 @@
+import os
+
+from pathlib import Path
 from sqlalchemy import desc
 from . import leas_calc_bp
 from .other_utils import ValidateFields
@@ -11,6 +14,7 @@ from flask import (
     render_template,
     url_for,
     current_app,
+    send_file,
 )
 from flask_login import current_user, login_required
 from logger import logging
@@ -72,6 +76,7 @@ def get_status(task_id) -> jsonify:
                     "term": task.result.get("term"),
                     "prepaid_expense": task.result.get("prepaid_expense"),
                     "interest_rate": task.result.get("interest_rate"),
+                    "full_path_to_file": task.result.get("full_path_to_file"),
                 }
         else:
             response = {"state": task.state, "status": str(task.info)}
@@ -100,6 +105,36 @@ def delete_calculation(calc_id):
                 {
                     "success": False,
                     "message": "An error occurred while deleting the calculation",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )
+
+
+@leas_calc_bp.route("/crm/calculator/download/<int:calc_id>", methods=["GET"])
+def download_calculation(calc_id):
+    logging.info(f"Запрос на скачивание калькулятора (id_{calc_id})")
+    try:
+        calc = LeasCalculator.query.filter_by(id=calc_id).first()
+        if calc is None:
+            return jsonify({"success": False, "message": "Calculation not found"}), 404
+
+        file_path = Path(calc.path_to_file) / calc.title
+        if not os.path.exists(file_path):
+            return jsonify({"success": False, "message": "File not found"}), 404
+
+        return send_file(
+            file_path.resolve(), as_attachment=True, download_name=calc.title
+        )
+
+    except Exception as e:
+        logging.info(f"Ошибка при скачивании калькулятора: {e}")
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "An error occurred while downloading the calculation",
                     "error": str(e),
                 }
             ),

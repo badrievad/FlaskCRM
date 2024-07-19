@@ -76,6 +76,16 @@
         td:hover .fa-trash-can {
             color: #4b0404;
         }
+
+        .fa-circle-down {
+            cursor: pointer;
+            color: #75a17e;
+            transition: color 0.3s;
+        }
+
+        td:hover .fa-circle-down {
+            color: #23412b;
+        }
     </style>
 </head>
 <body>
@@ -103,10 +113,6 @@
                                  onclick="makeEditable('item-type-modal', true)"></i><br>
                     <strong>Привязать к сделке:</strong> <span id="item-deal-modal">${itemDeal}</span>
                 </p>
-            </div>
-            <div class="modal-body-right">
-                <button class="download-btn" onclick="downloadKP()"><i class="fa-regular fa-circle-down"></i> Скачать КП
-                </button>
             </div>
         </div>
         <div class="modal-footer">
@@ -327,8 +333,8 @@
                         var calcListBody = document.getElementById('calc-list-body');
                         var newRow = document.createElement('tr');
                         console.log(calculation);
-                        newRow.setAttribute('onclick', `openModal('${calculation.item_name}', '${calculation.date_ru}',
-                        '${calculation.item_price_str}'. '${calculation.item_type}')`);
+                        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}",
+                        "${calculation.item_price_str}", "${calculation.item_type}")`);
                         newRow.innerHTML = `
                             <td>${calcListBody.rows.length + 1}</td>
                             <td>${calculation.item_name}</td>
@@ -339,6 +345,8 @@
                             <td onclick="deleteCalculation(event, '${calculation.id}')">
                                 <i class="fa-regular fa-trash-can" data-id="${calculation.id}"></i>
                             </td>
+                            <td onclick="downloadCalculation(event, '${calculation.id}')">
+                                <i class="fa-regular fa-circle-down" data-id="${calculation.id}"></i></td>
                             `;
                         calcListBody.insertBefore(newRow, calcListBody.firstChild);
                     }
@@ -467,6 +475,13 @@
                                 });
                         }
                     }
+
+                    function downloadCalculation(event, calcId) {
+                        event.stopPropagation(); // Остановить всплытие события, чтобы не вызывать openModal
+                        if (confirm("Вы уверены, что хотите скачать этот расчет?")) {
+                            window.location.href = `./calculator/download/${calcId}`;
+                        }
+                    }
                 </script>
             </div>
         </div>
@@ -498,6 +513,8 @@
                     <td>{{ calc.manager_login }}</td>
                     <td onclick="deleteCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-trash-can"
                                                                                data-id="{{ calc.id }}"></i></td>
+                    <td onclick="downloadCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-circle-down"
+                                                                                 data-id="{{ calc.id }}"></i></td>
                 </tr>
             {% endfor %}
             </tbody>

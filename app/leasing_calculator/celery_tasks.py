@@ -60,11 +60,11 @@ def intensive_task_simulation(data: dict) -> dict:
         raise e
 
     # Инициализируем путь к файлу
-    file_path = user_dir / new_title
+    file_path = str(user_dir / new_title)
 
     # Сохраняем файл
     try:
-        wb.save(str(file_path))
+        wb.save(file_path)
     except Exception as e:
         # Если не удалось сохранить файл, откатываем транзакцию
         db.session.delete(new_calc)
@@ -83,6 +83,7 @@ def intensive_task_simulation(data: dict) -> dict:
         "term": new_calc.term,
         "prepaid_expense": new_calc.prepaid_expense,
         "interest_rate": new_calc.interest_rate,
+        "full_path_to_file": file_path,
     }
 
     return result

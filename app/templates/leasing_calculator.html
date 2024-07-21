@@ -381,26 +381,28 @@
                             });
                     }
 
-                    function addNewCalculation(calculation, activeTabText, itemPrice, prepaidExpense,
-                                               term, interestRate, itemName) {
+                    function addNewCalculation(calculation, activeTabText, itemPrice, prepaidExpense, term, interestRate, itemName) {
                         var calcListBody = document.getElementById('calc-list-body');
                         var newRow = document.createElement('tr');
-                        console.log(calculation);
-                        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}",
-                        "${calculation.item_price_str}", "${calculation.item_type}", "-", "${calculation.id}")`);
+
+                        newRow.setAttribute('data-id', calculation.id);
+                        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "-", "${calculation.id}")`);
+
                         newRow.innerHTML = `
                             <td>${calcListBody.rows.length + 1}</td>
-                            <td>${calculation.item_name}</td>
-                            <td>${calculation.item_price_str}</td>
-                            <td>${activeTabText}</td>
-                            <td>${calculation.date_ru}</td>
+                            <td class="item-name">${calculation.item_name}</td>
+                            <td class="item-price">${calculation.item_price_str}</td>
+                            <td class="item-type">${activeTabText}</td>
+                            <td class="date-ru">${calculation.date_ru}</td>
                             <td>${calculation.manager_login}</td>
                             <td onclick="deleteCalculation(event, '${calculation.id}')">
                                 <i class="fa-regular fa-trash-can" data-id="${calculation.id}"></i>
                             </td>
                             <td onclick="downloadCalculation(event, '${calculation.id}')">
-                                <i class="fa-regular fa-file-pdf" data-id="${calculation.id}"></i></td>
-                            `;
+                                <i class="fa-regular fa-file-pdf" data-id="${calculation.id}"></i>
+                            </td>
+                        `;
+
                         calcListBody.insertBefore(newRow, calcListBody.firstChild);
                     }
 
@@ -449,53 +451,57 @@
                 <script>
                     // Получить модальное окно
                     function openModal(name, date, itemPrice, itemType, itemDeal, calcId) {
-                        console.log(name, date, itemPrice, itemType, itemDeal, calcId);
+                        var modalTable = document.getElementById('modal-table');
+
                         var modalContent = `
-                        <table class="modal-table" id="modal-table" data-calc-id="${calcId}">
-                            <tr>
-                                <th>Наименование ПЛ</th>
-                                <td>
-                                    <span id="item-name-modal">${name}</span>
-                                    <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Дата</th>
-                                <td>${date}</td>
-                            </tr>
-                            <tr>
-                                <th>Цена ПЛ</th>
-                                <td>${itemPrice} руб.</td>
-                            </tr>
-                            <tr>
-                                <th>Тип ПЛ</th>
-                                <td>
-                                    <span id="item-type-modal">${itemType}</span>
-                                    <select id="item-type-modal-select" class="hidden">
-                                        <option value="Легковые">Легковые</option>
-                                        <option value="Грузовые и прицепы">Грузовые и прицепы</option>
-                                        <option value="Оборудование">Оборудование</option>
-                                        <option value="Спецтехника">Спецтехника</option>
-                                        <option value="Автобусы">Автобусы</option>
-                                        <option value="Недвижимость">Недвижимость</option>
-                                    </select>
-                                    <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-type-modal', true)"></i>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Привязать к сделке</th>
-                                <td>
-                                    <span id="item-deal-modal">${itemDeal}</span>
-                                    <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-deal-modal')"></i>
-                                </td>
-                            </tr>
-                        </table>
-                    `;
+                            <table class="modal-table" id="modal-table" data-calc-id="${calcId}">
+                                <tr>
+                                    <th>Наименование ПЛ</th>
+                                    <td>
+                                        <span id="item-name-modal">${name}</span>
+                                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Дата</th>
+                                    <td>${date}</td>
+                                </tr>
+                                <tr>
+                                    <th>Цена ПЛ</th>
+                                    <td>
+                                        <span id="item-price-modal">${itemPrice}</span> руб.
+                                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-price-modal')"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Тип ПЛ</th>
+                                    <td>
+                                        <span id="item-type-modal">${itemType}</span>
+                                        <select id="item-type-modal-select" class="hidden">
+                                            <option value="Легковые" ${itemType === 'Легковые' ? 'selected' : ''}>Легковые</option>
+                                            <option value="Грузовые и прицепы" ${itemType === 'Грузовые и прицепы' ? 'selected' : ''}>Грузовые и прицепы</option>
+                                            <option value="Оборудование" ${itemType === 'Оборудование' ? 'selected' : ''}>Оборудование</option>
+                                            <option value="Спецтехника" ${itemType === 'Спецтехника' ? 'selected' : ''}>Спецтехника</option>
+                                            <option value="Автобусы" ${itemType === 'Автобусы' ? 'selected' : ''}>Автобусы</option>
+                                            <option value="Недвижимость" ${itemType === 'Недвижимость' ? 'selected' : ''}>Недвижимость</option>
+                                        </select>
+                                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-type-modal', true)"></i>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Привязать к сделке</th>
+                                    <td>
+                                        <span id="item-deal-modal">${itemDeal}</span>
+                                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-deal-modal')"></i>
+                                    </td>
+                                </tr>
+                            </table>
+                        `;
 
-                        var modalBody = document.querySelector('.modal-body');
-                        modalBody.innerHTML = modalContent;
+                        document.querySelector('.modal-body').innerHTML = modalContent;
 
-                        document.getElementById('modal').style.display = "block";
+                        var modal = document.getElementById('modal');
+                        modal.style.display = "block";
                         document.getElementById('item-type-modal-select').value = itemType;
                     }
 
@@ -569,14 +575,18 @@
 
                     function saveChanges() {
                         var data = {
-                            name: document.getElementById('item-name-modal').innerText,
-                            type: document.getElementById('item-type-modal-select').value || document.getElementById('item-type-modal').innerText,
-                            deal: document.getElementById('item-deal-modal').innerText
+                            item_name: document.getElementById('item-name-modal').innerText,
+                            item_type: document.getElementById('item-type-modal-select').value || document.getElementById('item-type-modal').innerText,
+                            deal_id: document.getElementById('item-deal-modal').innerText
                         };
 
                         var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
-
-                        fetch(`/crm/calculator/update/${calcId}`, {
+                        // Удаляем поле deal_id, если его значение "-"
+                        if (data.deal_id === "-") {
+                            delete data.deal_id;
+                        }
+                        console.log(data);
+                        fetch(`./calculator/update/${calcId}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -586,11 +596,25 @@
                             .then(data => {
                                 if (data.success) {
                                     alert('Изменения сохранены!');
-                                    // Здесь можно обновить UI, чтобы отразить сохраненные изменения
+                                    updateTableRow(calcId, data.data);
+                                    closeModal();
                                 } else {
                                     alert('Ошибка сохранения изменений: ' + data.message);
                                 }
                             }).catch(error => console.error('Error:', error));
+                    }
+
+                    function updateTableRow(calcId, updatedData) {
+                        var row = document.querySelector(`tr[data-id="${calcId}"]`);
+                        if (row) {
+                            row.querySelector('.item-name').innerText = updatedData.item_name;
+                            row.querySelector('.item-price').innerText = updatedData.item_price;
+                            row.querySelector('.item-type').innerText = updatedData.item_type;
+                            row.querySelector('.date-ru').innerText = updatedData.date_ru;
+
+                            // Обновление атрибута onclick в строке
+                            row.setAttribute('onclick', `openModal('${updatedData.item_name}', '${updatedData.date_ru}', '${updatedData.item_price}', '${updatedData.item_type}', '-', '${calcId}')`);
+                        }
                     }
                 </script>
             </div>
@@ -613,13 +637,13 @@
             </thead>
             <tbody id="calc-list-body">
             {% for calc in calc_list %}
-                <tr onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}',
-                        '{{ calc.item_price_str }}', '{{ calc.item_type }}', '-','{{ calc.id }}')">
+                <tr data-id="{{ calc.id }}"
+                    onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}', '{{ calc.item_price_str }}', '{{ calc.item_type }}', '-', '{{ calc.id }}')">
                     <td>{{ loop.index }}</td>
-                    <td>{{ calc.item_name }}</td>
-                    <td>{{ calc.item_price_str }}</td>
-                    <td>{{ calc.item_type }}</td>
-                    <td>{{ calc.date_ru }}</td>
+                    <td class="item-name">{{ calc.item_name }}</td>
+                    <td class="item-price">{{ calc.item_price_str }}</td>
+                    <td class="item-type">{{ calc.item_type }}</td>
+                    <td class="date-ru">{{ calc.date_ru }}</td>
                     <td>{{ calc.manager_login }}</td>
                     <td onclick="deleteCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-trash-can"
                                                                                data-id="{{ calc.id }}"></i></td>

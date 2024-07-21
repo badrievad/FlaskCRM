@@ -155,19 +155,50 @@ def autocomplete():
 @leas_calc_bp.route("/crm/calculator/update/<int:calc_id>", methods=["POST"])
 def update_calculation(calc_id):
     try:
+        if not request.is_json:
+            logging.error("Request data is not in JSON format")
+            return (
+                jsonify(
+                    {"success": False, "message": "Request data must be in JSON format"}
+                ),
+                400,
+            )
+        else:
+            logging.info("Request data is in JSON format")
+
         data = request.get_json()
         logging.info(f"Запрос на обновление калькулятора (id_{calc_id}): {data}")
-        # calc = LeasCalculator.query.filter_by(id=calc_id).first()
-        # if calc is None:
-        #     return jsonify({"success": False, "message": "Calculation not found"}), 404
-        #
-        # for key, value in data.items():
-        #     setattr(calc, key, value)
-        # db.session.commit()
-        return jsonify({"success": True, "message": "Calculation updated successfully"})
+
+        calc = LeasCalculator.query.filter_by(id=calc_id).first()
+        if calc is None:
+            return jsonify({"success": False, "message": "Calculation not found"}), 404
+
+        for key, value in data.items():
+            if value == "-":
+                continue
+            setattr(calc, key, value)
+
+        db.session.commit()
+
+        updated_data = {
+            "id": calc.id,
+            "item_name": calc.item_name,
+            "item_price": calc.item_price_str,
+            "item_type": calc.item_type,
+            "date_ru": calc.date_ru,
+        }
+
+        return jsonify(
+            {
+                "success": True,
+                "message": "Calculation updated successfully",
+                "data": updated_data,
+            }
+        )
 
     except Exception as e:
-        # db.session.rollback()
+        db.session.rollback()
+        logging.error(f"Ошибка при обновлении калькулятора: {str(e)}")
         return (
             jsonify(
                 {

@@ -156,17 +156,18 @@ def autocomplete():
 def update_calculation(calc_id):
     try:
         data = request.get_json()
-        calc = LeasCalculator.query.filter_by(id=calc_id).first()
-        if calc is None:
-            return jsonify({"success": False, "message": "Calculation not found"}), 404
-
-        for key, value in data.items():
-            setattr(calc, key, value)
-        db.session.commit()
+        logging.info(f"Запрос на обновление калькулятора (id_{calc_id}): {data}")
+        # calc = LeasCalculator.query.filter_by(id=calc_id).first()
+        # if calc is None:
+        #     return jsonify({"success": False, "message": "Calculation not found"}), 404
+        #
+        # for key, value in data.items():
+        #     setattr(calc, key, value)
+        # db.session.commit()
         return jsonify({"success": True, "message": "Calculation updated successfully"})
 
     except Exception as e:
-        db.session.rollback()
+        # db.session.rollback()
         return (
             jsonify(
                 {

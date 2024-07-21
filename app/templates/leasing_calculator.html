@@ -139,45 +139,6 @@
     <div class="modal-content">
         <h4 class="modal-header">Основные параметры</h4>
         <div class="modal-body">
-            <table class="modal-table">
-                <tr>
-                    <th>Наименование ПЛ</th>
-                    <td>
-                        <span id="item-name-modal">${name}</span>
-                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Дата</th>
-                    <td>${date}</td>
-                </tr>
-                <tr>
-                    <th>Цена ПЛ</th>
-                    <td>${itemPrice}</td> руб.
-                </tr>
-                <tr>
-                    <th>Тип ПЛ</th>
-                    <td>
-                        <span id="item-type-modal">${itemType}</span>
-                        <select id="item-type-modal-select" class="hidden">
-                            <option value="Легковые">Легковые</option>
-                            <option value="Грузовые и прицепы">Грузовые и прицепы</option>
-                            <option value="Оборудование">Оборудование</option>
-                            <option value="Спецтехника">Спецтехника</option>
-                            <option value="Автобусы">Автобусы</option>
-                            <option value="Недвижимость">Недвижимость</option>
-                        </select>
-                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-type-modal', true)"></i>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Привязать к сделке</th>
-                    <td>
-                        <span id="item-deal-modal">${itemDeal}</span>
-                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-deal-modal')"></i>
-                    </td>
-                </tr>
-            </table>
         </div>
         <div class="modal-footer">
             <button class="save-btn" onclick="saveChanges()"><i class="fa-regular fa-floppy-disk"></i> Сохранить
@@ -426,7 +387,7 @@
                         var newRow = document.createElement('tr');
                         console.log(calculation);
                         newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}",
-                        "${calculation.item_price_str}", "${calculation.item_type}")`);
+                        "${calculation.item_price_str}", "${calculation.item_type}", "-", "${calculation.id}")`);
                         newRow.innerHTML = `
                             <td>${calcListBody.rows.length + 1}</td>
                             <td>${calculation.item_name}</td>
@@ -487,9 +448,10 @@
                 </script>
                 <script>
                     // Получить модальное окно
-                    function openModal(name, date, itemPrice, itemType, itemDeal) {
+                    function openModal(name, date, itemPrice, itemType, itemDeal, calcId) {
+                        console.log(name, date, itemPrice, itemType, itemDeal, calcId);
                         var modalContent = `
-                        <table class="modal-table">
+                        <table class="modal-table" id="modal-table" data-calc-id="${calcId}">
                             <tr>
                                 <th>Наименование ПЛ</th>
                                 <td>
@@ -604,6 +566,32 @@
                             window.location.href = `./calculator/download/${calcId}`;
                         }
                     }
+
+                    function saveChanges() {
+                        var data = {
+                            name: document.getElementById('item-name-modal').innerText,
+                            type: document.getElementById('item-type-modal-select').value || document.getElementById('item-type-modal').innerText,
+                            deal: document.getElementById('item-deal-modal').innerText
+                        };
+
+                        var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
+
+                        fetch(`/crm/calculator/update/${calcId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(data),
+                        }).then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    alert('Изменения сохранены!');
+                                    // Здесь можно обновить UI, чтобы отразить сохраненные изменения
+                                } else {
+                                    alert('Ошибка сохранения изменений: ' + data.message);
+                                }
+                            }).catch(error => console.error('Error:', error));
+                    }
                 </script>
             </div>
         </div>
@@ -626,7 +614,7 @@
             <tbody id="calc-list-body">
             {% for calc in calc_list %}
                 <tr onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}',
-                        '{{ calc.item_price_str }}', '{{ calc.item_type }}')">
+                        '{{ calc.item_price_str }}', '{{ calc.item_type }}', '-','{{ calc.id }}')">
                     <td>{{ loop.index }}</td>
                     <td>{{ calc.item_name }}</td>
                     <td>{{ calc.item_price_str }}</td>

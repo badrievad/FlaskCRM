@@ -586,22 +586,23 @@
                             delete data.deal_id;
                         }
                         console.log(data);
-                        fetch(`./calculator/update/${calcId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(data),
-                        }).then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    alert('Изменения сохранены!');
-                                    updateTableRow(calcId, data.data);
-                                    closeModal();
-                                } else {
-                                    alert('Ошибка сохранения изменений: ' + data.message);
-                                }
-                            }).catch(error => console.error('Error:', error));
+                        if (confirm('Вы уверены, что хотите сохранить изменения?')) {
+                            fetch(`/crm/calculator/update/${calcId}`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(data),
+                            }).then(response => response.json())
+                                .then(responseData => {
+                                    if (responseData.success) {
+                                        updateTableRow(calcId, responseData.data);
+                                        closeModal(); // Закрываем модальное окно после сохранения
+                                    } else {
+                                        alert('Ошибка сохранения изменений: ' + responseData.message);
+                                    }
+                                }).catch(error => console.error('Error:', error));
+                        }
                     }
 
                     function updateTableRow(calcId, updatedData) {

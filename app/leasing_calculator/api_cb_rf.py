@@ -102,7 +102,7 @@ class CentralBankKeyRate:
             table = Bs4Stub()
 
         try:
-            date, key_rate = map(lambda x: x.text, table.find_all("td"))
+            date, key_rate = map(lambda x: x.text, table.find_all("td"))  # noqa C417
         except Exception as e:
             logging.error(f"Error: {e}")
             date, key_rate = datetime.date.today().strftime("%d.%m.%Y"), "-"
@@ -111,8 +111,3 @@ class CentralBankKeyRate:
             "date": date,
             "key_rate": key_rate,
         }
-
-
-if __name__ == "__main__":
-    key = CentralBankKeyRate()
-    print(key.get_key_rate())

@@ -151,8 +151,10 @@
 
 <div class="sidebar" id="sidebar">
     <ul>
-        <li><a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
-            Вернуться на главную</a></li>
+        <li class="clickable">
+            <a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
+            Вернуться на главную</a>
+        </li>
     </ul>
     <h6>{{ current_user }}</h6>
 </div>
@@ -655,7 +657,20 @@
         </table>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var clickableItems = document.querySelectorAll('.sidebar ul li.clickable');
 
+        clickableItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                var link = item.querySelector('a.nav-link');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            });
+        });
+    });
+</script>
 <!-- Autocomplete Script -->
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-autocomplete.js') }}"></script>
 

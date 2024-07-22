@@ -37,8 +37,10 @@
 <body>
 <div class="sidebar" id="sidebar">
     <ul>
-        <li><a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
-            Вернуться к сделкам</a></li>
+        <li class="clickable">
+            <a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
+            Вернуться к сделкам</a>
+        </li>
         <br>
         <li class="nav-link" onclick="showForm('some')"><i class="fa-solid fa-database"></i> Данные по сделке</li>
     </ul>
@@ -155,6 +157,20 @@
         const date = new Date(dateElement.textContent);
         dateElement.textContent = "Дата создания сделки: " + date.toLocaleString();
     });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var clickableItems = document.querySelectorAll('.sidebar ul li.clickable');
+
+    clickableItems.forEach(function (item) {
+        item.addEventListener('click', function () {
+            var link = item.querySelector('a.nav-link');
+            if (link) {
+                window.location.href = link.href;
+            }
+        });
+    });
+});
 </script>
 </body>
 </html>

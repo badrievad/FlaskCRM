@@ -3,8 +3,9 @@ import os
 from pathlib import Path
 from sqlalchemy import desc
 from . import leas_calc_bp
+from .api_cb_currency import ApiCentralBank
 from .other_utils import ValidateFields
-from .. import db
+from .. import db, cache
 from ..leasing_calculator.models import LeasCalculator, LeasingItem
 from ..leasing_calculator.celery_tasks import long_task
 
@@ -209,3 +210,11 @@ def update_calculation(calc_id):
             ),
             500,
         )
+
+
+@leas_calc_bp.route("/crm/calculator/get_exchange_rates", methods=["GET"])
+@cache.cached(timeout=600)
+def get_exchange_rates():
+    api = ApiCentralBank()
+    exchange_rates = api.get_exchange_rates()
+    return jsonify(exchange_rates)

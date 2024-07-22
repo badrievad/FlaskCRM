@@ -238,33 +238,32 @@
             </div>
             <div class="results">
                 <div class="exchange-rates">
-                    <table class="exchange-rates-table">
+                    <table class="exchange-rates-table" id="exchange-rates-table">
                         <tr>
                             <th>Валюта</th>
-                            <th>18.07.2024</th>
-                            <th>19.07.2024</th>
+                            <th id="previous-date">-</th>
+                            <th id="today-date">-</th>
                         </tr>
                         <tr>
                             <td><img src="https://img.icons8.com/color/48/000000/china-circular.png" alt="CNY"
                                      class="currency-icon"> CNY, 1¥
                             </td>
-                            <td>12,0537 ₽</td>
-                            <td>12,0227 ₽</td>
+                            <td id="previous-cny"> ₽</td>
+                            <td id="today-cny"> ₽</td>
                         </tr>
                         <tr>
                             <td><img src="https://img.icons8.com/color/48/000000/usa-circular.png" alt="USD"
                                      class="currency-icon"> USD, 1$
                             </td>
-                            <td>88,0872 ₽</td>
-                            <td>87,8754 ₽</td>
+                            <td id="previous-usd"> ₽</td>
+                            <td id="today-usd"> ₽</td>
                         </tr>
                         <tr>
                             <td><img src="https://img.icons8.com/?size=100&id=Y76SzpmxslW4&format=png&color=000000"
-                                     alt="EUR"
-                                     class="currency-icon"> EUR, 1€
+                                     alt="EUR" class="currency-icon"> EUR, 1€
                             </td>
-                            <td>96,3046 ₽</td>
-                            <td>96,1018 ₽</td>
+                            <td id="previous-eur"> ₽</td>
+                            <td id="today-eur"> ₽</td>
                         </tr>
                     </table>
                 </div>
@@ -663,6 +662,7 @@
 <!-- Scripts -->
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-sidebar.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/leasing-calculator-exchange-rates.js') }}"></script>
 
 </body>
 </html>

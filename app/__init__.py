@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint
+from flask_caching import Cache
 from flask_migrate import Migrate
 from flask_socketio import SocketIO
 from flask_login import LoginManager
@@ -7,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from .celery_utils import celery_init_app
 
 
+cache = Cache()
 socketio = SocketIO()
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -42,6 +44,7 @@ def create_app(debug=False):
     app.register_blueprint(user_blueprint)
     app.register_blueprint(leas_calc_blueprint)
 
+    cache.init_app(app)
     socketio.init_app(app)
     db.init_app(app)
     login_manager.init_app(app)

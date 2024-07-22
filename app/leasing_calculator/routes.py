@@ -89,7 +89,7 @@ def get_status(task_id) -> jsonify:
 
 
 @leas_calc_bp.route("/crm/calculator/delete/<int:calc_id>", methods=["POST"])
-def delete_calculation(calc_id):
+def delete_calculation(calc_id) -> jsonify:
     try:
         calc = LeasCalculator.query.filter_by(id=calc_id).first()
         if calc is None:
@@ -144,7 +144,7 @@ def download_calculation(calc_id):
 
 
 @leas_calc_bp.route("/crm/calculator/autocomplete", methods=["GET"])
-def autocomplete():
+def autocomplete() -> jsonify:
     query = request.args.get("query", "")
     suggestions = (
         LeasingItem.query.filter(LeasingItem.name.ilike(f"%{query}%")).limit(10).all()
@@ -154,7 +154,7 @@ def autocomplete():
 
 
 @leas_calc_bp.route("/crm/calculator/update/<int:calc_id>", methods=["POST"])
-def update_calculation(calc_id):
+def update_calculation(calc_id) -> jsonify:
     try:
         if not request.is_json:
             logging.error("Request data is not in JSON format")
@@ -214,7 +214,7 @@ def update_calculation(calc_id):
 
 @leas_calc_bp.route("/crm/calculator/get_exchange_rates", methods=["GET"])
 @cache.cached(timeout=600)
-def get_exchange_rates():
+def get_exchange_rates() -> jsonify:
     api = ApiCentralBank()
-    exchange_rates = api.get_exchange_rates()
+    exchange_rates: dict = api.get_exchange_rates()
     return jsonify(exchange_rates)

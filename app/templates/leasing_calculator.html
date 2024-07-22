@@ -131,6 +131,49 @@
             margin-right: 5px;
         }
     </style>
+    <style>
+        .key-rate-container {
+            padding: 20px 0;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .key-rate-container .label {
+            font-size: 14px;
+            color: #7f8c8d;
+            width: 100%;
+            text-align: left;
+        }
+
+        .key-rate-container .line {
+            width: 100%;
+            height: 2px;
+            background-color: rgba(157, 157, 157, 0.10);
+            margin: 15px 0;
+        }
+
+        .key-rate-container .date-rate-container {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .key-rate-container .date {
+            font-size: 14px;
+            color: #000;
+        }
+
+        .key-rate-container .rate {
+            font-size: 24px;
+            font-weight: bold;
+            color: #000;
+        }
+    </style>
 </head>
 <body>
 
@@ -153,7 +196,7 @@
     <ul>
         <li class="clickable">
             <a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
-            Вернуться на главную</a>
+                Вернуться на главную</a>
         </li>
     </ul>
     <h6>{{ current_user }}</h6>
@@ -269,7 +312,16 @@
                         </tr>
                     </table>
                 </div>
-                <br><br><br><br><br><br>
+                <div class="key-rate-container">
+                    <div class="line"></div>
+                    <div class="label">Ключевая ставка</div>
+                    <div class="date-rate-container">
+                        <div class="date"></div>
+                        <div class="rate"></div>
+                    </div>
+                    <div class="line"></div>
+                </div>
+                <br><br><br>
                 <button class="calculate-button" id="calculate-button">
                     Сформировать КП
                 </button>

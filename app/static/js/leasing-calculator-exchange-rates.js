@@ -15,4 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('previous-eur').innerText = data.previous_day.eur + ' ₽';
         })
         .catch(error => console.error('Error fetching exchange rates:', error));
+    fetch('/crm/calculator/get_key_rate')
+        .then(response => response.json())
+        .then(data => {
+            const keyRateDiv = document.querySelector('.key-rate-container');
+            keyRateDiv.querySelector('.date').innerText = 'на ' + data.date;
+            keyRateDiv.querySelector('.rate').innerText = data.key_rate + '%';
+        })
+        .catch(error => console.error('Error fetching key rate:', error));
 });

@@ -8,7 +8,7 @@
 .custom-table th,
 .custom-table td {
     padding: 12px;
-    border: 1px solid #dee2e6; /* Границы ячеек */
+    border: 1px solid rgba(49, 98, 78, 0.04); /* Границы ячеек */
 }
 
 .custom-table tbody tr {
@@ -17,7 +17,7 @@
 }
 
 .custom-table tbody tr:hover {
-    background-color: rgba(214, 216, 219, 1); /* Фон при наведении */
+    background-color: rgb(100, 140, 105, 0.1); /* Фон при наведении */
 }
 
 .custom-table tbody tr {

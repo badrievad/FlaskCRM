@@ -26,30 +26,6 @@ h1 {
     color: #333;
 }
 
-.tabs {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.tabs .tab {
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background 0.3s;
-    border: 1px solid rgba(221, 221, 221, 0.49);
-    background-color: rgba(255, 255, 255, 0.49);
-    border-radius: 4px;
-    margin: 0 5px;
-    font-size: 0.9em;
-    color: #333;
-}
-
-.tabs .tab:hover,
-.tabs .tab.active {
-    background-color: #007bff;
-    color: rgba(255, 255, 255, 0.42);
-    border-color: #007bff;
-}
 
 .form-section {
     margin-bottom: 20px;
@@ -64,35 +40,6 @@ h1 {
     margin-bottom: 5px;
     font-weight: bold;
     color: #333;
-}
-
-input[type="range"] {
-    width: 100%;
-    -webkit-appearance: none;
-    appearance: none;
-    background: rgba(221, 221, 221, 0.45);
-    height: 6px;
-    border-radius: 5px;
-    outline: none;
-    margin-top: 10px;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    background-color: rgba(55, 101, 86, 0.8);
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background: rgba(0, 123, 255, 0.46);
-    border-radius: 50%;
-    cursor: pointer;
 }
 
 output {
@@ -212,45 +159,8 @@ output {
     backdrop-filter: blur(10px); /* Размытие фона */
 }
 
-.header {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.header h1 {
-    margin: 0;
-    font-size: 18px;
-}
-
-.tabs {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.tabs button {
-    background-color: rgba(255, 255, 255, 0.42);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    outline: none; /* Убираем рамку */
-}
-
-.tabs button.active {
-    background-color: rgba(0, 123, 255, 0.47);
-    color: rgba(255, 255, 255, 0.51);
-}
-
 .tabs button i {
     margin-right: 8px;
-}
-
-.tabs button:focus {
-    outline: none; /* Убираем рамку при фокусе */
 }
 
 .header {
@@ -278,6 +188,10 @@ output {
     font-size: 14px;
     display: flex;
     align-items: center;
+}
+
+.tabs button:hover {
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .tabs button.active {
@@ -393,6 +307,10 @@ output {
     cursor: pointer;
 }
 
+.calculate-button:hover {
+    background-color: rgba(55, 101, 86, 1);
+}
+
 .input-section {
     width: 60%;
     padding-right: 20px;
@@ -437,3 +355,47 @@ input[type="text"] {
 .input-container {
     margin-right: 10px; /* Добавим отступ между контейнерами */
 }
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #376556 0%, #376556 var(--value, 0%), #ddd var(--value, 0%), #ddd 100%);
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .15s ease-in-out;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    border: 4px solid rgba(55, 101, 86, 0.9);
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    border: 4px solid rgba(55, 101, 86, 0.9);
+}
+
+input[type="range"]::-ms-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    border: 4px solid rgba(55, 101, 86, 0.9);
+}
+

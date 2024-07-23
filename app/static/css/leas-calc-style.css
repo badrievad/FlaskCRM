@@ -240,11 +240,12 @@ output {
 .form-group .input-container-item-name input {
     width: 500px;
     font-size: 14px;
-    padding: 5px;
+    padding: 6px;
     -moz-appearance: textfield;
     text-align: center;
     border: 1px solid rgba(204, 204, 204, 0.4);
     border-radius: 4px;
+    margin-right: 8px;
 }
 
 .form-group .input-container input::-webkit-outer-spin-button,
@@ -399,3 +400,39 @@ input[type="range"]::-ms-thumb {
     border: 4px solid rgba(55, 101, 86, 0.9);
 }
 
+input[type="text"],
+select {
+    width: 10%;
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    text-align: center;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-size: 10px 10px;
+    background-color: rgba(255, 255, 255, 0.6);
+    border: none;
+}
+
+select:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.foreign-cost-container {
+    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.foreign-cost-container.show {
+    max-height: 500px; /* достаточное значение для содержимого */
+    opacity: 1;
+}

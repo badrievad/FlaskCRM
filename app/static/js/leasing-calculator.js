@@ -131,3 +131,21 @@ function allowOnlyNumbers(event) {
 
 document.getElementById('cost-display').addEventListener('keypress', allowOnlyNumbers);
 document.getElementById('initial-payment-value-display').addEventListener('keypress', allowOnlyNumbers);
+
+document.getElementById('foreign-cost').addEventListener('input', function () {
+    var value = parseInt(this.value);
+    document.getElementById('foreign-cost-value').value = value;
+    document.getElementById('foreign-cost-display').value = formatNumber(value);
+});
+
+document.getElementById('foreign-cost-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('foreign-cost-value').value = value;
+    document.getElementById('foreign-cost').value = value;
+});
+
+document.getElementById('foreign-cost-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+document.getElementById('foreign-cost-display').addEventListener('keypress', allowOnlyNumbers);

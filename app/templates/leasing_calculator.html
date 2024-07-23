@@ -138,7 +138,34 @@
                     </div>
                     <br>
                     <div class="input-container">
-                        <label for="cost">Стоимость имущества</label>
+                        <label for="currency">Выберите валюту</label>
+                        <select id="currency" name="currency">
+                            <option value="rub" data-symbol="₽">₽</option>
+                            <option value="usd" data-symbol="$">$</option>
+                            <option value="eur" data-symbol="€">€</option>
+                            <option value="cny" data-symbol="¥">¥</option>
+                        </select>
+                    </div>
+                    <br>
+                    <div id="foreign-cost-section" class="foreign-cost-container">
+                        <div class="input-container">
+                            <label for="foreign-cost">Стоимость имущества в иностранной валюте</label>
+                            <input type="text" id="foreign-cost-display" name="foreign-cost-display"
+                                   value="10 000">
+                            <input type="hidden" id="foreign-cost-value" name="foreign-cost-value" value="10000">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="foreign-cost" name="foreign-cost" min="10000" max="10000000"
+                                   value="10000" step="1000">
+                        </div>
+                        <div class="range-labels">
+                            <span id="foreign-min-label">10 тыс.</span>
+                            <span id="foreign-max-label">10 млн.</span>
+                        </div>
+                        <br>
+                    </div>
+                    <div class="input-container">
+                        <label for="cost">Стоимость имущества в рублях</label>
                         <input type="text" id="cost-display" name="cost-display" value="1 000 000,00">
                         <input type="hidden" id="cost-value" name="cost-value" value="1000000">
                     </div>
@@ -470,6 +497,21 @@
                 }
             });
         });
+    });
+    document.getElementById('currency').addEventListener('change', function () {
+        const selectedCurrency = this.value;
+        const selectedSymbol = this.options[this.selectedIndex].getAttribute('data-symbol');
+        const foreignCostSection = document.getElementById('foreign-cost-section');
+
+        if (selectedCurrency === 'rub') {
+            foreignCostSection.classList.remove('show');
+        } else {
+            foreignCostSection.classList.add('show');
+        }
+
+        // Обновление лейблов валюты
+        document.getElementById('foreign-min-label').textContent = `10 тыс. ${selectedSymbol}`;
+        document.getElementById('foreign-max-label').textContent = `10 млн. ${selectedSymbol}`;
     });
 </script>
 <!-- Autocomplete Script -->

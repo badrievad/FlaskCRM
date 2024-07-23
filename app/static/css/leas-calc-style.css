@@ -407,3 +407,33 @@ input[type="text"] {
     background: rgba(255, 255, 255, 0.56);
     border: none;
 }
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-container input {
+    padding-right: 30px; /* Увеличим padding для правого отступа */
+}
+
+.currency-label,
+.percent-label {
+    position: absolute;
+    right: 10px;
+    top: 55%;
+    transform: translateY(-55%);
+    white-space: nowrap;
+    pointer-events: none;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.input-container {
+    margin-right: 10px; /* Добавим отступ между контейнерами */
+}

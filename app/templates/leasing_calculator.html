@@ -295,7 +295,7 @@
                                     checkTaskStatus(data.task_id, activeTabText, itemPrice, prepaidExpense,
                                         term, interestRate, itemName);
                                 } else {
-                                    showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз', 'Ошибка');
+                                    showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
                                     loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
                                     calculateButton.disabled = false; // Разблокировать кнопку
                                     calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета

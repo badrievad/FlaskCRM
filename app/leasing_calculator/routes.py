@@ -8,6 +8,7 @@ from .other_utils import ValidateFields
 from .. import db, cache
 from ..leasing_calculator.models import LeasCalculator, LeasingItem
 from ..leasing_calculator.celery_tasks import long_task
+from ..celery_utils import is_celery_alive
 
 from flask import (
     request,
@@ -47,6 +48,11 @@ def get_leasing_calculator() -> render_template:
 @leas_calc_bp.route("/crm/calculator/start-task", methods=["POST"])
 def start_task() -> jsonify:
     try:
+        # Проверка состояния Celery
+        if not is_celery_alive(current_app.extensions["celery"]):
+            logging.info("Сервер Celery недоступен")
+            return jsonify({"error": "Сервер временно недоступен"}), 503
+
         data: dict = ValidateFields(request.get_json()).get_dict()
         logging.info(f"Поля из сайта (лизинговый калькулятор): {data}")
         user_login: dict = {"login": current_user.login}

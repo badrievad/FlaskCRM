@@ -149,3 +149,53 @@ document.getElementById('foreign-cost-display').addEventListener('blur', functio
 });
 
 document.getElementById('foreign-cost-display').addEventListener('keypress', allowOnlyNumbers);
+
+function getExchangeRate(currency) {
+    const exchangeRates = {
+        usd: parseFloat(document.getElementById('today-usd').textContent.replace(/[^\d,.-]/g, '').replace(',', '.')),
+        eur: parseFloat(document.getElementById('today-eur').textContent.replace(/[^\d,.-]/g, '').replace(',', '.')),
+        cny: parseFloat(document.getElementById('today-cny').textContent.replace(/[^\d,.-]/g, '').replace(',', '.'))
+    };
+    return exchangeRates[currency.toLowerCase()];
+}
+
+function convertToRubles(value, rate) {
+    return value * rate;
+}
+
+function updateCostInRubles() {
+    const currency = document.getElementById('currency').value;
+    if (currency === 'rub') {
+        return;
+    }
+
+    const foreignCost = parseFormattedNumber(document.getElementById('foreign-cost-display').value);
+    const rate = getExchangeRate(currency);
+    const rubleCost = convertToRubles(foreignCost, rate);
+
+    document.getElementById('cost-value').value = rubleCost;
+    document.getElementById('cost-display').value = formatNumber(rubleCost);
+    document.getElementById('cost').value = rubleCost;
+    updateInitialPaymentValue();
+}
+
+document.getElementById('foreign-cost-display').addEventListener('input', function () {
+    updateCostInRubles();
+});
+
+document.getElementById('foreign-cost-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+    updateCostInRubles();
+});
+
+document.getElementById('currency').addEventListener('change', function () {
+    updateCostInRubles();
+});
+
+// Обработчик для слайдера foreign-cost
+document.getElementById('foreign-cost').addEventListener('input', function () {
+    var value = parseInt(this.value);
+    document.getElementById('foreign-cost-value').value = value;
+    document.getElementById('foreign-cost-display').value = formatNumber(value);
+    updateCostInRubles();  // Обновляем стоимость в рублях при изменении слайдера
+});

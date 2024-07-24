@@ -15,6 +15,7 @@ document.getElementById('cost').addEventListener('input', function () {
     document.getElementById('cost-value').value = value;
     document.getElementById('cost-display').value = formatNumber(value);
     updateInitialPaymentValue();
+    updateCreditValue(); // Обновляем значение кредита
 });
 
 document.getElementById('cost-display').addEventListener('input', function () {
@@ -22,10 +23,12 @@ document.getElementById('cost-display').addEventListener('input', function () {
     document.getElementById('cost-value').value = value;
     document.getElementById('cost').value = value;
     updateInitialPaymentValue();
+    updateCreditValue(); // Обновляем значение кредита
 });
 
 document.getElementById('cost-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    updateCreditValue(); // Обновляем значение кредита
 });
 
 document.getElementById('initial-payment').addEventListener('input', function () {
@@ -85,13 +88,6 @@ document.getElementById('term-value').addEventListener('input', function () {
     document.getElementById('term').value = this.value;
 });
 
-document.getElementById('percent').addEventListener('input', function () {
-    document.getElementById('percent-value').value = this.value;
-});
-
-document.getElementById('percent-value').addEventListener('input', function () {
-    document.getElementById('percent').value = this.value;
-});
 
 document.querySelectorAll('.tabs button').forEach(button => {
     button.addEventListener('click', function () {
@@ -131,6 +127,7 @@ function allowOnlyNumbers(event) {
 
 document.getElementById('cost-display').addEventListener('keypress', allowOnlyNumbers);
 document.getElementById('initial-payment-value-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('credit-value-display').addEventListener('keypress', allowOnlyNumbers);
 
 document.getElementById('foreign-cost').addEventListener('input', function () {
     var value = parseInt(this.value);
@@ -177,6 +174,7 @@ function updateCostInRubles() {
     document.getElementById('cost-display').value = formatNumber(rubleCost);
     document.getElementById('cost').value = rubleCost;
     updateInitialPaymentValue();
+    updateCreditValue(); // Обновляем значение кредита
 }
 
 document.getElementById('foreign-cost-display').addEventListener('input', function () {
@@ -198,4 +196,49 @@ document.getElementById('foreign-cost').addEventListener('input', function () {
     document.getElementById('foreign-cost-value').value = value;
     document.getElementById('foreign-cost-display').value = formatNumber(value);
     updateCostInRubles();  // Обновляем стоимость в рублях при изменении слайдера
+});
+
+function updateCreditValue() {
+    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var creditPercent = parseFloat(document.getElementById('credit-percent').value);
+    var creditValue = (creditPercent / 100) * totalCost;
+
+    document.getElementById('credit-value').value = creditValue.toFixed(0);
+    document.getElementById('credit-value-display').value = formatNumber(creditValue);
+    document.getElementById('credit').value = creditPercent;
+}
+
+// Обработчики для кредитного значения и процента
+document.getElementById('credit-percent').addEventListener('input', function () {
+    updateCreditValue();
+});
+
+document.getElementById('credit').addEventListener('input', function () {
+    document.getElementById('credit-percent').value = this.value;
+    updateCreditValue();
+});
+
+document.getElementById('credit-value-display').addEventListener('blur', function () {
+    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var creditValue = parseFormattedNumber(this.value);
+    var maxCreditValue = totalCost * 0.9;
+
+    if (creditValue > maxCreditValue) {
+        creditValue = maxCreditValue;
+    }
+
+    var creditPercent = (creditValue / totalCost) * 100;
+
+    document.getElementById('credit-value').value = creditValue.toFixed(0);
+    document.getElementById('credit-value-display').value = formatNumber(creditValue);
+    document.getElementById('credit-percent').value = creditPercent.toFixed(2);
+    document.getElementById('credit').value = creditPercent;
+});
+
+document.getElementById('commission').addEventListener('input', function () {
+    document.getElementById('commission-value').value = this.value;
+});
+
+document.getElementById('commission-value').addEventListener('input', function () {
+    document.getElementById('commission').value = this.value;
 });

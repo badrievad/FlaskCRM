@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-custom-table.css') }}">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-exchange.css') }}">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-key-rate.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-tranche-table.css') }}">
     <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -138,7 +139,7 @@
                     </div>
                     <br>
                     <div class="input-container">
-                        <label for="currency">Выберите валюту</label>
+                        <label for="currency">Валюта сделки</label>
                         <select id="currency" name="currency">
                             <option value="rub" data-symbol="₽">₽</option>
                             <option value="usd" data-symbol="$">$</option>
@@ -202,6 +203,28 @@
                 </div>
                 <div class="form-group">
                     <div class="input-container">
+                        <label for="credit-value">Размер кредита</label>
+                        <div class="input-group">
+                            <input type="text" id="credit-value-display" name="credit-value-display"
+                                   value="800 000,00" placeholder="₽">
+                            <input type="hidden" id="credit-value" name="credit-value" value="800000"
+                                   placeholder="₽">
+                            <input type="number" id="credit-percent" name="credit-percent" value="80"
+                                   placeholder="%" max="90">
+                            <span class="percent-label">%</span>
+                        </div>
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="credit" name="credit" min="0" max="90" value="80"
+                               step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0%</span>
+                        <span>90%</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
                         <label for="term">Срок договора</label>
                         <input type="number" id="term-value" name="term-value" value="36">
                     </div>
@@ -215,17 +238,62 @@
                 </div>
                 <div class="form-group">
                     <div class="input-container">
-                        <label>% ставка банка</label>
-                        <input type="number" id="percent-value" name="percent-value" value="20" placeholder="%">
+                        <label>Комиссия банка</label>
+                        <input type="number" id="commission-value" name="commission-value" value="0" placeholder="%">
                         <span class="percent-label">%</span>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="percent" name="percent" min="1" max="30" value="20" step="0.5">
+                        <input type="range" id="commission" name="commission" min="0" max="3" value="0" step="0.1">
                     </div>
                     <div class="range-labels">
-                        <span>1%</span>
-                        <span>30%</span>
+                        <span>0%</span>
+                        <span>3%</span>
                     </div>
+                </div>
+                <div id="tranches-container" class="table-container">
+                    <table id="tranches-table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th id="tranche-1">Транш 1</th>
+                            <th id="tranche-2">Транш 2</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Размер транша, %</td>
+                            <td><input type="text" name="tranche1-size" value="20"/></td>
+                            <td><input type="text" name="tranche2-size" value="80"/></td>
+                        </tr>
+                        <tr>
+                            <td>Ставка банка, %</td>
+                            <td><input type="text" name="tranche1-rate" value="0"/></td>
+                            <td><input type="text" name="tranche2-rate" value="20"/></td>
+                        </tr>
+                        <tr>
+                            <td>Вознаграждение лизинговой компании, %</td>
+                            <td><input type="text" name="tranche1-fee" value="4,85"/></td>
+                            <td><input type="text" name="tranche2-fee" value="4,85"/></td>
+                        </tr>
+                        <tr>
+                            <td>Вознаграждение лизинговой компании, % (за счет собственных средств)</td>
+                            <td><input type="text" name="tranche1-own-fee" value="0"/></td>
+                            <td><input type="text" name="tranche2-own-fee" value="0"/></td>
+                        </tr>
+                        <tr>
+                            <td>Дата выдачи кредита</td>
+                            <td><input type="date" name="tranche1-credit-date"/></td>
+                            <td><input type="date" name="tranche2-credit-date"/></td>
+                        </tr>
+                        <tr>
+                            <td>Дата первого лизингового платежа</td>
+                            <td><input type="date" name="tranche1-payment-date"/></td>
+                            <td><input type="date" name="tranche2-payment-date"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button id="add-tranche" class="add-tranche-button">Добавить транш</button>
+                    <button id="remove-tranche" class="remove-tranche-button">Удалить транш</button>
                 </div>
             </div>
             <div class="results">
@@ -269,181 +337,6 @@
                 </div>
                 <button class="btn-hover color-5" id="calculate-button">Сформировать КП</button>
                 <div class="loader" id="loader"></div>
-                <script>
-                    document.getElementById('calculate-button').addEventListener('click', function () {
-                        var loader = document.getElementById('loader');
-                        var calculateButton = document.getElementById('calculate-button');
-
-                        calculateButton.disabled = true; // Заблокировать кнопку
-                        calculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
-                        loader.style.display = 'flex'; // Показать круг загрузки
-
-                        // Найти активную вкладку
-                        var itemType = document.querySelector('.tabs button.active');
-                        var activeTabText = itemType ? itemType.innerText.trim() : '';
-
-                        // Найти цену ПЛ
-                        var itemPrice = document.getElementById('cost-value').value;
-
-                        // Найти первоначальный взнос
-                        var prepaidExpense = document.getElementById('initial-payment-value').value;
-
-                        // Найти срок договора
-                        var term = document.getElementById('term-value').value;
-
-                        // Найти ставку банка
-                        var interestRate = document.getElementById('percent-value').value;
-
-                        // Найти наименование ПЛ
-                        var itemName = document.getElementById('item-name').value;
-
-                        // Отправка задачи в Celery с активной вкладкой
-                        fetch('./calculator/start-task', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({
-                                itemType: activeTabText,
-                                itemPrice: itemPrice,
-                                prepaidExpense: prepaidExpense,
-                                term: term,
-                                interestRate: interestRate,
-                                itemName: itemName
-                            })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.task_id) {
-                                    // Периодическая проверка состояния задачи
-                                    checkTaskStatus(data.task_id, activeTabText, itemPrice, prepaidExpense,
-                                        term, interestRate, itemName);
-                                } else {
-                                    showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
-                                    loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                                    calculateButton.disabled = false; // Разблокировать кнопку
-                                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Ошибка:', error);
-                                showError('Произошла ошибка при отправке задачи', 'Ошибка');
-                                loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                                calculateButton.disabled = false; // Разблокировать кнопку
-                                calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                            });
-                    });
-
-                    function checkTaskStatus(taskId, activeTabText, itemPrice, prepaidExpense,
-                                             term, interestRate, itemName) {
-                        fetch(`./calculator/status/${taskId}`, {
-                            method: 'GET',
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.state === 'SUCCESS') {
-                                    document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                                    var calculateButton = document.getElementById('calculate-button');
-                                    calculateButton.disabled = false; // Разблокировать кнопку
-                                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                                    showSuccess('Расчет по лизингу создан', 'Успешно');
-
-                                    // Добавление нового расчета в начало списка
-                                    console.log(data.result);
-                                    addNewCalculation(data.result, activeTabText, itemPrice, prepaidExpense,
-                                        term, interestRate, itemName);
-
-                                } else if (data.state === 'FAILURE') {
-                                    document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                                    var calculateButton = document.getElementById('calculate-button');
-                                    calculateButton.disabled = false; // Разблокировать кнопку
-                                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                                    showError('Ошибка при выполнении расчета. Попробуйте запустить расчет еще раз', 'Ошибка');
-                                } else {
-                                    // Если задача еще не завершена, проверка снова через некоторое время
-                                    setTimeout(function () {
-                                        checkTaskStatus(taskId, activeTabText, itemPrice, prepaidExpense,
-                                            term, interestRate, itemName);
-                                    }, 2000); // Повторная проверка через 2 секунды
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Ошибка:', error);
-                                showError('Произошла ошибка при проверке состояния задачи', 'Ошибка');
-                                document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                                var calculateButton = document.getElementById('calculate-button');
-                                calculateButton.disabled = false; // Разблокировать кнопку
-                                calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                            });
-                    }
-
-                    function addNewCalculation(calculation, activeTabText, itemPrice, prepaidExpense, term, interestRate, itemName) {
-                        var calcListBody = document.getElementById('calc-list-body');
-                        var newRow = document.createElement('tr');
-
-                        newRow.setAttribute('data-id', calculation.id);
-                        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "-", "${calculation.id}")`);
-
-                        newRow.innerHTML = `
-                            <td>${calcListBody.rows.length + 1}</td>
-                            <td class="item-name">${calculation.item_name}</td>
-                            <td class="item-price">${calculation.item_price_str}</td>
-                            <td class="item-type">${activeTabText}</td>
-                            <td class="date-ru">${calculation.date_ru}</td>
-                            <td>${calculation.manager_login}</td>
-                            <td onclick="deleteCalculation(event, '${calculation.id}')">
-                                <i class="fa-regular fa-trash-can" data-id="${calculation.id}"></i>
-                            </td>
-                            <td onclick="downloadCalculation(event, '${calculation.id}')">
-                                <i class="fa-regular fa-file-pdf" data-id="${calculation.id}"></i>
-                            </td>
-                        `;
-
-                        calcListBody.insertBefore(newRow, calcListBody.firstChild);
-                    }
-
-                    function showSuccess(message, title) {
-                        toastr.options = {
-                            closeButton: true,
-                            debug: false,
-                            newestOnTop: false,
-                            progressBar: true,
-                            positionClass: "toast-bottom-right",
-                            preventDuplicates: false,
-                            onclick: null,
-                            showDuration: "300",
-                            hideDuration: "1000",
-                            timeOut: "3000",
-                            extendedTimeOut: "1000",
-                            showEasing: "swing",
-                            hideEasing: "linear",
-                            showMethod: "fadeIn",
-                            hideMethod: "fadeOut"
-                        };
-                        toastr.success(message, title);
-                    }
-
-                    function showError(message, title) {
-                        toastr.options = {
-                            closeButton: true,
-                            debug: false,
-                            newestOnTop: false,
-                            progressBar: true,
-                            positionClass: "toast-bottom-right",
-                            preventDuplicates: false,
-                            onclick: null,
-                            showDuration: "300",
-                            hideDuration: "1000",
-                            timeOut: "5000",
-                            extendedTimeOut: "1000",
-                            showEasing: "swing",
-                            hideEasing: "linear",
-                            showMethod: "fadeIn",
-                            hideMethod: "fadeOut"
-                        };
-                        toastr.error(message, title);
-                    }
-                </script>
             </div>
         </div>
     </div>
@@ -511,6 +404,181 @@
         document.getElementById('foreign-max-label').textContent = `10 млн. ${selectedSymbol}`;
     });
 </script>
+<script>
+    document.getElementById('calculate-button').addEventListener('click', function () {
+        var loader = document.getElementById('loader');
+        var calculateButton = document.getElementById('calculate-button');
+
+        calculateButton.disabled = true; // Заблокировать кнопку
+        calculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
+        loader.style.display = 'flex'; // Показать круг загрузки
+
+        // Найти активную вкладку
+        var itemType = document.querySelector('.tabs button.active');
+        var activeTabText = itemType ? itemType.innerText.trim() : '';
+
+        // Найти цену ПЛ
+        var itemPrice = document.getElementById('cost-value').value;
+
+        // Найти первоначальный взнос
+        var prepaidExpense = document.getElementById('initial-payment-value').value;
+
+        // Найти срок договора
+        var term = document.getElementById('term-value').value;
+
+        // Найти ставку банка
+        var interestRate = document.getElementById('percent-value').value;
+
+        // Найти наименование ПЛ
+        var itemName = document.getElementById('item-name').value;
+
+        // Отправка задачи в Celery с активной вкладкой
+        fetch('./calculator/start-task', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                itemType: activeTabText,
+                itemPrice: itemPrice,
+                prepaidExpense: prepaidExpense,
+                term: term,
+                interestRate: interestRate,
+                itemName: itemName
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.task_id) {
+                    // Периодическая проверка состояния задачи
+                    checkTaskStatus(data.task_id, activeTabText, itemPrice, prepaidExpense,
+                        term, interestRate, itemName);
+                } else {
+                    showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
+                    loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                    calculateButton.disabled = false; // Разблокировать кнопку
+                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                showError('Произошла ошибка при отправке задачи', 'Ошибка');
+                loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                calculateButton.disabled = false; // Разблокировать кнопку
+                calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+            });
+    });
+
+    function checkTaskStatus(taskId, activeTabText, itemPrice, prepaidExpense,
+                             term, interestRate, itemName) {
+        fetch(`./calculator/status/${taskId}`, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.state === 'SUCCESS') {
+                    document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
+                    var calculateButton = document.getElementById('calculate-button');
+                    calculateButton.disabled = false; // Разблокировать кнопку
+                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                    showSuccess('Расчет по лизингу создан', 'Успешно');
+
+                    // Добавление нового расчета в начало списка
+                    console.log(data.result);
+                    addNewCalculation(data.result, activeTabText, itemPrice, prepaidExpense,
+                        term, interestRate, itemName);
+
+                } else if (data.state === 'FAILURE') {
+                    document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
+                    var calculateButton = document.getElementById('calculate-button');
+                    calculateButton.disabled = false; // Разблокировать кнопку
+                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                    showError('Ошибка при выполнении расчета. Попробуйте запустить расчет еще раз', 'Ошибка');
+                } else {
+                    // Если задача еще не завершена, проверка снова через некоторое время
+                    setTimeout(function () {
+                        checkTaskStatus(taskId, activeTabText, itemPrice, prepaidExpense,
+                            term, interestRate, itemName);
+                    }, 2000); // Повторная проверка через 2 секунды
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                showError('Произошла ошибка при проверке состояния задачи', 'Ошибка');
+                document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                var calculateButton = document.getElementById('calculate-button');
+                calculateButton.disabled = false; // Разблокировать кнопку
+                calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+            });
+    }
+
+    function addNewCalculation(calculation, activeTabText, itemPrice, prepaidExpense, term, interestRate, itemName) {
+        var calcListBody = document.getElementById('calc-list-body');
+        var newRow = document.createElement('tr');
+
+        newRow.setAttribute('data-id', calculation.id);
+        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "-", "${calculation.id}")`);
+
+        newRow.innerHTML = `
+                            <td>${calcListBody.rows.length + 1}</td>
+                            <td class="item-name">${calculation.item_name}</td>
+                            <td class="item-price">${calculation.item_price_str}</td>
+                            <td class="item-type">${activeTabText}</td>
+                            <td class="date-ru">${calculation.date_ru}</td>
+                            <td>${calculation.manager_login}</td>
+                            <td onclick="deleteCalculation(event, '${calculation.id}')">
+                                <i class="fa-regular fa-trash-can" data-id="${calculation.id}"></i>
+                            </td>
+                            <td onclick="downloadCalculation(event, '${calculation.id}')">
+                                <i class="fa-regular fa-file-pdf" data-id="${calculation.id}"></i>
+                            </td>
+                        `;
+
+        calcListBody.insertBefore(newRow, calcListBody.firstChild);
+    }
+
+    function showSuccess(message, title) {
+        toastr.options = {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-right",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "3000",
+            extendedTimeOut: "1000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut"
+        };
+        toastr.success(message, title);
+    }
+
+    function showError(message, title) {
+        toastr.options = {
+            closeButton: true,
+            debug: false,
+            newestOnTop: false,
+            progressBar: true,
+            positionClass: "toast-bottom-right",
+            preventDuplicates: false,
+            onclick: null,
+            showDuration: "300",
+            hideDuration: "1000",
+            timeOut: "5000",
+            extendedTimeOut: "1000",
+            showEasing: "swing",
+            hideEasing: "linear",
+            showMethod: "fadeIn",
+            hideMethod: "fadeOut"
+        };
+        toastr.error(message, title);
+    }
+</script>
 <!-- Autocomplete Script -->
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-autocomplete.js') }}"></script>
 
@@ -520,5 +588,6 @@
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-exchange-rates.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-modal.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-new.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/leasing-calculator-add-tranche.js') }}"></script>
 </body>
 </html>

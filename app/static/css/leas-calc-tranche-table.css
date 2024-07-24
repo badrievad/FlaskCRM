@@ -1,0 +1,85 @@
+#tranches-container {
+    margin: 20px;
+}
+
+#tranches-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 10px;
+}
+
+#tranches-table th, #tranches-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#tranches-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+#tranches-table input[type="text"], #tranches-table input[type="date"] {
+    width: 90%;
+    padding: 4px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+#tranches-table input[type="date"] {
+    position: relative;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#tranches-table input[type="date"]::-webkit-inner-spin-button,
+#tranches-table input[type="date"]::-webkit-clear-button {
+    display: none;
+}
+
+#tranches-table input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 10px;
+    color: #555;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+#tranches-table input[type="date"]:hover::-webkit-calendar-picker-indicator {
+    opacity: 1;
+}
+
+.add-tranche-button, .remove-tranche-button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-right: 10px;
+}
+
+.remove-tranche-button {
+    background-color: #f44336;
+}
+
+.add-tranche-button:hover {
+    background-color: #45a049;
+}
+
+.remove-tranche-button:hover {
+    background-color: #d32f2f;
+}

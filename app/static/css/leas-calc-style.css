@@ -12,7 +12,7 @@
 }
 
 .card {
-    background-color: rgba(255, 255, 255, 0.51);
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     margin-bottom: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -85,7 +85,7 @@ output {
 }
 
 .result-section {
-    background-color: rgba(255, 255, 255, 0.54);
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -131,8 +131,8 @@ output {
     padding: 10px 20px;
     cursor: pointer;
     transition: background 0.3s;
-    border: 1px solid rgba(221, 221, 221, 0.51);
-    background-color: rgba(255, 255, 255, 0.55);
+    border: 1px solid rgba(221, 221, 221, 0.7);
+    background-color: rgba(255, 255, 255, 0.7);
     border-radius: 4px;
     margin: 5px;
     font-size: 0.9em;
@@ -152,7 +152,7 @@ output {
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(255, 255, 255, 0.95);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -176,11 +176,16 @@ output {
 .tabs {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
+    margin-top: 35px;
+    border-top: 2px solid rgba(69, 154, 108, 0.05); /* Верхняя линия */
+    border-bottom: 2px solid rgba(69, 154, 108, 0.05); /* Нижняя линия */
+    padding-top: 20px; /* Отступ сверху */
+    padding-bottom: 20px; /* Отступ снизу */
 }
 
 .tabs button {
-    background-color: rgba(255, 255, 255, 0.30);
+    background-color: rgba(255, 255, 255);
     border: none;
     padding: 10px 20px;
     border-radius: 4px;
@@ -191,7 +196,7 @@ output {
 }
 
 .tabs button:hover {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(156, 192, 174, 0.05);
 }
 
 .tabs button.active {
@@ -274,7 +279,7 @@ output {
 
 .results {
     width: 35%;
-    background-color: rgba(244, 244, 244, 0.3);
+    background-color: rgba(244, 244, 244, 0.5);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -417,11 +422,11 @@ select {
     appearance: none;
     background-size: 10px 10px;
     background-color: rgba(255, 255, 255, 0.6);
-    border: none;
+    border: 1px solid rgba(204, 204, 204, 0.5);
 }
 
 select:hover {
-    background-color: white;
+    background-color: rgba(95, 168, 110, 0.05);
     cursor: pointer;
 }
 

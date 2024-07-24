@@ -71,9 +71,11 @@
     </div>
     <h6>{{ current_user }}</h6>
     <h6>Должность: {{ user_role }}</h6>
-    <h6><a class="nav-link" href="{{ url_for('user.exit_user') }}"><i
-            class="fa-solid fa-right-from-bracket"></i>
-        Выйти из аккаунта</a></h6>
+    <h6>
+        <a class="nav-link exit-link" href="{{ url_for('user.exit_user') }}">
+            <i class="fa-solid fa-right-from-bracket"></i> Выйти из аккаунта
+        </a>
+    </h6>
 </div>
 
 <div class="main-content">

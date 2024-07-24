@@ -308,8 +308,7 @@ th, td {
 #archived-deals .deal-table .filter-input-created-archived,
 #archived-deals .deal-table .filter-input-to-archive-archived,
 #active-deals .deal-table .filter-input-dl,
-#archived-deals .deal-table .filter-input-dl-archived
-{
+#archived-deals .deal-table .filter-input-dl-archived {
     width: 100%;
     padding: 8px;
     margin: 4px 0;
@@ -340,4 +339,19 @@ th, td {
 
 #active-deals h4:hover, #archived-deals h4:hover {
     color: #ffffff; /* Цвет при наведении, можно изменить на любой желаемый */
+}
+
+/* Стиль для обычного состояния ссылки */
+.nav-link.exit-link {
+    color: #ffffff; /* Цвет текста по умолчанию */
+    text-decoration: none; /* Убираем подчеркивание */
+    transition: color 0.3s ease, border 0.3s ease; /* Плавный переход цвета и рамки */
+    border: 2px solid transparent; /* Прозрачная рамка для правильного перехода */
+    padding: 4px; /* Внутренний отступ для ссылки */
+}
+
+/* Стиль для состояния при наведении (hover) */
+.nav-link.exit-link:hover {
+    color: rgba(199, 199, 199, 0.8); /* Цвет текста при наведении, например, красный */
+    border-color: rgba(199, 199, 199, 0.05); /* Цвет рамки при наведении, например, красный */
 }

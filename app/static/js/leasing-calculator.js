@@ -39,6 +39,7 @@ document.getElementById('initial-payment').addEventListener('input', function ()
     document.getElementById('initial-payment-percent').value = percentValue.toFixed(2);
     document.getElementById('initial-payment-value').value = initialPaymentValue.toFixed(0);
     document.getElementById('initial-payment-value-display').value = formatNumber(initialPaymentValue);
+    updateCreditValue(); // Добавлен вызов для обновления значения кредита
 });
 
 document.getElementById('initial-payment-value-display').addEventListener('input', function () {
@@ -53,6 +54,7 @@ document.getElementById('initial-payment-value-display').addEventListener('input
     document.getElementById('initial-payment-percent').value = percentValue.toFixed(2);
     document.getElementById('initial-payment').value = percentValue;
     document.getElementById('initial-payment-value').value = initialPaymentValue.toFixed(0);
+    updateCreditValue(); // Добавлен вызов для обновления значения кредита
 });
 
 document.getElementById('initial-payment-value-display').addEventListener('blur', function () {
@@ -63,21 +65,24 @@ document.getElementById('initial-payment-value-display').addEventListener('blur'
         initialPaymentValue = maxInitialPaymentValue;
     }
     this.value = formatNumber(initialPaymentValue);
+    updateCreditValue(); // Добавлен вызов для обновления значения кредита
 });
 
-document.getElementById('initial-payment-percent').addEventListener('input', function () {
+document.getElementById('initial-payment-percent').addEventListener('blur', function () {
     var percentValue = parseFloat(this.value);
     var totalCost = parseInt(document.getElementById('cost-value').value);
-    var initialPaymentValue = (percentValue / 100) * totalCost;
 
     if (percentValue > 49.99) {
         percentValue = 49.99;
-        initialPaymentValue = totalCost * (percentValue / 100);
     }
 
+    var initialPaymentValue = (percentValue / 100) * totalCost;
+
     document.getElementById('initial-payment').value = percentValue;
+    document.getElementById('initial-payment-percent').value = percentValue.toFixed(2);  // Установите значение обратно в поле
     document.getElementById('initial-payment-value').value = initialPaymentValue.toFixed(0);
     document.getElementById('initial-payment-value-display').value = formatNumber(initialPaymentValue);
+    updateCreditValue(); // Добавлен вызов для обновления значения кредита
 });
 
 document.getElementById('term').addEventListener('input', function () {
@@ -201,15 +206,24 @@ document.getElementById('foreign-cost').addEventListener('input', function () {
 function updateCreditValue() {
     var totalCost = parseInt(document.getElementById('cost-value').value);
     var creditPercent = parseFloat(document.getElementById('credit-percent').value);
+    var initialPaymentPercent = parseFloat(document.getElementById('initial-payment-percent').value);
+    var maxCreditPercent = 100 - initialPaymentPercent;
+
+    if (creditPercent > maxCreditPercent) {
+        creditPercent = maxCreditPercent;
+    }
+
     var creditValue = (creditPercent / 100) * totalCost;
 
     document.getElementById('credit-value').value = creditValue.toFixed(0);
     document.getElementById('credit-value-display').value = formatNumber(creditValue);
     document.getElementById('credit').value = creditPercent;
+    document.getElementById('credit-percent').value = creditPercent.toFixed(2);  // Обновление поля процента кредита
 }
 
+
 // Обработчики для кредитного значения и процента
-document.getElementById('credit-percent').addEventListener('input', function () {
+document.getElementById('credit-percent').addEventListener('blur', function () {
     updateCreditValue();
 });
 
@@ -220,8 +234,10 @@ document.getElementById('credit').addEventListener('input', function () {
 
 document.getElementById('credit-value-display').addEventListener('blur', function () {
     var totalCost = parseInt(document.getElementById('cost-value').value);
+    var initialPaymentPercent = parseFloat(document.getElementById('initial-payment-percent').value);
+    var maxCreditPercent = 100 - initialPaymentPercent;
     var creditValue = parseFormattedNumber(this.value);
-    var maxCreditValue = totalCost * 0.9;
+    var maxCreditValue = totalCost * (maxCreditPercent / 100);
 
     if (creditValue > maxCreditValue) {
         creditValue = maxCreditValue;

@@ -6,6 +6,7 @@
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 10px;
+    font-size: 14px;
 }
 
 #tranches-table th, #tranches-table td {
@@ -32,9 +33,8 @@
 #tranches-table input[type="date"] {
     position: relative;
     padding: 8px 12px;
-    font-size: 14px;
     line-height: 20px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.4);
     border: 1px solid #ccc;
     border-radius: 4px;
     -webkit-appearance: none;
@@ -82,4 +82,42 @@
 
 .remove-tranche-button:hover {
     background-color: #d32f2f;
+}
+
+#input-period input[type="date"] {
+    width: 50%;
+    padding: 4px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+#input-period input[type="date"] {
+    position: relative;
+    padding: 8px 12px;
+    line-height: 20px;
+    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+#input-period input[type="date"]::-webkit-inner-spin-button,
+#input-period input[type="date"]::-webkit-clear-button {
+    display: none;
+}
+
+#input-period input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 10px;
+    color: #555;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+#input-period input[type="date"]:hover::-webkit-calendar-picker-indicator {
+    opacity: 1;
 }

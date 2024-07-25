@@ -489,3 +489,42 @@ select:hover {
     background-image: linear-gradient(to right, rgba(7, 119, 70, 0.7), rgba(45, 152, 119, 0.7), rgba(23, 154, 95, 0.7), rgba(41, 189, 116, 0.7));
     box-shadow: 0 1px 15px 0 rgba(23, 168, 108, 0.55);
 }
+
+.bbtn-hover {
+    width: 150px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    margin: 10px;
+    height: 35px;
+    text-align: center;
+    border: none;
+    background-size: 300% 100%;
+
+    border-radius: 50px;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.bbtn-hover:hover {
+    background-position: 100% 0;
+    moz-transition: all .4s ease-in-out;
+    -o-transition: all .4s ease-in-out;
+    -webkit-transition: all .4s ease-in-out;
+    transition: all .4s ease-in-out;
+}
+
+.bbtn-hover:focus {
+    outline: none;
+}
+
+.bbtn-hover.color-1 {
+    background-image: linear-gradient(to right, #115d4e, #40e495, #30dd8a, #2bb673);
+}
+
+.bbtn-hover.color-11 {
+       background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);  box-shadow: 0 5px 15px rgba(242, 97, 103, .4);
+}

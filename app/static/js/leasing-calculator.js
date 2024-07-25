@@ -242,3 +242,244 @@ document.getElementById('commission').addEventListener('input', function () {
 document.getElementById('commission-value').addEventListener('input', function () {
     document.getElementById('commission').value = this.value;
 });
+
+// Расходы на страхование КАСКО
+document.getElementById('insurance-casko').addEventListener('input', function () {
+    document.getElementById('insurance-casko-value').value = this.value;
+});
+
+document.getElementById('insurance-casko-value').addEventListener('input', function () {
+    document.getElementById('insurance-casko').value = this.value;
+});
+
+// Расходы на страхование ОСАГО
+document.getElementById('insurance-osago').addEventListener('input', function () {
+    document.getElementById('insurance-osago-value').value = this.value;
+});
+
+document.getElementById('insurance-osago-value').addEventListener('input', function () {
+    document.getElementById('insurance-osago').value = this.value;
+});
+
+// Расходы на страхование ЖИЗНИ и ЗДОРОВЬЯ
+document.getElementById('health-insurance').addEventListener('input', function () {
+    document.getElementById('health-insurance-value').value = this.value;
+    document.getElementById('health-insurance-display').value = this.value;
+});
+
+document.getElementById('health-insurance-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('health-insurance-value').value = value;
+    document.getElementById('health-insurance').value = value;
+});
+
+// Расходы на страхование ИНОЕ
+document.getElementById('other-insurance').addEventListener('input', function () {
+    document.getElementById('other-insurance-value').value = this.value;
+    document.getElementById('other-insurance-display').value = this.value;
+});
+
+document.getElementById('other-insurance-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('other-insurance-value').value = value;
+    document.getElementById('other-insurance').value = value;
+});
+
+// Агентское вознаграждение
+document.getElementById('agent-commission').addEventListener('input', function () {
+    document.getElementById('agent-commission-value').value = this.value;
+});
+
+document.getElementById('agent-commission-value').addEventListener('input', function () {
+    document.getElementById('agent-commission').value = this.value;
+});
+
+// Бонус менеджера
+document.getElementById('manager-bonus').addEventListener('input', function () {
+    document.getElementById('manager-bonus-value').value = this.value;
+});
+
+document.getElementById('manager-bonus-value').addEventListener('input', function () {
+    document.getElementById('manager-bonus').value = this.value;
+});
+
+// Трекеры
+document.getElementById('tracker').addEventListener('input', function () {
+    document.getElementById('tracker-value').value = this.value;
+    document.getElementById('tracker-display').value = this.value;
+});
+
+document.getElementById('tracker-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('tracker-value').value = value;
+    document.getElementById('tracker').value = value;
+});
+
+// Маячки
+document.getElementById('mayak').addEventListener('input', function () {
+    document.getElementById('mayak-value').value = this.value;
+    document.getElementById('mayak-display').value = this.value;
+});
+
+document.getElementById('mayak-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('mayak-value').value = value;
+    document.getElementById('mayak').value = value;
+});
+
+// Федресурс
+document.getElementById('fedresurs').addEventListener('input', function () {
+    document.getElementById('fedresurs-value').value = this.value;
+    document.getElementById('fedresurs-display').value = this.value;
+});
+
+document.getElementById('fedresurs-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('fedresurs-value').value = value;
+    document.getElementById('fedresurs').value = value;
+});
+
+// ГСМ
+document.getElementById('gsm').addEventListener('input', function () {
+    document.getElementById('gsm-value').value = this.value;
+    document.getElementById('gsm-display').value = this.value;
+});
+
+document.getElementById('gsm-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('gsm-value').value = value;
+    document.getElementById('gsm').value = value;
+});
+
+// Почтовые расходы
+document.getElementById('mail').addEventListener('input', function () {
+    document.getElementById('mail-value').value = this.value;
+    document.getElementById('mail-display').value = this.value;
+});
+
+document.getElementById('mail-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('mail-value').value = value;
+    document.getElementById('mail').value = value;
+});
+
+document.getElementById('health-insurance-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('other-insurance-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('tracker-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('mayak-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('fedresurs-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('gsm-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('mail-display').addEventListener('keypress', allowOnlyNumbers);
+
+// Форматирование для health-insurance-display
+document.getElementById('health-insurance-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('health-insurance').value = value;
+});
+
+document.getElementById('health-insurance-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера health-insurance
+document.getElementById('health-insurance').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('health-insurance-display').value = formatNumber(value);
+});
+
+// Форматирование для other-insurance-display
+document.getElementById('other-insurance-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('other-insurance').value = value;
+});
+
+document.getElementById('other-insurance-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера other-insurance
+document.getElementById('other-insurance').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('other-insurance-display').value = formatNumber(value);
+});
+
+// Форматирование для tracker-display
+document.getElementById('tracker-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('tracker').value = value;
+});
+
+document.getElementById('tracker-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера tracker
+document.getElementById('tracker').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('tracker-display').value = formatNumber(value);
+});
+
+// Форматирование для mayak-display
+document.getElementById('mayak-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('mayak').value = value;
+});
+
+document.getElementById('mayak-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера mayak
+document.getElementById('mayak').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('mayak-display').value = formatNumber(value);
+});
+
+// Форматирование для fedresurs-display
+document.getElementById('fedresurs-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('fedresurs').value = value;
+});
+
+document.getElementById('fedresurs-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера fedresurs
+document.getElementById('fedresurs').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('fedresurs-display').value = formatNumber(value);
+});
+
+// Форматирование для gsm-display
+document.getElementById('gsm-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('gsm').value = value;
+});
+
+document.getElementById('gsm-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера gsm
+document.getElementById('gsm').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('gsm-display').value = formatNumber(value);
+});
+
+// Форматирование для mail-display
+document.getElementById('mail-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('mail').value = value;
+});
+
+document.getElementById('mail-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера mail
+document.getElementById('mail').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('mail-display').value = formatNumber(value);
+});
+

@@ -14,7 +14,7 @@ class Tranche(BaseModel):
     payment_date: str = Field(alias="paymentDate")
 
     @field_validator("fee", "own_fee", mode="before")
-    def parse_float_with_comma(cls, value) -> float:
+    def parse_float_with_comma(cls, value) -> float:  # noqa C901
         if isinstance(value, str):
             return float(value.replace(",", "."))
         return value

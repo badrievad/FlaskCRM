@@ -257,53 +257,74 @@
                             <th></th>
                             <th id="tranche-1">Транш 1</th>
                             <th id="tranche-2">Транш 2</th>
+                            <th id="tranche-3">Транш 3</th>
+                            <th id="tranche-4">Транш 4</th>
+                            <th id="tranche-5">Транш 5</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>Размер транша, %</td>
-                            <td><input type="text" name="tranche1-size" value="20"/></td>
-                            <td><input type="text" name="tranche2-size" value="80"/></td>
+                            <td><input type="text" name="tranche1-size" id="tranche1-size" value="20"/></td>
+                            <td><input type="text" name="tranche2-size" id="tranche2-size" value="80"/></td>
+                            <td><input type="text" name="tranche3-size" id="tranche3-size" value="0"/></td>
+                            <td><input type="text" name="tranche4-size" id="tranche4-size" value="0"/></td>
+                            <td><input type="text" name="tranche5-size" id="tranche5-size" value="0"/></td>
                         </tr>
                         <tr>
                             <td>Ставка банка, %</td>
-                            <td><input type="text" name="tranche1-rate" value="0"/></td>
-                            <td><input type="text" name="tranche2-rate" value="20"/></td>
+                            <td><input type="text" name="tranche1-rate" id="tranche1-rate" value="20"/></td>
+                            <td><input type="text" name="tranche2-rate" id="tranche2-rate" value="20"/></td>
+                            <td><input type="text" name="tranche3-rate" id="tranche3-rate" value="0"/></td>
+                            <td><input type="text" name="tranche4-rate" id="tranche4-rate" value="0"/></td>
+                            <td><input type="text" name="tranche5-rate" id="tranche5-rate" value="0"/></td>
                         </tr>
                         <tr>
                             <td>Вознаграждение лизинговой компании, %</td>
-                            <td><input type="text" name="tranche1-fee" value="4,85"/></td>
-                            <td><input type="text" name="tranche2-fee" value="4,85"/></td>
+                            <td><input type="text" name="tranche1-fee" id="tranche1-fee" value="4,85"/></td>
+                            <td><input type="text" name="tranche2-fee" id="tranche2-fee" value="4,85"/></td>
+                            <td><input type="text" name="tranche3-fee" id="tranche3-fee" value="0"/></td>
+                            <td><input type="text" name="tranche4-fee" id="tranche4-fee" value="0"/></td>
+                            <td><input type="text" name="tranche5-fee" id="tranche5-fee" value="0"/></td>
                         </tr>
                         <tr>
                             <td>Вознаграждение лизинговой компании, % (за счет собственных средств)</td>
-                            <td><input type="text" name="tranche1-own-fee" value="0"/></td>
-                            <td><input type="text" name="tranche2-own-fee" value="0"/></td>
+                            <td><input type="text" name="tranche1-own-fee" id="tranche1-own-fee" value="0"/></td>
+                            <td><input type="text" name="tranche2-own-fee" id="tranche2-own-fee" value="0"/></td>
+                            <td><input type="text" name="tranche3-own-fee" id="tranche3-own-fee" value="0"/></td>
+                            <td><input type="text" name="tranche4-own-fee" id="tranche4-own-fee" value="0"/></td>
+                            <td><input type="text" name="tranche5-own-fee" id="tranche5-own-fee" value="0"/></td>
                         </tr>
                         <tr>
                             <td>Дата выдачи кредита</td>
-                            <td><input type="date" name="tranche1-credit-date"/></td>
-                            <td><input type="date" name="tranche2-credit-date"/></td>
+                            <td><input type="date" name="tranche1-credit-date" id="tranche1-credit-date"/></td>
+                            <td><input type="date" name="tranche2-credit-date" id="tranche2-credit-date"/></td>
+                            <td><input type="date" name="tranche3-credit-date" id="tranche3-credit-date"/></td>
+                            <td><input type="date" name="tranche4-credit-date" id="tranche4-credit-date"/></td>
+                            <td><input type="date" name="tranche5-credit-date" id="tranche5-credit-date"/></td>
                         </tr>
                         <tr>
                             <td>Дата первого лизингового платежа</td>
-                            <td><input type="date" name="tranche1-payment-date"/></td>
-                            <td><input type="date" name="tranche2-payment-date"/></td>
+                            <td><input type="date" name="tranche1-payment-date" id="tranche1-payment-date"/></td>
+                            <td><input type="date" name="tranche2-payment-date" id="tranche2-payment-date"/></td>
+                            <td><input type="date" name="tranche3-payment-date" id="tranche3-payment-date"/></td>
+                            <td><input type="date" name="tranche4-payment-date" id="tranche4-payment-date"/></td>
+                            <td><input type="date" name="tranche5-payment-date" id="tranche5-payment-date"></td>
                         </tr>
                         </tbody>
                     </table>
-                    <button id="add-tranche" class="bbtn-hover color-1">Добавить транш</button>
-                    <button id="remove-tranche" class="bbtn-hover color-11">Удалить транш</button>
                 </div>
                 <h5>Расходы на страхование: </h5><br>
                 <div class="form-group">
                     <div class="input-container">
                         <label>Расходы на страхование КАСКО, %</label>
-                        <input type="number" id="insurance-casko-value" name="insurance-casko-value" value="0" placeholder="%">
+                        <input type="number" id="insurance-casko-value" name="insurance-casko-value" value="0"
+                               placeholder="%">
                         <span class="percent-label">%</span>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="insurance-casko" name="insurance-casko" min="0" max="20" value="0" step="1">
+                        <input type="range" id="insurance-casko" name="insurance-casko" min="0" max="20" value="0"
+                               step="1">
                     </div>
                     <div class="range-labels">
                         <span>0%</span>
@@ -313,11 +334,13 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Расходы на страхование ОСАГО, %</label>
-                        <input type="number" id="insurance-osago-value" name="insurance-osago-value" value="0" placeholder="%">
+                        <input type="number" id="insurance-osago-value" name="insurance-osago-value" value="0"
+                               placeholder="%">
                         <span class="percent-label">%</span>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="insurance-osago" name="insurance-osago" min="0" max="20" value="0" step="1">
+                        <input type="range" id="insurance-osago" name="insurance-osago" min="0" max="20" value="0"
+                               step="1">
                     </div>
                     <div class="range-labels">
                         <span>0%</span>
@@ -327,11 +350,13 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Расходы на страхование ЖИЗНИ и ЗДОРОВЬЯ, руб.</label>
-                        <input type="text" id="health-insurance-display" name="health-insurance-display" value="0,00" placeholder="руб.">
+                        <input type="text" id="health-insurance-display" name="health-insurance-display" value="0,00"
+                               placeholder="руб.">
                         <input type="hidden" id="health-insurance-value" name="health-insurance-value" value="0">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="health-insurance" name="health-insurance" min="0" max="1000000" value="0" step="1">
+                        <input type="range" id="health-insurance" name="health-insurance" min="0" max="1000000"
+                               value="0" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -341,26 +366,31 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Расходы на страхование ИНОЕ, руб.</label>
-                        <input type="text" id="other-insurance-display" name="other-insurance-display" value="0,00" placeholder="руб.">
+                        <input type="text" id="other-insurance-display" name="other-insurance-display" value="0,00"
+                               placeholder="руб.">
                         <input type="hidden" id="other-insurance-value" name="other-insurance-value" value="0">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="other-insurance" name="other-insurance" min="0" max="1000000" value="0" step="1">
+                        <input type="range" id="other-insurance" name="other-insurance" min="0" max="1000000" value="0"
+                               step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
                         <span>1 млн. руб.</span>
                     </div>
-                </div><br>
+                </div>
+                <br>
                 <h5>Накладные расходы: </h5><br>
                 <div class="form-group">
                     <div class="input-container">
                         <label>Агентское вознаграждение, %</label>
-                        <input type="number" id="agent-commission-value" name="agent-commission-value" value="0" placeholder="%">
+                        <input type="number" id="agent-commission-value" name="agent-commission-value" value="0"
+                               placeholder="%">
                         <span class="percent-label">%</span>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="agent-commission" name="agent-commission" min="0" max="5" value="0" step="0.1">
+                        <input type="range" id="agent-commission" name="agent-commission" min="0" max="5" value="0"
+                               step="0.1">
                     </div>
                     <div class="range-labels">
                         <span>0%</span>
@@ -370,11 +400,13 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Бонус менеджера, %</label>
-                        <input type="number" id="manager-bonus-value" name="manager-bonus-value" value="1.2" placeholder="%">
+                        <input type="number" id="manager-bonus-value" name="manager-bonus-value" value="1.2"
+                               placeholder="%">
                         <span class="percent-label">%</span>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="manager-bonus" name="manager-bonus" min="0" max="1.5" value="1.2" step="0.1">
+                        <input type="range" id="manager-bonus" name="manager-bonus" min="0" max="1.5" value="1.2"
+                               step="0.1">
                     </div>
                     <div class="range-labels">
                         <span>0%</span>
@@ -412,7 +444,8 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Федресурс, руб.</label>
-                        <input type="text" id="fedresurs-display" name="fedresurs-display" value="0,00" placeholder="руб.">
+                        <input type="text" id="fedresurs-display" name="fedresurs-display" value="0,00"
+                               placeholder="руб.">
                         <input type="hidden" id="fedresurs-value" name="fedresurs-value" value="0">
                     </div>
                     <div class="slider-container">
@@ -454,7 +487,7 @@
                 <div class="form-group">
                     <div class="input-container" id="input-period">
                         <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема передачи</label>
-                        <input type="date" name="input-period" value=""/>
+                        <input type="date" name="input-period" id="input-period" value=""/>
                     </div>
                 </div>
             </div>
@@ -581,19 +614,64 @@
 
         // Найти цену ПЛ
         var itemPrice = document.getElementById('cost-value').value;
-
-        // Найти первоначальный взнос
-        var prepaidExpense = document.getElementById('initial-payment-value').value;
-
-        // Найти срок договора
-        var term = document.getElementById('term-value').value;
-
-        {#// Найти ставку банка#}
-        {#var interestRate = document.getElementById('percent-value').value;#}
         var interestRate = "20"  // Значение по умолчанию
 
         // Найти наименование ПЛ
         var itemName = document.getElementById('item-name').value;
+        var currency = document.getElementById('currency').value;
+        var foreignCost = document.getElementById('foreign-cost-value').value;
+        var initialPayment = document.getElementById('initial-payment-value').value;
+        var credit = document.getElementById('credit-value').value;
+        var creditTerm = document.getElementById('term-value').value;
+        var bankCommission = document.getElementById('commission-value').value;
+        var insuranceCasko = document.getElementById('insurance-casko-value').value;
+        var insuranceOsago = document.getElementById('insurance-osago-value').value;
+        var healthInsurance = document.getElementById('health-insurance-value').value;
+        var otherInsurance = document.getElementById('other-insurance-value').value;
+        var agentCommission = document.getElementById('agent-commission-value').value;
+        var managerBonus = document.getElementById('manager-bonus-value').value;
+        var tracker = document.getElementById('tracker-value').value;
+        var mayak = document.getElementById('mayak-value').value;
+        var fedresurs = document.getElementById('fedresurs-value').value;
+        var gsm = document.getElementById('gsm-value').value;
+        var mail = document.getElementById('mail-value').value;
+        var inputPeriod = document.getElementById('input-period').value;
+
+        var tranche1Size = document.getElementById('tranche1-size').value;
+        var tranche2Size = document.getElementById('tranche2-size').value;
+        var tranche3Size = document.getElementById('tranche3-size').value;
+        var tranche4Size = document.getElementById('tranche4-size').value;
+        var tranche5Size = document.getElementById('tranche5-size').value;
+
+        var tranche1Rate = document.getElementById('tranche1-rate').value;
+        var tranche2Rate = document.getElementById('tranche2-rate').value;
+        var tranche3Rate = document.getElementById('tranche3-rate').value;
+        var tranche4Rate = document.getElementById('tranche4-rate').value;
+        var tranche5Rate = document.getElementById('tranche5-rate').value;
+
+        var tranche1Fee = document.getElementById('tranche1-fee').value;
+        var tranche2Fee = document.getElementById('tranche2-fee').value;
+        var tranche3Fee = document.getElementById('tranche3-fee').value;
+        var tranche4Fee = document.getElementById('tranche4-fee').value;
+        var tranche5Fee = document.getElementById('tranche5-fee').value;
+
+        var tranche1OwnFee = document.getElementById('tranche1-own-fee').value;
+        var tranche2OwnFee = document.getElementById('tranche2-own-fee').value;
+        var tranche3OwnFee = document.getElementById('tranche3-own-fee').value;
+        var tranche4OwnFee = document.getElementById('tranche4-own-fee').value;
+        var tranche5OwnFee = document.getElementById('tranche5-own-fee').value;
+
+        var tranche1CreditDate = document.getElementById('tranche1-credit-date').value;
+        var tranche2CreditDate = document.getElementById('tranche2-credit-date').value;
+        var tranche3CreditDate = document.getElementById('tranche3-credit-date').value;
+        var tranche4CreditDate = document.getElementById('tranche4-credit-date').value;
+        var tranche5CreditDate = document.getElementById('tranche5-credit-date').value;
+
+        var tranche1PaymentDate = document.getElementById('tranche1-payment-date').value;
+        var tranche2PaymentDate = document.getElementById('tranche2-payment-date').value;
+        var tranche3PaymentDate = document.getElementById('tranche3-payment-date').value;
+        var tranche4PaymentDate = document.getElementById('tranche4-payment-date').value;
+        var tranche5PaymentDate = document.getElementById('tranche5-payment-date').value;
 
         // Отправка задачи в Celery с активной вкладкой
         fetch('./calculator/start-task', {
@@ -604,18 +682,76 @@
             body: JSON.stringify({
                 itemType: activeTabText,
                 itemPrice: itemPrice,
-                prepaidExpense: prepaidExpense,
-                term: term,
                 interestRate: interestRate,
-                itemName: itemName
+                itemName: itemName,
+                currency: currency,
+                foreignCost: foreignCost,
+                initialPayment: initialPayment,
+                credit: credit,
+                creditTerm: creditTerm,
+                bankCommission: bankCommission,
+                insuranceCasko: insuranceCasko,
+                insuranceOsago: insuranceOsago,
+                healthInsurance: healthInsurance,
+                otherInsurance: otherInsurance,
+                agentCommission: agentCommission,
+                managerBonus: managerBonus,
+                tracker: tracker,
+                mayak: mayak,
+                fedresurs: fedresurs,
+                gsm: gsm,
+                mail: mail,
+                inputPeriod: inputPeriod,
+                tranches: {
+                    tranche1: {
+                        size: tranche1Size,
+                        interestRate: tranche1Rate,
+                        fee: tranche1Fee,
+                        ownFee: tranche1OwnFee,
+                        creditDate: tranche1CreditDate,
+                        paymentDate: tranche1PaymentDate
+                    },
+                    tranche2: {
+                        size: tranche2Size,
+                        interestRate: tranche2Rate,
+                        fee: tranche2Fee,
+                        ownFee: tranche2OwnFee,
+                        creditDate: tranche2CreditDate,
+                        paymentDate: tranche2PaymentDate
+                    },
+                    tranche3: {
+                        size: tranche3Size,
+                        interestRate: tranche3Rate,
+                        fee: tranche3Fee,
+                        ownFee: tranche3OwnFee,
+                        creditDate: tranche3CreditDate,
+                        paymentDate: tranche3PaymentDate
+                    },
+                    tranche4: {
+                        size: tranche4Size,
+                        interestRate: tranche4Rate,
+                        fee: tranche4Fee,
+                        ownFee: tranche4OwnFee,
+                        creditDate: tranche4CreditDate,
+                        paymentDate: tranche4PaymentDate
+                    },
+                    tranche5: {
+                        size: tranche5Size,
+                        interestRate: tranche5Rate,
+                        fee: tranche5Fee,
+                        ownFee: tranche5OwnFee,
+                        creditDate: tranche5CreditDate,
+                        paymentDate: tranche5PaymentDate
+                    },
+                },
             })
         })
             .then(response => response.json())
             .then(data => {
                 if (data.task_id) {
                     // Периодическая проверка состояния задачи
-                    checkTaskStatus(data.task_id, activeTabText, itemPrice, prepaidExpense,
-                        term, interestRate, itemName);
+                    checkTaskStatus(data.task_id, activeTabText, itemPrice, initialPayment,
+                        creditTerm, interestRate, itemName);
                 } else {
                     showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
                     loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
@@ -632,8 +768,8 @@
             });
     });
 
-    function checkTaskStatus(taskId, activeTabText, itemPrice, prepaidExpense,
-                             term, interestRate, itemName) {
+    function checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
+                             creditTerm, interestRate, itemName) {
         fetch(`./calculator/status/${taskId}`, {
             method: 'GET',
         })
@@ -648,8 +784,8 @@
 
                     // Добавление нового расчета в начало списка
                     console.log(data.result);
-                    addNewCalculation(data.result, activeTabText, itemPrice, prepaidExpense,
-                        term, interestRate, itemName);
+                    addNewCalculation(data.result, activeTabText, itemPrice, initialPayment,
+                        creditTerm, interestRate, itemName);
 
                 } else if (data.state === 'FAILURE') {
                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
@@ -660,8 +796,8 @@
                 } else {
                     // Если задача еще не завершена, проверка снова через некоторое время
                     setTimeout(function () {
-                        checkTaskStatus(taskId, activeTabText, itemPrice, prepaidExpense,
-                            term, interestRate, itemName);
+                        checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
+                            creditTerm, interestRate, itemName);
                     }, 2000); // Повторная проверка через 2 секунды
                 }
             })
@@ -675,7 +811,7 @@
             });
     }
 
-    function addNewCalculation(calculation, activeTabText, itemPrice, prepaidExpense, term, interestRate, itemName) {
+    function addNewCalculation(calculation, activeTabText, itemPrice, initialPayment, creditTerm, interestRate, itemName) {
         var calcListBody = document.getElementById('calc-list-body');
         var newRow = document.createElement('tr');
 
@@ -751,6 +887,5 @@
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-exchange-rates.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-modal.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-new.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-add-tranche.js') }}"></script>
 </body>
 </html>

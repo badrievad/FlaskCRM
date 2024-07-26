@@ -4,7 +4,9 @@ from pathlib import Path
 from sqlalchemy import desc
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
-from .other_utils import ValidateFields
+from .pydantic_models import ValidateFields
+
+# from .other_utils import ValidateFields
 from .. import db, cache
 from ..leasing_calculator.models import LeasCalculator, LeasingItem
 from ..leasing_calculator.celery_tasks import long_task
@@ -47,6 +49,16 @@ def get_leasing_calculator() -> render_template:
 # Эндпоинт для запуска фоновой задачи
 @leas_calc_bp.route("/crm/calculator/start-task", methods=["POST"])
 def start_task() -> jsonify:
+    data: dict = request.get_json()
+    validate_data = ValidateFields(**data)
+    logging.info(f"Наименование: {validate_data.item_name}")
+    logging.info(f"Тип ПЛ: {validate_data.item_type}")
+    logging.info(f"Цена ПЛ: {validate_data.item_price}")
+    logging.info(f"Срок кредита: {validate_data.credit_term}")
+    logging.info(f"Ставка: {validate_data.interest_rate}")
+    logging.info(f"Валюта: {validate_data.currency}")
+    logging.info(f"Транши: {validate_data.tranches}")
+
     try:
         # Проверка состояния Celery
         if not is_celery_alive(current_app.extensions["celery"]):

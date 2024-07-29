@@ -90,7 +90,16 @@ document.getElementById('term').addEventListener('input', function () {
 });
 
 document.getElementById('term-value').addEventListener('input', function () {
+    if (this.value > 100) {
+        this.value = 100;
+    }
     document.getElementById('term').value = this.value;
+});
+
+document.getElementById('term-value').addEventListener('keypress', function (event) {
+    if (event.key === '-' || event.key === '+') {
+        event.preventDefault();
+    }
 });
 
 
@@ -256,7 +265,16 @@ document.getElementById('commission').addEventListener('input', function () {
 });
 
 document.getElementById('commission-value').addEventListener('input', function () {
+    if (this.value > 5) {
+        this.value = 5;
+    }
     document.getElementById('commission').value = this.value;
+});
+
+document.getElementById('commission-value').addEventListener('keypress', function (event) {
+    if (event.key === '-' || event.key === '+' || (event.key < '0' || event.key > '9') && event.key !== '.') {
+        event.preventDefault();
+    }
 });
 
 // Расходы на страхование КАСКО

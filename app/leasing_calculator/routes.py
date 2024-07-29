@@ -6,7 +6,6 @@ from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .pydantic_models import ValidateFields
 
-# from .other_utils import ValidateFields
 from .. import db, cache
 from ..leasing_calculator.models import LeasCalculator, LeasingItem
 from ..leasing_calculator.celery_tasks import long_task
@@ -50,14 +49,8 @@ def get_leasing_calculator() -> render_template:
 @leas_calc_bp.route("/crm/calculator/start-task", methods=["POST"])
 def start_task() -> jsonify:
     data: dict = request.get_json()
-    validate_data = ValidateFields(**data)
-    logging.info(f"Наименование: {validate_data.item_name}")
-    logging.info(f"Тип ПЛ: {validate_data.item_type}")
-    logging.info(f"Цена ПЛ: {validate_data.item_price}")
-    logging.info(f"Срок кредита: {validate_data.credit_term}")
-    logging.info(f"Ставка: {validate_data.interest_rate}")
-    logging.info(f"Валюта: {validate_data.currency}")
-    logging.info(f"Транши: {validate_data.tranches}")
+    logging.info(f"DATA: {data}")
+    validate_data: dict = ValidateFields(**data).model_dump()
 
     try:
         # Проверка состояния Celery
@@ -65,10 +58,9 @@ def start_task() -> jsonify:
             logging.info("Сервер Celery недоступен")
             return jsonify({"error": "Сервер временно недоступен"}), 503
 
-        data: dict = ValidateFields(request.get_json()).get_dict()
-        logging.info(f"Поля из сайта (лизинговый калькулятор): {data}")
+        logging.info(f"Поля из сайта (лизинговый калькулятор): {validate_data}")
         user_login: dict = {"login": current_user.login}
-        task = long_task.delay({**user_login, **data})
+        task = long_task.delay({**user_login, **validate_data})
         return jsonify({"task_id": task.id}), 202
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -92,9 +84,8 @@ def get_status(task_id) -> jsonify:
                     "item_name": task.result.get("item_name"),
                     "item_price": task.result.get("item_price"),
                     "item_price_str": task.result.get("item_price_str"),
-                    "term": task.result.get("term"),
-                    "prepaid_expense": task.result.get("prepaid_expense"),
-                    "interest_rate": task.result.get("interest_rate"),
+                    # "term": task.result.get("term"),
+                    # "prepaid_expense": task.result.get("prepaid_expense"),
                     "full_path_to_file": task.result.get("full_path_to_file"),
                 }
         else:

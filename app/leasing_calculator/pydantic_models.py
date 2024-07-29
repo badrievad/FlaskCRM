@@ -31,12 +31,11 @@ class Tranches(BaseModel):
 class ValidateFields(BaseModel):
     item_type: str = Field(alias="itemType")
     item_price: float = Field(alias="itemPrice")
-    interest_rate: float = Field(alias="interestRate")
     item_name: str = Field(alias="itemName", default="-")
     currency: str
-    foreign_cost: float = Field(alias="foreignCost")
+    foreign_price: float = Field(alias="foreignCost")
     initial_payment: float = Field(alias="initialPayment")
-    credit: float
+    credit_sum: float = Field(alias="creditSum")
     credit_term: int = Field(alias="creditTerm")
     bank_commission: float = Field(alias="bankCommission")
     insurance_casko: float = Field(alias="insuranceCasko")
@@ -50,6 +49,7 @@ class ValidateFields(BaseModel):
     fedresurs: float
     gsm: float
     mail: float
+    input_period: str = Field(alias="inputPeriod")
     tranches: Tranches
 
     class Config:

@@ -485,7 +485,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="input-container" id="input-period">
+                    <div class="input-container" id="input-period-container">
                         <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема передачи</label>
                         <input type="date" name="input-period" id="input-period" value=""/>
                     </div>
@@ -614,14 +614,13 @@
 
         // Найти цену ПЛ
         var itemPrice = document.getElementById('cost-value').value;
-        var interestRate = "20"  // Значение по умолчанию
 
         // Найти наименование ПЛ
         var itemName = document.getElementById('item-name').value;
         var currency = document.getElementById('currency').value;
         var foreignCost = document.getElementById('foreign-cost-value').value;
         var initialPayment = document.getElementById('initial-payment-value').value;
-        var credit = document.getElementById('credit-value').value;
+        var creditSum = document.getElementById('credit-value').value;
         var creditTerm = document.getElementById('term-value').value;
         var bankCommission = document.getElementById('commission-value').value;
         var insuranceCasko = document.getElementById('insurance-casko-value').value;
@@ -673,6 +672,7 @@
         var tranche4PaymentDate = document.getElementById('tranche4-payment-date').value;
         var tranche5PaymentDate = document.getElementById('tranche5-payment-date').value;
 
+        console.log(inputPeriod);
         // Отправка задачи в Celery с активной вкладкой
         fetch('./calculator/start-task', {
             method: 'POST',
@@ -682,12 +682,11 @@
             body: JSON.stringify({
                 itemType: activeTabText,
                 itemPrice: itemPrice,
-                interestRate: interestRate,
                 itemName: itemName,
                 currency: currency,
                 foreignCost: foreignCost,
                 initialPayment: initialPayment,
-                credit: credit,
+                creditSum: creditSum,
                 creditTerm: creditTerm,
                 bankCommission: bankCommission,
                 insuranceCasko: insuranceCasko,
@@ -751,7 +750,7 @@
                 if (data.task_id) {
                     // Периодическая проверка состояния задачи
                     checkTaskStatus(data.task_id, activeTabText, itemPrice, initialPayment,
-                        creditTerm, interestRate, itemName);
+                        creditTerm, itemName);
                 } else {
                     showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
                     loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
@@ -769,7 +768,7 @@
     });
 
     function checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
-                             creditTerm, interestRate, itemName) {
+                             creditTerm, itemName) {
         fetch(`./calculator/status/${taskId}`, {
             method: 'GET',
         })
@@ -785,7 +784,7 @@
                     // Добавление нового расчета в начало списка
                     console.log(data.result);
                     addNewCalculation(data.result, activeTabText, itemPrice, initialPayment,
-                        creditTerm, interestRate, itemName);
+                        creditTerm, itemName);
 
                 } else if (data.state === 'FAILURE') {
                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
@@ -797,7 +796,7 @@
                     // Если задача еще не завершена, проверка снова через некоторое время
                     setTimeout(function () {
                         checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
-                            creditTerm, interestRate, itemName);
+                            creditTerm, itemName);
                     }, 2000); // Повторная проверка через 2 секунды
                 }
             })
@@ -811,7 +810,7 @@
             });
     }
 
-    function addNewCalculation(calculation, activeTabText, itemPrice, initialPayment, creditTerm, interestRate, itemName) {
+    function addNewCalculation(calculation, activeTabText, itemPrice, initialPayment, creditTerm, itemName) {
         var calcListBody = document.getElementById('calc-list-body');
         var newRow = document.createElement('tr');
 

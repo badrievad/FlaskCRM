@@ -49,8 +49,11 @@ def get_leasing_calculator() -> render_template:
 @leas_calc_bp.route("/crm/calculator/start-task", methods=["POST"])
 def start_task() -> jsonify:
     data: dict = request.get_json()
-    logging.info(f"DATA: {data}")
     validate_data: dict = ValidateFields(**data).model_dump()
+    import json
+
+    with open("data.json", "w", encoding="utf-8") as f:
+        json.dump(validate_data, f, ensure_ascii=False, indent=4)
 
     try:
         # Проверка состояния Celery

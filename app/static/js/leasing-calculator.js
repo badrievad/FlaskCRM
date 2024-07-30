@@ -19,9 +19,21 @@ document.getElementById('cost').addEventListener('input', function () {
 });
 
 document.getElementById('cost-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
+    var inputValue = this.value.trim().toLowerCase();
+
+    if (inputValue === '' || inputValue === 'не число') {
+        this.value = '0';
+        var value = 0;
+    } else {
+        var value = parseFormattedNumber(this.value);
+        if (isNaN(value)) {
+            value = 0;
+        }
+    }
+
     document.getElementById('cost-value').value = value;
     document.getElementById('cost').value = value;
+
     updateInitialPaymentValue();
     updateCreditValue(); // Обновляем значение кредита
 });
@@ -43,8 +55,19 @@ document.getElementById('initial-payment').addEventListener('input', function ()
 });
 
 document.getElementById('initial-payment-value-display').addEventListener('input', function () {
+    var inputValue = this.value.trim().toLowerCase();
+
+    if (inputValue === '' || inputValue === 'не число') {
+        this.value = '0';
+        var initialPaymentValue = 0;
+    } else {
+        var initialPaymentValue = parseFormattedNumber(this.value);
+        if (isNaN(initialPaymentValue)) {
+            initialPaymentValue = 0;
+        }
+    }
+
     var totalCost = parseInt(document.getElementById('cost-value').value);
-    var initialPaymentValue = parseFormattedNumber(this.value);
     var maxInitialPaymentValue = totalCost * 0.4999;
     if (initialPaymentValue > maxInitialPaymentValue) {
         initialPaymentValue = maxInitialPaymentValue;
@@ -56,6 +79,7 @@ document.getElementById('initial-payment-value-display').addEventListener('input
     document.getElementById('initial-payment-value').value = initialPaymentValue.toFixed(0);
     updateCreditValue(); // Добавлен вызов для обновления значения кредита
 });
+
 
 document.getElementById('initial-payment-value-display').addEventListener('blur', function () {
     var totalCost = parseInt(document.getElementById('cost-value').value);
@@ -69,7 +93,18 @@ document.getElementById('initial-payment-value-display').addEventListener('blur'
 });
 
 document.getElementById('initial-payment-percent').addEventListener('blur', function () {
-    var percentValue = parseFloat(this.value);
+    var inputValue = this.value.trim().toLowerCase();
+
+    if (inputValue === '' || inputValue === 'не число') {
+        this.value = '0';
+        var percentValue = 0;
+    } else {
+        var percentValue = parseFloat(this.value);
+        if (isNaN(percentValue)) {
+            percentValue = 0;
+        }
+    }
+
     var totalCost = parseInt(document.getElementById('cost-value').value);
 
     if (percentValue > 49.99) {
@@ -83,6 +118,14 @@ document.getElementById('initial-payment-percent').addEventListener('blur', func
     document.getElementById('initial-payment-value').value = initialPaymentValue.toFixed(0);
     document.getElementById('initial-payment-value-display').value = formatNumber(initialPaymentValue);
     updateCreditValue(); // Добавлен вызов для обновления значения кредита
+});
+
+
+document.getElementById('initial-payment-percent').addEventListener('keypress', function (event) {
+    // Разрешить только цифры и блокировать -, +
+    if (event.key === '-' || event.key === '+' || event.key === 'e') {
+        event.preventDefault();
+    }
 });
 
 document.getElementById('term').addEventListener('input', function () {
@@ -151,12 +194,21 @@ document.getElementById('foreign-cost').addEventListener('input', function () {
 
 document.getElementById('foreign-cost-display').addEventListener('input', function () {
     var value = parseFormattedNumber(this.value);
+
+    if (isNaN(value)) {
+        value = 0;
+    }
+
     document.getElementById('foreign-cost-value').value = value;
     document.getElementById('foreign-cost').value = value;
 });
 
 document.getElementById('foreign-cost-display').addEventListener('blur', function () {
-    this.value = formatNumber(parseFormattedNumber(this.value));
+    var value = parseFormattedNumber(this.value);
+    if (isNaN(value)) {
+        value = 0;
+    }
+    this.value = formatNumber(value);
 });
 
 document.getElementById('foreign-cost-display').addEventListener('keypress', allowOnlyNumbers);
@@ -233,6 +285,12 @@ function updateCreditValue() {
 
 // Обработчики для кредитного значения и процента
 document.getElementById('credit-percent').addEventListener('blur', function () {
+    var inputValue = this.value.trim().toLowerCase();
+
+    if (inputValue === '' || inputValue === 'не число') {
+        this.value = '0';
+    }
+
     updateCreditValue();
 });
 
@@ -242,10 +300,21 @@ document.getElementById('credit').addEventListener('input', function () {
 });
 
 document.getElementById('credit-value-display').addEventListener('blur', function () {
+    var inputValue = this.value.trim().toLowerCase();
+
+    if (inputValue === '' || inputValue === 'не число') {
+        this.value = '0';
+        var creditValue = 0;
+    } else {
+        var creditValue = parseFormattedNumber(this.value);
+        if (isNaN(creditValue)) {
+            creditValue = 0;
+        }
+    }
+
     var totalCost = parseInt(document.getElementById('cost-value').value);
     var initialPaymentPercent = parseFloat(document.getElementById('initial-payment-percent').value);
     var maxCreditPercent = 100 - initialPaymentPercent;
-    var creditValue = parseFormattedNumber(this.value);
     var maxCreditValue = totalCost * (maxCreditPercent / 100);
 
     if (creditValue > maxCreditValue) {
@@ -260,6 +329,7 @@ document.getElementById('credit-value-display').addEventListener('blur', functio
     document.getElementById('credit').value = creditPercent;
 });
 
+
 document.getElementById('commission').addEventListener('input', function () {
     document.getElementById('commission-value').value = this.value;
 });
@@ -268,6 +338,7 @@ document.getElementById('commission-value').addEventListener('input', function (
     if (this.value > 5) {
         this.value = 5;
     }
+
     document.getElementById('commission').value = this.value;
 });
 
@@ -282,8 +353,31 @@ document.getElementById('insurance-casko').addEventListener('input', function ()
     document.getElementById('insurance-casko-value').value = this.value;
 });
 
-document.getElementById('insurance-casko-value').addEventListener('input', function () {
-    document.getElementById('insurance-casko').value = this.value;
+document.getElementById('insurance-casko-value').addEventListener('blur', function () {
+    var value = this.value;
+
+    // Ограничение на длину значения (например, 5 символов)
+    if (value.length > 5) {
+        value = value.slice(0, 5);
+    }
+
+    // Преобразование в число и проверка на превышение 20
+    var numericValue = parseFloat(value);
+
+    if (numericValue > 20) {
+        numericValue = 20;
+    }
+
+    this.value = numericValue; // Обновить значение поля, если оно было изменено
+    document.getElementById('insurance-casko').value = numericValue;
+});
+
+
+document.getElementById('insurance-casko-value').addEventListener('keypress', function () {
+    // Разрешить только цифры и блокировать -, +
+    if (event.key === '-' || event.key === '+' || event.key === 'e') {
+        event.preventDefault();
+    }
 });
 
 // Расходы на страхование ОСАГО
@@ -291,8 +385,31 @@ document.getElementById('insurance-osago').addEventListener('input', function ()
     document.getElementById('insurance-osago-value').value = this.value;
 });
 
-document.getElementById('insurance-osago-value').addEventListener('input', function () {
-    document.getElementById('insurance-osago').value = this.value;
+document.getElementById('insurance-osago-value').addEventListener('blur', function () {
+    var value = this.value;
+
+    // Ограничение на длину значения (например, 5 символов)
+    if (value.length > 5) {
+        value = value.slice(0, 5);
+    }
+
+    // Преобразование в число и проверка на превышение 20
+    var numericValue = parseFloat(value);
+
+    if (numericValue > 20) {
+        numericValue = 20;
+    }
+
+    this.value = numericValue; // Обновить значение поля, если оно было изменено
+    document.getElementById('insurance-osago').value = numericValue;
+});
+
+
+document.getElementById('insurance-osago-value').addEventListener('keypress', function () {
+    // Разрешить только цифры и блокировать -, +
+    if (event.key === '-' || event.key === '+' || event.key === 'e') {
+        event.preventDefault();
+    }
 });
 
 // Расходы на страхование ЖИЗНИ и ЗДОРОВЬЯ
@@ -303,6 +420,11 @@ document.getElementById('health-insurance').addEventListener('input', function (
 
 document.getElementById('health-insurance-display').addEventListener('input', function () {
     var value = parseInt(this.value.replace(/\D/g, ''), 10);
+
+    if (isNaN(value) || this.value.trim().toLowerCase() === 'не число') {
+        value = 0;
+    }
+
     document.getElementById('health-insurance-value').value = value;
     document.getElementById('health-insurance').value = value;
 });
@@ -324,8 +446,30 @@ document.getElementById('agent-commission').addEventListener('input', function (
     document.getElementById('agent-commission-value').value = this.value;
 });
 
-document.getElementById('agent-commission-value').addEventListener('input', function () {
-    document.getElementById('agent-commission').value = this.value;
+document.getElementById('agent-commission-value').addEventListener('blur', function () {
+    var value = this.value;
+
+    // Ограничение на длину значения (например, 5 символов)
+    if (value.length > 5) {
+        value = value.slice(0, 5);
+    }
+
+    // Преобразование в число и проверка на превышение 20
+    var numericValue = parseFloat(value);
+
+    if (numericValue > 20) {
+        numericValue = 20;
+    }
+
+    this.value = numericValue; // Обновить значение поля, если оно было изменено
+    document.getElementById('agent-commission').value = numericValue;
+});
+
+document.getElementById('agent-commission-value').addEventListener('keypress', function () {
+    // Разрешить только цифры и блокировать -, +
+    if (event.key === '-' || event.key === '+' || event.key === 'e') {
+        event.preventDefault();
+    }
 });
 
 // Бонус менеджера
@@ -333,9 +477,25 @@ document.getElementById('manager-bonus').addEventListener('input', function () {
     document.getElementById('manager-bonus-value').value = this.value;
 });
 
-document.getElementById('manager-bonus-value').addEventListener('input', function () {
-    document.getElementById('manager-bonus').value = this.value;
+document.getElementById('manager-bonus-value').addEventListener('blur', function () {
+    var value = this.value;
+
+    // Ограничение на длину значения (например, 5 символов)
+    if (value.length > 5) {
+        value = value.slice(0, 5);
+    }
+
+    // Преобразование в число и проверка на превышение 20
+    var numericValue = parseFloat(value);
+
+    if (numericValue > 20) {
+        numericValue = 20;
+    }
+
+    this.value = numericValue; // Обновить значение поля, если оно было изменено
+    document.getElementById('manager-bonus').value = numericValue;
 });
+
 
 // Трекеры
 document.getElementById('tracker').addEventListener('input', function () {

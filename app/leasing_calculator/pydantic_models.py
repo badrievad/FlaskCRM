@@ -97,7 +97,7 @@ class ValidateFields(BaseModel):
         mode="before",
     )
     def check_empty_price(cls, value):  # noqa
-        if value in ("", None, float("nan")):
+        if value in ("", None, float("nan"), "NaN"):
             return 0.0
         return value
 

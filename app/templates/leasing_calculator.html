@@ -673,7 +673,6 @@
         var tranche4PaymentDate = document.getElementById('tranche4-payment-date').value;
         var tranche5PaymentDate = document.getElementById('tranche5-payment-date').value;
 
-        console.log(inputPeriod);
         // Отправка задачи в Celery с активной вкладкой
         fetch('./calculator/start-task', {
             method: 'POST',

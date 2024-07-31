@@ -122,17 +122,7 @@ def intensive_task_simulation(data: dict) -> dict:
         raise e
 
     result = {
-        "id": new_calc.id,
-        "title": new_title,
-        "date_ru": new_calc.date_ru,
-        "manager_login": new_calc.manager_login,
-        "item_type": new_calc.item_type,
-        "item_name": new_calc.item_name,
-        "item_price": new_calc.item_price,
-        "item_price_str": new_calc.item_price_str,
-        "term": new_calc.term,
-        "prepaid_expense": new_calc.prepaid_expense,
-        "interest_rate": new_calc.interest_rate,
+        **new_calc.to_dict(),
         "full_path_to_file": file_path,
     }
 

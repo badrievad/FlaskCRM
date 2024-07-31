@@ -42,6 +42,40 @@ class LeasCalculator(db.Model):
 
     tranche = relationship("Tranches", back_populates="leas_calculator", uselist=False)
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "item_type": self.item_type,
+            "item_price": self.item_price,
+            "item_price_str": self.item_price_str,
+            "item_name": self.item_name,
+            "currency": self.currency,
+            "foreign_price": self.foreign_price,
+            "initial_payment": self.initial_payment,
+            "credit_sum": self.credit_sum,
+            "credit_term": self.credit_term,
+            "bank_commission": self.bank_commission,
+            "insurance_casko": self.insurance_casko,
+            "insurance_osago": self.insurance_osago,
+            "health_insurance": self.health_insurance,
+            "other_insurance": self.other_insurance,
+            "agent_commission": self.agent_commission,
+            "manager_bonus": self.manager_bonus,
+            "tracker": self.tracker,
+            "mayak": self.mayak,
+            "fedresurs": self.fedresurs,
+            "gsm": self.gsm,
+            "mail": self.mail,
+            "input_period": self.input_period,
+            "trance_id": self.trance_id,
+            "date": self.date,
+            "date_ru": self.date_ru,
+            "path_to_file": self.path_to_file,
+            "manager_login": self.manager_login,
+            "title": self.title,
+            "deal_id": self.deal_id,
+        }
+
 
 class Tranches(db.Model):
     __tablename__ = "tranches"

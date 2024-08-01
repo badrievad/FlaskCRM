@@ -47,6 +47,8 @@ class Tranches(BaseModel):
 
 class ValidateFields(BaseModel):
     item_type: str = Field(alias="itemType")
+    item_year: int = Field(alias="itemYear", default=datetime.now().year)
+    item_condition: str = Field(alias="itemCondition")
     item_price: float = Field(alias="itemPrice", default=0.0)
     item_name: str = Field(alias="itemName", default="Отсутствует наименование ПЛ")
     currency: str
@@ -111,6 +113,12 @@ class ValidateFields(BaseModel):
     def check_term(cls, value):  # noqa
         if value in ("", None, float("nan")):
             return 1
+        return value
+
+    @field_validator("item_year", mode="before")
+    def chech_year(cls, value):  # noqa
+        if value in ("", None, float("nan")):
+            return datetime.now().year
         return value
 
     class Config:

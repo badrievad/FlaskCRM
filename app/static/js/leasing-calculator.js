@@ -677,3 +677,56 @@ document.getElementById('mail').addEventListener('input', function () {
     document.getElementById('mail-display').value = formatNumber(value);
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const newBtn = document.getElementById('new-btn');
+    const usedBtn = document.getElementById('used-btn');
+    const itemCondition = document.getElementById('item-condition');
+
+    function setActiveButton(activeBtn, inactiveBtn) {
+        activeBtn.classList.add('active');
+        inactiveBtn.classList.remove('active');
+        itemCondition.value = activeBtn.getAttribute('data-value');
+    }
+
+    newBtn.addEventListener('click', function () {
+        setActiveButton(newBtn, usedBtn);
+    });
+
+    usedBtn.addEventListener('click', function () {
+        setActiveButton(usedBtn, newBtn);
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const yearInput = document.getElementById('production-year-value');
+    const currentYear = new Date().getFullYear();
+    const maxYear = currentYear + 1;
+
+    yearInput.value = currentYear;
+
+    yearInput.addEventListener('blur', function () {
+        let value = this.value.replace(/[^0-9]/g, '').slice(0, 4); // Удаляем все символы, кроме цифр, и ограничиваем до 4 символов
+        this.value = value;
+
+        if (value && parseInt(value) < 1950) {
+            this.value = 1950;
+        } else if (value && parseInt(value) > maxYear) {
+            this.value = maxYear;
+        }
+    });
+
+    yearInput.addEventListener('blur', function () {
+        if (parseInt(this.value) < 1950) {
+            this.value = 1950;
+        } else if (parseInt(this.value) > maxYear) {
+            this.value = maxYear;
+        }
+    });
+
+    yearInput.addEventListener('keypress', function (e) {
+        const charCode = e.charCode || e.keyCode;
+        if (charCode === 43 || charCode === 45 || charCode === 101) {
+            e.preventDefault();
+        }
+    });
+});

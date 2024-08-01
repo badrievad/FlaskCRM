@@ -138,8 +138,26 @@
                         <input type="text" id="item-name" name="item-name" maxlength="500">
                     </div>
                     <br>
+                    <div class="input-container-item-condition">
+                        <label>Состояние имущества:</label>
+                        <input type="hidden" id="item-condition" name="item-condition" value="new">
+                    </div>
+                    <div class="button-group">
+                        <button id="new-btn" class="toggle-btn active" data-value="new">Новое</button>
+                        <button id="used-btn" class="toggle-btn" data-value="used">Б/У</button>
+                    </div>
+                    <br>
+                    <div class="input-container">
+                        <label for="production-year">Год выпуска/изготовления ПЛ</label>
+                    </div>
+                    <div class="input-container">
+                        <input type="number" id="production-year-value" name="production-year-value" value="">
+                    </div>
+                    <br>
                     <div class="input-container">
                         <label for="currency">Валюта сделки</label>
+                    </div>
+                    <div class="input-container">
                         <select id="currency" name="currency">
                             <option value="rub" data-symbol="₽">₽</option>
                             <option value="usd" data-symbol="$">$</option>
@@ -148,6 +166,7 @@
                         </select>
                     </div>
                     <br>
+                    <div class="line"></div>
                     <div id="foreign-cost-section" class="foreign-cost-container">
                         <div class="input-container">
                             <label for="foreign-cost">Стоимость имущества в иностранной валюте</label>
@@ -251,6 +270,7 @@
                         <span>3%</span>
                     </div>
                 </div>
+                <div class="line"></div>
                 <div id="tranches-container" class="table-container">
                     <table id="tranches-table">
                         <thead>
@@ -315,6 +335,7 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="line"></div>
                 <h5>Расходы на страхование: </h5><br>
                 <div class="form-group">
                     <div class="input-container">
@@ -381,6 +402,7 @@
                     </div>
                 </div>
                 <br>
+                <div class="line"></div>
                 <h5>Накладные расходы: </h5><br>
                 <div class="form-group">
                     <div class="input-container">
@@ -417,7 +439,8 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Трекеры, руб.</label>
-                        <input type="text" id="tracker-display" name="tracker-display" value="0,00" placeholder="руб." maxlength="7">
+                        <input type="text" id="tracker-display" name="tracker-display" value="0,00" placeholder="руб."
+                               maxlength="7">
                         <input type="hidden" id="tracker-value" name="tracker-value" value="0">
                     </div>
                     <div class="slider-container">
@@ -431,7 +454,8 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Маячки, руб.</label>
-                        <input type="text" id="mayak-display" name="mayak-display" value="0,00" placeholder="руб." maxlength="7">
+                        <input type="text" id="mayak-display" name="mayak-display" value="0,00" placeholder="руб."
+                               maxlength="7">
                         <input type="hidden" id="mayak-value" name="mayak-value" value="0">
                     </div>
                     <div class="slider-container">
@@ -460,7 +484,8 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>ГСМ, руб.</label>
-                        <input type="text" id="gsm-display" name="gsm-display" value="0,00" placeholder="руб." maxlength="7">
+                        <input type="text" id="gsm-display" name="gsm-display" value="0,00" placeholder="руб."
+                               maxlength="7">
                         <input type="hidden" id="gsm-value" name="gsm-value" value="0">
                     </div>
                     <div class="slider-container">
@@ -474,7 +499,8 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Почтовые расходы, руб.</label>
-                        <input type="text" id="mail-display" name="mail-display" value="0,00" placeholder="руб." maxlength="7">
+                        <input type="text" id="mail-display" name="mail-display" value="0,00" placeholder="руб."
+                               maxlength="7">
                         <input type="hidden" id="mail-value" name="mail-value" value="0">
                     </div>
                     <div class="slider-container">
@@ -491,6 +517,7 @@
                         <input type="date" name="input-period" id="input-period" value=""/>
                     </div>
                 </div>
+                <div class="line"></div>
             </div>
             <div class="results">
                 <div class="exchange-rates">
@@ -522,9 +549,8 @@
                             <td id="today-eur"> ₽</td>
                         </tr>
                     </table>
-                </div>
+                </div><br>
                 <div class="key-rate-container">
-                    <div class="line"></div>
                     <div class="label">Ключевая ставка</div>
                     <div class="date-rate-container">
                         <div class="date"></div>
@@ -613,10 +639,15 @@
         var itemType = document.querySelector('.tabs button.active');
         var activeTabText = itemType ? itemType.innerText.trim() : '';
 
+        // Найти состояние имущества
+        var itemCondition = document.querySelector('.button-group button.active')
+        var conditionText = itemCondition ? itemCondition.innerText.trim() : '';
+
         // Найти цену ПЛ
         var itemPrice = document.getElementById('cost-value').value;
 
-        // Найти наименование ПЛ
+        // Найти остальные поля
+        var itemYear = document.getElementById('production-year-value').value;
         var itemName = document.getElementById('item-name').value;
         var currency = document.getElementById('currency').value;
         var foreignCost = document.getElementById('foreign-cost-value').value;
@@ -681,6 +712,8 @@
             },
             body: JSON.stringify({
                 itemType: activeTabText,
+                itemCondition: conditionText,
+                itemYear: itemYear,
                 itemPrice: itemPrice,
                 itemName: itemName,
                 currency: currency,

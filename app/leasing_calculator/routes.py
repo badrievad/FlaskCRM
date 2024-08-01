@@ -50,6 +50,8 @@ def get_leasing_calculator() -> render_template:
 def start_task() -> jsonify:
     data: dict = request.get_json()
     validate_data: dict = ValidateFields(**data).model_dump()
+
+    #  Нужно будет удалить после всех проверок
     import json
 
     with open("data.json", "w", encoding="utf-8") as f:

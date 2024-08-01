@@ -8,6 +8,8 @@ class LeasCalculator(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     item_type = db.Column(db.String(150), nullable=True)
+    item_year = db.Column(db.Integer, nullable=True)
+    item_condition = db.Column(db.String(50), nullable=True)
     item_price = db.Column(db.Numeric(precision=10, scale=2), nullable=True)
     item_price_str = db.Column(db.String(50), nullable=True)
     item_name = db.Column(db.String(500), nullable=True)
@@ -46,6 +48,8 @@ class LeasCalculator(db.Model):
         return {
             "id": self.id,
             "item_type": self.item_type,
+            "item_year": self.item_year,
+            "item_condition": self.item_condition,
             "item_price": self.item_price,
             "item_price_str": self.item_price_str,
             "item_name": self.item_name,

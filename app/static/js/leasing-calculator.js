@@ -11,7 +11,7 @@ function parseFormattedNumber(value) {
 }
 
 document.getElementById('cost').addEventListener('input', function () {
-    var value = parseInt(this.value);
+    var value = parseFloat(this.value);
     document.getElementById('cost-value').value = value;
     document.getElementById('cost-display').value = formatNumber(value);
     updateInitialPaymentValue();
@@ -45,7 +45,7 @@ document.getElementById('cost-display').addEventListener('blur', function () {
 
 document.getElementById('initial-payment').addEventListener('input', function () {
     var percentValue = parseFloat(this.value);
-    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var totalCost = parseFloat(document.getElementById('cost-value').value);
     var initialPaymentValue = (percentValue / 100) * totalCost;
 
     document.getElementById('initial-payment-percent').value = percentValue.toFixed(2);
@@ -67,7 +67,7 @@ document.getElementById('initial-payment-value-display').addEventListener('input
         }
     }
 
-    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var totalCost = parseFloat(document.getElementById('cost-value').value);
     var maxInitialPaymentValue = totalCost * 0.4999;
     if (initialPaymentValue > maxInitialPaymentValue) {
         initialPaymentValue = maxInitialPaymentValue;
@@ -82,7 +82,7 @@ document.getElementById('initial-payment-value-display').addEventListener('input
 
 
 document.getElementById('initial-payment-value-display').addEventListener('blur', function () {
-    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var totalCost = parseFloat(document.getElementById('cost-value').value);
     var initialPaymentValue = parseFormattedNumber(this.value);
     var maxInitialPaymentValue = totalCost * 0.4999;
     if (initialPaymentValue > maxInitialPaymentValue) {
@@ -105,7 +105,7 @@ document.getElementById('initial-payment-percent').addEventListener('blur', func
         }
     }
 
-    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var totalCost = parseFloat(document.getElementById('cost-value').value);
 
     if (percentValue > 49.99) {
         percentValue = 49.99;
@@ -187,7 +187,7 @@ document.getElementById('initial-payment-value-display').addEventListener('keypr
 document.getElementById('credit-value-display').addEventListener('keypress', allowOnlyNumbers);
 
 document.getElementById('foreign-cost').addEventListener('input', function () {
-    var value = parseInt(this.value);
+    var value = parseFloat(this.value);
     document.getElementById('foreign-cost-value').value = value;
     document.getElementById('foreign-cost-display').value = formatNumber(value);
 });
@@ -258,7 +258,7 @@ document.getElementById('currency').addEventListener('change', function () {
 
 // Обработчик для слайдера foreign-cost
 document.getElementById('foreign-cost').addEventListener('input', function () {
-    var value = parseInt(this.value);
+    var value = parseFloat(this.value);
     document.getElementById('foreign-cost-value').value = value;
     document.getElementById('foreign-cost-display').value = formatNumber(value);
     updateCostInRubles();  // Обновляем стоимость в рублях при изменении слайдера
@@ -312,7 +312,7 @@ document.getElementById('credit-value-display').addEventListener('blur', functio
         }
     }
 
-    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var totalCost = parseFloat(document.getElementById('cost-value').value);
     var initialPaymentPercent = parseFloat(document.getElementById('initial-payment-percent').value);
     var maxCreditPercent = 100 - initialPaymentPercent;
     var maxCreditValue = totalCost * (maxCreditPercent / 100);
@@ -763,8 +763,11 @@ function populateForm(data) {
     document.getElementById('credit-percent').value = calc.credit_sum_percent;
     updateInitialPaymentValue();
     updateCreditValue();
+    updateCostInRubles();
     document.getElementById('term-value').value = calc.credit_term;
+    document.getElementById('term').value = calc.credit_term;
     document.getElementById('commission-value').value = calc.bank_commission;
+    document.getElementById('commission').value = calc.bank_commission;
     document.getElementById('insurance-casko-value').value = calc.insurance_casko;
     document.getElementById('insurance-osago-value').value = calc.insurance_osago;
     document.getElementById('health-insurance-value').value = calc.health_insurance;

@@ -7,7 +7,7 @@ from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .pydantic_models import ValidateFields
 
 from .. import db, cache
-from ..leasing_calculator.models import LeasCalculator, LeasingItem
+from ..leasing_calculator.models import LeasCalculator, LeasingItem, Tranches
 from ..leasing_calculator.celery_tasks import long_task
 from ..celery_utils import is_celery_alive
 
@@ -238,3 +238,25 @@ def get_key_rate() -> jsonify:
     api = CentralBankKeyRate()
     key_rate = api.get_key_rate()
     return jsonify(key_rate)
+
+
+@leas_calc_bp.route(
+    "/crm/calculator/copy-commercial-offer/<int:calc_id>", methods=["GET"]
+)
+def get_commercial_offer(calc_id: int) -> jsonify:
+    try:
+        calc: LeasCalculator = LeasCalculator.query.filter_by(id=calc_id).first()
+        if calc is None:
+            return jsonify({"success": False, "message": "Calculation not found"}), 404
+
+        tranches: Tranches = Tranches.query.filter_by(id=calc.trance_id).first()
+
+        result = {
+            "calc": calc.to_dict(),
+            "tranches": tranches.to_dict(),
+        }
+        logging.info(result)
+        return jsonify({"success": True, "data": result})
+
+    except Exception as e:
+        return jsonify({"success": False, "message": str(e)}), 500

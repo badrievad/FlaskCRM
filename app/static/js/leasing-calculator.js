@@ -154,7 +154,7 @@ document.querySelectorAll('.tabs button').forEach(button => {
 });
 
 function updateInitialPaymentValue() {
-    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var totalCost = parseFloat(document.getElementById('cost-value').value);
     var percentValue = parseFloat(document.getElementById('initial-payment-percent').value);
     var value = (percentValue / 100) * totalCost;
 
@@ -265,7 +265,7 @@ document.getElementById('foreign-cost').addEventListener('input', function () {
 });
 
 function updateCreditValue() {
-    var totalCost = parseInt(document.getElementById('cost-value').value);
+    var totalCost = parseFloat(document.getElementById('cost-value').value);
     var creditPercent = parseFloat(document.getElementById('credit-percent').value);
     var initialPaymentPercent = parseFloat(document.getElementById('initial-payment-percent').value);
     var maxCreditPercent = 100 - initialPaymentPercent;
@@ -730,3 +730,155 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 });
+
+function populateForm(data) {
+    var calc = data.data.calc;
+    var tranches = data.data.tranches;
+
+    console.log(data);
+
+    if (calc.currency !== 'rub') {
+        document.getElementById('foreign-cost-section').classList.add('show');
+        // Обновление лейблов валюты
+    } else {
+        document.getElementById('foreign-cost-section').classList.remove('show');
+    }
+
+    // Заполните основные поля
+    document.getElementById('item-name').value = calc.item_name;
+    document.getElementById('production-year-value').value = calc.item_year;
+    document.getElementById('cost-value').value = calc.item_price;
+    document.getElementById('cost-display').value = calc.item_price_str;
+    document.getElementById('foreign-cost-value').value = calc.foreign_price;
+    document.getElementById('foreign-cost-display').value = calc.foreign_price_str;
+    document.getElementById('foreign-cost').value = calc.foreign_price;
+
+    // document.getElementById('initial-payment-value').value = calc.initial_payment;
+    // document.getElementById('initial-payment-value-display').value = calc.initial_payment_str;
+    document.getElementById('initial-payment').value = calc.initial_payment_percent;
+    document.getElementById('initial-payment-percent').value = calc.initial_payment_percent;
+    // document.getElementById('credit-value').value = calc.credit_sum;
+    // document.getElementById('credit-value-display').value = calc.credit_sum_str;
+    document.getElementById('credit').value = calc.credit_sum_percent;
+    document.getElementById('credit-percent').value = calc.credit_sum_percent;
+    updateInitialPaymentValue();
+    updateCreditValue();
+    document.getElementById('term-value').value = calc.credit_term;
+    document.getElementById('commission-value').value = calc.bank_commission;
+    document.getElementById('insurance-casko-value').value = calc.insurance_casko;
+    document.getElementById('insurance-osago-value').value = calc.insurance_osago;
+    document.getElementById('health-insurance-value').value = calc.health_insurance;
+    document.getElementById('health-insurance-display').value = calc.health_insurance_str;
+    document.getElementById('other-insurance-value').value = calc.other_insurance;
+    document.getElementById('other-insurance-display').value = calc.other_insurance_str;
+    document.getElementById('agent-commission-value').value = calc.agent_commission;
+    document.getElementById('manager-bonus-value').value = calc.manager_bonus;
+    document.getElementById('tracker-value').value = calc.tracker;
+    document.getElementById('tracker-display').value = calc.tracker_str;
+    document.getElementById('mayak-value').value = calc.mayak;
+    document.getElementById('mayak-display').value = calc.mayak_str;
+    document.getElementById('fedresurs-value').value = calc.fedresurs;
+    document.getElementById('fedresurs-display').value = calc.fedresurs_str;
+    document.getElementById('gsm-value').value = calc.gsm;
+    document.getElementById('gsm-display').value = calc.gsm_str;
+    document.getElementById('mail-value').value = calc.mail;
+    document.getElementById('mail-display').value = calc.mail_str;
+    document.getElementById('input-period').value = formatDate(calc.input_period);
+
+    // Установите правильное значение для item_type
+    var itemTypeButtons = document.querySelectorAll('.tabs button');
+    itemTypeButtons.forEach(button => {
+        if (button.innerText.trim() === calc.item_type) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+
+    // Установите правильное значение для item_condition
+    var conditionButtons = document.querySelectorAll('.button-group button');
+    conditionButtons.forEach(button => {
+        if (button.innerText.trim() === calc.item_condition) {
+            button.classList.add('active');
+        } else {
+            button.classList.remove('active');
+        }
+    });
+
+    // Установите правильное значение для currency
+    var currencySelector = document.getElementById('currency');
+    var currencyOptions = currencySelector.options;
+    for (var i = 0; i < currencyOptions.length; i++) {
+        if (currencyOptions[i].value === calc.currency) {
+            currencySelector.selectedIndex = i;
+            break;
+        }
+    }
+
+    // Заполните поля траншей
+    if (tranches) {
+        document.getElementById('tranche1-size').value = tranches.tranche_1_size;
+        document.getElementById('tranche1-rate').value = tranches.tranche_1_rate;
+        document.getElementById('tranche1-fee').value = tranches.tranche_1_fee;
+        document.getElementById('tranche1-own-fee').value = tranches.tranche_1_own_fee;
+        document.getElementById('tranche1-credit-date').value = formatDate(tranches.tranche_1_credit_date);
+        document.getElementById('tranche1-payment-date').value = formatDate(tranches.tranche_1_payment_date);
+        document.getElementById('tranche2-size').value = tranches.tranche_2_size;
+        document.getElementById('tranche2-rate').value = tranches.tranche_2_rate;
+        document.getElementById('tranche2-fee').value = tranches.tranche_2_fee;
+        document.getElementById('tranche2-own-fee').value = tranches.tranche_2_own_fee;
+        document.getElementById('tranche2-credit-date').value = formatDate(tranches.tranche_2_credit_date);
+        document.getElementById('tranche2-payment-date').value = formatDate(tranches.tranche_2_payment_date);
+        document.getElementById('tranche3-size').value = tranches.tranche_3_size;
+        document.getElementById('tranche3-rate').value = tranches.tranche_3_rate;
+        document.getElementById('tranche3-fee').value = tranches.tranche_3_fee;
+        document.getElementById('tranche3-own-fee').value = tranches.tranche_3_own_fee;
+        document.getElementById('tranche3-credit-date').value = formatDate(tranches.tranche_3_credit_date);
+        document.getElementById('tranche3-payment-date').value = formatDate(tranches.tranche_3_payment_date);
+        document.getElementById('tranche4-size').value = tranches.tranche_4_size;
+        document.getElementById('tranche4-rate').value = tranches.tranche_4_rate;
+        document.getElementById('tranche4-fee').value = tranches.tranche_4_fee;
+        document.getElementById('tranche4-own-fee').value = tranches.tranche_4_own_fee;
+        document.getElementById('tranche4-credit-date').value = formatDate(tranches.tranche_4_credit_date);
+        document.getElementById('tranche4-payment-date').value = formatDate(tranches.tranche_4_payment_date);
+        document.getElementById('tranche5-size').value = tranches.tranche_5_size;
+        document.getElementById('tranche5-rate').value = tranches.tranche_5_rate;
+        document.getElementById('tranche5-fee').value = tranches.tranche_5_fee;
+        document.getElementById('tranche5-own-fee').value = tranches.tranche_5_own_fee;
+        document.getElementById('tranche5-credit-date').value = formatDate(tranches.tranche_5_credit_date);
+        document.getElementById('tranche5-payment-date').value = formatDate(tranches.tranche_5_payment_date);
+    }
+    closeModal()
+}
+
+
+document.querySelector('.copy-btn').addEventListener('click', function () {
+    var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
+
+    if (confirm("Вы хотите создать КП на основе этой?")) {
+        fetch(`./calculator/copy-commercial-offer/${calcId}`, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    populateForm(data);
+                } else {
+                    alert("Ошибка при получении данных КП");
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert("Ошибка при получении данных КП");
+            });
+    }
+});
+
+function formatDate(dateString) {
+    if (!dateString) return "";
+    var date = new Date(dateString);
+    var year = date.getFullYear();
+    var month = String(date.getMonth() + 1).padStart(2, '0');
+    var day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}

@@ -851,6 +851,7 @@ function populateForm(data) {
         document.getElementById('tranche5-credit-date').value = formatDate(tranches.tranche_5_credit_date);
         document.getElementById('tranche5-payment-date').value = formatDate(tranches.tranche_5_payment_date);
     }
+    updateCostInRubles();
     closeModal()
 }
 

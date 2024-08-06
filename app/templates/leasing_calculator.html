@@ -73,24 +73,47 @@
         }
 
         .fa-trash-can {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            color: #c55c5c;
-            transition: color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 14px; /* Размер иконки */
+            text-align: center;
         }
 
-        td:hover .fa-trash-can {
-            color: #4b0404;
+        .fa-trash-can:hover {
+            background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
+            transform: scale(1.5); /* Увеличение размера при наведении */
         }
 
         .fa-file-pdf {
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            color: #75a17e;
-            transition: color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
+            font-size: 14px; /* Размер иконки */
+            text-align: center;
         }
 
-        td:hover .fa-file-pdf {
-            color: #23412b;
+        .fa-file-pdf:hover {
+            background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
+            transform: scale(1.5); /* Увеличение размера при наведении */
         }
+
     </style>
 </head>
 <body>
@@ -573,6 +596,9 @@
                 <button class="btn-hover color-5" id="calculate-button">Сформировать КП</button>
                 <div class="loader" id="loader"></div>
             </div>
+        </div>
+        <div class="scroll-to-top" onclick="simpleScrollTest()">
+            <i class="fa-solid fa-arrow-up"></i>
         </div>
     </div>
     <br>

@@ -126,7 +126,6 @@
         </div>
         <div class="modal-footer">
             <button class="copy-btn"><i class="fa-regular fa-copy"></i> Копия КП</button>
-            </button>
             <button class="save-btn" onclick="saveChanges()"><i class="fa-regular fa-floppy-disk"></i> Сохранить
                 изменения
             </button>
@@ -321,19 +320,19 @@
                         <tbody>
                         <tr>
                             <td>Размер транша, %</td>
-                            <td><input type="text" name="tranche1-size" id="tranche1-size" value="20"/></td>
-                            <td><input type="text" name="tranche2-size" id="tranche2-size" value="80"/></td>
-                            <td><input type="text" name="tranche3-size" id="tranche3-size" value="0"/></td>
-                            <td><input type="text" name="tranche4-size" id="tranche4-size" value="0"/></td>
-                            <td><input type="text" name="tranche5-size" id="tranche5-size" value="0"/></td>
+                            <td><input type="text" name="tranche1-size" id="tranche1-size" value="20" maxlength="3"/></td>
+                            <td><input type="text" name="tranche2-size" id="tranche2-size" value="80" maxlength="3"/></td>
+                            <td><input type="text" name="tranche3-size" id="tranche3-size" value="0" maxlength="3"/></td>
+                            <td><input type="text" name="tranche4-size" id="tranche4-size" value="0" maxlength="3"/></td>
+                            <td><input type="text" name="tranche5-size" id="tranche5-size" value="0" maxlength="3"/></td>
                         </tr>
                         <tr>
                             <td>Ставка банка, %</td>
-                            <td><input type="text" name="tranche1-rate" id="tranche1-rate" value="20"/></td>
-                            <td><input type="text" name="tranche2-rate" id="tranche2-rate" value="20"/></td>
-                            <td><input type="text" name="tranche3-rate" id="tranche3-rate" value="0"/></td>
-                            <td><input type="text" name="tranche4-rate" id="tranche4-rate" value="0"/></td>
-                            <td><input type="text" name="tranche5-rate" id="tranche5-rate" value="0"/></td>
+                            <td><input type="text" name="tranche1-rate" id="tranche1-rate" value="20" maxlength="3"/></td>
+                            <td><input type="text" name="tranche2-rate" id="tranche2-rate" value="20" maxlength="3"/></td>
+                            <td><input type="text" name="tranche3-rate" id="tranche3-rate" value="0" maxlength="3"/></td>
+                            <td><input type="text" name="tranche4-rate" id="tranche4-rate" value="0" maxlength="3"/></td>
+                            <td><input type="text" name="tranche5-rate" id="tranche5-rate" value="0" maxlength="3"/></td>
                         </tr>
                         <tr>
                             <td>Вознаграждение лизинговой компании, %</td>
@@ -707,11 +706,24 @@
         var mail = document.getElementById('mail-value').value;
         var inputPeriod = document.getElementById('input-period').value;
 
-        var tranche1Size = document.getElementById('tranche1-size').value;
-        var tranche2Size = document.getElementById('tranche2-size').value;
-        var tranche3Size = document.getElementById('tranche3-size').value;
-        var tranche4Size = document.getElementById('tranche4-size').value;
-        var tranche5Size = document.getElementById('tranche5-size').value;
+        var tranche1Size = parseFloat(document.getElementById('tranche1-size').value.replace(',', '.')) || 0;
+        var tranche2Size = parseFloat(document.getElementById('tranche2-size').value.replace(',', '.')) || 0;
+        var tranche3Size = parseFloat(document.getElementById('tranche3-size').value.replace(',', '.')) || 0;
+        var tranche4Size = parseFloat(document.getElementById('tranche4-size').value.replace(',', '.')) || 0;
+        var tranche5Size = parseFloat(document.getElementById('tranche5-size').value.replace(',', '.')) || 0;
+
+        // Суммирование значений
+        var totalSize = tranche1Size + tranche2Size + tranche3Size + tranche4Size + tranche5Size;
+
+        // Проверка суммы
+        if (totalSize !== 100) {
+            showError('Сумма всех траншей должна быть равна 100%. Текущая сумма: ' + totalSize + '%', 'Ошибка валидации');
+            loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+            calculateButton.disabled = false; // Разблокировать кнопку
+            calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+            scrollToTrancheTable();
+            return false;
+        }
 
         var tranche1Rate = document.getElementById('tranche1-rate').value;
         var tranche2Rate = document.getElementById('tranche2-rate').value;
@@ -852,6 +864,7 @@
                     calculateButton.disabled = false; // Разблокировать кнопку
                     calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     showSuccess('Расчет по лизингу создан', 'Успешно');
+                    scrollToOffers();
 
                     // Добавление нового расчета в начало списка
                     console.log(data.result);
@@ -918,7 +931,7 @@
             onclick: null,
             showDuration: "300",
             hideDuration: "1000",
-            timeOut: "3000",
+            timeOut: "5000",
             extendedTimeOut: "1000",
             showEasing: "swing",
             hideEasing: "linear",
@@ -939,7 +952,7 @@
             onclick: null,
             showDuration: "300",
             hideDuration: "1000",
-            timeOut: "5000",
+            timeOut: "6000",
             extendedTimeOut: "1000",
             showEasing: "swing",
             hideEasing: "linear",

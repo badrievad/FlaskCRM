@@ -763,23 +763,34 @@ function populateForm(data) {
     document.getElementById('commission-value').value = calc.bank_commission;
     document.getElementById('commission').value = calc.bank_commission;
     document.getElementById('insurance-casko-value').value = calc.insurance_casko;
+    document.getElementById('insurance-casko').value = calc.insurance_casko;
     document.getElementById('insurance-osago-value').value = calc.insurance_osago;
+    document.getElementById('insurance-osago').value = calc.insurance_osago;
     document.getElementById('health-insurance-value').value = calc.health_insurance;
     document.getElementById('health-insurance-display').value = calc.health_insurance_str;
+    document.getElementById('health-insurance').value = calc.health_insurance;
     document.getElementById('other-insurance-value').value = calc.other_insurance;
     document.getElementById('other-insurance-display').value = calc.other_insurance_str;
+    document.getElementById('other-insurance').value = calc.other_insurance;
     document.getElementById('agent-commission-value').value = calc.agent_commission;
+    document.getElementById('agent-commission').value = calc.agent_commission;
     document.getElementById('manager-bonus-value').value = calc.manager_bonus;
+    document.getElementById('manager-bonus').value = calc.manager_bonus;
     document.getElementById('tracker-value').value = calc.tracker;
     document.getElementById('tracker-display').value = calc.tracker_str;
+    document.getElementById('tracker').value = calc.tracker;
     document.getElementById('mayak-value').value = calc.mayak;
     document.getElementById('mayak-display').value = calc.mayak_str;
+    document.getElementById('mayak').value = calc.mayak;
     document.getElementById('fedresurs-value').value = calc.fedresurs;
     document.getElementById('fedresurs-display').value = calc.fedresurs_str;
+    document.getElementById('fedresurs').value = calc.fedresurs;
     document.getElementById('gsm-value').value = calc.gsm;
     document.getElementById('gsm-display').value = calc.gsm_str;
+    document.getElementById('gsm').value = calc.gsm;
     document.getElementById('mail-value').value = calc.mail;
     document.getElementById('mail-display').value = calc.mail_str;
+    document.getElementById('mail').value = calc.mail;
     document.getElementById('input-period').value = formatDate(calc.input_period);
 
     // Установите правильное значение для item_type
@@ -860,7 +871,28 @@ function simpleScrollTest() {
         left: 0,
         behavior: 'smooth'
     });
+}
 
+function scrollToOffers() {
+    const element = document.getElementById('created-proposals');
+    if (element) {
+        window.scroll({
+            top: element.offsetTop,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+}
+
+function scrollToTrancheTable() {
+    const element = document.getElementById('tranches-table');
+    if (element) {
+        window.scroll({
+            top: element.offsetTop,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
 }
 
 document.querySelector('.copy-btn').addEventListener('click', function () {

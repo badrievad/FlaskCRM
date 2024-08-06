@@ -53,6 +53,15 @@ html {
     background-color: #ccc;
 }
 
+.modal-footer .copy-btn {
+    background-color: rgba(74, 148, 196, 0.85);
+    color: white;
+}
+
+.modal-footer .copy-btn:hover {
+    background-color: #4a94c4;
+}
+
 .modal-footer .save-btn {
     background-color: #69a86a;
     color: white;

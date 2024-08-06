@@ -862,6 +862,7 @@ function populateForm(data) {
     }
     closeModal();
     simpleScrollTest();
+    showSuccess('Данные из предыдущего расчета были успешно скопированы', 'Выполнено');
 
 }
 

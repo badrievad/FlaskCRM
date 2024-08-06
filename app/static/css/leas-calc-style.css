@@ -3,7 +3,7 @@
     margin-left: 250px;
     padding: 20px;
     flex-grow: 1;
-    overflow-y: auto;
+    overflow: visible;
     transition: margin-left 0.5s ease-in-out;
 }
 
@@ -437,7 +437,7 @@ select:hover {
     transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
     max-height: 0;
     opacity: 0;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .foreign-cost-container.show {

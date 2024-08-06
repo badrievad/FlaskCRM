@@ -756,7 +756,7 @@ function populateForm(data) {
     // document.getElementById('initial-payment-value').value = calc.initial_payment;
     // document.getElementById('initial-payment-value-display').value = calc.initial_payment_str;
     document.getElementById('initial-payment').value = calc.initial_payment_percent;
-    document.getElementById('initial-payment-percent').value = calc.initial_payment_percent;
+    document.getElementById('initial-payment-percent').value = calc.initial_payment_percent.toFixed(2);
     // document.getElementById('credit-value').value = calc.credit_sum;
     // document.getElementById('credit-value-display').value = calc.credit_sum_str;
     document.getElementById('credit').value = calc.credit_sum_percent;
@@ -852,9 +852,20 @@ function populateForm(data) {
         document.getElementById('tranche5-payment-date').value = formatDate(tranches.tranche_5_payment_date);
     }
     updateCostInRubles();
-    closeModal()
+    closeModal();
+    simpleScrollTest();
+
 }
 
+function simpleScrollTest() {
+    console.log("simpleScrollTest");
+    window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+    });
+
+}
 
 document.querySelector('.copy-btn').addEventListener('click', function () {
     var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');

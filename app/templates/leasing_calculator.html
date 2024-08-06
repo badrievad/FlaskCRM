@@ -58,10 +58,12 @@
             padding: 0;
             display: flex;
             height: 100vh;
-            overflow: hidden;
+            overflow: auto;
             background-image: url({{ user_fon }}); /* Укажите путь к вашему изображению */
             background-position: center; /* Изображение будет центрировано */
             background-repeat: no-repeat; /* Изображение не будет повторяться */
+            background-attachment: fixed; /* изменено со scroll на fixed */
+            background-size: cover;
         }
 
         .button-disabled {
@@ -208,7 +210,7 @@
                                    value="100 000,00" placeholder="₽">
                             <input type="hidden" id="initial-payment-value" name="initial-payment-value" value="100000"
                                    placeholder="₽">
-                            <input type="number" id="initial-payment-percent" name="initial-payment-percent" value="10"
+                            <input type="number" id="initial-payment-percent" name="initial-payment-percent" value="10.00"
                                    placeholder="%" max="49.99">
                             <span class="percent-label">%</span>
                         </div>
@@ -230,7 +232,7 @@
                                    value="800 000,00" placeholder="₽">
                             <input type="hidden" id="credit-value" name="credit-value" value="800000"
                                    placeholder="₽">
-                            <input type="number" id="credit-percent" name="credit-percent" value="80"
+                            <input type="number" id="credit-percent" name="credit-percent" value="80.00"
                                    placeholder="%" max="90">
                             <span class="percent-label">%</span>
                         </div>

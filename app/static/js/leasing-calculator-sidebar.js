@@ -33,3 +33,20 @@ window.onload = function () {
     document.getElementById("main-content").classList.remove("shrink");
 
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelector('.clickable a').addEventListener('click', function (event) {
+        event.preventDefault(); // Предотвращаем стандартное действие ссылки
+
+        // Получаем цель прокрутки из атрибута href
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+            window.scrollTo({
+                top: targetElement.offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+});

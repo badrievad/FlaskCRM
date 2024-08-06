@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .modal {
     display: none; /* Hide the modal initially */
     position: fixed;

@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .sidebar {
     font-family: 'Roboto', sans-serif;
     width: 250px;

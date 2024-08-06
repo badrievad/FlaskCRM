@@ -10,15 +10,17 @@
 }
 
 #tranches-table th, #tranches-table td {
-    border: 1px solid #ddd;
+    border: 1px solid #eeeded;
     padding: 8px;
     text-align: center;
     vertical-align: middle;
 }
 
 #tranches-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+    background-color: rgba(58, 162, 123, 0.8);
+    color: white;
+    font-size: small;
+
 }
 
 #tranches-table input[type="text"], #tranches-table input[type="date"] {

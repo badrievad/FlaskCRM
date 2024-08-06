@@ -752,18 +752,12 @@ function populateForm(data) {
     document.getElementById('foreign-cost-value').value = calc.foreign_price;
     document.getElementById('foreign-cost-display').value = calc.foreign_price_str;
     document.getElementById('foreign-cost').value = calc.foreign_price;
-
-    // document.getElementById('initial-payment-value').value = calc.initial_payment;
-    // document.getElementById('initial-payment-value-display').value = calc.initial_payment_str;
     document.getElementById('initial-payment').value = calc.initial_payment_percent;
     document.getElementById('initial-payment-percent').value = calc.initial_payment_percent.toFixed(2);
-    // document.getElementById('credit-value').value = calc.credit_sum;
-    // document.getElementById('credit-value-display').value = calc.credit_sum_str;
     document.getElementById('credit').value = calc.credit_sum_percent;
     document.getElementById('credit-percent').value = calc.credit_sum_percent;
     updateInitialPaymentValue();
     updateCreditValue();
-    updateCostInRubles();
     document.getElementById('term-value').value = calc.credit_term;
     document.getElementById('term').value = calc.credit_term;
     document.getElementById('commission-value').value = calc.bank_commission;
@@ -851,14 +845,16 @@ function populateForm(data) {
         document.getElementById('tranche5-credit-date').value = formatDate(tranches.tranche_5_credit_date);
         document.getElementById('tranche5-payment-date').value = formatDate(tranches.tranche_5_payment_date);
     }
-    updateCostInRubles();
+    // обновляем цену в рублях, если валюта не рубль
+    if (calc.currency !== 'rub') {
+        updateCostInRubles();
+    }
     closeModal();
     simpleScrollTest();
 
 }
 
 function simpleScrollTest() {
-    console.log("simpleScrollTest");
     window.scroll({
         top: 0,
         left: 0,

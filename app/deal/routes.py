@@ -308,11 +308,20 @@ def index_crm() -> render_template:
 
 @deal_bp.route("/crm/deals/active", methods=["GET"])
 def get_deals_active() -> jsonify:
+    user_fullname = request.args.get(
+        "user_fullname"
+    )  # Получаем параметр из строки запроса
     active_deals: list[Deal] = (
         Deal.query.filter_by(status="active").order_by(desc(Deal.created_at)).all()
     )
     active_deals_count: int = len(active_deals)
     archived_deals_count: int = Deal.query.filter_by(status="archived").count()
+    if user_fullname:
+        active_deals: list[Deal] = (
+            Deal.query.filter_by(status="active", created_by=user_fullname)
+            .order_by(desc(Deal.created_at))
+            .all()
+        )
     return jsonify(
         {
             "deals": [

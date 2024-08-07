@@ -32,6 +32,7 @@ def get_leasing_calculator() -> render_template:
 
     # список расчетов
     user_login = current_user.login
+    user_fullname = current_user.fullname
     calc_list = (
         LeasCalculator.query.filter_by(manager_login=user_login)
         .order_by(desc(LeasCalculator.id))
@@ -42,6 +43,7 @@ def get_leasing_calculator() -> render_template:
         user_fon=user_fon_url,
         calc_list=calc_list,
         login=user_login,
+        user_fullname=user_fullname,
     )
 
 

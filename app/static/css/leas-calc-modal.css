@@ -143,3 +143,21 @@ html {
 .modal .modal-table th {
     background-color: #f2f2f2;
 }
+
+/* Основной стиль для элемента select */
+.item-type-modal-select {
+    appearance: none; /* Убираем стандартный вид браузера */
+    -webkit-appearance: none; /* Убираем стандартный вид для Safari */
+    -moz-appearance: none; /* Убираем стандартный вид для Firefox */
+    background-color: #fff; /* Фон */
+    border: 1px solid #ccc; /* Граница */
+    border-radius: 4px; /* Скругленные углы */
+    padding: 10px 30px 10px 15px; /* Отступы */
+    font-size: 16px; /* Размер шрифта */
+    color: #333; /* Цвет текста */
+    cursor: pointer; /* Курсор указателя */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+    transition: border-color 0.3s, box-shadow 0.3s; /* Переходы */
+    width: 100%; /* Ширина 100% */
+    max-width: 200px; /* Максимальная ширина */
+}

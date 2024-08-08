@@ -9,7 +9,7 @@ from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .pydantic_models import ValidateFields
 
 from .. import db, cache
-from ..deal.models import Deal
+from ..deal.services import update_calculation_service
 from ..leasing_calculator.models import LeasCalculator, LeasingItem, Tranches
 from ..leasing_calculator.celery_tasks import long_task
 from ..celery_utils import is_celery_alive
@@ -176,7 +176,7 @@ def autocomplete() -> jsonify:
 
 
 @leas_calc_bp.route("/crm/calculator/update/<int:calc_id>", methods=["POST"])
-def update_calculation(calc_id) -> jsonify:
+def update_calculation(calc_id):
     try:
         if not request.is_json:
             logging.error("Request data is not in JSON format")
@@ -186,76 +186,15 @@ def update_calculation(calc_id) -> jsonify:
                 ),
                 400,
             )
-        else:
-            logging.info("Request data is in JSON format")
 
         data = request.get_json()
-        logging.info(f"Запрос на обновление калькулятора (id_{calc_id}): {data}")
+        logging.info(f"Request to update calculator (id_{calc_id}): {data}")
 
-        calc: LeasCalculator = (
-            LeasCalculator.query.options(joinedload(LeasCalculator.deal))
-            .filter_by(id=calc_id)
-            .first()
-        )
-        if calc is None:
-            return jsonify({"success": False, "message": "Calculation not found"}), 404
-
-        # Получаем данные о кол-ве сделок
-        deal = calc.deal
-
-        if data["deal_id"] in [None, "", "-"]:
-            logging.info(f"Deal_id: {data['deal_id']}. Отвязываем КП от сделки либо сделка не выбрана")
-        else:
-            deals_count: int = Deal.query.filter_by(id=data["deal_id"]).count()
-            logging.info(f"Кол-во сделок в БД с id {data['deal_id']}: {deals_count}")
-
-            # Подсчитываем кол-во связанных КП для этой сделки
-            offers_count: int = LeasCalculator.query.filter_by(
-                deal_id=data["deal_id"]
-            ).count()
-            logging.info(f"Кол-во связанных КП: {offers_count}")
-
-            # Проверяем, не превышает ли текущее количество лимит
-            if offers_count >= deals_count:
-                return (
-                    jsonify(
-                        {
-                            "success": False,
-                            "message": f"Нельзя привязать КП к данной сделке. Уже привязано: {offers_count}. "
-                            f"Можно привязать: {deals_count}",
-                        }
-                    ),
-                    400,
-                )
-
-        for key, value in data.items():
-            if value in ["-", "", None]:
-                setattr(calc, key, None)
-                continue
-            setattr(calc, key, value)
-
-        db.session.commit()
-
-        updated_data = {
-            "id": calc.id,
-            "item_name": calc.item_name,
-            "item_price": calc.item_price_str,
-            "item_type": calc.item_type,
-            "date_ru": calc.date_ru,
-            "title": deal.title if deal else "",
-        }
-
-        return jsonify(
-            {
-                "success": True,
-                "message": "Calculation updated successfully",
-                "data": updated_data,
-            }
-        )
+        result = update_calculation_service(calc_id, data)
+        return jsonify(result), result["status_code"]
 
     except Exception as e:
-        db.session.rollback()
-        logging.error(f"Ошибка при обновлении калькулятора: {str(e)}")
+        logging.error(f"Error updating calculator: {str(e)}")
         return (
             jsonify(
                 {

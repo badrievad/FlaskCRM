@@ -9,7 +9,7 @@ from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .pydantic_models import ValidateFields
 
 from .. import db, cache
-from ..deal.services import update_calculation_service
+from ..leasing_calculator.services import update_calculation_service
 from ..leasing_calculator.models import LeasCalculator, LeasingItem, Tranches
 from ..leasing_calculator.celery_tasks import long_task
 from ..celery_utils import is_celery_alive

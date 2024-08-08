@@ -2,7 +2,7 @@ from .. import db
 from ..deal.models import Deal
 from ..leasing_calculator.models import LeasCalculator
 from sqlalchemy.orm import joinedload
-import logging
+from logger import logging
 
 
 def update_calculation_service(calc_id, data):

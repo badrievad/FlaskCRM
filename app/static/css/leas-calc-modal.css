@@ -145,7 +145,7 @@ html {
 }
 
 /* Основной стиль для элемента select */
-.item-type-modal-select {
+.item-deal-modal-select, .item-type-modal-select {
     appearance: none; /* Убираем стандартный вид браузера */
     -webkit-appearance: none; /* Убираем стандартный вид для Safari */
     -moz-appearance: none; /* Убираем стандартный вид для Firefox */
@@ -159,5 +159,6 @@ html {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
     transition: border-color 0.3s, box-shadow 0.3s; /* Переходы */
     width: 100%; /* Ширина 100% */
-    max-width: 200px; /* Максимальная ширина */
+    max-width: 400px; /* Максимальная ширина */
+    text-align: left;
 }

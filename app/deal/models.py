@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from sqlalchemy.orm import relationship
+
 from .. import db
 
 
@@ -34,6 +36,9 @@ class Deal(db.Model):
     product = db.Column(
         db.String(50), nullable=False, default="Статус продукта еще не определен"
     )
+    deals_count = db.Column(db.Integer, default=1)
+
+    leas_calculators = relationship("LeasCalculator", back_populates="deal")
 
     @classmethod
     def generate_dl_number(cls):
@@ -65,3 +70,9 @@ class Deal(db.Model):
             "dl_number": self.dl_number,
             "dl_number_windows": self.dl_number_windows,
         }
+
+    def can_add_leas_calculator(self):
+        """
+        Проверяет, можно ли добавить еще один LeasCalculator к этой сделке.
+        """
+        return len(self.leas_calculators) < self.deals_count

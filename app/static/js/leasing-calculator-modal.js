@@ -1,22 +1,39 @@
 // Функция для получения активных сделок
-function fetchActiveDeals(userFullname) {
+function fetchActiveDeals(userFullname, selectElementId) {
     return fetch(`/crm/deals/active?user_fullname=${encodeURIComponent(userFullname)}`)
         .then(response => response.json())
         .then(data => {
             // Обработка данных после получения ответа
-            console.log('Active deals:', data.deals);
-            // Здесь можно обновить DOM или выполнить другие действия с данными
+            updateSelectElement(data.deals, selectElementId);
         })
         .catch(error => {
             console.error('Error fetching deals:', error);
         });
 }
 
+function updateSelectElement(deals, selectElementId) {
+    var selectElement = document.getElementById(selectElementId);
+    selectElement.innerHTML = ""; // Очищаем текущее содержимое
+
+    // Добавляем опцию "-" в начале
+    var defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.text = "";
+    selectElement.appendChild(defaultOption);
+
+    // Добавляем остальные опции
+    deals.forEach(deal => {
+        var option = document.createElement("option");
+        option.value = deal.id;
+        option.text = "ДЛ " + deal.dl_number + " | " + deal.title; // Используйте поле, которое хотите отобразить
+        selectElement.appendChild(option);
+    });
+}
+
 
 function openModal(name, date, itemPrice, itemType, itemDeal, calcId, userFullName) {
     var modalTable = document.getElementById('modal-table');
-    fetchActiveDeals(userFullName);
-    console.log(userFullName)
+    fetchActiveDeals(userFullName, 'item-deal-modal-select');
 
     var modalContent = `
                             <table class="modal-table" id="modal-table" data-calc-id="${calcId}">
@@ -56,8 +73,7 @@ function openModal(name, date, itemPrice, itemType, itemDeal, calcId, userFullNa
                                     <th>Привязать к сделке</th>
                                     <td>
                                         <span id="item-deal-modal">${itemDeal}</span>
-                                        <select id="item-deal-select" class="hidden item-deal-select">
-                                            <option value="Легковые" ${itemType === 'Легковые' ? 'selected' : ''}>Легковые</option>
+                                        <select id="item-deal-modal-select" class="hidden item-deal-modal-select">
                                         </select>
                                         <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-deal-modal', true)"></i>
                                     </td>
@@ -70,6 +86,7 @@ function openModal(name, date, itemPrice, itemType, itemDeal, calcId, userFullNa
     var modal = document.getElementById('modal');
     modal.style.display = "block";
     document.getElementById('item-type-modal-select').value = itemType;
+    document.getElementById('item-deal-modal-select').value = itemDeal;
 }
 
 
@@ -116,15 +133,11 @@ function saveChanges(userFullName) {
     var data = {
         item_name: document.getElementById('item-name-modal').innerText,
         item_type: document.getElementById('item-type-modal-select').value || document.getElementById('item-type-modal').innerText,
-        deal_id: document.getElementById('item-deal-modal').innerText
+        deal_id: document.getElementById('item-deal-modal-select').value,
     };
 
     var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
-    // Удаляем поле deal_id, если его значение "-"
-    if (data.deal_id === "-") {
-        delete data.deal_id;
-    }
-    console.log(data);
+
     if (confirm('Вы уверены, что хотите сохранить изменения?')) {
         fetch(`/crm/calculator/update/${calcId}`, {
             method: 'POST', headers: {
@@ -148,9 +161,8 @@ function updateTableRow(calcId, updatedData, userFullName) {
         row.querySelector('.item-name').innerText = updatedData.item_name;
         row.querySelector('.item-price').innerText = updatedData.item_price;
         row.querySelector('.item-type').innerText = updatedData.item_type;
-        row.querySelector('.date-ru').innerText = updatedData.date_ru;
 
         // Обновление атрибута onclick в строке
-        row.setAttribute('onclick', `openModal('${updatedData.item_name}', '${updatedData.date_ru}', '${updatedData.item_price}', '${updatedData.item_type}', '-', '${calcId}', '${userFullName}')`);
+        row.setAttribute('onclick', `openModal('${updatedData.item_name}', '${updatedData.date_ru}', '${updatedData.item_price}', '${updatedData.item_type}', '${updatedData.title}', '${calcId}', '${userFullName}')`);
     }
 }

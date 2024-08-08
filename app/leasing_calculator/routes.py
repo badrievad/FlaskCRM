@@ -2,11 +2,14 @@ import os
 
 from pathlib import Path
 from sqlalchemy import desc
+from sqlalchemy.orm import joinedload
+
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .pydantic_models import ValidateFields
 
 from .. import db, cache
+from ..deal.models import Deal
 from ..leasing_calculator.models import LeasCalculator, LeasingItem, Tranches
 from ..leasing_calculator.celery_tasks import long_task
 from ..celery_utils import is_celery_alive
@@ -33,11 +36,16 @@ def get_leasing_calculator() -> render_template:
     # список расчетов
     user_login = current_user.login
     user_fullname = current_user.fullname
+
     calc_list = (
-        LeasCalculator.query.filter_by(manager_login=user_login)
+        LeasCalculator.query.options(
+            joinedload(LeasCalculator.deal)
+        )  # Предварительная загрузка связи deal
+        .filter_by(manager_login=user_login)
         .order_by(desc(LeasCalculator.id))
         .all()
     )
+
     return render_template(
         "leasing_calculator.html",
         user_fon=user_fon_url,
@@ -184,12 +192,45 @@ def update_calculation(calc_id) -> jsonify:
         data = request.get_json()
         logging.info(f"Запрос на обновление калькулятора (id_{calc_id}): {data}")
 
-        calc = LeasCalculator.query.filter_by(id=calc_id).first()
+        calc: LeasCalculator = (
+            LeasCalculator.query.options(joinedload(LeasCalculator.deal))
+            .filter_by(id=calc_id)
+            .first()
+        )
         if calc is None:
             return jsonify({"success": False, "message": "Calculation not found"}), 404
 
+        # Получаем данные о кол-ве сделок
+        deal = calc.deal
+
+        if data["deal_id"] in [None, "", "-"]:
+            logging.info(f"Deal_id: {data['deal_id']}. Отвязываем КП от сделки либо сделка не выбрана")
+        else:
+            deals_count: int = Deal.query.filter_by(id=data["deal_id"]).count()
+            logging.info(f"Кол-во сделок в БД с id {data['deal_id']}: {deals_count}")
+
+            # Подсчитываем кол-во связанных КП для этой сделки
+            offers_count: int = LeasCalculator.query.filter_by(
+                deal_id=data["deal_id"]
+            ).count()
+            logging.info(f"Кол-во связанных КП: {offers_count}")
+
+            # Проверяем, не превышает ли текущее количество лимит
+            if offers_count >= deals_count:
+                return (
+                    jsonify(
+                        {
+                            "success": False,
+                            "message": f"Нельзя привязать КП к данной сделке. Уже привязано: {offers_count}. "
+                            f"Можно привязать: {deals_count}",
+                        }
+                    ),
+                    400,
+                )
+
         for key, value in data.items():
-            if value == "-":
+            if value in ["-", "", None]:
+                setattr(calc, key, None)
                 continue
             setattr(calc, key, value)
 
@@ -201,6 +242,7 @@ def update_calculation(calc_id) -> jsonify:
             "item_price": calc.item_price_str,
             "item_type": calc.item_type,
             "date_ru": calc.date_ru,
+            "title": deal.title if deal else "",
         }
 
         return jsonify(

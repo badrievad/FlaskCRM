@@ -126,7 +126,7 @@
         </div>
         <div class="modal-footer">
             <button class="copy-btn"><i class="fa-regular fa-copy"></i> Копия КП</button>
-            <button class="save-btn" onclick="saveChanges({{ user_fullname }})"><i class="fa-regular fa-floppy-disk"></i> Сохранить
+            <button class="save-btn" onclick="saveChanges('{{ user_fullname }}')"><i class="fa-regular fa-floppy-disk"></i> Сохранить
                 изменения
             </button>
             <button class="close-btn" onclick="closeModal()"><i class="fa-regular fa-circle-xmark"></i> Закрыть</button>
@@ -628,7 +628,7 @@
             <tbody id="calc-list-body">
             {% for calc in calc_list %}
                 <tr data-id="{{ calc.id }}"
-                    onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}', '{{ calc.item_price_str }}', '{{ calc.item_type }}', '-', '{{ calc.id }}', '{{ user_fullname }}')">
+                    onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}', '{{ calc.item_price_str }}', '{{ calc.item_type }}', '{{ calc.deal.title }}', '{{ calc.id }}', '{{ user_fullname }}')">
                     <td>{{ loop.index }}</td>
                     <td class="item-name">{{ calc.item_name }}</td>
                     <td class="item-price">{{ calc.item_price_str }}</td>
@@ -910,7 +910,7 @@
         var newRow = document.createElement('tr');
 
         newRow.setAttribute('data-id', calculation.id);
-        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "-", "${calculation.id}", "{{ user_fullname }}")`);
+        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "", "${calculation.id}", "{{ user_fullname }}")`);
 
         newRow.innerHTML = `
                             <td>${calcListBody.rows.length + 1}</td>

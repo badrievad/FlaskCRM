@@ -55,6 +55,7 @@ class LeasCalculator(db.Model):
     deal_id = db.Column(db.Integer, db.ForeignKey("deals.id"), nullable=True)
 
     tranche = relationship("Tranches", back_populates="leas_calculator", uselist=False)
+    deal = relationship("Deal", back_populates="leas_calculators")
 
     def to_dict(self):
         return {

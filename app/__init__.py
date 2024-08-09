@@ -6,7 +6,7 @@ from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
 from .celery_utils import celery_init_app
-
+from .config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND
 
 cache = Cache()
 socketio = SocketIO()
@@ -27,8 +27,8 @@ def create_app(debug=False):
 
     app.config.update(
         CELERY={
-            "broker_url": "redis://localhost:6379/0",
-            "result_backend": "redis://localhost:6379/0",
+            "broker_url": CELERY_BROKER_URL,
+            "result_backend": CELERY_RESULT_BACKEND,
             "task_ignore_result": True,
         },
     )

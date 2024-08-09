@@ -1,5 +1,8 @@
+import os.path
+
 from .. import db
 from ..deal.models import Deal
+from ..deal.work_with_folders import CompanyFolderAPI
 from ..leasing_calculator.models import LeasCalculator
 from sqlalchemy.orm import joinedload
 from logger import logging
@@ -45,6 +48,10 @@ def update_calculation_service(calc_id, data):
             setattr(calc, key, None if value in ["-", "", None] else value)
 
         db.session.commit()
+
+        path_to_commercial_offer = os.path.join(calc.path_to_file, calc.title)
+        folder_api = CompanyFolderAPI()
+        folder_api.send_commercial_offer(path_to_commercial_offer, deal_id)
 
         updated_data = {
             "id": calc.id,

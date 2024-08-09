@@ -1,3 +1,5 @@
+from typing import LiteralString
+
 import requests
 from app.config import URL_FOLDER_API
 from logger import logging
@@ -72,3 +74,37 @@ class CompanyFolderAPI:
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e
+
+    def send_commercial_offer(
+        self, file_path: LiteralString | str | bytes, company_id: str
+    ):
+        url = f"{self.base_url}/commercial-offer/upload"
+        logging.info(
+            f"Sending POST request to {url} with file: {file_path} and company_id: {company_id}"
+        )
+
+        if company_id in [None, "", "-"]:
+            logging.info(
+                f"Company_id: {company_id}. Detaching offer from deal or deal not selected"
+            )
+            return
+
+        try:
+            with open(file_path, "rb") as file:
+                logging.info(f"File opened: {file_path}")
+                files = {"file": file}
+                data = {"company_id": company_id}
+                logging.info(f"Type file: {type(file)}")
+                logging.info(f"Type company_id: {type(company_id)}")
+                response = requests.post(url, files=files, data=data)
+                response.raise_for_status()  # Проверка на ошибки HTTP
+
+        except requests.exceptions.RequestException as e:
+            logging.error(f"Failed to upload file: {e}")
+            raise PermissionError from e
+        except FileNotFoundError as e:
+            logging.error(f"File not found: {e}")
+            raise
+        except Exception as e:
+            logging.error(f"An unexpected error occurred: {e}")
+            raise

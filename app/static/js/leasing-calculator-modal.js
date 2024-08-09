@@ -32,7 +32,6 @@ function updateSelectElement(deals, selectElementId) {
 
 
 function openModal(name, date, itemPrice, itemType, itemDeal, calcId, userFullName) {
-    var modalTable = document.getElementById('modal-table');
     fetchActiveDeals(userFullName, 'item-deal-modal-select');
 
     var modalContent = `

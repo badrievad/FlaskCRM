@@ -28,10 +28,14 @@ def intensive_task_simulation(data: dict) -> dict:
     ws = wb.active
 
     # Заполняем файл случайными данными
+    #  TODO: вот тут нужно все делать
+
     num_rows = 50000
     for _ in range(num_rows):
         row = ["".join(random.choice(string.ascii_letters) for _ in range(10))]
         ws.append(row)
+
+    # КОНЕЦ
 
     logging.info(data)
     # Записываем в базу данных

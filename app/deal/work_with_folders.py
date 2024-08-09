@@ -1,6 +1,6 @@
-from typing import LiteralString
-
 import requests
+
+from typing import LiteralString
 from app.config import URL_FOLDER_API
 from logger import logging
 
@@ -108,3 +108,24 @@ class CompanyFolderAPI:
         except Exception as e:
             logging.error(f"An unexpected error occurred: {e}")
             raise
+
+    def create_commercial_offer(self, file_path: str, user_login: str):
+        url = f"{self.base_url}/commercial-offer/create"
+
+        # Открытие файла и подготовка данных для отправки
+        with open(file_path, "rb") as file_data:
+            files = {"file": file_data}
+            data = {"user_login": user_login}
+
+            # Отправка POST-запроса
+            response = requests.post(url, files=files, data=data)
+
+            # Проверка статуса ответа и извлечение path_to_file
+            if response.status_code == 200:
+                response_data = response.json()
+                path_to_file = response_data.get("path_to_file")
+                logging.info("Success:", path_to_file)
+                return path_to_file
+            else:
+                logging.info("Error:", response.status_code, response.text)
+                response.raise_for_status()

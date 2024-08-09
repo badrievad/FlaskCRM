@@ -99,7 +99,6 @@ def get_status(task_id) -> jsonify:
                     "item_name": task.result.get("item_name"),
                     "item_price": task.result.get("item_price"),
                     "item_price_str": task.result.get("item_price_str"),
-                    "full_path_to_file": task.result.get("full_path_to_file"),
                 }
         else:
             response = {"state": task.state, "status": str(task.info)}

@@ -1,34 +1,31 @@
 import datetime
+import os
 import time
+import openpyxl
 
 from datetime import date
 from logger import logging
-from openpyxl import Workbook
 from celery import shared_task
 
-from ..config import PATH_TO_CALENDAR
+from ..config import CALCULATION_TEMPLATE_PATH
 from .models import LeasCalculator, Tranches
 from .other_utils import validate_item_price
 from .. import db
+from ..deal.work_with_folders import CompanyFolderAPI
 
 
 def intensive_task_simulation(data: dict) -> dict:
     import random
     import string
 
-    """Intensive task simulation"""
-
-    # Создаем директорию пользователя, если она не существует
-    user_dir = PATH_TO_CALENDAR / data["login"]
-    if not user_dir.exists():
-        user_dir.mkdir(parents=True, exist_ok=True)
-
-    # Создаем новый Excel файл
-    wb = Workbook()
-    ws = wb.active
+    user_login = data["login"]  # текущий пользователь
 
     # Заполняем файл случайными данными
     #  TODO: вот тут нужно все делать
+
+    # Имитация заполнения шаблона
+    wb = openpyxl.load_workbook(CALCULATION_TEMPLATE_PATH / "ШАБЛОН РАСЧЕТА.xlsx")
+    ws = wb.active
 
     num_rows = 50000
     for _ in range(num_rows):
@@ -121,30 +118,30 @@ def intensive_task_simulation(data: dict) -> dict:
         db.session.commit()
 
         new_title = f"Лизинговый калькулятор (id_{new_calc.id}).xlsx"
+        path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title
+        wb.save(path_to_xlsx)
+
         new_calc.title = new_title
-        new_calc.path_to_file = str(user_dir)
+        folder_api = CompanyFolderAPI()
+        new_calc.path_to_file = folder_api.create_commercial_offer(
+            path_to_xlsx, user_login
+        )
+
+        # Удаление файла
+        try:
+            os.remove(path_to_xlsx)
+            logging.info(f"Файл {path_to_xlsx} успешно удален.")
+        except FileNotFoundError:
+            logging.info(f"Файл не найден: {path_to_xlsx}")
+        except Exception as e:
+            logging.info(f"Произошла ошибка при удалении файла: {e}")
 
         db.session.commit()
     except Exception as e:
         db.session.rollback()
         raise e
 
-    # Инициализируем путь к файлу
-    file_path = str(user_dir / new_title)
-
-    # Сохраняем файл
-    try:
-        wb.save(file_path)
-    except Exception as e:
-        # Если не удалось сохранить файл, откатываем транзакцию
-        db.session.delete(new_calc)
-        db.session.commit()
-        raise e
-
-    result = {
-        **new_calc.to_dict(),
-        "full_path_to_file": file_path,
-    }
+    result = new_calc.to_dict()
 
     return result
 

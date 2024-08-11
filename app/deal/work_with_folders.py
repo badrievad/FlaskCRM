@@ -1,6 +1,5 @@
 import requests
 
-from typing import LiteralString
 from app.config import URL_FOLDER_API
 from logger import logging
 

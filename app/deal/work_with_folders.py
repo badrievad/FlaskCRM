@@ -75,13 +75,9 @@ class CompanyFolderAPI:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e
 
-    def send_commercial_offer(
-        self, file_path: LiteralString | str | bytes, company_id: str
-    ):
+    def send_commercial_offer(self, company_id: str, file_path: str):
         url = f"{self.base_url}/commercial-offer/upload"
-        logging.info(
-            f"Sending POST request to {url} with file: {file_path} and company_id: {company_id}"
-        )
+        logging.info(f"Sending POST request to {url} with company_id: {company_id}")
 
         if company_id in [None, "", "-"]:
             logging.info(
@@ -90,14 +86,10 @@ class CompanyFolderAPI:
             return
 
         try:
-            with open(file_path, "rb") as file:
-                logging.info(f"File opened: {file_path}")
-                files = {"file": file}
-                data = {"company_id": company_id}
-                logging.info(f"Type file: {type(file)}")
-                logging.info(f"Type company_id: {type(company_id)}")
-                response = requests.post(url, files=files, data=data)
-                response.raise_for_status()  # Проверка на ошибки HTTP
+            data = {"company_id": company_id, "file_path": file_path}
+            logging.info(f"Type company_id: {type(company_id)}")
+            response = requests.post(url, json=data)
+            response.raise_for_status()  # Проверка на ошибки HTTP
 
         except requests.exceptions.RequestException as e:
             logging.error(f"Failed to upload file: {e}")

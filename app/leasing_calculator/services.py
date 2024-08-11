@@ -49,9 +49,10 @@ def update_calculation_service(calc_id, data):
 
         db.session.commit()
 
-        path_to_commercial_offer = os.path.join(calc.path_to_file, calc.title)
+        path_to_commercial_offer = calc.path_to_file
         folder_api = CompanyFolderAPI()
-        folder_api.send_commercial_offer(path_to_commercial_offer, deal_id)
+        logging.info(f"Path: {path_to_commercial_offer} and deal_id: {deal_id}")
+        folder_api.send_commercial_offer(deal_id, path_to_commercial_offer)
 
         updated_data = {
             "id": calc.id,

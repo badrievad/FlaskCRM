@@ -780,6 +780,8 @@ function populateForm(data) {
     document.getElementById('term').value = calc.credit_term;
     document.getElementById('commission-value').value = calc.bank_commission;
     document.getElementById('commission').value = calc.bank_commission;
+    document.getElementById('commission-lkmb-value').value = calc.lkmb_commission;
+    document.getElementById('commission-lkmb').value = calc.lkmb_commission;
     document.getElementById('insurance-casko-value').value = calc.insurance_casko;
     document.getElementById('insurance-casko').value = calc.insurance_casko;
     document.getElementById('insurance-osago-value').value = calc.insurance_osago;

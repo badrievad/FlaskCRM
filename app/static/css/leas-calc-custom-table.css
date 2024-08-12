@@ -28,3 +28,8 @@ html {
 .custom-table tbody tr {
     transition: background-color 0.3s; /* Плавный переход цвета фона */
 }
+
+.custom-table td i {
+    margin-right: 5px; /* Отступ между иконками */
+    cursor: pointer; /* Чтобы курсор менялся на указатель при наведении */
+}

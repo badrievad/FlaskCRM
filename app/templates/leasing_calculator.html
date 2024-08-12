@@ -650,10 +650,10 @@
                     <td class="item-type">{{ calc.item_type }}</td>
                     <td class="date-ru">{{ calc.date_ru }}</td>
                     <td>{{ calc.manager_login }}</td>
-                    <td onclick="deleteCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-trash-can"
-                                                                               data-id="{{ calc.id }}"></i></td>
-                    <td onclick="downloadCalculation(event, '{{ calc.id }}')"><i class="fa-regular fa-file-pdf"
-                                                                                 data-id="{{ calc.id }}"></i></td>
+                    <td>
+                        <i class="fa-regular fa-trash-can" data-id="{{ calc.id }}" onclick="deleteCalculation(event, '{{ calc.id }}')"></i>
+                        <i class="fa-regular fa-file-pdf" data-id="{{ calc.id }}" onclick="downloadCalculation(event, '{{ calc.id }}')"></i>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -936,11 +936,9 @@
                             <td class="item-type">${activeTabText}</td>
                             <td class="date-ru">${calculation.date_ru}</td>
                             <td>${calculation.manager_login}</td>
-                            <td onclick="deleteCalculation(event, '${calculation.id}')">
-                                <i class="fa-regular fa-trash-can" data-id="${calculation.id}"></i>
-                            </td>
-                            <td onclick="downloadCalculation(event, '${calculation.id}')">
-                                <i class="fa-regular fa-file-pdf" data-id="${calculation.id}"></i>
+                            <td>
+                                <i class="fa-regular fa-trash-can" data-id="${calculation.id}" onclick="deleteCalculation(event, '${calculation.id}')"></i>
+                                <i class="fa-regular fa-file-pdf" data-id="${calculation.id}" onclick="downloadCalculation(event, '${calculation.id}')"></i>
                             </td>
                         `;
 

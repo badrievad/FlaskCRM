@@ -21,3 +21,11 @@ def write_deal_to_db(
     db.session.commit()
 
     return new_deal.to_json()
+
+
+def write_deal_path_to_db(folder_path: str, deal_id: str) -> None:
+    """Write deal path to database"""
+
+    deal: Deal = Deal.query.get(deal_id)
+    deal.deal_path = folder_path
+    db.session.commit()

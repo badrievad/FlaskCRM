@@ -57,6 +57,7 @@ class ValidateFields(BaseModel):
     credit_sum: float = Field(alias="creditSum", default=0.0)
     credit_term: int = Field(alias="creditTerm", default=1)
     bank_commission: float = Field(alias="bankCommission", default=0.0)
+    lkmb_commission: float = Field(alias="lkmbCommission", default=0.0)
     insurance_casko: float = Field(alias="insuranceCasko", default=0.0)
     insurance_osago: float = Field(alias="insuranceOsago", default=0.0)
     health_insurance: float = Field(alias="healthInsurance", default=0.0)

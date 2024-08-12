@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from . import deal_bp
 from .. import socketio, db
 
-from .deals_db import write_deal_to_db
+from .deals_db import write_deal_to_db, write_deal_path_to_db
 from .deals_validate import DealsValidate
 from .work_with_folders import CompanyFolderAPI
 
@@ -65,7 +65,13 @@ def create_deal() -> jsonify:
         dl_number = deal_data["dl_number_windows"]
 
         # Создание папки через API
-        api_folder.create_folder(name_without_special_symbols, deal_id, dl_number)
+        created_folder = api_folder.create_folder(
+            name_without_special_symbols, deal_id, dl_number
+        )  # Путь к папке со сделкой
+
+        write_deal_path_to_db(
+            created_folder, deal_id
+        )  # Запись пути к папке (к сделке) в БД
 
         # Логирование и уведомление
         logging.info(

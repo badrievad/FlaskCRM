@@ -24,6 +24,7 @@ class LeasCalculator(db.Model):
     credit_sum_percent = db.Column(db.Float, nullable=True)
     credit_term = db.Column(db.Integer, nullable=True)
     bank_commission = db.Column(db.Float, nullable=True)
+    lkmb_commission = db.Column(db.Float, nullable=True)
     insurance_casko = db.Column(db.Float, nullable=True)
     insurance_osago = db.Column(db.Float, nullable=True)
     health_insurance = db.Column(db.Float, nullable=True)
@@ -77,6 +78,7 @@ class LeasCalculator(db.Model):
             "credit_sum_percent": self.credit_sum_percent,
             "credit_term": self.credit_term,
             "bank_commission": self.bank_commission,
+            "lkmb_commission": self.lkmb_commission,
             "insurance_casko": self.insurance_casko,
             "insurance_osago": self.insurance_osago,
             "health_insurance": self.health_insurance,

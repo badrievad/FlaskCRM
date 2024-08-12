@@ -37,6 +37,7 @@ class Deal(db.Model):
         db.String(50), nullable=False, default="Статус продукта еще не определен"
     )
     deals_count = db.Column(db.Integer, default=1)
+    deal_path = db.Column(db.String(500), nullable=True)
 
     leas_calculators = relationship("LeasCalculator", back_populates="deal")
 

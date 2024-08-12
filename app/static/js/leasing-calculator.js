@@ -335,14 +335,32 @@ document.getElementById('commission').addEventListener('input', function () {
 });
 
 document.getElementById('commission-value').addEventListener('input', function () {
-    if (this.value > 5) {
-        this.value = 5;
+    if (this.value > 3) {
+        this.value = 3;
     }
 
     document.getElementById('commission').value = this.value;
 });
 
 document.getElementById('commission-value').addEventListener('keypress', function (event) {
+    if (event.key === '-' || event.key === '+' || (event.key < '0' || event.key > '9') && event.key !== '.') {
+        event.preventDefault();
+    }
+});
+
+document.getElementById('commission-lkmb').addEventListener('input', function () {
+    document.getElementById('commission-lkmb-value').value = this.value;
+});
+
+document.getElementById('commission-lkmb-value').addEventListener('input', function () {
+    if (this.value > 3) {
+        this.value = 3;
+    }
+
+    document.getElementById('commission-lkmb').value = this.value;
+});
+
+document.getElementById('commission-lkmb-value').addEventListener('keypress', function (event) {
     if (event.key === '-' || event.key === '+' || (event.key < '0' || event.key > '9') && event.key !== '.') {
         event.preventDefault();
     }

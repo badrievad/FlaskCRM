@@ -89,6 +89,7 @@ def intensive_task_simulation(data: dict) -> dict:
             credit_sum_percent=credit_percent,
             credit_term=data["credit_term"],
             bank_commission=data["bank_commission"],
+            lkmb_commission=data["lkmb_commission"],
             insurance_casko=data["insurance_casko"],
             insurance_osago=data["insurance_osago"],
             health_insurance=data["health_insurance"],

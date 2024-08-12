@@ -21,7 +21,8 @@ class CompanyFolderAPI:
         try:
             response = requests.post(url, json=data)
             response.raise_for_status()  # Проверка на ошибки HTTP
-            return response.json()
+            response_json = response.json()
+            return response_json["path_to_folder"]
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e

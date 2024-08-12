@@ -30,6 +30,7 @@ def create_app(debug=False):
             "broker_url": CELERY_BROKER_URL,
             "result_backend": CELERY_RESULT_BACKEND,
             "task_ignore_result": True,
+            "broker_connection_retry_on_startup": True,
         },
     )
 

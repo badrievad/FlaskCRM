@@ -3,9 +3,8 @@
 }
 
 #tranches-table {
-    width: 1000px;
-    border-collapse: collapse;
-    margin-bottom: 10px;
+    width: 100%;
+    max-width: 1000px;
     font-size: 14px;
 }
 

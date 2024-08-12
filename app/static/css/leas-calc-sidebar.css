@@ -63,3 +63,13 @@
     text-align: center;
     color: rgb(255, 255, 255);
 }
+
+@media (min-width: 769px) {
+    .main-content {
+        margin-left: 220px;
+    }
+
+    .sidebar.open ~ .main-content {
+        margin-left: 220px;
+    }
+}

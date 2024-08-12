@@ -1,5 +1,5 @@
 .exchange-rates {
-    max-width: 400px;
+    max-width: 100%; /* адаптируется под размер родительского контейнера */
     margin: auto;
     border: 1px solid #ddd;
     border-radius: 10px;

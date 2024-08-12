@@ -4,9 +4,7 @@ html {
 
 .main-content {
     font-family: 'Roboto', sans-serif;
-    margin-left: 200px;
-    padding: 20px;
-    flex-grow: 1;
+    padding: 60px;
     overflow: visible;
     transition: margin-left 0.5s ease-in-out;
 }
@@ -146,6 +144,17 @@ output {
     max-width: 150px;
 }
 
+.tabs, .vehicle-types {
+    flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        padding: 10px;
+    }
+}
+
 .vehicle-type:hover,
 .vehicle-type.active {
     background-color: rgba(0, 123, 255, 0.45);
@@ -154,7 +163,7 @@ output {
 }
 
 .container {
-    max-width: max-content;
+    max-width: 100%;
     margin: 0 auto;
     background-color: rgba(255, 255, 255, 0.95);
     padding: 20px;

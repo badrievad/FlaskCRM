@@ -1,5 +1,4 @@
 import datetime
-import os
 import time
 import openpyxl
 
@@ -7,7 +6,7 @@ from datetime import date
 from logger import logging
 from celery import shared_task
 
-from ..config import CALCULATION_TEMPLATE_PATH
+from ..config import CALCULATION_TEMPLATE_PATH, LEAS_CALC_TEMPLATE_PATH
 from .models import LeasCalculator, Tranches
 from .other_utils import validate_item_price
 from .. import db
@@ -24,7 +23,7 @@ def intensive_task_simulation(data: dict) -> dict:
     #  TODO: вот тут нужно все делать
 
     # Имитация заполнения шаблона
-    wb = openpyxl.load_workbook(CALCULATION_TEMPLATE_PATH / "ШАБЛОН РАСЧЕТА.xlsx")
+    wb = openpyxl.load_workbook(LEAS_CALC_TEMPLATE_PATH / "ШАБЛОН РАСЧЕТА.xlsx")
     ws = wb.active
 
     num_rows = 50000
@@ -119,6 +118,10 @@ def intensive_task_simulation(data: dict) -> dict:
 
         new_title = f"Лизинговый калькулятор (id_{new_calc.id}).xlsx"
         path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title
+
+        # Создание директории, если она не существует
+        CALCULATION_TEMPLATE_PATH.mkdir(parents=True, exist_ok=True)
+
         wb.save(path_to_xlsx)
 
         new_calc.title = new_title
@@ -126,16 +129,6 @@ def intensive_task_simulation(data: dict) -> dict:
         new_calc.path_to_file = folder_api.create_commercial_offer(
             path_to_xlsx, user_login
         )
-
-        # Удаление файла
-        try:
-            os.remove(path_to_xlsx)
-            logging.info(f"Файл {path_to_xlsx} успешно удален.")
-        except FileNotFoundError:
-            logging.info(f"Файл не найден: {path_to_xlsx}")
-        except Exception as e:
-            logging.info(f"Произошла ошибка при удалении файла: {e}")
-
         db.session.commit()
     except Exception as e:
         db.session.rollback()

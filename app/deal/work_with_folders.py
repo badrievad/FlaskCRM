@@ -86,7 +86,6 @@ class CompanyFolderAPI:
 
         try:
             data = {"company_id": company_id, "file_path": file_path}
-            logging.info(f"Type company_id: {type(company_id)}")
             response = requests.post(url, json=data)
             response.raise_for_status()  # Проверка на ошибки HTTP
 
@@ -122,27 +121,3 @@ class CompanyFolderAPI:
             else:
                 logging.info("Error:", response.status_code, response.text)
                 response.raise_for_status()
-
-    def download_offer(self, file_path: str):
-        """Функция для скачивания КП с сервера"""
-
-        url = f"{self.base_url}/commercial-offer/download"
-        logging.info(f"Sending GET request to {url}")
-        try:
-            data = {"file_path": file_path}
-            response = requests.post(url, json=data)
-            response.raise_for_status()
-
-            return response
-
-        except requests.exceptions.RequestException as e:
-            logging.error(f"An error occurred: {e}")
-            raise PermissionError from e
-
-        except FileNotFoundError as e:
-            logging.error(f"File not found: {e}")
-            raise e
-
-        except Exception as e:
-            logging.error(f"An unexpected error occurred: {e}")
-            raise e

@@ -37,39 +37,3 @@ def validate_item_price(price: str) -> str:
     # Формируем окончательный результат
     formatted_price: str = integer_part_with_spaces + "," + fractional_part
     return formatted_price
-
-
-class ValidateFields:
-    """Класс для валидации полей формы на странице с калькулятором.
-    Если изменится форма на сайте, нужно будет изменить этот класс"""
-
-    def __init__(self, data: dict) -> None:
-        self.data = data
-
-    def item_type(self) -> str:
-        return self.data.get("itemType", "-")
-
-    def item_price(self) -> str:
-        return self.data.get("itemPrice", "-")
-
-    def item_name(self) -> str:
-        return self.data.get("itemName", "-")
-
-    def term(self) -> str:
-        return self.data.get("term", "-")
-
-    def prepaid_expense(self) -> str:
-        return self.data.get("prepaidExpense", "-")
-
-    def interest_rate(self) -> str:
-        return self.data.get("interestRate", "-")
-
-    def get_dict(self) -> dict:
-        return {
-            "item_type": self.item_type(),
-            "item_price": self.item_price(),
-            "item_name": self.item_name(),
-            "term": self.term(),
-            "prepaid_expense": self.prepaid_expense(),
-            "interest_rate": self.interest_rate(),
-        }

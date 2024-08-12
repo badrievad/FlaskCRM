@@ -63,7 +63,7 @@ def update_calculation_service(calc_id, data):
 
         return {
             "success": True,
-            "message": "Calculation updated successfully",
+            "message": "Изменения успешно сохранены",
             "data": updated_data,
             "status_code": 200,
         }

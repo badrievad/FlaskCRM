@@ -147,8 +147,10 @@ function saveChanges(userFullName) {
                 if (responseData.success) {
                     updateTableRow(calcId, responseData.data, userFullName);
                     closeModal(); // Закрываем модальное окно после сохранения
+                    showSuccess(responseData.message, "Успешно");
+
                 } else {
-                    alert('Ошибка сохранения изменений: ' + responseData.message);
+                    showError(responseData.message, "Ошибка сохранения изменений:");
                 }
             }).catch(error => console.error('Error:', error));
     }

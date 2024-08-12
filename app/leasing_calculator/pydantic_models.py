@@ -86,6 +86,7 @@ class ValidateFields(BaseModel):
         "initial_payment",
         "credit_sum",
         "bank_commission",
+        "lkmb_commission",
         "insurance_casko",
         "insurance_osago",
         "health_insurance",

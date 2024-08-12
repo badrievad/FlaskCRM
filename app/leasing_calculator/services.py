@@ -1,5 +1,3 @@
-import os.path
-
 from .. import db
 from ..deal.models import Deal
 from ..deal.work_with_folders import CompanyFolderAPI

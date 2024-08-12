@@ -9,6 +9,8 @@ class CompanyFolderAPI:
         self.base_url = URL_FOLDER_API
 
     def create_folder(self, company_name: str, company_id: str, dl_number: str):
+        """Функция для создания папки сделки"""
+
         url = f"{self.base_url}/create"
         data = {
             "company_name": company_name,
@@ -35,33 +37,29 @@ class CompanyFolderAPI:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e
 
-    def archive_folder(self, company_id: str, dl_number: str):
-        url = f"{self.base_url}/archive/{company_id}"
-        logging.info(f"Sending PUT request to {url}")
-        data = {
-            "dl_number": dl_number,
-        }
-        try:
-            response = requests.put(url, json=data)
-            response.raise_for_status()
-            return response.json()
-        except requests.exceptions.RequestException as e:
-            logging.error(f"An error occurred: {e}")
-            raise PermissionError from e
+    def active_or_archive_folder(self, company_id: str, dl_number: str, status: str):
+        """Функция переименования папки сделки в активные или архивные"""
 
-    def activate_folder(self, company_id: str, dl_number: str):
-        url = f"{self.base_url}/activate/{company_id}"
-        logging.info(f"Sending PUT request to {url}")
+        urls = {
+            "active": f"{self.base_url}/activate/{company_id}",
+            "archive": f"{self.base_url}/archive/{company_id}",
+        }
+
+        if status not in urls:
+            logging.error(f"Invalid status: {status}")
+            raise ValueError(f"Invalid status: {status}")
+
+        logging.info(f"Sending PUT request to {urls[status]}")
         data = {
             "dl_number": dl_number,
         }
         try:
-            response = requests.put(url, json=data)
+            response = requests.put(urls[status], json=data)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
-            raise PermissionError from e
+            raise
 
     def is_available(self) -> bool:
         url = f"{self.base_url}/is_available"
@@ -75,6 +73,8 @@ class CompanyFolderAPI:
             raise PermissionError from e
 
     def send_commercial_offer(self, company_id: str, file_path: str):
+        """Функция для копирования коммерческого предложения в папку сделки"""
+
         url = f"{self.base_url}/commercial-offer/upload"
         logging.info(f"Sending POST request to {url} with company_id: {company_id}")
 
@@ -101,6 +101,8 @@ class CompanyFolderAPI:
             raise
 
     def create_commercial_offer(self, file_path: str, user_login: str):
+        """Функция для создания КП на сервере"""
+
         url = f"{self.base_url}/commercial-offer/create"
 
         # Открытие файла и подготовка данных для отправки
@@ -120,3 +122,27 @@ class CompanyFolderAPI:
             else:
                 logging.info("Error:", response.status_code, response.text)
                 response.raise_for_status()
+
+    def download_offer(self, file_path: str):
+        """Функция для скачивания КП с сервера"""
+
+        url = f"{self.base_url}/commercial-offer/download"
+        logging.info(f"Sending GET request to {url}")
+        try:
+            data = {"file_path": file_path}
+            response = requests.post(url, json=data)
+            response.raise_for_status()
+
+            return response
+
+        except requests.exceptions.RequestException as e:
+            logging.error(f"An error occurred: {e}")
+            raise PermissionError from e
+
+        except FileNotFoundError as e:
+            logging.error(f"File not found: {e}")
+            raise e
+
+        except Exception as e:
+            logging.error(f"An unexpected error occurred: {e}")
+            raise e

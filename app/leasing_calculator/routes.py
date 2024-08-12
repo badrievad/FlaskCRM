@@ -1,6 +1,3 @@
-import os
-
-from pathlib import Path
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 
@@ -9,6 +6,7 @@ from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .pydantic_models import ValidateFields
 
 from .. import db, cache
+from ..deal.work_with_folders import CompanyFolderAPI
 from ..leasing_calculator.services import update_calculation_service
 from ..leasing_calculator.models import LeasCalculator, LeasingItem, Tranches
 from ..leasing_calculator.celery_tasks import long_task
@@ -138,25 +136,22 @@ def delete_calculation(calc_id) -> jsonify:
 def download_calculation(calc_id):
     logging.info(f"Запрос на скачивание калькулятора (id_{calc_id})")
     try:
-        calc = LeasCalculator.query.filter_by(id=calc_id).first()
+        calc: LeasCalculator = LeasCalculator.query.filter_by(id=calc_id).first()
         if calc is None:
             return jsonify({"success": False, "message": "Calculation not found"}), 404
 
-        file_path = Path(calc.path_to_file) / calc.title
-        if not os.path.exists(file_path):
-            return jsonify({"success": False, "message": "File not found"}), 404
+        folder_api = CompanyFolderAPI()
+        comm_offer = folder_api.download_offer(calc.path_to_file)
 
-        return send_file(
-            file_path.resolve(), as_attachment=True, download_name=calc.title
-        )
+        return send_file(...)
 
     except Exception as e:
-        logging.info(f"Ошибка при скачивании калькулятора: {e}")
+        logging.info(f"Ошибка при скачивании КП: {e}")
         return (
             jsonify(
                 {
                     "success": False,
-                    "message": "An error occurred while downloading the calculation",
+                    "message": "An error occurred while downloading the commercial offer",
                     "error": str(e),
                 }
             ),
@@ -187,13 +182,13 @@ def update_calculation(calc_id):
             )
 
         data = request.get_json()
-        logging.info(f"Request to update calculator (id_{calc_id}): {data}")
+        logging.info(f"Request to update calculation (id_{calc_id}): {data}")
 
         result = update_calculation_service(calc_id, data)
         return jsonify(result), result["status_code"]
 
     except Exception as e:
-        logging.error(f"Error updating calculator: {str(e)}")
+        logging.error(f"Error updating calculation: {str(e)}")
         return (
             jsonify(
                 {

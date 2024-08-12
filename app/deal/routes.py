@@ -169,7 +169,7 @@ def deal_to_archive(deal_id) -> jsonify:
             deal.dl_number = "б/н"
             deal.dl_number_windows = "б-н"
             db.session.commit()
-            api_folder.archive_folder(deal_id, old_dl_number)
+            api_folder.active_or_archive_folder(deal_id, old_dl_number, "archive")
             socketio.emit("deal_to_archive", deal.to_json())
             session_username = session.get("username")
             if session_username:
@@ -229,7 +229,9 @@ def deal_to_active(deal_id) -> jsonify:
             deal.created_at = datetime.datetime.now()
             deal.dl_number, deal.dl_number_windows = Deal.generate_dl_number()
             db.session.commit()
-            api_folder.activate_folder(deal_id, deal.dl_number_windows)
+            api_folder.active_or_archive_folder(
+                deal_id, deal.dl_number_windows, "active"
+            )
             socketio.emit("deal_to_active", deal.to_json())
             session_username = session.get("username")
             if session_username:

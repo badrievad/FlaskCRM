@@ -57,7 +57,8 @@ class CompanyFolderAPI:
         try:
             response = requests.put(urls[status], json=data)
             response.raise_for_status()
-            return response.json()
+            response_json = response.json()
+            return response_json["path_to_folder"]
         except requests.exceptions.RequestException as e:
             logging.error(f"An error occurred: {e}")
             raise

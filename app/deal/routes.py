@@ -175,7 +175,13 @@ def deal_to_archive(deal_id) -> jsonify:
             deal.dl_number = "б/н"
             deal.dl_number_windows = "б-н"
             db.session.commit()
-            api_folder.active_or_archive_folder(deal_id, old_dl_number, "archive")
+            path_to_folder = api_folder.active_or_archive_folder(
+                deal_id, old_dl_number, "archive"
+            )
+            logging.info("Обновляем путь к папке со сделкой (Архивная)")
+            logging.info(f"New path: {path_to_folder}")
+            logging.info(f"Deal ID: {deal_id}")
+            write_deal_path_to_db(path_to_folder, deal_id)
             socketio.emit("deal_to_archive", deal.to_json())
             session_username = session.get("username")
             if session_username:
@@ -235,9 +241,14 @@ def deal_to_active(deal_id) -> jsonify:
             deal.created_at = datetime.datetime.now()
             deal.dl_number, deal.dl_number_windows = Deal.generate_dl_number()
             db.session.commit()
-            api_folder.active_or_archive_folder(
+            path_to_folder = api_folder.active_or_archive_folder(
                 deal_id, deal.dl_number_windows, "active"
             )
+            logging.info("Обновляем путь к папке со сделкой (Активная)")
+            logging.info(f"New path: {path_to_folder}")
+            logging.info(f"Deal ID: {deal_id}")
+            write_deal_path_to_db(path_to_folder, deal_id)
+
             socketio.emit("deal_to_active", deal.to_json())
             session_username = session.get("username")
             if session_username:

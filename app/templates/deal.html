@@ -39,7 +39,7 @@
     <ul>
         <li class="clickable">
             <a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
-            Вернуться к сделкам</a>
+                Вернуться к сделкам</a>
         </li>
         <br>
         <li class="nav-link" onclick="showForm('some')"><i class="fa-solid fa-database"></i> Данные по сделке</li>
@@ -75,19 +75,19 @@
                 </div>
                 <div class="section">
                     <h3>Предмет лизинга</h3>
-                    <p>Снегоболотоход AODES Pathcross 1000L, 2023 г.в., новый.</p>
+                    <p>{{ leas_calc.item_name if leas_calc.item_name else '-' }}</p>
                 </div>
                 <div class="section">
                     <h3>Стоимость предмета лизинга</h3>
-                    <p>11 855 744 ₽</p>
+                    <p>{{ leas_calc.item_price_str + ' ₽' if leas_calc.item_price_str else '-' }}</p>
                 </div>
                 <div class="section">
                     <h3>Аванс</h3>
-                    <p>0 ₽</p>
+                    <p>{{ leas_calc.initial_payment_str + ' ₽' if leas_calc.initial_payment_str else '-' }}</p>
                 </div>
                 <div class="section">
                     <h3>Срок лизинга</h3>
-                    <p>60 мес.</p>
+                    <p>{{ (leas_calc.credit_term | string) + ' мес.' if leas_calc.credit_term else '-' }}</p>
                 </div>
             </div>
             <div class="right">
@@ -160,17 +160,17 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    var clickableItems = document.querySelectorAll('.sidebar ul li.clickable');
+        var clickableItems = document.querySelectorAll('.sidebar ul li.clickable');
 
-    clickableItems.forEach(function (item) {
-        item.addEventListener('click', function () {
-            var link = item.querySelector('a.nav-link');
-            if (link) {
-                window.location.href = link.href;
-            }
+        clickableItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                var link = item.querySelector('a.nav-link');
+                if (link) {
+                    window.location.href = link.href;
+                }
+            });
         });
     });
-});
 </script>
 </body>
 </html>

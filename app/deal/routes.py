@@ -2,6 +2,7 @@ import datetime
 
 from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import joinedload
 
 from . import deal_bp
 from .. import socketio, db
@@ -391,5 +392,13 @@ def get_deals_archived() -> jsonify:
 
 @deal_bp.route("/crm/deal/<deal_id>", methods=["GET"])
 def enter_into_deal(deal_id: int) -> render_template:
-    deal: Deal = Deal.query.get(deal_id)
-    return render_template("deal.html", deal=deal)
+    deal: Deal = Deal.query.options(joinedload(Deal.leas_calculators)).get(deal_id)
+    if deal.leas_calculators:
+        leas_calc = deal.leas_calculators[0]
+    else:
+        leas_calc = {}
+    return render_template(
+        "deal.html",
+        deal=deal,
+        leas_calc=leas_calc,
+    )

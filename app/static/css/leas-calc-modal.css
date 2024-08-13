@@ -75,10 +75,6 @@ html {
     background-color: #45a049;
 }
 
-.fa-pen-to-square:hover {
-    color: #3c7c2b; /* Измените цвет на тот, который вам нравится */
-    cursor: pointer;
-}
 
 .editable {
     border: 1px dashed #ccc;
@@ -138,6 +134,27 @@ html {
 .modal .modal-table td {
     padding: 10px;
     text-align: left;
+    position: relative;
+}
+
+.modal-table td i {
+    background-color: rgba(76, 76, 76, 0.8); /* Серый цвет фона */
+    color: white; /* Белый цвет иконки */
+    border-radius: 50%; /* Круглая форма */
+    padding: 8px; /* Отступы внутри иконки */
+    font-size: 15px; /* Размер иконки */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень вокруг иконки */
+    position: absolute;
+    right: 10px; /* Положение иконки справа */
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Плавный переход для фона и тени */
+
+}
+
+.modal-table td i:hover {
+    background-color: #666666; /* Изменение цвета при наведении */
 }
 
 .modal .modal-table th {
@@ -161,4 +178,53 @@ html {
     width: 100%; /* Ширина 100% */
     max-width: 400px; /* Максимальная ширина */
     text-align: left;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end; /* Выравнивание кнопок справа */
+    gap: 10px; /* Расстояние между кнопками */
+    padding: 10px 20px;
+    background-color: #f9f9f9; /* Легкий фоновый цвет для подложки */
+    border-top: 1px solid #e0e0e0; /* Линия сверху для разделения */
+}
+
+.modal-footer button {
+    display: flex;
+    align-items: center;
+    padding: 8px 15px;
+    border: 1px solid transparent; /* Убираем стандартную рамку */
+    border-radius: 5px; /* Слегка скругленные углы */
+    background-color: #ffffff; /* Белый фон */
+    color: #333333; /* Темный цвет текста */
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Плавный переход для фона и тени */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Легкая тень для объема */
+}
+
+.modal-footer button i {
+    margin-right: 8px; /* Отступ между иконкой и текстом */
+}
+
+.modal-footer button:hover {
+    background-color: #f0f0f0; /* Изменение фона при наведении */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Более выраженная тень при наведении */
+}
+
+.modal-footer button.copy-btn {
+    color: white;
+}
+
+.modal-footer button.save-btn {
+    color: white;
+}
+
+.modal-footer button.close-btn {
+    color: white;
+}
+
+.modal-footer button:focus {
+    outline: none; /* Убираем стандартный фокус */
+    border: 1px solid #999; /* Добавляем легкую рамку при фокусе */
 }

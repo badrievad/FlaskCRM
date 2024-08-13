@@ -46,7 +46,6 @@ function openModal(name, date, itemPrice, itemType, itemDeal, calcId, userFullNa
                                     <th>Наименование ПЛ</th>
                                     <td>
                                         <span id="item-name-modal">${name}</span>
-                                        <i class="fa-regular fa-pen-to-square" onclick="makeEditable('item-name-modal')"></i>
                                     </td>
                                 </tr>
                                 <tr>

@@ -927,7 +927,7 @@
         var newRow = document.createElement('tr');
 
         newRow.setAttribute('data-id', calculation.id);
-        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "", "${calculation.id}", "{{ user_fullname }}", "")`);
+        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "ДЛ |", "${calculation.id}", "{{ user_fullname }}", "")`);
 
         newRow.innerHTML = `
                             <td>${calcListBody.rows.length + 1}</td>

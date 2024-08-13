@@ -23,7 +23,7 @@
 
     <!-- toastr -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/toast-style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-toast-style.css') }}">
 
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -126,7 +126,8 @@
         </div>
         <div class="modal-footer">
             <button class="copy-btn"><i class="fa-regular fa-copy"></i> Копия КП</button>
-            <button class="save-btn" onclick="saveChanges('{{ user_fullname }}')"><i class="fa-regular fa-floppy-disk"></i> Сохранить
+            <button class="save-btn" onclick="saveChanges('{{ user_fullname }}')"><i
+                    class="fa-regular fa-floppy-disk"></i> Сохранить
                 изменения
             </button>
             <button class="close-btn" onclick="closeModal()"><i class="fa-regular fa-circle-xmark"></i> Закрыть</button>
@@ -307,12 +308,14 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Комиссия ООО "ЛКМБ-РТ"</label>
-                        <input type="number" id="commission-lkmb-value" name="commission-lkmb-value" value="1.8" placeholder="%"
+                        <input type="number" id="commission-lkmb-value" name="commission-lkmb-value" value="1.8"
+                               placeholder="%"
                                max="3">
                         <span class="percent-label">%</span>
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="commission-lkmb" name="commission-lkmb" min="0" max="3" value="1.8" step="0.1">
+                        <input type="range" id="commission-lkmb" name="commission-lkmb" min="0" max="3" value="1.8"
+                               step="0.1">
                     </div>
                     <div class="range-labels">
                         <span>0%</span>
@@ -651,8 +654,19 @@
                     <td class="date-ru">{{ calc.date_ru }}</td>
                     <td>{{ calc.manager_login }}</td>
                     <td>
-                        <i class="fa-regular fa-trash-can" data-id="{{ calc.id }}" onclick="deleteCalculation(event, '{{ calc.id }}')"></i>
-                        <i class="fa-regular fa-file-pdf" data-id="{{ calc.id }}" onclick="downloadCalculation(event, '{{ calc.id }}')"></i>
+                        {% if calc.deal_id %}
+                            <i class="fa-solid fa-link"></i>
+                            <!-- Иконка цепочки для привязанных КП -->
+                        {% else %}
+                            <i class="fa-solid fa-unlink"></i>
+                            <!-- Иконка разорванной цепочки для непривязанных КП -->
+                        {% endif %}
+                    </td>
+                    <td>
+                        <i class="fa-regular fa-trash-can" data-id="{{ calc.id }}"
+                           onclick="deleteCalculation(event, '{{ calc.id }}')"></i>
+                        <i class="fa-regular fa-file-pdf" data-id="{{ calc.id }}"
+                           onclick="downloadCalculation(event, '{{ calc.id }}')"></i>
                     </td>
                 </tr>
             {% endfor %}
@@ -929,18 +943,23 @@
         newRow.setAttribute('data-id', calculation.id);
         newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "ДЛ |", "${calculation.id}", "{{ user_fullname }}", "")`);
 
+        var dealIcon = calculation.deal_id
+            ? '<i class="fa-solid fa-link"></i>'
+            : '<i class="fa-solid fa-unlink"></i>'; // Иконки с меньшим размером
+
         newRow.innerHTML = `
-                            <td>${calcListBody.rows.length + 1}</td>
-                            <td class="item-name">${calculation.item_name}</td>
-                            <td class="item-price">${calculation.item_price_str}</td>
-                            <td class="item-type">${activeTabText}</td>
-                            <td class="date-ru">${calculation.date_ru}</td>
-                            <td>${calculation.manager_login}</td>
-                            <td>
-                                <i class="fa-regular fa-trash-can" data-id="${calculation.id}" onclick="deleteCalculation(event, '${calculation.id}')"></i>
-                                <i class="fa-regular fa-file-pdf" data-id="${calculation.id}" onclick="downloadCalculation(event, '${calculation.id}')"></i>
-                            </td>
-                        `;
+                        <td>${calcListBody.rows.length + 1}</td>
+                        <td class="item-name">${calculation.item_name}</td>
+                        <td class="item-price">${calculation.item_price_str}</td>
+                        <td class="item-type">${activeTabText}</td>
+                        <td class="date-ru">${calculation.date_ru}</td>
+                        <td>${calculation.manager_login}</td>
+                        <td>${dealIcon}</td>
+                        <td>
+                            <i class="fa-regular fa-trash-can" data-id="${calculation.id}" onclick="deleteCalculation(event, '${calculation.id}')"></i>
+                            <i class="fa-regular fa-file-pdf" data-id="${calculation.id}" onclick="downloadCalculation(event, '${calculation.id}')"></i>
+                        </td>
+                    `;
 
         calcListBody.insertBefore(newRow, calcListBody.firstChild);
     }

@@ -186,6 +186,20 @@ function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
             itemTypeElement.innerText = updatedData.item_type;
         }
 
+        // Обновляем иконку зависимости от dealId
+        var dealIconElement = row.querySelector('td i.fa-link, td i.fa-unlink');
+        if (dealIconElement) {
+            if (dealId) {
+                // Если есть dealId, используем иконку fa-link
+                dealIconElement.className = 'fa-solid fa-link';
+                showInfo("", "КП успешно добавлен в сделку");
+            } else {
+                // Если dealId нет, используем иконку fa-unlink
+                dealIconElement.className = 'fa-solid fa-unlink';
+                showInfo("", "КП не привязан к сделке");
+            }
+        }
+
         // Обновляем атрибут onclick в строке
         row.setAttribute('onclick', `openModal('${updatedData.item_name}', '${updatedData.date_ru}', '${updatedData.item_price}', '${updatedData.item_type}', '${dealText}', '${calcId}', '${userFullName}', '${dealId}')`);
     }

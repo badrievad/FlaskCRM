@@ -1,21 +1,21 @@
 // Функция для получения активных сделок
-function fetchActiveDeals(userFullname, selectElementId) {
+function fetchActiveDeals(userFullname, selectElementId, dealId) {
     return fetch(`/crm/deals/active?user_fullname=${encodeURIComponent(userFullname)}`)
         .then(response => response.json())
         .then(data => {
             // Обработка данных после получения ответа
-            updateSelectElement(data.deals, selectElementId);
+            updateSelectElement(data.deals, selectElementId, dealId);
         })
         .catch(error => {
             console.error('Error fetching deals:', error);
         });
 }
 
-function updateSelectElement(deals, selectElementId) {
+function updateSelectElement(deals, selectElementId, dealId) {
     var selectElement = document.getElementById(selectElementId);
     selectElement.innerHTML = ""; // Очищаем текущее содержимое
 
-    // Добавляем опцию "-" в начале
+    // Добавляем опцию "" в начале
     var defaultOption = document.createElement("option");
     defaultOption.value = "";
     defaultOption.text = "";
@@ -26,13 +26,19 @@ function updateSelectElement(deals, selectElementId) {
         var option = document.createElement("option");
         option.value = deal.id;
         option.text = "ДЛ " + deal.dl_number + " | " + deal.title; // Используйте поле, которое хотите отобразить
+
+        // Если option.value равно переданному dealId, делаем его selected
+        if (option.value == dealId) {
+            option.selected = true;
+        }
+
         selectElement.appendChild(option);
     });
 }
 
 
-function openModal(name, date, itemPrice, itemType, itemDeal, calcId, userFullName) {
-    fetchActiveDeals(userFullName, 'item-deal-modal-select');
+function openModal(name, date, itemPrice, itemType, itemDeal, calcId, userFullName, dealId) {
+    fetchActiveDeals(userFullName, 'item-deal-modal-select', dealId);
 
     var modalContent = `
                             <table class="modal-table" id="modal-table" data-calc-id="${calcId}">
@@ -129,10 +135,14 @@ function makeEditable(id, isSelect = false) {
 }
 
 function saveChanges(userFullName) {
+    var dealId = document.getElementById('item-deal-modal-select').value;
+    var dealText = dealId ? document.getElementById('item-deal-modal-select').options[document.getElementById('item-deal-modal-select').selectedIndex].text : '';
+
     var data = {
         item_name: document.getElementById('item-name-modal').innerText,
         item_type: document.getElementById('item-type-modal-select').value || document.getElementById('item-type-modal').innerText,
-        deal_id: document.getElementById('item-deal-modal-select').value,
+        deal_id: dealId,
+        deal_text: dealText  // Сохраняем текст сделки только если deal_id не пустой
     };
 
     var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
@@ -145,7 +155,7 @@ function saveChanges(userFullName) {
         }).then(response => response.json())
             .then(responseData => {
                 if (responseData.success) {
-                    updateTableRow(calcId, responseData.data, userFullName);
+                    updateTableRow(calcId, responseData.data, userFullName, data.deal_id, data.deal_text);
                     closeModal(); // Закрываем модальное окно после сохранения
                     showSuccess(responseData.message, "Успешно");
 
@@ -156,14 +166,28 @@ function saveChanges(userFullName) {
     }
 }
 
-function updateTableRow(calcId, updatedData, userFullName) {
+function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
     var row = document.querySelector(`tr[data-id="${calcId}"]`);
     if (row) {
-        row.querySelector('.item-name').innerText = updatedData.item_name;
-        row.querySelector('.item-price').innerText = updatedData.item_price;
-        row.querySelector('.item-type').innerText = updatedData.item_type;
+        // Обновляем имя предмета, если элемент существует
+        var itemNameElement = row.querySelector('.item-name');
+        if (itemNameElement) {
+            itemNameElement.innerText = updatedData.item_name;
+        }
 
-        // Обновление атрибута onclick в строке
-        row.setAttribute('onclick', `openModal('${updatedData.item_name}', '${updatedData.date_ru}', '${updatedData.item_price}', '${updatedData.item_type}', '${updatedData.title}', '${calcId}', '${userFullName}')`);
+        // Обновляем цену предмета, если элемент существует
+        var itemPriceElement = row.querySelector('.item-price');
+        if (itemPriceElement) {
+            itemPriceElement.innerText = updatedData.item_price;
+        }
+
+        // Обновляем тип предмета, если элемент существует
+        var itemTypeElement = row.querySelector('.item-type');
+        if (itemTypeElement) {
+            itemTypeElement.innerText = updatedData.item_type;
+        }
+
+        // Обновляем атрибут onclick в строке
+        row.setAttribute('onclick', `openModal('${updatedData.item_name}', '${updatedData.date_ru}', '${updatedData.item_price}', '${updatedData.item_type}', '${dealText}', '${calcId}', '${userFullName}', '${dealId}')`);
     }
 }

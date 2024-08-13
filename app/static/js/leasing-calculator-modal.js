@@ -192,11 +192,15 @@ function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
             if (dealId) {
                 // Если есть dealId, используем иконку fa-link
                 dealIconElement.className = 'fa-solid fa-link';
-                showInfo("", "КП успешно добавлен в сделку");
+                dealIconElement.setAttribute('title', 'КП привязано к сделке');
+                showInfo("", "КП успешно добавлено в сделку");
+
             } else {
                 // Если dealId нет, используем иконку fa-unlink
                 dealIconElement.className = 'fa-solid fa-unlink';
-                showInfo("", "КП не привязан к сделке");
+                dealIconElement.setAttribute('title', 'КП не привязано к сделке');
+                showInfo("", "КП не привязано к сделке");
+
             }
         }
 

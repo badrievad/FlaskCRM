@@ -114,9 +114,20 @@ def delete_calculation(calc_id) -> jsonify:
         if calc is None:
             return jsonify({"success": False, "message": "Calculation not found"}), 404
 
-        db.session.delete(calc)
-        db.session.commit()
-        return jsonify({"success": True, "message": "Calculation deleted successfully"})
+        # Найти связанный tranche, если он существует
+        tranche = calc.tranche  # Получить связанную запись из Tranches
+        if tranche:
+            db.session.delete(tranche)  # Удалить запись из Tranches
+
+        db.session.delete(calc)  # Удалить запись из LeasCalculator
+        db.session.commit()  # Подтвердить транзакцию
+
+        return jsonify(
+            {
+                "success": True,
+                "message": "Calculation and related tranche deleted successfully",
+            }
+        )
 
     except Exception as e:
         db.session.rollback()

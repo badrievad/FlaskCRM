@@ -239,3 +239,8 @@ def get_commercial_offer(calc_id: int) -> jsonify:
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
+
+
+@leas_calc_bp.route("/crm/commercial-offer/<int:calc_id>", methods=["GET"])
+def show_commercial_offer(calc_id) -> render_template:
+    return render_template("commercial-offer.html")

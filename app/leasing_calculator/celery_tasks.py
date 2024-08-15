@@ -6,6 +6,7 @@ from datetime import date
 from logger import logging
 from celery import shared_task
 
+from .api_pdf_generate import PDFGeneratorClient
 from ..config import CALCULATION_TEMPLATE_PATH, LEAS_CALC_TEMPLATE_PATH
 from .models import LeasCalculator, Tranches
 from .other_utils import validate_item_price
@@ -117,7 +118,9 @@ def intensive_task_simulation(data: dict) -> dict:
         db.session.add(new_calc)
         db.session.commit()
 
-        new_title = f"Лизинговый калькулятор (id_{new_calc.id}).xlsx"
+        new_deal_id = new_calc.id
+
+        new_title = f"Лизинговый калькулятор (id_{new_deal_id}).xlsx"
         path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title
 
         # Создание директории, если она не существует
@@ -127,6 +130,8 @@ def intensive_task_simulation(data: dict) -> dict:
 
         new_calc.title = new_title
         folder_api = CompanyFolderAPI()
+        pdf_api = PDFGeneratorClient(new_deal_id, data["login"])
+        pdf_api.generate_pdf()
         new_calc.path_to_file = folder_api.create_commercial_offer(
             path_to_xlsx, user_login
         )

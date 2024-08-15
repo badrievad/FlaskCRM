@@ -1,9 +1,11 @@
 import requests
+
+from ..config import URL_PDF_API
 from logger import logging
 
 
 class PDFGeneratorClient:
-    def __init__(self, deal_id, user_login, base_url="http://192.168.100.105:5050"):
+    def __init__(self, deal_id, user_login, base_url=URL_PDF_API):
         self.base_url = base_url
         self.deal_id = deal_id
         self.user_login = user_login

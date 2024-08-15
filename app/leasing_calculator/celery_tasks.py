@@ -131,8 +131,8 @@ def intensive_task_simulation(data: dict) -> dict:
         new_calc.title = new_title
         folder_api = CompanyFolderAPI()
         pdf_api = PDFGeneratorClient(new_deal_id, data["login"])
-        pdf_api.generate_pdf()
-        new_calc.path_to_file = folder_api.create_commercial_offer(
+        new_calc.path_to_pdf = pdf_api.generate_pdf()
+        new_calc.path_to_xlsx = folder_api.create_commercial_offer(
             path_to_xlsx, user_login
         )
         db.session.commit()

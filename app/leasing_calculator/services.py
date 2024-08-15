@@ -47,10 +47,14 @@ def update_calculation_service(calc_id, data):
 
         db.session.commit()
 
-        path_to_commercial_offer = calc.path_to_file
+        path_to_xlsx = calc.path_to_xlsx
+        path_to_pdf = calc.path_to_pdf
+
         folder_api = CompanyFolderAPI()
-        logging.info(f"Path: {path_to_commercial_offer} and deal_id: {deal_id}")
-        folder_api.send_commercial_offer(deal_id, path_to_commercial_offer)
+        logging.info(f"Path: {path_to_xlsx} and deal_id: {deal_id}")
+
+        #  Сохраняем КП и расчет в папке сделки
+        folder_api.copy_commercial_offer_to_deal(deal_id, path_to_xlsx, path_to_pdf)
 
         updated_data = {
             "id": calc.id,

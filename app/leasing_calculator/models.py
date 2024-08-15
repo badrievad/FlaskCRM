@@ -48,7 +48,8 @@ class LeasCalculator(db.Model):
 
     date = db.Column(db.Date, nullable=False)
     date_ru = db.Column(db.String(50), nullable=True)
-    path_to_file = db.Column(db.String(500), nullable=True)
+    path_to_xlsx = db.Column(db.String(500), nullable=True)
+    path_to_pdf = db.Column(db.String(500), nullable=True)
     manager_login = db.Column(db.String(200), nullable=False)
     title = db.Column(
         db.String(200), nullable=True
@@ -101,7 +102,8 @@ class LeasCalculator(db.Model):
             "trance_id": self.trance_id,
             "date": self.date,
             "date_ru": self.date_ru,
-            "path_to_file": self.path_to_file,
+            "path_to_xlsx": self.path_to_xlsx,
+            "path_to_pdf": self.path_to_pdf,
             "manager_login": self.manager_login,
             "title": self.title,
             "deal_id": self.deal_id,

@@ -74,7 +74,9 @@ class CompanyFolderAPI:
             logging.error(f"An error occurred: {e}")
             raise PermissionError from e
 
-    def send_commercial_offer(self, company_id: str, file_path: str):
+    def copy_commercial_offer_to_deal(
+        self, company_id: str, xlsx_path: str, pdf_path: str
+    ):
         """Функция для копирования коммерческого предложения в папку сделки"""
 
         url = f"{self.base_url}/commercial-offer/upload"
@@ -87,7 +89,11 @@ class CompanyFolderAPI:
             return
 
         try:
-            data = {"company_id": company_id, "file_path": file_path}
+            data = {
+                "company_id": company_id,
+                "xlsx_path": xlsx_path,
+                "pdf_path": pdf_path,
+            }
             response = requests.post(url, json=data)
             response.raise_for_status()  # Проверка на ошибки HTTP
 
@@ -114,12 +120,12 @@ class CompanyFolderAPI:
             # Отправка POST-запроса
             response = requests.post(url, files=files, data=data)
 
-            # Проверка статуса ответа и извлечение path_to_file
+            # Проверка статуса ответа и извлечение path_to_xlsx
             if response.status_code == 200:
                 response_data = response.json()
-                path_to_file = response_data.get("path_to_file")
-                logging.info("Success:", path_to_file)
-                return path_to_file
+                path_to_xlsx = response_data.get("path_to_xlsx")
+                logging.info("Success:", path_to_xlsx)
+                return path_to_xlsx
             else:
                 logging.info("Error:", response.status_code, response.text)
                 response.raise_for_status()

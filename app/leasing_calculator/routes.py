@@ -1,17 +1,4 @@
-from sqlalchemy import desc
-from sqlalchemy.orm import joinedload
-
-from . import leas_calc_bp
-from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
-from .pydantic_models import ValidateFields
-
-from .. import db, cache
-from ..config import CALCULATION_TEMPLATE_PATH
-from ..leasing_calculator.services import update_calculation_service
-from ..leasing_calculator.models import LeasCalculator, LeasingItem, Tranches
-from ..leasing_calculator.celery_tasks import long_task
-from ..celery_utils import is_celery_alive
-
+import json
 from flask import (
     request,
     jsonify,
@@ -21,7 +8,19 @@ from flask import (
     send_file,
 )
 from flask_login import current_user, login_required
+from sqlalchemy import desc
+from sqlalchemy.orm import joinedload
+
 from logger import logging
+from . import leas_calc_bp
+from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
+from .api_yandex_cloud import yandex_download_file_s3
+from .pydantic_models import ValidateFields
+from .. import db, cache
+from ..celery_utils import is_celery_alive
+from ..leasing_calculator.celery_tasks import long_task
+from ..leasing_calculator.models import LeasCalculator, LeasingItem, Tranches
+from ..leasing_calculator.services import update_calculation_service
 
 
 @leas_calc_bp.route("/crm/calculator", methods=["GET"])
@@ -58,9 +57,6 @@ def get_leasing_calculator() -> render_template:
 def start_task() -> jsonify:
     data: dict = request.get_json()
     validate_data: dict = ValidateFields(**data).model_dump()
-
-    #  Нужно будет удалить после всех проверок
-    import json
 
     with open("data.json", "w", encoding="utf-8") as f:
         json.dump(validate_data, f, ensure_ascii=False, indent=4)
@@ -145,18 +141,16 @@ def delete_calculation(calc_id) -> jsonify:
 
 @leas_calc_bp.route("/crm/calculator/download/<int:calc_id>", methods=["GET"])
 def download_calculation(calc_id):
-    logging.info(f"Запрос на скачивание калькулятора (id_{calc_id})")
+    logging.info(f"Запрос на скачивание КП (id_{calc_id})")
     try:
         calc: LeasCalculator = LeasCalculator.query.filter_by(id=calc_id).first()
         if calc is None:
             return jsonify({"success": False, "message": "Calculation not found"}), 404
 
-        commercial_offer = (
-            CALCULATION_TEMPLATE_PATH.resolve()
-            / f"Лизинговый калькулятор (id_{calc_id}).xlsx"
-        )
+        file_name = f"Коммерческое предложение (id_{calc_id}).pdf"
+        commercial_offer = yandex_download_file_s3(file_name)
 
-        return send_file(commercial_offer)
+        return send_file(commercial_offer, as_attachment=True)
 
     except Exception as e:
         logging.info(f"Ошибка при скачивании КП: {e}")

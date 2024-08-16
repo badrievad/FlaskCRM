@@ -1,0 +1,55 @@
+from pathlib import Path
+
+import boto3
+
+from ..config import CALCULATION_TEMPLATE_PATH, BUCKET_NAME
+from botocore.exceptions import (
+    NoCredentialsError,
+    PartialCredentialsError,
+    ClientError,
+    BotoCoreError,
+)
+from logger import logging
+
+
+def yandex_download_file_s3(file_name: str) -> str | None:
+    """
+    Скачивание файла с Yandex Cloud
+    """
+    try:
+        # Создаем сессию и клиент для работы с Yandex Object Storage
+        session = boto3.session.Session()
+        s3 = session.client(
+            service_name="s3", endpoint_url="https://storage.yandexcloud.net"
+        )
+
+        download_path = (
+            CALCULATION_TEMPLATE_PATH.resolve() / file_name
+        )  # Локальный путь, куда будет сохранен файл
+
+        # Загрузка файла
+        s3.download_file(BUCKET_NAME, file_name, download_path)
+        logging.info(
+            f"File '{file_name}' successfully downloaded to '{download_path}'."
+        )
+
+        return download_path
+
+    except NoCredentialsError:
+        logging.error(
+            "No credentials provided. Please check your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY."
+        )
+    except PartialCredentialsError:
+        logging.error(
+            "Incomplete credentials provided. Please ensure both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are set."
+        )
+    except ClientError as e:
+        logging.error(f"Client error occurred: {e}")
+        if e.response["Error"]["Code"] == "NoSuchKey":
+            logging.error(
+                f"The file '{file_name}' does not exist in the bucket '{BUCKET_NAME}'."
+            )
+    except BotoCoreError as e:
+        logging.error(f"An error occurred in Boto3: {e}")
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")

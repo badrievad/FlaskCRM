@@ -1112,3 +1112,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return `${year}-${month}-${day}`;
     }
 })
+
+function simpleScrollTest() {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }

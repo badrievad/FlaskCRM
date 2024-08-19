@@ -1,5 +1,3 @@
-from pathlib import Path
-
 import boto3
 
 from ..config import CALCULATION_TEMPLATE_PATH, BUCKET_NAME

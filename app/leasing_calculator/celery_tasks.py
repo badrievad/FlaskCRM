@@ -120,18 +120,24 @@ def intensive_task_simulation(data: dict) -> dict:
 
         new_deal_id = new_calc.id
 
-        new_title = f"Лизинговый калькулятор (id_{new_deal_id}).xlsx"
-        path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title
+        new_title_xlsx = f"Лизинговый калькулятор (id_{new_deal_id}).xlsx"
+        path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title_xlsx
 
         # Создание директории, если она не существует
         CALCULATION_TEMPLATE_PATH.mkdir(parents=True, exist_ok=True)
 
         wb.save(path_to_xlsx)
 
-        new_calc.title = new_title
         folder_api = CompanyFolderAPI()
         pdf_api = PDFGeneratorClient(new_deal_id, data["login"])
-        new_calc.path_to_pdf = pdf_api.generate_pdf()
+        try:
+            new_calc.path_to_pdf = pdf_api.generate_pdf()
+            new_title_pdf = f"Коммерческое предложение (id_{new_deal_id}).pdf"
+            new_calc.title = new_title_pdf
+        except Exception as e:
+            new_calc.path_to_pdf = None
+            logging.error(f"Error generating PDF: {e}")
+            logging.info("PDF не создался. Сервис недоступен.")
         new_calc.path_to_xlsx = folder_api.create_commercial_offer(
             path_to_xlsx, user_login
         )

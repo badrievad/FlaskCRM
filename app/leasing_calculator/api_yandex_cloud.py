@@ -53,3 +53,28 @@ def yandex_download_file_s3(file_name: str) -> str | None:
         logging.error(f"An error occurred in Boto3: {e}")
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
+
+
+def yandex_delete_file_s3(file_name: str) -> None:
+    """
+    Удаление файла с Yandex Cloud
+    """
+    try:
+        # Создаем сессию и клиент для работы с Yandex Object Storage
+        session = boto3.session.Session()
+        s3 = session.client(
+            service_name="s3", endpoint_url="https://storage.yandexcloud.net"
+        )
+
+        # Удаление файла
+        s3.delete_object(Bucket=BUCKET_NAME, Key=file_name)
+        logging.info(f"File '{file_name}' successfully deleted from Yandex Cloud.")
+
+    except NoCredentialsError:
+        logging.error(
+            "No credentials provided. Please check your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY."
+        )
+    except PartialCredentialsError:
+        logging.error(
+            "Incomplete credentials provided. Please ensure both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are set."
+        )

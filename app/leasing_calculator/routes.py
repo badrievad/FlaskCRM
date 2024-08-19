@@ -14,7 +14,7 @@ from sqlalchemy.orm import joinedload
 from logger import logging
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
-from .api_yandex_cloud import yandex_download_file_s3
+from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
 from .pydantic_models import ValidateFields
 from .. import db, cache
 from ..celery_utils import is_celery_alive
@@ -114,6 +114,9 @@ def delete_calculation(calc_id) -> jsonify:
         tranche = calc.tranche  # Получить связанную запись из Tranches
         if tranche:
             db.session.delete(tranche)  # Удалить запись из Tranches
+
+        # Удалить файл из S3
+        yandex_delete_file_s3(calc.title)
 
         db.session.delete(calc)  # Удалить запись из LeasCalculator
         db.session.commit()  # Подтвердить транзакцию

@@ -366,99 +366,6 @@ document.getElementById('commission-lkmb-value').addEventListener('keypress', fu
     }
 });
 
-// Расходы на страхование КАСКО
-document.getElementById('insurance-casko').addEventListener('input', function () {
-    document.getElementById('insurance-casko-value').value = this.value;
-});
-
-document.getElementById('insurance-casko-value').addEventListener('blur', function () {
-    var value = this.value;
-
-    // Ограничение на длину значения (например, 5 символов)
-    if (value.length > 5) {
-        value = value.slice(0, 5);
-    }
-
-    // Преобразование в число и проверка на превышение 20
-    var numericValue = parseFloat(value);
-
-    if (numericValue > 20) {
-        numericValue = 20;
-    }
-
-    this.value = numericValue; // Обновить значение поля, если оно было изменено
-    document.getElementById('insurance-casko').value = numericValue;
-});
-
-
-document.getElementById('insurance-casko-value').addEventListener('keypress', function () {
-    // Разрешить только цифры и блокировать -, +
-    if (event.key === '-' || event.key === '+' || event.key === 'e') {
-        event.preventDefault();
-    }
-});
-
-// Расходы на страхование ОСАГО
-document.getElementById('insurance-osago').addEventListener('input', function () {
-    document.getElementById('insurance-osago-value').value = this.value;
-});
-
-document.getElementById('insurance-osago-value').addEventListener('blur', function () {
-    var value = this.value;
-
-    // Ограничение на длину значения (например, 5 символов)
-    if (value.length > 5) {
-        value = value.slice(0, 5);
-    }
-
-    // Преобразование в число и проверка на превышение 20
-    var numericValue = parseFloat(value);
-
-    if (numericValue > 20) {
-        numericValue = 20;
-    }
-
-    this.value = numericValue; // Обновить значение поля, если оно было изменено
-    document.getElementById('insurance-osago').value = numericValue;
-});
-
-
-document.getElementById('insurance-osago-value').addEventListener('keypress', function () {
-    // Разрешить только цифры и блокировать -, +
-    if (event.key === '-' || event.key === '+' || event.key === 'e') {
-        event.preventDefault();
-    }
-});
-
-// Расходы на страхование ЖИЗНИ и ЗДОРОВЬЯ
-document.getElementById('health-insurance').addEventListener('input', function () {
-    document.getElementById('health-insurance-value').value = this.value;
-    document.getElementById('health-insurance-display').value = this.value;
-});
-
-document.getElementById('health-insurance-display').addEventListener('input', function () {
-    var value = parseInt(this.value.replace(/\D/g, ''), 10);
-
-    if (isNaN(value) || this.value.trim().toLowerCase() === 'не число') {
-        value = 0;
-    }
-
-    document.getElementById('health-insurance-value').value = value;
-    document.getElementById('health-insurance').value = value;
-});
-
-// Расходы на страхование ИНОЕ
-document.getElementById('other-insurance').addEventListener('input', function () {
-    document.getElementById('other-insurance-value').value = this.value;
-    document.getElementById('other-insurance-display').value = this.value;
-});
-
-document.getElementById('other-insurance-display').addEventListener('input', function () {
-    var value = parseInt(this.value.replace(/\D/g, ''), 10);
-    document.getElementById('other-insurance-value').value = value;
-    document.getElementById('other-insurance').value = value;
-});
-
 // Агентское вознаграждение
 document.getElementById('agent-commission').addEventListener('input', function () {
     document.getElementById('agent-commission-value').value = this.value;
@@ -575,45 +482,119 @@ document.getElementById('mail-display').addEventListener('input', function () {
     document.getElementById('mail').value = value;
 });
 
-document.getElementById('health-insurance-display').addEventListener('keypress', allowOnlyNumbers);
-document.getElementById('other-insurance-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('depr-transport').addEventListener('input', function () {
+    document.getElementById('depr-transport-value').value = this.value;
+    document.getElementById('depr-transport-display').value = this.value;
+})
+
+document.getElementById('depr-transport-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('depr-transport-value').value = value;
+    document.getElementById('depr-transport').value = value;
+})
+
+document.getElementById('travel').addEventListener('input', function () {
+    document.getElementById('travel-value').value = this.value;
+    document.getElementById('travel-display').value = this.value;
+})
+
+document.getElementById('travel-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('travel-value').value = value;
+    document.getElementById('travel').value = value;
+})
+
+document.getElementById('stationery').addEventListener('input', function () {
+    document.getElementById('stationery-value').value = this.value;
+    document.getElementById('stationery-display').value = this.value;
+})
+
+document.getElementById('stationery-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('stationery-value').value = value;
+    document.getElementById('stationery').value = value;
+})
+
+document.getElementById('internet').addEventListener('input', function () {
+    document.getElementById('internet-value').value = this.value;
+    document.getElementById('internet-display').value = this.value;
+})
+
+document.getElementById('internet-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('internet-value').value = value;
+    document.getElementById('internet').value = value;
+})
+
+document.getElementById('pledge').addEventListener('input', function () {
+    document.getElementById('pledge-value').value = this.value;
+    document.getElementById('pledge-display').value = this.value;
+})
+
+document.getElementById('pledge-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('pledge-value').value = value;
+    document.getElementById('pledge').value = value;
+})
+
+document.getElementById('bank-pledge').addEventListener('input', function () {
+    document.getElementById('bank-pledge-value').value = this.value;
+    document.getElementById('bank-pledge-display').value = this.value;
+})
+
+document.getElementById('bank-pledge-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('bank-pledge-value').value = value;
+    document.getElementById('bank-pledge').value = value;
+})
+
+document.getElementById('express').addEventListener('input', function () {
+    document.getElementById('express-value').value = this.value;
+    document.getElementById('express-display').value = this.value;
+})
+
+document.getElementById('express-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('express-value').value = value;
+    document.getElementById('express').value = value;
+})
+
+document.getElementById('egrn').addEventListener('input', function () {
+    document.getElementById('egrn-value').value = this.value;
+    document.getElementById('egrn-display').value = this.value;
+})
+
+document.getElementById('egrn-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('egrn-value').value = value;
+    document.getElementById('egrn').value = value;
+})
+
+document.getElementById('egrul').addEventListener('input', function () {
+    document.getElementById('egrul-value').value = this.value;
+    document.getElementById('egrul-display').value = this.value;
+})
+document.getElementById('egrul-display').addEventListener('input', function () {
+    var value = parseInt(this.value.replace(/\D/g, ''), 10);
+    document.getElementById('egrul-value').value = value;
+    document.getElementById('egrul').value = value;
+})
+
 document.getElementById('tracker-display').addEventListener('keypress', allowOnlyNumbers);
 document.getElementById('mayak-display').addEventListener('keypress', allowOnlyNumbers);
 document.getElementById('fedresurs-display').addEventListener('keypress', allowOnlyNumbers);
 document.getElementById('gsm-display').addEventListener('keypress', allowOnlyNumbers);
 document.getElementById('mail-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('depr-transport-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('travel-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('stationery-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('internet-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('pledge-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('bank-pledge-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('express-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('egrn-display').addEventListener('keypress', allowOnlyNumbers);
+document.getElementById('egrul-display').addEventListener('keypress', allowOnlyNumbers);
 
-// Форматирование для health-insurance-display
-document.getElementById('health-insurance-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('health-insurance').value = value;
-});
-
-document.getElementById('health-insurance-display').addEventListener('blur', function () {
-    this.value = formatNumber(parseFormattedNumber(this.value));
-});
-
-// Обработчик для слайдера health-insurance
-document.getElementById('health-insurance').addEventListener('input', function () {
-    var value = parseInt(this.value, 10);
-    document.getElementById('health-insurance-display').value = formatNumber(value);
-});
-
-// Форматирование для other-insurance-display
-document.getElementById('other-insurance-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('other-insurance').value = value;
-});
-
-document.getElementById('other-insurance-display').addEventListener('blur', function () {
-    this.value = formatNumber(parseFormattedNumber(this.value));
-});
-
-// Обработчик для слайдера other-insurance
-document.getElementById('other-insurance').addEventListener('input', function () {
-    var value = parseInt(this.value, 10);
-    document.getElementById('other-insurance-display').value = formatNumber(value);
-});
 
 // Форматирование для tracker-display
 document.getElementById('tracker-display').addEventListener('input', function () {
@@ -695,6 +676,150 @@ document.getElementById('mail').addEventListener('input', function () {
     document.getElementById('mail-display').value = formatNumber(value);
 });
 
+// Форматирование для depr-transport-display
+document.getElementById('depr-transport-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('depr-transport').value = value;
+});
+
+document.getElementById('depr-transport-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера depr-transport
+document.getElementById('depr-transport').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('depr-transport-display').value = formatNumber(value);
+});
+
+// Форматирование для travel-display
+document.getElementById('travel-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('travel').value = value;
+});
+
+document.getElementById('travel-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера travel
+document.getElementById('travel').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('travel-display').value = formatNumber(value);
+});
+
+// Форматирование для stationery-display
+document.getElementById('stationery-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('stationery').value = value;
+});
+
+document.getElementById('stationery-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера stationery
+document.getElementById('stationery').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('stationery-display').value = formatNumber(value);
+});
+
+// Форматирование для internet-display
+document.getElementById('internet-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('internet').value = value;
+});
+
+document.getElementById('internet-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера internet
+document.getElementById('internet').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('internet-display').value = formatNumber(value);
+});
+
+// Форматирование для pledge-display
+document.getElementById('pledge-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('pledge').value = value;
+});
+
+document.getElementById('pledge-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера pledge
+document.getElementById('pledge').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('pledge-display').value = formatNumber(value);
+});
+
+// Форматирование для bank-pledge-display
+document.getElementById('bank-pledge-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('bank-pledge').value = value;
+});
+
+document.getElementById('bank-pledge-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера bank-pledge
+document.getElementById('bank-pledge').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('bank-pledge-display').value = formatNumber(value);
+});
+
+// Форматирование для express-display
+document.getElementById('express-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('express').value = value;
+});
+
+document.getElementById('express-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера express
+document.getElementById('express').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('express-display').value = formatNumber(value);
+});
+
+// Форматирование для egrn-display
+document.getElementById('egrn-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('egrn').value = value;
+});
+
+document.getElementById('egrn-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера egrn
+document.getElementById('egrn').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('egrn-display').value = formatNumber(value);
+});
+
+// Форматирование для egrul-display
+document.getElementById('egrul-display').addEventListener('input', function () {
+    var value = parseFormattedNumber(this.value);
+    document.getElementById('egrul').value = value;
+});
+
+document.getElementById('egrul-display').addEventListener('blur', function () {
+    this.value = formatNumber(parseFormattedNumber(this.value));
+});
+
+// Обработчик для слайдера egrul
+document.getElementById('egrul').addEventListener('input', function () {
+    var value = parseInt(this.value, 10);
+    document.getElementById('egrul-display').value = formatNumber(value);
+});
+
 document.addEventListener('DOMContentLoaded', function () {
     const newBtn = document.getElementById('new-btn');
     const usedBtn = document.getElementById('used-btn');
@@ -731,218 +856,259 @@ document.addEventListener('DOMContentLoaded', function () {
         } else if (value && parseInt(value) > maxYear) {
             this.value = maxYear;
         }
+        // });
+
+        yearInput.addEventListener('blur', function () {
+            if (parseInt(this.value) < 1950) {
+                this.value = 1950;
+            } else if (parseInt(this.value) > maxYear) {
+                this.value = maxYear;
+            }
+        });
+
+        yearInput.addEventListener('keypress', function (e) {
+            const charCode = e.charCode || e.keyCode;
+            if (charCode === 43 || charCode === 45 || charCode === 101) {
+                e.preventDefault();
+            }
+        });
     });
 
-    yearInput.addEventListener('blur', function () {
-        if (parseInt(this.value) < 1950) {
-            this.value = 1950;
-        } else if (parseInt(this.value) > maxYear) {
-            this.value = maxYear;
-        }
-    });
+    function populateForm(data) {
+        var calc = data.data.calc;
+        var tranches = data.data.tranches;
+        var insurances = data.data.insurances;
 
-    yearInput.addEventListener('keypress', function (e) {
-        const charCode = e.charCode || e.keyCode;
-        if (charCode === 43 || charCode === 45 || charCode === 101) {
-            e.preventDefault();
-        }
-    });
-});
+        console.log(data);
 
-function populateForm(data) {
-    var calc = data.data.calc;
-    var tranches = data.data.tranches;
-
-    console.log(data);
-
-    if (calc.currency !== 'rub') {
-        document.getElementById('foreign-cost-section').classList.add('show');
-        // Обновление лейблов валюты
-    } else {
-        document.getElementById('foreign-cost-section').classList.remove('show');
-    }
-
-    // Заполните основные поля
-    document.getElementById('item-name').value = calc.item_name;
-    document.getElementById('production-year-value').value = calc.item_year;
-    document.getElementById('cost-value').value = calc.item_price;
-    document.getElementById('cost-display').value = calc.item_price_str;
-    document.getElementById('foreign-cost-value').value = calc.foreign_price;
-    document.getElementById('foreign-cost-display').value = calc.foreign_price_str;
-    document.getElementById('foreign-cost').value = calc.foreign_price;
-    document.getElementById('initial-payment').value = calc.initial_payment_percent;
-    document.getElementById('initial-payment-percent').value = calc.initial_payment_percent.toFixed(2);
-    document.getElementById('credit').value = calc.credit_sum_percent;
-    document.getElementById('credit-percent').value = calc.credit_sum_percent;
-    updateInitialPaymentValue();
-    updateCreditValue();
-    document.getElementById('term-value').value = calc.credit_term;
-    document.getElementById('term').value = calc.credit_term;
-    document.getElementById('commission-value').value = calc.bank_commission;
-    document.getElementById('commission').value = calc.bank_commission;
-    document.getElementById('commission-lkmb-value').value = calc.lkmb_commission;
-    document.getElementById('commission-lkmb').value = calc.lkmb_commission;
-    document.getElementById('insurance-casko-value').value = calc.insurance_casko;
-    document.getElementById('insurance-casko').value = calc.insurance_casko;
-    document.getElementById('insurance-osago-value').value = calc.insurance_osago;
-    document.getElementById('insurance-osago').value = calc.insurance_osago;
-    document.getElementById('health-insurance-value').value = calc.health_insurance;
-    document.getElementById('health-insurance-display').value = calc.health_insurance_str;
-    document.getElementById('health-insurance').value = calc.health_insurance;
-    document.getElementById('other-insurance-value').value = calc.other_insurance;
-    document.getElementById('other-insurance-display').value = calc.other_insurance_str;
-    document.getElementById('other-insurance').value = calc.other_insurance;
-    document.getElementById('agent-commission-value').value = calc.agent_commission;
-    document.getElementById('agent-commission').value = calc.agent_commission;
-    document.getElementById('manager-bonus-value').value = calc.manager_bonus;
-    document.getElementById('manager-bonus').value = calc.manager_bonus;
-    document.getElementById('tracker-value').value = calc.tracker;
-    document.getElementById('tracker-display').value = calc.tracker_str;
-    document.getElementById('tracker').value = calc.tracker;
-    document.getElementById('mayak-value').value = calc.mayak;
-    document.getElementById('mayak-display').value = calc.mayak_str;
-    document.getElementById('mayak').value = calc.mayak;
-    document.getElementById('fedresurs-value').value = calc.fedresurs;
-    document.getElementById('fedresurs-display').value = calc.fedresurs_str;
-    document.getElementById('fedresurs').value = calc.fedresurs;
-    document.getElementById('gsm-value').value = calc.gsm;
-    document.getElementById('gsm-display').value = calc.gsm_str;
-    document.getElementById('gsm').value = calc.gsm;
-    document.getElementById('mail-value').value = calc.mail;
-    document.getElementById('mail-display').value = calc.mail_str;
-    document.getElementById('mail').value = calc.mail;
-    document.getElementById('input-period').value = formatDate(calc.input_period);
-
-    // Установите правильное значение для item_type
-    var itemTypeButtons = document.querySelectorAll('.tabs button');
-    itemTypeButtons.forEach(button => {
-        if (button.innerText.trim() === calc.item_type) {
-            button.classList.add('active');
+        if (calc.currency !== 'rub') {
+            document.getElementById('foreign-cost-section').classList.add('show');
+            // Обновление лейблов валюты
         } else {
-            button.classList.remove('active');
+            document.getElementById('foreign-cost-section').classList.remove('show');
         }
-    });
 
-    // Установите правильное значение для item_condition
-    var conditionButtons = document.querySelectorAll('.button-group button');
-    conditionButtons.forEach(button => {
-        if (button.innerText.trim() === calc.item_condition) {
-            button.classList.add('active');
-        } else {
-            button.classList.remove('active');
-        }
-    });
+        // Заполните основные поля
+        document.getElementById('item-name').value = calc.item_name;
+        document.getElementById('production-year-value').value = calc.item_year;
+        document.getElementById('cost-value').value = calc.item_price;
+        document.getElementById('cost-display').value = calc.item_price_str;
+        document.getElementById('foreign-cost-value').value = calc.foreign_price;
+        document.getElementById('foreign-cost-display').value = calc.foreign_price_str;
+        document.getElementById('foreign-cost').value = calc.foreign_price;
+        document.getElementById('initial-payment').value = calc.initial_payment_percent;
+        document.getElementById('initial-payment-percent').value = calc.initial_payment_percent.toFixed(2);
+        document.getElementById('credit').value = calc.credit_sum_percent;
+        document.getElementById('credit-percent').value = calc.credit_sum_percent;
+        updateInitialPaymentValue();
+        updateCreditValue();
+        document.getElementById('term-value').value = calc.credit_term;
+        document.getElementById('term').value = calc.credit_term;
+        document.getElementById('commission-value').value = calc.bank_commission;
+        document.getElementById('commission').value = calc.bank_commission;
+        document.getElementById('commission-lkmb-value').value = calc.lkmb_commission;
+        document.getElementById('commission-lkmb').value = calc.lkmb_commission;
+        document.getElementById('payment-date-value').value = formatDate(calc.first_payment_date);
+        document.getElementById('agent-commission-value').value = calc.agent_commission;
+        document.getElementById('agent-commission').value = calc.agent_commission;
+        document.getElementById('manager-bonus-value').value = calc.manager_bonus;
+        document.getElementById('manager-bonus').value = calc.manager_bonus;
+        document.getElementById('tracker-value').value = calc.tracker;
+        document.getElementById('tracker-display').value = calc.tracker_str;
+        document.getElementById('tracker').value = calc.tracker;
+        document.getElementById('mayak-value').value = calc.mayak;
+        document.getElementById('mayak-display').value = calc.mayak_str;
+        document.getElementById('mayak').value = calc.mayak;
+        document.getElementById('fedresurs-value').value = calc.fedresurs;
+        document.getElementById('fedresurs-display').value = calc.fedresurs_str;
+        document.getElementById('fedresurs').value = calc.fedresurs;
+        document.getElementById('gsm-value').value = calc.gsm;
+        document.getElementById('gsm-display').value = calc.gsm_str;
+        document.getElementById('gsm').value = calc.gsm;
+        document.getElementById('mail-value').value = calc.mail;
+        document.getElementById('mail-display').value = calc.mail_str;
+        document.getElementById('mail').value = calc.mail;
+        document.getElementById('depr-transport-value').value = calc.depr_transport;
+        document.getElementById('depr-transport-display').value = calc.depr_transport_str;
+        document.getElementById('depr-transport').value = calc.depr_transport;
+        document.getElementById('travel-value').value = calc.travel;
+        document.getElementById('travel-display').value = calc.travel_str;
+        document.getElementById('travel').value = calc.travel;
+        document.getElementById('stationery-value').value = calc.stationery;
+        document.getElementById('stationery-display').value = calc.stationery_str;
+        document.getElementById('stationery').value = calc.stationery;
+        document.getElementById('internet-value').value = calc.internet;
+        document.getElementById('internet-display').value = calc.internet_str;
+        document.getElementById('internet').value = calc.internet;
+        document.getElementById('pledge-value').value = calc.pledge;
+        document.getElementById('pledge-display').value = calc.pledge_str;
+        document.getElementById('pledge').value = calc.pledge;
+        document.getElementById('bank-pledge-value').value = calc.bank_pledge;
+        document.getElementById('bank-pledge-display').value = calc.bank_pledge_str;
+        document.getElementById('bank-pledge').value = calc.bank_pledge;
+        document.getElementById('express-value').value = calc.express;
+        document.getElementById('express-display').value = calc.express_str;
+        document.getElementById('express').value = calc.express;
+        document.getElementById('egrn-value').value = calc.egrn;
+        document.getElementById('egrn-display').value = calc.egrn_str;
+        document.getElementById('egrn').value = calc.egrn;
+        document.getElementById('egrul-value').value = calc.egrul;
+        document.getElementById('egrul-display').value = calc.egrul_str;
+        document.getElementById('egrul').value = calc.egrul;
+        document.getElementById('input-period').value = formatDate(calc.input_period);
 
-    // Установите правильное значение для currency
-    var currencySelector = document.getElementById('currency');
-    var currencyOptions = currencySelector.options;
-    for (var i = 0; i < currencyOptions.length; i++) {
-        if (currencyOptions[i].value === calc.currency) {
-            currencySelector.selectedIndex = i;
-            break;
+        // Установите правильное значение для item_type
+        var itemTypeButtons = document.querySelectorAll('.tabs button');
+        itemTypeButtons.forEach(button => {
+            if (button.innerText.trim() === calc.item_type) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+
+        // Установите правильное значение для item_condition
+        var conditionButtons = document.querySelectorAll('.button-group button');
+        conditionButtons.forEach(button => {
+            if (button.innerText.trim() === calc.item_condition) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        });
+
+        // Установите правильное значение для currency
+        var currencySelector = document.getElementById('currency');
+        var currencyOptions = currencySelector.options;
+        for (var i = 0; i < currencyOptions.length; i++) {
+            if (currencyOptions[i].value === calc.currency) {
+                currencySelector.selectedIndex = i;
+                break;
+            }
         }
+
+        // Заполните поля траншей
+        if (tranches) {
+            document.getElementById('tranche1-size').value = tranches.tranche_1_size;
+            document.getElementById('tranche1-rate').value = tranches.tranche_1_rate;
+            document.getElementById('tranche1-fee').value = tranches.tranche_1_fee;
+            document.getElementById('tranche1-own-fee').value = tranches.tranche_1_own_fee;
+            document.getElementById('tranche1-credit-date').value = formatDate(tranches.tranche_1_credit_date);
+            document.getElementById('tranche2-size').value = tranches.tranche_2_size;
+            document.getElementById('tranche2-rate').value = tranches.tranche_2_rate;
+            document.getElementById('tranche2-fee').value = tranches.tranche_2_fee;
+            document.getElementById('tranche2-own-fee').value = tranches.tranche_2_own_fee;
+            document.getElementById('tranche2-credit-date').value = formatDate(tranches.tranche_2_credit_date);
+            document.getElementById('tranche3-size').value = tranches.tranche_3_size;
+            document.getElementById('tranche3-rate').value = tranches.tranche_3_rate;
+            document.getElementById('tranche3-fee').value = tranches.tranche_3_fee;
+            document.getElementById('tranche3-own-fee').value = tranches.tranche_3_own_fee;
+            document.getElementById('tranche3-credit-date').value = formatDate(tranches.tranche_3_credit_date);
+            document.getElementById('tranche4-size').value = tranches.tranche_4_size;
+            document.getElementById('tranche4-rate').value = tranches.tranche_4_rate;
+            document.getElementById('tranche4-fee').value = tranches.tranche_4_fee;
+            document.getElementById('tranche4-own-fee').value = tranches.tranche_4_own_fee;
+            document.getElementById('tranche4-credit-date').value = formatDate(tranches.tranche_4_credit_date);
+            document.getElementById('tranche5-size').value = tranches.tranche_5_size;
+            document.getElementById('tranche5-rate').value = tranches.tranche_5_rate;
+            document.getElementById('tranche5-fee').value = tranches.tranche_5_fee;
+            document.getElementById('tranche5-own-fee').value = tranches.tranche_5_own_fee;
+            document.getElementById('tranche5-credit-date').value = formatDate(tranches.tranche_5_credit_date);
+        }
+        if (insurances) {
+            document.getElementById('insurance-casko1').value = insurances.insurance_casko1;
+            document.getElementById('insurance-osago1').value = insurances.insurance_osago1;
+            document.getElementById('health-insurance1').value = insurances.health_insurance1_str;
+            document.getElementById('other-insurance1').value = insurances.other_insurance1_str;
+
+            document.getElementById('insurance-casko2').value = insurances.insurance_casko2;
+            document.getElementById('insurance-osago2').value = insurances.insurance_osago2;
+            document.getElementById('health-insurance2').value = insurances.health_insurance2_str;
+            document.getElementById('other-insurance2').value = insurances.other_insurance2_str;
+
+            document.getElementById('insurance-casko3').value = insurances.insurance_casko3;
+            document.getElementById('insurance-osago3').value = insurances.insurance_osago3;
+            document.getElementById('health-insurance3').value = insurances.health_insurance3_str;
+            document.getElementById('other-insurance3').value = insurances.other_insurance3_str;
+
+            document.getElementById('insurance-casko4').value = insurances.insurance_casko4;
+            document.getElementById('insurance-osago4').value = insurances.insurance_osago4;
+            document.getElementById('health-insurance4').value = insurances.health_insurance4_str;
+            document.getElementById('other-insurance4').value = insurances.other_insurance4_str;
+
+            document.getElementById('insurance-casko5').value = insurances.insurance_casko5;
+            document.getElementById('insurance-osago5').value = insurances.insurance_osago5;
+            document.getElementById('health-insurance5').value = insurances.health_insurance5_str;
+            document.getElementById('other-insurance5').value = insurances.other_insurance5_str;
+        }
+        // обновляем цену в рублях, если валюта не рубль
+        if (calc.currency !== 'rub') {
+            updateCostInRubles();
+        }
+        closeModal();
+        simpleScrollTest();
+        showSuccess('Данные из предыдущего расчета были успешно скопированы', 'Выполнено');
+
     }
 
-    // Заполните поля траншей
-    if (tranches) {
-        document.getElementById('tranche1-size').value = tranches.tranche_1_size;
-        document.getElementById('tranche1-rate').value = tranches.tranche_1_rate;
-        document.getElementById('tranche1-fee').value = tranches.tranche_1_fee;
-        document.getElementById('tranche1-own-fee').value = tranches.tranche_1_own_fee;
-        document.getElementById('tranche1-credit-date').value = formatDate(tranches.tranche_1_credit_date);
-        document.getElementById('tranche1-payment-date').value = formatDate(tranches.tranche_1_payment_date);
-        document.getElementById('tranche2-size').value = tranches.tranche_2_size;
-        document.getElementById('tranche2-rate').value = tranches.tranche_2_rate;
-        document.getElementById('tranche2-fee').value = tranches.tranche_2_fee;
-        document.getElementById('tranche2-own-fee').value = tranches.tranche_2_own_fee;
-        document.getElementById('tranche2-credit-date').value = formatDate(tranches.tranche_2_credit_date);
-        document.getElementById('tranche2-payment-date').value = formatDate(tranches.tranche_2_payment_date);
-        document.getElementById('tranche3-size').value = tranches.tranche_3_size;
-        document.getElementById('tranche3-rate').value = tranches.tranche_3_rate;
-        document.getElementById('tranche3-fee').value = tranches.tranche_3_fee;
-        document.getElementById('tranche3-own-fee').value = tranches.tranche_3_own_fee;
-        document.getElementById('tranche3-credit-date').value = formatDate(tranches.tranche_3_credit_date);
-        document.getElementById('tranche3-payment-date').value = formatDate(tranches.tranche_3_payment_date);
-        document.getElementById('tranche4-size').value = tranches.tranche_4_size;
-        document.getElementById('tranche4-rate').value = tranches.tranche_4_rate;
-        document.getElementById('tranche4-fee').value = tranches.tranche_4_fee;
-        document.getElementById('tranche4-own-fee').value = tranches.tranche_4_own_fee;
-        document.getElementById('tranche4-credit-date').value = formatDate(tranches.tranche_4_credit_date);
-        document.getElementById('tranche4-payment-date').value = formatDate(tranches.tranche_4_payment_date);
-        document.getElementById('tranche5-size').value = tranches.tranche_5_size;
-        document.getElementById('tranche5-rate').value = tranches.tranche_5_rate;
-        document.getElementById('tranche5-fee').value = tranches.tranche_5_fee;
-        document.getElementById('tranche5-own-fee').value = tranches.tranche_5_own_fee;
-        document.getElementById('tranche5-credit-date').value = formatDate(tranches.tranche_5_credit_date);
-        document.getElementById('tranche5-payment-date').value = formatDate(tranches.tranche_5_payment_date);
-    }
-    // обновляем цену в рублях, если валюта не рубль
-    if (calc.currency !== 'rub') {
-        updateCostInRubles();
-    }
-    closeModal();
-    simpleScrollTest();
-    showSuccess('Данные из предыдущего расчета были успешно скопированы', 'Выполнено');
-
-}
-
-function simpleScrollTest() {
-    window.scroll({
-        top: 0,
-        left: 0,
-        behavior: 'smooth'
-    });
-}
-
-function scrollToOffers() {
-    const element = document.getElementById('created-proposals');
-    if (element) {
+    function simpleScrollTest() {
         window.scroll({
-            top: element.offsetTop,
+            top: 0,
             left: 0,
             behavior: 'smooth'
         });
     }
-}
 
-function scrollToTrancheTable() {
-    const element = document.getElementById('tranches-table');
-    if (element) {
-        window.scroll({
-            top: element.offsetTop,
-            left: 0,
-            behavior: 'smooth'
-        });
-    }
-}
-
-document.querySelector('.copy-btn').addEventListener('click', function () {
-    var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
-
-    if (confirm("Вы хотите создать КП на основе этой?")) {
-        fetch(`./calculator/copy-commercial-offer/${calcId}`, {
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    populateForm(data);
-                } else {
-                    alert("Ошибка при получении данных КП");
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert("Ошибка при получении данных КП");
+    function scrollToOffers() {
+        const element = document.getElementById('created-proposals');
+        if (element) {
+            window.scroll({
+                top: element.offsetTop,
+                left: 0,
+                behavior: 'smooth'
             });
+        }
     }
-});
 
-function formatDate(dateString) {
-    if (!dateString) return "";
-    var date = new Date(dateString);
-    var year = date.getFullYear();
-    var month = String(date.getMonth() + 1).padStart(2, '0');
-    var day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
+    function scrollToTrancheTable() {
+        const element = document.getElementById('tranches-table');
+        if (element) {
+            window.scroll({
+                top: element.offsetTop,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }
+    }
+
+    document.querySelector('.copy-btn').addEventListener('click', function () {
+        var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
+
+        if (confirm("Вы хотите создать КП на основе этой?")) {
+            fetch(`./calculator/copy-commercial-offer/${calcId}`, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        populateForm(data);
+                    } else {
+                        alert("Ошибка при получении данных КП");
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert("Ошибка при получении данных КП");
+                });
+        }
+    });
+
+    function formatDate(dateString) {
+        if (!dateString) return "";
+        var date = new Date(dateString);
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+})

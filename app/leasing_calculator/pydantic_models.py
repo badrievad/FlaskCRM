@@ -14,14 +14,11 @@ class Tranche(BaseModel):
     credit_date: str = Field(
         alias="creditDate", default_factory=lambda: datetime.now().strftime("%Y-%m-%d")
     )
-    payment_date: str = Field(
-        alias="paymentDate", default_factory=lambda: datetime.now().strftime("%Y-%m-%d")
-    )
 
     @field_validator("fee", "own_fee", mode="before")
     def parse_float_with_comma(cls, value) -> float:  # noqa
         if isinstance(value, str):
-            return float(value.replace(",", "."))
+            return float(value.replace(",", ".").replace(" ", ""))
         return value
 
     @field_validator("size", "rate", "fee", "own_fee", mode="before")
@@ -30,7 +27,7 @@ class Tranche(BaseModel):
             return 0.0
         return value
 
-    @field_validator("credit_date", "payment_date", mode="before")
+    @field_validator("credit_date", mode="before")
     def set_default_date(cls, value):  # noqa
         if not value:
             return datetime.now().strftime("%Y-%m-%d")
@@ -43,6 +40,33 @@ class Tranches(BaseModel):
     tranche3: Tranche
     tranche4: Tranche
     tranche5: Tranche
+
+
+class Insurance(BaseModel):
+    casko: float = 0.0
+    osago: float = 0.0
+    health: float = 0.0
+    other: float = 0.0
+
+    @field_validator("casko", "osago", "health", "other", mode="before")
+    def check_empty(cls, value):  # noqa
+        if value in ("", None, float("nan")):
+            return 0.0
+        return value
+
+    @field_validator("casko", "osago", "health", "other", mode="before")
+    def parse_float_with_comma(cls, value) -> float:  # noqa
+        if isinstance(value, str):
+            return float(value.replace(",", ".").replace(" ", ""))
+        return value
+
+
+class Insurances(BaseModel):
+    insurance1: Insurance
+    insurance2: Insurance
+    insurance3: Insurance
+    insurance4: Insurance
+    insurance5: Insurance
 
 
 class ValidateFields(BaseModel):
@@ -58,10 +82,11 @@ class ValidateFields(BaseModel):
     credit_term: int = Field(alias="creditTerm", default=1)
     bank_commission: float = Field(alias="bankCommission", default=0.0)
     lkmb_commission: float = Field(alias="lkmbCommission", default=0.0)
-    insurance_casko: float = Field(alias="insuranceCasko", default=0.0)
-    insurance_osago: float = Field(alias="insuranceOsago", default=0.0)
-    health_insurance: float = Field(alias="healthInsurance", default=0.0)
-    other_insurance: float = Field(alias="otherInsurance", default=0.0)
+    first_payment_date: str = Field(
+        alias="firstPaymentDate",
+        default_factory=lambda: datetime.now().strftime("%Y-%m-%d"),
+    )
+    insurances: Insurances
     agent_commission: float = Field(alias="agentCommission", default=0.0)
     manager_bonus: float = Field(alias="managerBonus", default=0.0)
     tracker: float = 0.0
@@ -69,6 +94,15 @@ class ValidateFields(BaseModel):
     fedresurs: float = 0.0
     gsm: float = 0.0
     mail: float = 0.0
+    depr_transport: float = Field(alias="deprTransport", default=0.0)
+    travel: float = 0.0
+    stationery: float = 0.0
+    internet: float = 0.0
+    pledge: float = 0.0
+    bank_pledge: float = Field(alias="bankPledge", default=0.0)
+    express: float = 0.0
+    egrn: float = 0.0
+    egrul: float = 0.0
     input_period: str = Field(
         alias="inputPeriod", default_factory=lambda: datetime.now().strftime("%Y-%m-%d")
     )
@@ -87,10 +121,6 @@ class ValidateFields(BaseModel):
         "credit_sum",
         "bank_commission",
         "lkmb_commission",
-        "insurance_casko",
-        "insurance_osago",
-        "health_insurance",
-        "other_insurance",
         "agent_commission",
         "manager_bonus",
         "tracker",
@@ -98,6 +128,15 @@ class ValidateFields(BaseModel):
         "fedresurs",
         "gsm",
         "mail",
+        "depr_transport",
+        "travel",
+        "stationery",
+        "internet",
+        "pledge",
+        "bank_pledge",
+        "express",
+        "egrn",
+        "egrul",
         mode="before",
     )
     def check_empty_price(cls, value):  # noqa
@@ -105,7 +144,7 @@ class ValidateFields(BaseModel):
             return 0.0
         return value
 
-    @field_validator("input_period", mode="before")
+    @field_validator("input_period", "first_payment_date", mode="before")
     def set_default_date(cls, value):  # noqa
         if not value:
             return datetime.now().strftime("%Y-%m-%d")

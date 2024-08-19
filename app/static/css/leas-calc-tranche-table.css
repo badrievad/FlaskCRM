@@ -1,28 +1,23 @@
-#tranches-container {
-    margin: 20px;
-}
-
-#tranches-table {
-    width: 100%;
-    max-width: 1000px;
+#tranches-table, #insurance-table {
+    width: 900px;
     font-size: 14px;
 }
 
-#tranches-table th, #tranches-table td {
+#tranches-table th, #tranches-table td, #insurance-table th, #insurance-table td {
     border: 1px solid #eeeded;
     padding: 8px;
     text-align: center;
     vertical-align: middle;
 }
 
-#tranches-table th {
+#tranches-table th, #insurance-table th {
     background-color: rgba(58, 162, 123, 0.8);
     color: white;
     font-size: small;
 
 }
 
-#tranches-table input[type="text"], #tranches-table input[type="date"] {
+#tranches-table input[type="text"], #tranches-table input[type="date"], #insurance-table input[type="text"], #insurance-table input[type="date"] {
     width: 90%;
     padding: 4px;
     box-sizing: border-box;

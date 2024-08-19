@@ -19,7 +19,12 @@ from .pydantic_models import ValidateFields
 from .. import db, cache
 from ..celery_utils import is_celery_alive
 from ..leasing_calculator.celery_tasks import long_task
-from ..leasing_calculator.models import LeasCalculator, LeasingItem, Tranches
+from ..leasing_calculator.models import (
+    LeasCalculator,
+    LeasingItem,
+    Tranches,
+    Insurances,
+)
 from ..leasing_calculator.services import update_calculation_service
 
 
@@ -56,9 +61,13 @@ def get_leasing_calculator() -> render_template:
 @leas_calc_bp.route("/crm/calculator/start-task", methods=["POST"])
 def start_task() -> jsonify:
     data: dict = request.get_json()
+
+    with open("unvalid_data.json", "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=4)
+
     validate_data: dict = ValidateFields(**data).model_dump()
 
-    with open("data.json", "w", encoding="utf-8") as f:
+    with open("valid_data.json", "w", encoding="utf-8") as f:
         json.dump(validate_data, f, ensure_ascii=False, indent=4)
 
     try:
@@ -112,8 +121,13 @@ def delete_calculation(calc_id) -> jsonify:
 
         # Найти связанный tranche, если он существует
         tranche = calc.tranche  # Получить связанную запись из Tranches
+        insurance = calc.insurance  # Получить связанную запись из Insurances
+
         if tranche:
             db.session.delete(tranche)  # Удалить запись из Tranches
+
+        if insurance:
+            db.session.delete(insurance)  # Удалить запись из Insurances
 
         # Удалить файл из S3
         yandex_delete_file_s3(calc.title)
@@ -237,10 +251,14 @@ def get_commercial_offer(calc_id: int) -> jsonify:
             return jsonify({"success": False, "message": "Calculation not found"}), 404
 
         tranches: Tranches = Tranches.query.filter_by(id=calc.trance_id).first()
+        insurances: Insurances = Insurances.query.filter_by(
+            id=calc.insurance_id
+        ).first()
 
         result = {
             "calc": calc.to_dict(),
             "tranches": tranches.to_dict(),
+            "insurances": insurances.to_dict(),
         }
         logging.info(result)
         return jsonify({"success": True, "data": result})

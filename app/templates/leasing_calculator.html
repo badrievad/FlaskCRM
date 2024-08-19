@@ -322,6 +322,12 @@
                         <span>3%</span>
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Дата первого лизингового платежа</label>
+                        <input type="date" id="payment-date-value" name="payment-date-value" value="">
+                    </div>
+                </div>
                 <div class="line"></div>
                 <div id="tranches-container" class="table-container">
                     <table id="tranches-table">
@@ -386,82 +392,78 @@
                             <td><input type="date" name="tranche4-credit-date" id="tranche4-credit-date"/></td>
                             <td><input type="date" name="tranche5-credit-date" id="tranche5-credit-date"/></td>
                         </tr>
-                        <tr>
-                            <td>Дата первого лизингового платежа</td>
-                            <td><input type="date" name="tranche1-payment-date" id="tranche1-payment-date"/></td>
-                            <td><input type="date" name="tranche2-payment-date" id="tranche2-payment-date"/></td>
-                            <td><input type="date" name="tranche3-payment-date" id="tranche3-payment-date"/></td>
-                            <td><input type="date" name="tranche4-payment-date" id="tranche4-payment-date"/></td>
-                            <td><input type="date" name="tranche5-payment-date" id="tranche5-payment-date"></td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="line"></div>
-                <h5><i class="fa-solid fa-car-burst" style="color: #727a88"></i> Расходы на страхование: </h5><br>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Расходы на страхование КАСКО, %</label>
-                        <input type="number" id="insurance-casko-value" name="insurance-casko-value" value="0"
-                               placeholder="%" maxlength="3">
-                        <span class="percent-label">%</span>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="insurance-casko" name="insurance-casko" min="0" max="20" value="0"
-                               step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0%</span>
-                        <span>20%</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Расходы на страхование ОСАГО, %</label>
-                        <input type="number" id="insurance-osago-value" name="insurance-osago-value" value="0"
-                               placeholder="%" maxlength="3">
-                        <span class="percent-label">%</span>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="insurance-osago" name="insurance-osago" min="0" max="20" value="0"
-                               step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0%</span>
-                        <span>20%</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Расходы на страхование ЖИЗНИ и ЗДОРОВЬЯ, руб.</label>
-                        <input type="text" id="health-insurance-display" name="health-insurance-display" value="0,00"
-                               placeholder="руб." maxlength="8">
-                        <input type="hidden" id="health-insurance-value" name="health-insurance-value" value="0">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="health-insurance" name="health-insurance" min="0" max="1000000"
-                               value="0" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>1 млн. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Расходы на страхование ИНОЕ, руб.</label>
-                        <input type="text" id="other-insurance-display" name="other-insurance-display" value="0,00"
-                               placeholder="руб." maxlength="8">
-                        <input type="hidden" id="other-insurance-value" name="other-insurance-value" value="0">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="other-insurance" name="other-insurance" min="0" max="1000000" value="0"
-                               step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>1 млн. руб.</span>
-                    </div>
+                <h5><i class="fa-solid fa-car-burst" style="color: #727a88"></i> Расходы на страхование: </h5>
+                <div id="insurance-container" class="table-container">
+                    <table id="insurance-table">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th id="insurance-1">1 год</th>
+                            <th id="insurance-2">2 год</th>
+                            <th id="insurance-3">3 год</th>
+                            <th id="insurance-4">4 год</th>
+                            <th id="insurance-5">5 год</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Расходы на страхование КАСКО, %</td>
+                            <td><input type="text" name="insurance-casko1" id="insurance-casko1" value="0"
+                                       maxlength="3"/>
+                            </td>
+                            <td><input type="text" name="insurance-casko2" id="insurance-casko2" value="0"
+                                       maxlength="3"/>
+                            </td>
+                            <td><input type="text" name="insurance-casko3" id="insurance-casko3" value="0"
+                                       maxlength="3"/>
+                            </td>
+                            <td><input type="text" name="insurance-casko4" id="insurance-casko4" value="0"
+                                       maxlength="3"/>
+                            </td>
+                            <td><input type="text" name="insurance-casko5" id="insurance-casko5" value="0"
+                                       maxlength="3"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Расходы на страхование ОСАГО, %</td>
+                            <td><input type="text" name="insurance-osago1" id="insurance-osago1" value="0"
+                                       maxlength="3"/>
+                            </td>
+                            <td><input type="text" name="insurance-osago2" id="insurance-osago2" value="0"
+                                       maxlength="3"/>
+                            </td>
+                            <td><input type="text" name="insurance-osago3" id="insurance-osago3" value="0"
+                                       maxlength="3"/>
+                            </td>
+                            <td><input type="text" name="insurance-osago4" id="insurance-osago4" value="0"
+                                       maxlength="3"/>
+                            </td>
+                            <td><input type="text" name="insurance-osago5" id="insurance-osago5" value="0"
+                                       maxlength="3"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Расходы на страхование ЖИЗНИ и ЗДОРОВЬЯ, руб.</td>
+                            <td><input type="text" name="health-insurance1" id="health-insurance1" value="0"/></td>
+                            <td><input type="text" name="health-insurance2" id="health-insurance2" value="0"/></td>
+                            <td><input type="text" name="health-insurance3" id="health-insurance3" value="0"/></td>
+                            <td><input type="text" name="health-insurance4" id="health-insurance4" value="0"/></td>
+                            <td><input type="text" name="health-insurance5" id="health-insurance5" value="0"/></td>
+                        </tr>
+                        <tr>
+                            <td>Расходы на страхование ИНОЕ, руб.</td>
+                            <td><input type="text" name="other-insurance1" id="other-insurance1" value="0"/></td>
+                            <td><input type="text" name="other-insurance2" id="other-insurance2" value="0"/></td>
+                            <td><input type="text" name="other-insurance3" id="other-insurance3" value="0"/></td>
+                            <td><input type="text" name="other-insurance4" id="other-insurance4" value="0"/></td>
+                            <td><input type="text" name="other-insurance5" id="other-insurance5" value="0"/></td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <br>
                 <div class="line"></div>
@@ -574,12 +576,147 @@
                     </div>
                 </div>
                 <div class="form-group">
+                    <div class="input-container">
+                        <label>Амортизация транспорта, руб.</label>
+                        <input type="text" id="depr-transport-display" name="depr-transport-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="depr-transport-value" name="depr-transport-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="depr-transport" name="depr-transport" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Командировочные расходы, руб.</label>
+                        <input type="text" id="travel-display" name="travel-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="travel-value" name="travel-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="travel" name="travel" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Расходы на приобретение канцтоваров, руб.</label>
+                        <input type="text" id="stationery-display" name="stationery-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="stationery-value" name="stationery-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="stationery" name="stationery" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Телефония и интернет, руб.</label>
+                        <input type="text" id="internet-display" name="internet-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="internet-value" name="internet-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="internet" name="internet" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Регистрация залогов, руб.</label>
+                        <input type="text" id="pledge-display" name="pledge-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="pledge-value" name="pledge-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="pledge" name="pledge" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Регистрация залога в банках, руб.</label>
+                        <input type="text" id="bank-pledge-display" name="bank-pledge-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="bank-pledge-value" name="bank-pledge-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="bank-pledge" name="bank-pledge" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Расходы на экспресс-почту, руб.</label>
+                        <input type="text" id="express-display" name="express-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="express-value" name="express-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="express" name="express" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Пошлина за получение выписки из ЕГРН, руб.</label>
+                        <input type="text" id="egrn-display" name="egrn-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="egrn-value" name="egrn-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="egrn" name="egrn" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container">
+                        <label>Пошлина за получение сведение из ЕГРЮЛ, руб.</label>
+                        <input type="text" id="egrul-display" name="egrul-display" value="0,00" placeholder="руб."
+                               maxlength="7">
+                        <input type="hidden" id="egrul-value" name="egrul-value" value="0">
+                    </div>
+                    <div class="slider-container">
+                        <input type="range" id="egrul" name="egrul" min="0" max="100000" value="0" step="1">
+                    </div>
+                    <div class="range-labels">
+                        <span>0 руб.</span>
+                        <span>100 тыс. руб.</span>
+                    </div>
+                </div>
+                <div class="line"></div>
+                <div class="form-group">
                     <div class="input-container" id="input-period-container">
                         <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема передачи</label>
                         <input type="date" name="input-period" id="input-period" value=""/>
                     </div>
                 </div>
-                <div class="line"></div>
             </div>
             <div class="results">
                 <div class="exchange-rates">
@@ -733,10 +870,32 @@
         var creditTerm = document.getElementById('term-value').value;
         var bankCommission = document.getElementById('commission-value').value;
         var lkmbCommission = document.getElementById('commission-lkmb-value').value;
-        var insuranceCasko = document.getElementById('insurance-casko-value').value;
-        var insuranceOsago = document.getElementById('insurance-osago-value').value;
-        var healthInsurance = document.getElementById('health-insurance-value').value;
-        var otherInsurance = document.getElementById('other-insurance-value').value;
+        var firstPaymentDate = document.getElementById('payment-date-value').value;
+
+        var insuranceCasko1 = document.getElementById('insurance-casko1').value;
+        var insuranceCasko2 = document.getElementById('insurance-casko2').value;
+        var insuranceCasko3 = document.getElementById('insurance-casko3').value;
+        var insuranceCasko4 = document.getElementById('insurance-casko4').value;
+        var insuranceCasko5 = document.getElementById('insurance-casko5').value;
+
+        var insuranceOsago1 = document.getElementById('insurance-osago1').value;
+        var insuranceOsago2 = document.getElementById('insurance-osago2').value;
+        var insuranceOsago3 = document.getElementById('insurance-osago3').value;
+        var insuranceOsago4 = document.getElementById('insurance-osago4').value;
+        var insuranceOsago5 = document.getElementById('insurance-osago5').value;
+
+        var healthInsurance1 = document.getElementById('health-insurance1').value;
+        var healthInsurance2 = document.getElementById('health-insurance2').value;
+        var healthInsurance3 = document.getElementById('health-insurance3').value;
+        var healthInsurance4 = document.getElementById('health-insurance4').value;
+        var healthInsurance5 = document.getElementById('health-insurance5').value;
+
+        var otherInsurance1 = document.getElementById('other-insurance1').value;
+        var otherInsurance2 = document.getElementById('other-insurance2').value;
+        var otherInsurance3 = document.getElementById('other-insurance3').value;
+        var otherInsurance4 = document.getElementById('other-insurance4').value;
+        var otherInsurance5 = document.getElementById('other-insurance5').value;
+
         var agentCommission = document.getElementById('agent-commission-value').value;
         var managerBonus = document.getElementById('manager-bonus-value').value;
         var tracker = document.getElementById('tracker-value').value;
@@ -744,6 +903,15 @@
         var fedresurs = document.getElementById('fedresurs-value').value;
         var gsm = document.getElementById('gsm-value').value;
         var mail = document.getElementById('mail-value').value;
+        var deprTransport = document.getElementById('depr-transport-value').value;
+        var travel = document.getElementById('travel-value').value;
+        var stationery = document.getElementById('stationery-value').value;
+        var internet = document.getElementById('internet-value').value;
+        var pledge = document.getElementById('pledge-value').value;
+        var bankPledge = document.getElementById('bank-pledge-value').value;
+        var express = document.getElementById('express-value').value;
+        var egrn = document.getElementById('egrn-value').value;
+        var egrul = document.getElementById('egrul-value').value;
         var inputPeriod = document.getElementById('input-period').value;
 
         var tranche1Size = Math.abs(parseFloat(document.getElementById('tranche1-size').value.replace(',', '.')) || 0);
@@ -789,12 +957,6 @@
         var tranche4CreditDate = document.getElementById('tranche4-credit-date').value;
         var tranche5CreditDate = document.getElementById('tranche5-credit-date').value;
 
-        var tranche1PaymentDate = document.getElementById('tranche1-payment-date').value;
-        var tranche2PaymentDate = document.getElementById('tranche2-payment-date').value;
-        var tranche3PaymentDate = document.getElementById('tranche3-payment-date').value;
-        var tranche4PaymentDate = document.getElementById('tranche4-payment-date').value;
-        var tranche5PaymentDate = document.getElementById('tranche5-payment-date').value;
-
         // Отправка задачи в Celery с активной вкладкой
         fetch('./calculator/start-task', {
             method: 'POST',
@@ -814,10 +976,39 @@
                 creditTerm: creditTerm,
                 bankCommission: bankCommission,
                 lkmbCommission: lkmbCommission,
-                insuranceCasko: insuranceCasko,
-                insuranceOsago: insuranceOsago,
-                healthInsurance: healthInsurance,
-                otherInsurance: otherInsurance,
+                firstPaymentDate: firstPaymentDate,
+                insurances: {
+                    insurance1: {
+                        casko: insuranceCasko1,
+                        osago: insuranceOsago1,
+                        health: healthInsurance1,
+                        other: otherInsurance1,
+                    },
+                    insurance2: {
+                        casko: insuranceCasko2,
+                        osago: insuranceOsago2,
+                        health: healthInsurance2,
+                        other: otherInsurance2,
+                    },
+                    insurance3: {
+                        casko: insuranceCasko3,
+                        osago: insuranceOsago3,
+                        health: healthInsurance3,
+                        other: otherInsurance3,
+                    },
+                    insurance4: {
+                        casko: insuranceCasko4,
+                        osago: insuranceOsago4,
+                        health: healthInsurance4,
+                        other: otherInsurance4,
+                    },
+                    insurance5: {
+                        casko: insuranceCasko5,
+                        osago: insuranceOsago5,
+                        health: healthInsurance5,
+                        other: otherInsurance5,
+                    },
+                },
                 agentCommission: agentCommission,
                 managerBonus: managerBonus,
                 tracker: tracker,
@@ -825,6 +1016,15 @@
                 fedresurs: fedresurs,
                 gsm: gsm,
                 mail: mail,
+                deprTransport: deprTransport,
+                travel: travel,
+                stationery: stationery,
+                internet: internet,
+                pledge: pledge,
+                bankPledge: bankPledge,
+                express: express,
+                egrn: egrn,
+                egrul: egrul,
                 inputPeriod: inputPeriod,
                 tranches: {
                     tranche1: {
@@ -833,7 +1033,6 @@
                         fee: tranche1Fee,
                         ownFee: tranche1OwnFee,
                         creditDate: tranche1CreditDate,
-                        paymentDate: tranche1PaymentDate
                     },
                     tranche2: {
                         size: tranche2Size,
@@ -841,7 +1040,6 @@
                         fee: tranche2Fee,
                         ownFee: tranche2OwnFee,
                         creditDate: tranche2CreditDate,
-                        paymentDate: tranche2PaymentDate
                     },
                     tranche3: {
                         size: tranche3Size,
@@ -849,7 +1047,6 @@
                         fee: tranche3Fee,
                         ownFee: tranche3OwnFee,
                         creditDate: tranche3CreditDate,
-                        paymentDate: tranche3PaymentDate
                     },
                     tranche4: {
                         size: tranche4Size,
@@ -857,7 +1054,6 @@
                         fee: tranche4Fee,
                         ownFee: tranche4OwnFee,
                         creditDate: tranche4CreditDate,
-                        paymentDate: tranche4PaymentDate
                     },
                     tranche5: {
                         size: tranche5Size,
@@ -865,7 +1061,6 @@
                         fee: tranche5Fee,
                         ownFee: tranche5OwnFee,
                         creditDate: tranche5CreditDate,
-                        paymentDate: tranche5PaymentDate
                     },
                 },
             })

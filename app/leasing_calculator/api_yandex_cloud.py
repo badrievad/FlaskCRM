@@ -76,3 +76,13 @@ def yandex_delete_file_s3(file_name: str) -> None:
         logging.error(
             "Incomplete credentials provided. Please ensure both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are set."
         )
+    except ClientError as e:
+        logging.error(f"Client error occurred: {e}")
+        if e.response["Error"]["Code"] == "NoSuchKey":
+            logging.error(
+                f"The file '{file_name}' does not exist in the bucket '{BUCKET_NAME}'."
+            )
+    except BotoCoreError as e:
+        logging.error(f"An error occurred in Boto3: {e}")
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")

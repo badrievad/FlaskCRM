@@ -1090,16 +1090,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function scrollToTrancheTable() {
-        const element = document.getElementById('tranches-table');
-        if (element) {
-            window.scroll({
-                top: element.offsetTop,
-                left: 0,
-                behavior: 'smooth'
-            });
-        }
-    }
 
     document.querySelector('.copy-btn').addEventListener('click', function () {
         var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
@@ -1162,3 +1152,14 @@ document.querySelectorAll('.button-group-nds, .button-group-deposit, .button-gro
         }
     });
 });
+
+function scrollToTrancheTable() {
+        const element = document.getElementById('tranches-table');
+        if (element) {
+            window.scroll({
+                top: element.offsetTop,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }
+    }

@@ -142,9 +142,24 @@
             <a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
                 Вернуться на главную</a>
         </li>
-        <li class="clickable">
+        <li class="clickable-in">
+            <a class="nav-link" href="#main">
+                <i class="fa-solid fa-list-check"></i>Основные параметры
+            </a>
+        </li>
+        <li class="clickable-in">
+            <a class="nav-link" href="#insurance">
+                <i class="fa-solid fa-car-burst"></i>Расходы на страхование
+            </a>
+        </li>
+        <li class="clickable-in">
+            <a class="nav-link" href="#overhead">
+                <i class="fa-solid fa-dolly"></i>Накладные расходы
+            </a>
+        </li>
+        <li class="clickable-in">
             <a class="nav-link" href="#created-proposals">
-                <i class="fa-solid fa-layer-group"></i> Созданные КП
+                <i class="fa-solid fa-layer-group"></i>Созданные КП
             </a>
         </li>
     </ul>
@@ -154,7 +169,7 @@
 <div class="main-content" id="main-content">
     <div class="container">
         <div class="header">
-            <h1>Укажите основные параметры сделки</h1>
+            <h1 id="main">Укажите основные параметры сделки</h1>
         </div>
         <div class="tabs">
             <button class="active"><i class="fas fa-car"></i>Легковые</button>
@@ -396,7 +411,7 @@
                     </table>
                 </div>
                 <div class="line"></div>
-                <h5><i class="fa-solid fa-car-burst" style="color: #727a88"></i> Расходы на страхование: </h5>
+                <h5 id="insurance"><i class="fa-solid fa-car-burst" style="color: #727a88"></i> Расходы на страхование: </h5>
                 <div id="insurance-container" class="table-container">
                     <table id="insurance-table">
                         <thead>
@@ -467,7 +482,7 @@
                 </div>
                 <br>
                 <div class="line"></div>
-                <h5><i class="fa-solid fa-dolly" style="color: #727a88"></i> Накладные расходы: </h5><br>
+                <h5 id="overhead"><i class="fa-solid fa-dolly" style="color: #727a88"></i> Накладные расходы: </h5><br>
                 <div class="form-group">
                     <div class="input-container">
                         <label>Агентское вознаграждение, %</label>
@@ -503,12 +518,13 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Трекеры, руб.</label>
-                        <input type="text" id="tracker-display" name="tracker-display" value="0,00" placeholder="руб."
+                        <input type="text" id="tracker-display" name="tracker-display" value="43 000,00"
+                               placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="tracker-value" name="tracker-value" value="0">
+                        <input type="hidden" id="tracker-value" name="tracker-value" value="43000">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="tracker" name="tracker" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="tracker" name="tracker" min="0" max="100000" value="43000" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -518,12 +534,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Маячки, руб.</label>
-                        <input type="text" id="mayak-display" name="mayak-display" value="0,00" placeholder="руб."
+                        <input type="text" id="mayak-display" name="mayak-display" value="15 000,00" placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="mayak-value" name="mayak-value" value="0">
+                        <input type="hidden" id="mayak-value" name="mayak-value" value="15000">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="mayak" name="mayak" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="mayak" name="mayak" min="0" max="100000" value="15000" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -533,12 +549,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Федресурс, руб.</label>
-                        <input type="text" id="fedresurs-display" name="fedresurs-display" value="0,00"
+                        <input type="text" id="fedresurs-display" name="fedresurs-display" value="2 000,00"
                                placeholder="руб." maxlength="7">
-                        <input type="hidden" id="fedresurs-value" name="fedresurs-value" value="0">
+                        <input type="hidden" id="fedresurs-value" name="fedresurs-value" value="2000">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="fedresurs" name="fedresurs" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="fedresurs" name="fedresurs" min="0" max="100000" value="2000" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -548,12 +564,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>ГСМ, руб.</label>
-                        <input type="text" id="gsm-display" name="gsm-display" value="0,00" placeholder="руб."
+                        <input type="text" id="gsm-display" name="gsm-display" value="950,00" placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="gsm-value" name="gsm-value" value="0">
+                        <input type="hidden" id="gsm-value" name="gsm-value" value="950">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="gsm" name="gsm" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="gsm" name="gsm" min="0" max="100000" value="950" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -563,12 +579,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Почтовые расходы, руб.</label>
-                        <input type="text" id="mail-display" name="mail-display" value="0,00" placeholder="руб."
+                        <input type="text" id="mail-display" name="mail-display" value="400,00" placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="mail-value" name="mail-value" value="0">
+                        <input type="hidden" id="mail-value" name="mail-value" value="400">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="mail" name="mail" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="mail" name="mail" min="0" max="100000" value="400" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -578,13 +594,13 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Амортизация транспорта, руб.</label>
-                        <input type="text" id="depr-transport-display" name="depr-transport-display" value="0,00"
+                        <input type="text" id="depr-transport-display" name="depr-transport-display" value="450,00"
                                placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="depr-transport-value" name="depr-transport-value" value="0">
+                        <input type="hidden" id="depr-transport-value" name="depr-transport-value" value="450">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="depr-transport" name="depr-transport" min="0" max="100000" value="0"
+                        <input type="range" id="depr-transport" name="depr-transport" min="0" max="100000" value="450"
                                step="1">
                     </div>
                     <div class="range-labels">
@@ -595,12 +611,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Командировочные расходы, руб.</label>
-                        <input type="text" id="travel-display" name="travel-display" value="0,00" placeholder="руб."
+                        <input type="text" id="travel-display" name="travel-display" value="200,00" placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="travel-value" name="travel-value" value="0">
+                        <input type="hidden" id="travel-value" name="travel-value" value="200">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="travel" name="travel" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="travel" name="travel" min="0" max="100000" value="200" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -610,13 +626,13 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Расходы на приобретение канцтоваров, руб.</label>
-                        <input type="text" id="stationery-display" name="stationery-display" value="0,00"
+                        <input type="text" id="stationery-display" name="stationery-display" value="100,00"
                                placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="stationery-value" name="stationery-value" value="0">
+                        <input type="hidden" id="stationery-value" name="stationery-value" value="100">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="stationery" name="stationery" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="stationery" name="stationery" min="0" max="100000" value="100" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -626,12 +642,13 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Телефония и интернет, руб.</label>
-                        <input type="text" id="internet-display" name="internet-display" value="0,00" placeholder="руб."
+                        <input type="text" id="internet-display" name="internet-display" value="600,00"
+                               placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="internet-value" name="internet-value" value="0">
+                        <input type="hidden" id="internet-value" name="internet-value" value="600">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="internet" name="internet" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="internet" name="internet" min="0" max="100000" value="600" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -641,12 +658,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Регистрация залогов, руб.</label>
-                        <input type="text" id="pledge-display" name="pledge-display" value="0,00" placeholder="руб."
+                        <input type="text" id="pledge-display" name="pledge-display" value="1 000,00" placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="pledge-value" name="pledge-value" value="0">
+                        <input type="hidden" id="pledge-value" name="pledge-value" value="1000">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="pledge" name="pledge" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="pledge" name="pledge" min="0" max="100000" value="1000" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -656,13 +673,14 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Регистрация залога в банках, руб.</label>
-                        <input type="text" id="bank-pledge-display" name="bank-pledge-display" value="0,00"
+                        <input type="text" id="bank-pledge-display" name="bank-pledge-display" value="1 000,00"
                                placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="bank-pledge-value" name="bank-pledge-value" value="0">
+                        <input type="hidden" id="bank-pledge-value" name="bank-pledge-value" value="1000">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="bank-pledge" name="bank-pledge" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="bank-pledge" name="bank-pledge" min="0" max="100000" value="1000"
+                               step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -672,12 +690,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Расходы на экспресс-почту, руб.</label>
-                        <input type="text" id="express-display" name="express-display" value="0,00" placeholder="руб."
+                        <input type="text" id="express-display" name="express-display" value="2 166,00" placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="express-value" name="express-value" value="0">
+                        <input type="hidden" id="express-value" name="express-value" value="2166">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="express" name="express" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="express" name="express" min="0" max="100000" value="2166" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -687,12 +705,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Пошлина за получение выписки из ЕГРН, руб.</label>
-                        <input type="text" id="egrn-display" name="egrn-display" value="0,00" placeholder="руб."
+                        <input type="text" id="egrn-display" name="egrn-display" value="400,00" placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="egrn-value" name="egrn-value" value="0">
+                        <input type="hidden" id="egrn-value" name="egrn-value" value="400">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="egrn" name="egrn" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="egrn" name="egrn" min="0" max="100000" value="400" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -702,12 +720,12 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Пошлина за получение сведение из ЕГРЮЛ, руб.</label>
-                        <input type="text" id="egrul-display" name="egrul-display" value="0,00" placeholder="руб."
+                        <input type="text" id="egrul-display" name="egrul-display" value="200,00" placeholder="руб."
                                maxlength="7">
-                        <input type="hidden" id="egrul-value" name="egrul-value" value="0">
+                        <input type="hidden" id="egrul-value" name="egrul-value" value="200">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="egrul" name="egrul" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="egrul" name="egrul" min="0" max="100000" value="200" step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>

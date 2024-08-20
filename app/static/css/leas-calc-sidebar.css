@@ -38,12 +38,22 @@
     flex-grow: 1;
 }
 
-.sidebar ul li {
+.clickable {
     padding: 15px;
     margin-bottom: 25px;
     text-align: left;
     cursor: pointer;
     transition: background 0.3s;
+}
+
+.clickable-in {
+    padding: 10px;
+    margin-bottom: 25px;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.3s;
+    font-size: 14px;
+    color: #cccccc;
 }
 
 .sidebar ul li:hover {
@@ -55,13 +65,17 @@
 }
 
 .nav-link {
-    text-align: center;
+    text-align: left;
     color: rgb(255, 255, 255);
 }
 
 .nav-link:hover {
-    text-align: center;
+    text-align: left;
     color: rgb(255, 255, 255);
+}
+
+.clickable-in {
+    margin: 0;
 }
 
 @media (min-width: 769px) {

@@ -578,12 +578,14 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Амортизация транспорта, руб.</label>
-                        <input type="text" id="depr-transport-display" name="depr-transport-display" value="0,00" placeholder="руб."
+                        <input type="text" id="depr-transport-display" name="depr-transport-display" value="0,00"
+                               placeholder="руб."
                                maxlength="7">
                         <input type="hidden" id="depr-transport-value" name="depr-transport-value" value="0">
                     </div>
                     <div class="slider-container">
-                        <input type="range" id="depr-transport" name="depr-transport" min="0" max="100000" value="0" step="1">
+                        <input type="range" id="depr-transport" name="depr-transport" min="0" max="100000" value="0"
+                               step="1">
                     </div>
                     <div class="range-labels">
                         <span>0 руб.</span>
@@ -608,7 +610,8 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Расходы на приобретение канцтоваров, руб.</label>
-                        <input type="text" id="stationery-display" name="stationery-display" value="0,00" placeholder="руб."
+                        <input type="text" id="stationery-display" name="stationery-display" value="0,00"
+                               placeholder="руб."
                                maxlength="7">
                         <input type="hidden" id="stationery-value" name="stationery-value" value="0">
                     </div>
@@ -653,7 +656,8 @@
                 <div class="form-group">
                     <div class="input-container">
                         <label>Регистрация залога в банках, руб.</label>
-                        <input type="text" id="bank-pledge-display" name="bank-pledge-display" value="0,00" placeholder="руб."
+                        <input type="text" id="bank-pledge-display" name="bank-pledge-display" value="0,00"
+                               placeholder="руб."
                                maxlength="7">
                         <input type="hidden" id="bank-pledge-value" name="bank-pledge-value" value="0">
                     </div>
@@ -1221,8 +1225,6 @@
         };
         toastr.info(message, title);
     }
-</script>
-<script>
 </script>
 <!-- Autocomplete Script -->
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-autocomplete.js') }}"></script>

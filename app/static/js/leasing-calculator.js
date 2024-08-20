@@ -1059,17 +1059,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    function scrollToOffers() {
-        const element = document.getElementById('created-proposals');
-        if (element) {
-            window.scroll({
-                top: element.offsetTop,
-                left: 0,
-                behavior: 'smooth'
-            });
-        }
-    }
-
     function scrollToTrancheTable() {
         const element = document.getElementById('tranches-table');
         if (element) {
@@ -1114,9 +1103,20 @@ document.addEventListener('DOMContentLoaded', function () {
 })
 
 function simpleScrollTest() {
+    window.scroll({
+        top: 0,
+        left: 0,
+        behavior: 'smooth'
+    });
+}
+
+function scrollToOffers() {
+    const element = document.getElementById('created-proposals');
+    if (element) {
         window.scroll({
-            top: 0,
+            top: element.offsetTop,
             left: 0,
             behavior: 'smooth'
         });
     }
+}

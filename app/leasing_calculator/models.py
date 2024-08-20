@@ -57,6 +57,10 @@ class LeasCalculator(db.Model):
     egrul = db.Column(db.Float, nullable=True)
     egrul_str = db.Column(db.String(50), nullable=True)
     input_period = db.Column(db.Date, nullable=True)
+    allocate_vat = db.Column(db.String(50), nullable=True)
+    allocate_deposit = db.Column(db.String(50), nullable=True)
+    allocate_redemption = db.Column(db.String(50), nullable=True)
+
     insurance_id = db.Column(db.Integer, db.ForeignKey("insurances.id"), nullable=True)
     trance_id = db.Column(db.Integer, db.ForeignKey("tranches.id"), nullable=True)
 
@@ -137,6 +141,9 @@ class LeasCalculator(db.Model):
             "manager_login": self.manager_login,
             "title": self.title,
             "deal_id": self.deal_id,
+            "allocate_vat": self.allocate_vat,
+            "allocate_deposit": self.allocate_deposit,
+            "allocate_redemption": self.allocate_redemption,
         }
 
 

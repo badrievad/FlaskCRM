@@ -73,6 +73,9 @@ class ValidateFields(BaseModel):
     item_type: str = Field(alias="itemType")
     item_year: int = Field(alias="itemYear", default=datetime.now().year)
     item_condition: str = Field(alias="itemCondition")
+    allocate_vat: str = Field(alias="vat")
+    allocate_deposit: str = Field(alias="deposit")
+    allocate_redemption: str = Field(alias="redemption")
     item_price: float = Field(alias="itemPrice", default=0.0)
     item_name: str = Field(alias="itemName", default="Отсутствует наименование ПЛ")
     currency: str

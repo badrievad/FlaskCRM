@@ -893,6 +893,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('production-year-value').value = calc.item_year;
         document.getElementById('cost-value').value = calc.item_price;
         document.getElementById('cost-display').value = calc.item_price_str;
+        document.getElementById('cost').value = calc.item_price;
         document.getElementById('foreign-cost-value').value = calc.foreign_price;
         document.getElementById('foreign-cost-display').value = calc.foreign_price_str;
         document.getElementById('foreign-cost').value = calc.foreign_price;
@@ -976,6 +977,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 button.classList.remove('active');
             }
         });
+
+        // Установите правильное значение для выделения НДС
+        var vatButtons = document.querySelectorAll('.button-group-nds button');
+        vatButtons.forEach(button => {
+            if (button.innerText.trim() === calc.allocate_vat) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        })
+
+        // Установите правильное значение для распределения задатка
+        var depositButtons = document.querySelectorAll('.button-group-deposit button');
+        depositButtons.forEach(button => {
+            if (button.innerText.trim() === calc.allocate_deposit) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        })
+
+        // Установите правильное значение для распределения выкупного
+        var redemptionButtons = document.querySelectorAll('.button-group-redemption button');
+        redemptionButtons.forEach(button => {
+            if (button.innerText.trim() === calc.allocate_redemption) {
+                button.classList.add('active');
+            } else {
+                button.classList.remove('active');
+            }
+        })
 
         // Установите правильное значение для currency
         var currencySelector = document.getElementById('currency');
@@ -1120,3 +1151,14 @@ function scrollToOffers() {
         });
     }
 }
+
+document.querySelectorAll('.button-group-nds, .button-group-deposit, .button-group-redemption').forEach(group => {
+    group.addEventListener('click', function (e) {
+        if (e.target.classList.contains('toggle-btn')) {
+            // Удаляем класс 'active' со всех кнопок в группе
+            group.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            // Добавляем класс 'active' на нажатую кнопку
+            e.target.classList.add('active');
+        }
+    });
+});

@@ -175,6 +175,9 @@ def intensive_task_simulation(data: dict) -> dict:
             manager_login=data["login"],
             date=datetime.datetime.now(),
             date_ru=date.today().strftime("%d.%m.%Y"),
+            allocate_vat=data["allocate_vat"],
+            allocate_deposit=data["allocate_deposit"],
+            allocate_redemption=data["allocate_redemption"],
         )
         db.session.add(new_calc)
         db.session.commit()

@@ -737,6 +737,33 @@
                 <div class="line"></div>
                 <div class="form-group">
                     <div class="input-container" id="input-period-container">
+                        <label for="input-period">Поставщик выделяет НДС</label>
+                        <div class="button-group-nds">
+                            <button id="yes-nds-btn" class="toggle-btn active" data-value="yes-nds">Да</button>
+                            <button id="no-nds-btn" class="toggle-btn" data-value="no-nds">Нет</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container" id="input-period-container">
+                        <label for="input-period">Задаток</label>
+                        <div class="button-group-deposit">
+                            <button id="distribute-deposit-btn" class="toggle-btn" data-value="yes-distribute-deposit">Распределять</button>
+                            <button id="no-distribute-deposit-btn" class="toggle-btn active" data-value="no-distribute-deposit">Не распределять</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container" id="input-period-container">
+                        <label for="input-period">Выкупной платеж</label>
+                        <div class="button-group-redemption">
+                            <button id="distribute-redemption-btn" class="toggle-btn" data-value="yes-distribute-redemption">Распределять</button>
+                            <button id="no-distribute-redemption-btn" class="toggle-btn active" data-value="no-distribute-redemption">Не распределять</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-container" id="input-period-container">
                         <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема передачи</label>
                         <input type="date" name="input-period" id="input-period" value=""/>
                     </div>
@@ -885,6 +912,18 @@
         var itemCondition = document.querySelector('.button-group button.active')
         var conditionText = itemCondition ? itemCondition.innerText.trim() : '';
 
+        // Найти состояние НДС
+        var itemVAT = document.querySelector('.button-group-nds button.active')
+        var vatText = itemVAT ? itemVAT.innerText.trim() : '';
+
+        // Найти состояние задатка
+        var itemDeposit = document.querySelector('.button-group-deposit button.active')
+        var depositText = itemDeposit ? itemDeposit.innerText.trim() : '';
+
+        // Найти состояние выкупного
+        var itemRedemption = document.querySelector('.button-group-redemption button.active')
+        var redemptionText = itemRedemption ? itemRedemption.innerText.trim() : '';
+
         // Найти цену ПЛ
         var itemPrice = document.getElementById('cost-value').value;
 
@@ -996,6 +1035,9 @@
             body: JSON.stringify({
                 itemType: activeTabText,
                 itemCondition: conditionText,
+                vat: vatText,  // Поставщик выделяет НДС или нет
+                deposit: depositText,  // Поставщик распределяет задаток или нет
+                redemption: redemptionText,  // Поставщик распределяет выкупной или нет
                 itemYear: itemYear,
                 itemPrice: itemPrice,
                 itemName: itemName,

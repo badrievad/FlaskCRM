@@ -555,11 +555,18 @@ select:hover {
     margin-top: 10px;
 }
 
-.button-group {
+.button-group{
     display: flex;
     align-items: center;
     gap: 0;
     font-size: 16px;
+}
+
+.button-group-nds, .button-group-redemption, .button-group-deposit {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    font-size: 14px;
 }
 
 .toggle-btn {

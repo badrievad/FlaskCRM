@@ -318,17 +318,17 @@ output {
     font-size: 16px;
 }
 
-.calculate-button {
-    display: block;
-    width: 100%;
-    background-color: rgba(55, 101, 86, 0.8);
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-}
+/*.calculate-button {*/
+/*    display: block;*/
+/*    width: 100%;*/
+/*    background-color: rgba(55, 101, 86, 0.8);*/
+/*    color: white;*/
+/*    padding: 10px;*/
+/*    border: none;*/
+/*    border-radius: 4px;*/
+/*    font-size: 10px;*/
+/*    cursor: pointer;*/
+/*}*/
 
 .calculate-button:hover {
     background-color: rgba(55, 101, 86, 1);
@@ -470,17 +470,17 @@ select:hover {
 
 .btn-hover {
     width: 200px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
     color: #fff;
     cursor: pointer;
-    margin: 20px;
+    margin: 10px;
     height: 45px;
     text-align: center;
     border: none;
     background-size: 300% 100%;
 
-    border-radius: 50px;
+    border-radius: 0;
     moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
@@ -502,6 +502,11 @@ select:hover {
 .btn-hover.color-5 {
     background-image: linear-gradient(to right, rgba(7, 119, 70, 0.7), rgba(45, 152, 119, 0.7), rgba(23, 154, 95, 0.7), rgba(41, 189, 116, 0.7));
     box-shadow: 0 1px 15px 0 rgba(23, 168, 108, 0.55);
+}
+
+.btn-hover.color-4 {
+    background-image: linear-gradient(to right, rgba(57, 117, 154, 0.7), rgba(51, 102, 140, 0.7), rgba(56, 94, 136, 0.7), rgba(63, 158, 241, 0.7));
+    box-shadow: 0 1px 15px 0 rgba(63, 170, 196, 0.55);
 }
 
 .bbtn-hover {

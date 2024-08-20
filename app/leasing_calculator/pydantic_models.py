@@ -21,9 +21,27 @@ class Tranche(BaseModel):
             return float(value.replace(",", ".").replace(" ", ""))
         return value
 
-    @field_validator("size", "rate", "fee", "own_fee", mode="before")
-    def check_empty(cls, value):  # noqa
-        if value in ("", None, float("nan")):
+    @field_validator("rate", mode="before")
+    def check_empty_rate(cls, value):  # noqa
+        if value in ("", None, float("nan"), "0", "0.0", "0.00", "0,0", "0,00"):
+            return 20.0
+        return value
+
+    @field_validator("fee", mode="before")
+    def check_empty_fee(cls, value):  # noqa
+        if value in ("", None, float("nan"), "0", "0.0", "0.00", "0,0", "0,00"):
+            return 4.85
+        return value
+
+    @field_validator("own_fee", mode="before")
+    def check_empty_own_fee(cls, value):  # noqa
+        if value in ("", None, float("nan"), "0", "0.0", "0.00", "0,0", "0,00"):
+            return 20.0
+        return value
+
+    @field_validator("size", mode="before")
+    def check_empty_size(cls, value):  # noqa
+        if value in ("", None, float("nan"), "0", "0.0", "0.00", "0,0", "0,00"):
             return 0.0
         return value
 

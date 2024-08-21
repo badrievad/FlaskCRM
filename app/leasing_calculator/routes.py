@@ -20,6 +20,7 @@ from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
 from .pydantic_models import ValidateFields
 from .. import db, cache
 from ..celery_utils import is_celery_alive
+from ..config import FORM_OFFERS_PATH
 from ..leasing_calculator.celery_tasks import long_task
 from ..leasing_calculator.models import (
     LeasCalculator,
@@ -64,12 +65,19 @@ def get_leasing_calculator() -> render_template:
 def start_task() -> jsonify:
     data: dict = request.get_json()
 
-    with open("unvalid_data.json", "w", encoding="utf-8") as f:
+    curr_user_path = FORM_OFFERS_PATH / current_user.login
+    path_unvalid_data = curr_user_path / "unvalid_data.json"
+    path_valid_data = curr_user_path / "valid_data.json"
+
+    # Создание директории, если она не существует
+    curr_user_path.mkdir(parents=True, exist_ok=True)
+
+    with open(path_unvalid_data, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
     validate_data: dict = ValidateFields(**data).model_dump()
 
-    with open("valid_data.json", "w", encoding="utf-8") as f:
+    with open(path_valid_data, "w", encoding="utf-8") as f:
         json.dump(validate_data, f, ensure_ascii=False, indent=4)
 
     try:

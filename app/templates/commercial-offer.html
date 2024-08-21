@@ -379,15 +379,15 @@
         <img src="{{ url_for('crm.static', filename='images/lkmb-logo.png') }}" alt="ЛКМБ-РТ">
         <div class="contact-info">
             <p>Ваш персональный менеджер:</p>
-            <p>Тимур Халилов</p><br>
-            <p><i class="fa-regular fa-envelope"></i> Email: htb@lkmb-rt.ru</p>
-            <p><i class="fa-solid fa-phone"></i> Телефон: +7 (999) 999-99-99</p>
+            <p>{{ user_info.name }}</p><br>
+            <p><i class="fa-regular fa-envelope"></i> Email: {{ user_info.email }}</p>
+            <p><i class="fa-solid fa-phone"></i> Телефон: {{ user_info.phone }}</p>
             <p><i class="fa-brands fa-telegram"></i> Telegram: @timur_haliilov</p>
         </div>
     </div>
 </div>
 
-<p class="greeting">№ 615 от 14.08.2024</p>
+<p class="greeting">№ {{ leas_calc.id }} от {{ today }}</p>
 <h1 class="proposal-title">Уважаемый Рафаиль Равильевич!</h1>
 
 <div class="details">
@@ -396,7 +396,7 @@
             <i class="fa fa-briefcase"></i>
             <div class="info">
                 <p><strong>ПРЕДМЕТ ЛИЗИНГА</strong></p>
-                <p>Porsche CAYENNE</p>
+                <p>{{ leas_calc.item_name }}, {{ leas_calc.item_year }} г. в. ({{ leas_calc.item_condition }})</p>
             </div>
         </div>
         <br>
@@ -404,8 +404,8 @@
             <i class="fa-solid fa-coins"></i>
             <div class="info">
                 <p><strong>СТОИМОСТЬ</strong> <em style="font-size: 12px">(в т.ч. НДС)</em></p>
-                <p>145 225 000 ₽</p>
-                <p><em style="font-size: 12px">(87 500 ₽)</em></p>
+                <p>{{ leas_calc.item_price_str }} ₽</p>
+                <p><em style="font-size: 12px">({{ vat }} ₽)</em></p>
             </div>
         </div>
     </div>
@@ -417,7 +417,7 @@
                 <div class="separator"></div>
                 <div class="text-content">
                     <p>АВАНС</p>
-                    <p class="big-text">15%</p>
+                    <p class="big-text">{{ initial_payment_percent }}%</p>
                 </div>
             </div>
         </div>
@@ -427,7 +427,7 @@
                 <div class="separator"></div>
                 <div class="text-content">
                     <p>СРОК</p>
-                    <p class="big-text">36 мес.</p>
+                    <p class="big-text">{{ leas_calc.credit_term }} мес.</p>
                 </div>
             </div>
         </div>
@@ -438,7 +438,7 @@
                 <div class="text-content">
                     <p>ВЫКУПНОЙ</p>
                     <p>ПЛАТЕЖ</p>
-                    <p class="big-text">2 000 ₽</p>
+                    <p class="big-text">1 000 ₽</p>
                 </div>
             </div>
         </div>
@@ -491,7 +491,7 @@
         <table class="services-table">
             <tr>
                 <td>Баланcодержатель</td>
-                <td>ООО "ЛКМБ-РТ"</td>
+                <td>Лизингополучатель</td>
             </tr>
             <tr>
                 <td>Постановка на учет</td>

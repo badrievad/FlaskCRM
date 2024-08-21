@@ -5,15 +5,18 @@ from logger import logging
 
 
 class PDFGeneratorClient:
-    def __init__(self, deal_id, user_login, base_url=URL_PDF_API):
+    def __init__(self, deal_id, user_info: dict, base_url=URL_PDF_API):
         self.base_url = base_url
         self.deal_id = deal_id
-        self.user_login = user_login
+        self.user_info = user_info
 
     def generate_pdf(self):
         """Отправляет запрос на генерацию PDF и возвращает путь к файлу."""
         url = f"{self.base_url}/generate_pdf"
-        payload = {"calc_id": self.deal_id, "user_login": self.user_login}
+        payload = {
+            "calc_id": self.deal_id,
+            **self.user_info,
+        }
 
         response = requests.post(url, json=payload)
 

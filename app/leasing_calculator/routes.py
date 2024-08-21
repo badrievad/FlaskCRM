@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from pathlib import Path
 
 from flask import (
@@ -17,6 +18,7 @@ from logger import logging
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
+from .other_utils import validate_item_price
 from .pydantic_models import ValidateFields
 from .. import db, cache
 from ..celery_utils import is_celery_alive
@@ -86,9 +88,14 @@ def start_task() -> jsonify:
             logging.info("Сервер Celery недоступен")
             return jsonify({"error": "Сервер временно недоступен"}), 503
 
-        logging.info(f"Поля из сайта (лизинговый калькулятор): {validate_data}")
-        user_login: dict = {"login": current_user.login}
-        task = long_task.delay({**user_login, **validate_data})
+        user_info: dict = {
+            "user_login": current_user.login,
+            "user_name": current_user.fullname,
+            "user_email": current_user.email,
+            "user_phone": current_user.mobilenumber,
+        }
+        logging.info(user_info)
+        task = long_task.delay({**user_info, **validate_data})
         return jsonify({"task_id": task.id}), 202
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -270,7 +277,6 @@ def get_commercial_offer(calc_id: int) -> jsonify:
             "tranches": tranches.to_dict(),
             "insurances": insurances.to_dict(),
         }
-        logging.info(result)
         return jsonify({"success": True, "data": result})
 
     except Exception as e:
@@ -279,7 +285,35 @@ def get_commercial_offer(calc_id: int) -> jsonify:
 
 @leas_calc_bp.route("/crm/commercial-offer/<int:calc_id>", methods=["GET"])
 def show_commercial_offer(calc_id) -> render_template:
-    return render_template("commercial-offer.html")
+    today = date.today().strftime("%d.%m.%Y")
+    user_info = {
+        "login": request.args.get("user_login"),
+        "name": request.args.get("name"),
+        "email": request.args.get("email"),
+        "phone": request.args.get("phone"),
+    }
+
+    leas_calc = (
+        LeasCalculator.query.options(joinedload(LeasCalculator.deal))
+        .filter_by(id=calc_id)
+        .first()
+    )
+    vat = validate_item_price(
+        str(float(leas_calc.item_price) - float(leas_calc.item_price) / 1.2)
+    )  # выделяем НДС 20%
+    initial_payment_percent = validate_item_price(
+        str(leas_calc.initial_payment_percent)
+    )
+
+    return render_template(
+        "commercial-offer.html",
+        today=today,
+        user=current_user,
+        leas_calc=leas_calc,
+        vat=vat,
+        initial_payment_percent=initial_payment_percent,
+        user_info=user_info,
+    )
 
 
 @leas_calc_bp.route("/crm/calculator/overheads", methods=["GET"])

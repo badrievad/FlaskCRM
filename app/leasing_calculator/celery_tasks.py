@@ -18,7 +18,7 @@ def intensive_task_simulation(data: dict) -> dict:
     import random
     import string
 
-    user_login = data["login"]  # текущий пользователь
+    user_login = data["user_login"]  # текущий пользователь
 
     # Заполняем файл случайными данными
     #  TODO: вот тут нужно все делать
@@ -172,7 +172,7 @@ def intensive_task_simulation(data: dict) -> dict:
             input_period=data["input_period"],
             insurance=new_insurance,
             tranche=new_tranche,
-            manager_login=data["login"],
+            manager_login=data["user_login"],
             date=datetime.datetime.now(),
             date_ru=date.today().strftime("%d.%m.%Y"),
             allocate_vat=data["allocate_vat"],
@@ -193,7 +193,13 @@ def intensive_task_simulation(data: dict) -> dict:
         wb.save(path_to_xlsx)
 
         folder_api = CompanyFolderAPI()
-        pdf_api = PDFGeneratorClient(new_deal_id, data["login"])
+        user_info = {
+            "user_login": user_login,
+            "user_name": data["user_name"],
+            "user_email": data["user_email"],
+            "user_phone": data["user_phone"],
+        }
+        pdf_api = PDFGeneratorClient(new_deal_id, user_info)
         try:
             new_calc.path_to_pdf = pdf_api.generate_pdf()
             new_title_pdf = f"Коммерческое предложение (id_{new_deal_id}).pdf"

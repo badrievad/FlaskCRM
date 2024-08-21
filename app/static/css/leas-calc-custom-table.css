@@ -41,7 +41,14 @@ html {
 }
 
 .fa-unlink {
-    color: rgba(33, 8, 8, 0.7); /* Красный цвет для непривязанных КП */
+    color: rgba(49, 13, 13, 0.7); /* Красный цвет для непривязанных КП */
     margin-right: 18px;
     font-size: 16px;
+}
+
+.custom-table th:nth-child(2),
+.custom-table td:nth-child(2) {
+    width: 400px; /* Установите нужную ширину */
+    max-width: 400px; /* Максимальная ширина */
+    word-wrap: break-word; /* Перенос слов */
 }

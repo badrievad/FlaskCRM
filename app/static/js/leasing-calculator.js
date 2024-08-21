@@ -1154,12 +1154,15 @@ document.querySelectorAll('.button-group-nds, .button-group-deposit, .button-gro
 });
 
 function scrollToTrancheTable() {
-        const element = document.getElementById('tranches-table');
-        if (element) {
-            window.scroll({
-                top: element.offsetTop,
-                left: 0,
-                behavior: 'smooth'
-            });
-        }
+    const element = document.getElementById('tranches-table');
+    if (element) {
+        window.scroll({
+            top: element.offsetTop,
+            left: 0,
+            behavior: 'smooth'
+        });
     }
+}
+
+
+

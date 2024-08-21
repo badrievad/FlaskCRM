@@ -1,4 +1,6 @@
 import json
+from pathlib import Path
+
 from flask import (
     request,
     jsonify,
@@ -270,3 +272,22 @@ def get_commercial_offer(calc_id: int) -> jsonify:
 @leas_calc_bp.route("/crm/commercial-offer/<int:calc_id>", methods=["GET"])
 def show_commercial_offer(calc_id) -> render_template:
     return render_template("commercial-offer.html")
+
+
+@leas_calc_bp.route("/crm/calculator/overheads", methods=["GET"])
+def get_overheads() -> jsonify:
+    try:
+        overheads_path = Path("app").resolve() / "static" / "jsons" / "overheads.json"
+        logging.info(overheads_path)
+        with open(overheads_path, "r") as f:
+            overheads = json.load(f)
+        return jsonify(overheads)
+    except FileNotFoundError:
+        logging.error("File not found")
+        return jsonify({"error": "File not found"}), 404
+    except json.JSONDecodeError:
+        logging.error("Error decoding JSON")
+        return jsonify({"error": "Error decoding JSON"}), 500
+    except Exception as e:
+        logging.error(str(e))
+        return jsonify({"error": str(e)}), 500

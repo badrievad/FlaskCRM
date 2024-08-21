@@ -7,7 +7,7 @@ function formatNumber(value) {
 }
 
 function parseFormattedNumber(value) {
-    return parseFloat(value.replace(/\s/g, '').replace(',', '.'));
+    return parseFloat(value.replace(/\s/g, '').replace(',', '.').replace('-', ''));
 }
 
 document.getElementById('cost').addEventListener('input', function () {
@@ -137,6 +137,10 @@ document.getElementById('term-value').addEventListener('input', function () {
         this.value = 100;
     }
     document.getElementById('term').value = this.value;
+    if (this.value.trim() === "") {
+        this.value = "6";
+        document.getElementById('term').value = 6;
+    }
 });
 
 document.getElementById('term-value').addEventListener('keypress', function (event) {
@@ -334,12 +338,16 @@ document.getElementById('commission').addEventListener('input', function () {
     document.getElementById('commission-value').value = this.value;
 });
 
-document.getElementById('commission-value').addEventListener('input', function () {
+document.getElementById('commission-value').addEventListener('blur', function () {
     if (this.value > 3) {
         this.value = 3;
     }
 
     document.getElementById('commission').value = this.value;
+    if (this.value.trim() === "") {
+        this.value = "0";
+        document.getElementById('commission').value = 0;
+    }
 });
 
 document.getElementById('commission-value').addEventListener('keypress', function (event) {
@@ -352,12 +360,16 @@ document.getElementById('commission-lkmb').addEventListener('input', function ()
     document.getElementById('commission-lkmb-value').value = this.value;
 });
 
-document.getElementById('commission-lkmb-value').addEventListener('input', function () {
+document.getElementById('commission-lkmb-value').addEventListener('blur', function () {
     if (this.value > 3) {
         this.value = 3;
     }
 
     document.getElementById('commission-lkmb').value = this.value;
+    if (this.value.trim() === "") {
+        this.value = "0";
+        document.getElementById('commission-lkmb').value = 0;
+    }
 });
 
 document.getElementById('commission-lkmb-value').addEventListener('keypress', function (event) {
@@ -388,6 +400,10 @@ document.getElementById('agent-commission-value').addEventListener('blur', funct
 
     this.value = numericValue; // Обновить значение поля, если оно было изменено
     document.getElementById('agent-commission').value = numericValue;
+    if (this.value.trim() === "") {
+        this.value = "0";
+        document.getElementById('agent-commission').value = 0;
+    }
 });
 
 document.getElementById('agent-commission-value').addEventListener('keypress', function () {
@@ -419,6 +435,10 @@ document.getElementById('manager-bonus-value').addEventListener('blur', function
 
     this.value = numericValue; // Обновить значение поля, если оно было изменено
     document.getElementById('manager-bonus').value = numericValue;
+    if (this.value.trim() === "") {
+        this.value = "0";
+        document.getElementById('manager-bonus').value = 0;
+    }
 });
 
 
@@ -596,14 +616,12 @@ document.getElementById('egrn-display').addEventListener('keypress', allowOnlyNu
 document.getElementById('egrul-display').addEventListener('keypress', allowOnlyNumbers);
 
 
-// Форматирование для tracker-display
-document.getElementById('tracker-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('tracker').value = value;
-});
-
 document.getElementById('tracker-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('tracker').value = 0;
+    }
 });
 
 // Обработчик для слайдера tracker
@@ -612,14 +630,12 @@ document.getElementById('tracker').addEventListener('input', function () {
     document.getElementById('tracker-display').value = formatNumber(value);
 });
 
-// Форматирование для mayak-display
-document.getElementById('mayak-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('mayak').value = value;
-});
-
 document.getElementById('mayak-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('mayak').value = 0;
+    }
 });
 
 // Обработчик для слайдера mayak
@@ -628,14 +644,13 @@ document.getElementById('mayak').addEventListener('input', function () {
     document.getElementById('mayak-display').value = formatNumber(value);
 });
 
-// Форматирование для fedresurs-display
-document.getElementById('fedresurs-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('fedresurs').value = value;
-});
 
 document.getElementById('fedresurs-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('fedresurs').value = 0;
+    }
 });
 
 // Обработчик для слайдера fedresurs
@@ -645,13 +660,12 @@ document.getElementById('fedresurs').addEventListener('input', function () {
 });
 
 // Форматирование для gsm-display
-document.getElementById('gsm-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('gsm').value = value;
-});
-
 document.getElementById('gsm-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('gsm').value = 0;
+    }
 });
 
 // Обработчик для слайдера gsm
@@ -661,13 +675,12 @@ document.getElementById('gsm').addEventListener('input', function () {
 });
 
 // Форматирование для mail-display
-document.getElementById('mail-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('mail').value = value;
-});
-
 document.getElementById('mail-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('mail').value = 0;
+    }
 });
 
 // Обработчик для слайдера mail
@@ -677,13 +690,12 @@ document.getElementById('mail').addEventListener('input', function () {
 });
 
 // Форматирование для depr-transport-display
-document.getElementById('depr-transport-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('depr-transport').value = value;
-});
-
 document.getElementById('depr-transport-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('depr-transport').value = 0;
+    }
 });
 
 // Обработчик для слайдера depr-transport
@@ -693,13 +705,12 @@ document.getElementById('depr-transport').addEventListener('input', function () 
 });
 
 // Форматирование для travel-display
-document.getElementById('travel-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('travel').value = value;
-});
-
 document.getElementById('travel-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('travel').value = 0;
+    }
 });
 
 // Обработчик для слайдера travel
@@ -709,13 +720,12 @@ document.getElementById('travel').addEventListener('input', function () {
 });
 
 // Форматирование для stationery-display
-document.getElementById('stationery-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('stationery').value = value;
-});
-
 document.getElementById('stationery-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('stationery').value = 0;
+    }
 });
 
 // Обработчик для слайдера stationery
@@ -725,13 +735,12 @@ document.getElementById('stationery').addEventListener('input', function () {
 });
 
 // Форматирование для internet-display
-document.getElementById('internet-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('internet').value = value;
-});
-
 document.getElementById('internet-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('internet').value = 0;
+    }
 });
 
 // Обработчик для слайдера internet
@@ -741,13 +750,12 @@ document.getElementById('internet').addEventListener('input', function () {
 });
 
 // Форматирование для pledge-display
-document.getElementById('pledge-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('pledge').value = value;
-});
-
 document.getElementById('pledge-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('pledge').value = 0;
+    }
 });
 
 // Обработчик для слайдера pledge
@@ -757,13 +765,12 @@ document.getElementById('pledge').addEventListener('input', function () {
 });
 
 // Форматирование для bank-pledge-display
-document.getElementById('bank-pledge-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('bank-pledge').value = value;
-});
-
 document.getElementById('bank-pledge-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('bank-pledge').value = 0;
+    }
 });
 
 // Обработчик для слайдера bank-pledge
@@ -773,13 +780,12 @@ document.getElementById('bank-pledge').addEventListener('input', function () {
 });
 
 // Форматирование для express-display
-document.getElementById('express-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('express').value = value;
-});
-
 document.getElementById('express-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('express').value = 0;
+    }
 });
 
 // Обработчик для слайдера express
@@ -789,13 +795,12 @@ document.getElementById('express').addEventListener('input', function () {
 });
 
 // Форматирование для egrn-display
-document.getElementById('egrn-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('egrn').value = value;
-});
-
 document.getElementById('egrn-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('egrn').value = 0;
+    }
 });
 
 // Обработчик для слайдера egrn
@@ -805,19 +810,39 @@ document.getElementById('egrn').addEventListener('input', function () {
 });
 
 // Форматирование для egrul-display
-document.getElementById('egrul-display').addEventListener('input', function () {
-    var value = parseFormattedNumber(this.value);
-    document.getElementById('egrul').value = value;
-});
-
 document.getElementById('egrul-display').addEventListener('blur', function () {
     this.value = formatNumber(parseFormattedNumber(this.value));
+    if (this.value.trim() === "не число") {
+        this.value = "0,00";
+        document.getElementById('egrul').value = 0;
+    }
 });
 
 // Обработчик для слайдера egrul
 document.getElementById('egrul').addEventListener('input', function () {
     var value = parseInt(this.value, 10);
     document.getElementById('egrul-display').value = formatNumber(value);
+});
+
+
+// Применяем обработчик событий 'blur' ко всем элементам с id 'health-insurance1' до 'health-insurance5'
+document.querySelectorAll('[id^="health-insurance"]').forEach(function (element) {
+    element.addEventListener('blur', function () {
+        this.value = formatNumber(parseFormattedNumber(this.value));
+        console.log(this.value)
+        if (this.value.trim() === "не число") {
+            this.value = "0,00";
+        }
+    });
+});
+
+document.querySelectorAll('[id^="other-insurance"]').forEach(function (element) {
+    element.addEventListener('blur', function () {
+        this.value = formatNumber(parseFormattedNumber(this.value));
+        if (this.value.trim() === "не число") {
+            this.value = "0,00";
+        }
+    });
 });
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1164,5 +1189,34 @@ function scrollToTrancheTable() {
     }
 }
 
+// Функция для проверки и корректировки значения в поле ввода
+function validateInput(element) {
+    let value = parseFloat(element.value);
+
+    if (isNaN(value) || value < 0) {
+        element.value = 0;
+    } else if (value > 100) {
+        element.value = 100;
+    } else {
+        element.value = value;
+    }
+}
+
+// Функция для установки обработчиков событий на все поля
+function setValidationHandlers() {
+    const inputs = document.querySelectorAll('input[type="text"][id^="insurance-casko"], input[type="text"][id^="insurance-osago"], input[type="text"][id^="tranche"]');
+
+    inputs.forEach(input => {
+        // Ограничение ввода при изменении значения
+
+        // Проверка и корректировка значения при потере фокуса
+        input.addEventListener('blur', function () {
+            validateInput(input);
+        });
+    });
+}
+
+// Установка обработчиков при загрузке страницы
+document.addEventListener('DOMContentLoaded', setValidationHandlers);
 
 

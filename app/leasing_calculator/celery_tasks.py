@@ -33,8 +33,6 @@ def intensive_task_simulation(data: dict) -> dict:
         ws.append(row)
 
     # КОНЕЦ
-
-    logging.info(data)
     # Записываем в базу данных
     try:
         new_insurance = Insurances(

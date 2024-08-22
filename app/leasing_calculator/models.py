@@ -74,11 +74,28 @@ class LeasCalculator(db.Model):
     )  # Название xlsx файла (для скачивания)
     deal_id = db.Column(db.Integer, db.ForeignKey("deals.id"), nullable=True)
 
-    tranche = relationship("Tranches", back_populates="leas_calculator", uselist=False)
+    tranche = relationship(
+        "Tranches",
+        back_populates="leas_calculator",
+        uselist=False,
+        cascade="all, delete-orphan",
+        single_parent=True,
+    )
     insurance = relationship(
-        "Insurances", back_populates="leas_calculator", uselist=False
+        "Insurances",
+        back_populates="leas_calculator",
+        uselist=False,
+        cascade="all, delete-orphan",
+        single_parent=True,
     )
     deal = relationship("Deal", back_populates="leas_calculators")
+
+    # Связь с графиками платежей
+    payment_schedules = relationship(
+        "CalculateResultSchedule",
+        back_populates="leas_calculator",
+        cascade="all, delete-orphan",
+    )
 
     def to_dict(self):
         return {
@@ -293,3 +310,18 @@ class LeasingItem(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(500), nullable=False)
+
+
+class CalculateResultSchedule(db.Model):
+    """Модель для хранения графиков расчета"""
+
+    __tablename__ = "calculate_result_schedules"
+
+    id = db.Column(db.Integer, primary_key=True)
+    calc_id = db.Column(db.Integer, db.ForeignKey("leas_calculator.id"), nullable=False)
+    payment_date = db.Column(db.Date, nullable=False)
+    leas_payment_amount = db.Column(db.Float, nullable=False)
+    early_repayment_amount = db.Column(db.Float, nullable=False)
+
+    # Обратное отношение к LeasCalculator
+    leas_calculator = relationship("LeasCalculator", back_populates="payment_schedules")

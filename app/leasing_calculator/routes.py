@@ -17,6 +17,7 @@ from sqlalchemy.orm import joinedload
 from logger import logging
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
+from .api_for_leas_culc import upload_schedule
 from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
 from .other_utils import validate_item_price
 from .pydantic_models import ValidateFields
@@ -333,3 +334,11 @@ def get_overheads() -> jsonify:
     except Exception as e:
         logging.error(str(e))
         return jsonify({"error": str(e)}), 500
+
+
+@leas_calc_bp.route("/crm/calculator/api/upload_schedule", methods=["POST"])
+def upload_schedules():
+    data = request.get_json()  # принимаем JSON с графиками
+    upload_schedule(data)
+
+    return jsonify({"message": "Schedules successfully uploaded"}), 201

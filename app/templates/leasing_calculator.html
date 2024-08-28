@@ -164,6 +164,11 @@
         </li>
     </ul>
     <h6>{{ current_user }}</h6>
+    <h6 style="margin-left: 35px">
+        <a class="nav-link exit-link" href="{{ url_for('user.exit_user') }}">
+            <i class="fa-solid fa-right-from-bracket"></i> Выйти из аккаунта
+        </a>
+    </h6>
 </div>
 
 <div class="main-content" id="main-content">
@@ -1321,6 +1326,18 @@
         };
         toastr.info(message, title);
     }
+
+    $(document).ready(function () {
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'info' %}
+                        showInfo("{{ message }}", "Информация");
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    });
 </script>
 <!-- Autocomplete Script -->
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-autocomplete.js') }}"></script>

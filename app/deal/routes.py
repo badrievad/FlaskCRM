@@ -12,6 +12,7 @@ from .deals_validate import DealsValidate
 from .work_with_folders import CompanyFolderAPI
 
 from ..deal.models import Deal
+from ..user.auth_utils import _tester_required
 from ..user.models import User
 from ..config import suggestions_token
 
@@ -22,7 +23,7 @@ from flask import (
     session,
     url_for,
 )
-from flask_login import current_user, login_required
+from flask_login import current_user
 from logger import logging
 
 
@@ -298,7 +299,7 @@ def deal_to_active(deal_id) -> jsonify:
 
 
 @deal_bp.route("/crm", methods=["GET"])
-@login_required
+@_tester_required
 def index_crm() -> render_template:
     session["username"] = current_user.login  # Устанавливаем username в сессию
     logging.info(f"Socket connected: {session}")
@@ -309,7 +310,6 @@ def index_crm() -> render_template:
     # установка фона для пользователя
     user_fon_filename = current_user.fon_url
     user_fon_url = url_for("crm.static", filename=user_fon_filename)
-
     return render_template(
         "crm.html",
         deals=deals,

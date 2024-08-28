@@ -24,9 +24,11 @@ def process_login():
             login_user(user, remember=form.remember_me.data)
             logging.info(f"{current_user} зашел на сайт.")
             session["username"] = current_user.login  # Устанавливаем username в сессию
+            if current_user.is_manager:
+                return redirect(url_for("leas_calc.get_leasing_calculator"))
             return redirect(url_for("deal.index_crm"))
         else:
-            logging.info(f"Неправильный логин или пароль")
+            logging.info("Неправильный логин или пароль")
             flash("Неправильный логин или пароль", "error")
     return redirect(url_for("user.login"))
 

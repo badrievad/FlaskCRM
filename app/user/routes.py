@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, session
+from flask import render_template, redirect, url_for, session, flash
 from flask_login import login_user, logout_user, current_user
 
 from app.user.forms import LoginForm
@@ -25,6 +25,9 @@ def process_login():
             logging.info(f"{current_user} зашел на сайт.")
             session["username"] = current_user.login  # Устанавливаем username в сессию
             return redirect(url_for("deal.index_crm"))
+        else:
+            logging.info(f"Неправильный логин или пароль")
+            flash("Неправильный логин или пароль", "error")
     return redirect(url_for("user.login"))
 
 

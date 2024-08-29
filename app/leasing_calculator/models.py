@@ -321,7 +321,9 @@ class CalculateResultSchedule(db.Model):
     calc_id = db.Column(db.Integer, db.ForeignKey("leas_calculator.id"), nullable=False)
     payment_date = db.Column(db.Date, nullable=False)
     leas_payment_amount = db.Column(db.Float, nullable=False)
+    leas_payment_amount_str = db.Column(db.String(255), nullable=False)
     early_repayment_amount = db.Column(db.Float, nullable=False)
+    early_repayment_amount_str = db.Column(db.String(255), nullable=False)
 
     # Обратное отношение к LeasCalculator
     leas_calculator = relationship("LeasCalculator", back_populates="payment_schedules")

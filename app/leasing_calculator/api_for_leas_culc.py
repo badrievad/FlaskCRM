@@ -4,6 +4,7 @@ from pydantic import BaseModel, ValidationError, field_validator, Field
 from datetime import date
 
 from .models import CalculateResultSchedule
+from .other_utils import validate_item_price
 from .. import db
 from flask import jsonify
 from logger import logging
@@ -55,7 +56,13 @@ def upload_schedule(data: Any):
                 calc_id=item.calc_id,
                 payment_date=item.payment_date,
                 leas_payment_amount=item.leas_payment_amount,
+                leas_payment_amount_str=validate_item_price(
+                    str(item.leas_payment_amount)
+                ),
                 early_repayment_amount=item.early_repayment_amount,
+                early_repayment_amount_str=validate_item_price(
+                    str(item.early_repayment_amount)
+                ),
             )
             db.session.add(new_schedule)
 

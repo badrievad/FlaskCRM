@@ -30,6 +30,7 @@ from ..leasing_calculator.models import (
     LeasingItem,
     Tranches,
     Insurances,
+    CalculateResultSchedule,
 )
 from ..leasing_calculator.services import update_calculation_service
 
@@ -305,7 +306,8 @@ def show_commercial_offer(calc_id) -> render_template:
     initial_payment_percent = validate_item_price(
         str(leas_calc.initial_payment_percent)
     )
-
+    schedules = CalculateResultSchedule.query.filter_by(calc_id=leas_calc.id).all()
+    logging.info(schedules)
     return render_template(
         "commercial-offer.html",
         today=today,
@@ -314,6 +316,7 @@ def show_commercial_offer(calc_id) -> render_template:
         vat=vat,
         initial_payment_percent=initial_payment_percent,
         user_info=user_info,
+        schedules=schedules,
     )
 
 

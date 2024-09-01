@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-exchange.css') }}">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-key-rate.css') }}">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-tranche-table.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-pagination.css') }}">
     <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -390,27 +391,39 @@
                         </tr>
                         <tr>
                             <td>Вознаграждение лизинговой компании, %</td>
-                            <td><input type="text" name="tranche1-fee" id="tranche1-fee" value="4.85" maxlength="5"/></td>
-                            <td><input type="text" name="tranche2-fee" id="tranche2-fee" value="4.85" maxlength="5"/></td>
+                            <td><input type="text" name="tranche1-fee" id="tranche1-fee" value="4.85" maxlength="5"/>
+                            </td>
+                            <td><input type="text" name="tranche2-fee" id="tranche2-fee" value="4.85" maxlength="5"/>
+                            </td>
                             <td><input type="text" name="tranche3-fee" id="tranche3-fee" value="0" maxlength="5"/></td>
                             <td><input type="text" name="tranche4-fee" id="tranche4-fee" value="0" maxlength="5"/></td>
                             <td><input type="text" name="tranche5-fee" id="tranche5-fee" value="0" maxlength="5"/></td>
                         </tr>
                         <tr>
                             <td>Вознаграждение лизинговой компании, % (за счет собственных средств)</td>
-                            <td><input type="text" name="tranche1-own-fee" id="tranche1-own-fee" value="0" maxlength="5"/></td>
-                            <td><input type="text" name="tranche2-own-fee" id="tranche2-own-fee" value="0" maxlength="5"/></td>
-                            <td><input type="text" name="tranche3-own-fee" id="tranche3-own-fee" value="0" maxlength="5"/></td>
-                            <td><input type="text" name="tranche4-own-fee" id="tranche4-own-fee" value="0" maxlength="5"/></td>
-                            <td><input type="text" name="tranche5-own-fee" id="tranche5-own-fee" value="0" maxlength="5"/></td>
+                            <td><input type="text" name="tranche1-own-fee" id="tranche1-own-fee" value="0"
+                                       maxlength="5"/></td>
+                            <td><input type="text" name="tranche2-own-fee" id="tranche2-own-fee" value="0"
+                                       maxlength="5"/></td>
+                            <td><input type="text" name="tranche3-own-fee" id="tranche3-own-fee" value="0"
+                                       maxlength="5"/></td>
+                            <td><input type="text" name="tranche4-own-fee" id="tranche4-own-fee" value="0"
+                                       maxlength="5"/></td>
+                            <td><input type="text" name="tranche5-own-fee" id="tranche5-own-fee" value="0"
+                                       maxlength="5"/></td>
                         </tr>
                         <tr>
                             <td>Дата выдачи кредита</td>
-                            <td><input type="date" name="tranche1-credit-date" id="tranche1-credit-date" maxlength="5"/></td>
-                            <td><input type="date" name="tranche2-credit-date" id="tranche2-credit-date" maxlength="5"/></td>
-                            <td><input type="date" name="tranche3-credit-date" id="tranche3-credit-date" maxlength="5"/></td>
-                            <td><input type="date" name="tranche4-credit-date" id="tranche4-credit-date" maxlength="5"/></td>
-                            <td><input type="date" name="tranche5-credit-date" id="tranche5-credit-date" maxlength="5"/></td>
+                            <td><input type="date" name="tranche1-credit-date" id="tranche1-credit-date" maxlength="5"/>
+                            </td>
+                            <td><input type="date" name="tranche2-credit-date" id="tranche2-credit-date" maxlength="5"/>
+                            </td>
+                            <td><input type="date" name="tranche3-credit-date" id="tranche3-credit-date" maxlength="5"/>
+                            </td>
+                            <td><input type="date" name="tranche4-credit-date" id="tranche4-credit-date" maxlength="5"/>
+                            </td>
+                            <td><input type="date" name="tranche5-credit-date" id="tranche5-credit-date" maxlength="5"/>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -469,19 +482,29 @@
                         </tr>
                         <tr>
                             <td>Расходы на страхование ЖИЗНИ и ЗДОРОВЬЯ, руб.</td>
-                            <td><input type="text" name="health-insurance1" id="health-insurance1" value="0,00" maxlength="12"/></td>
-                            <td><input type="text" name="health-insurance2" id="health-insurance2" value="0,00" maxlength="12"/></td>
-                            <td><input type="text" name="health-insurance3" id="health-insurance3" value="0,00" maxlength="12"/></td>
-                            <td><input type="text" name="health-insurance4" id="health-insurance4" value="0,00" maxlength="12"/></td>
-                            <td><input type="text" name="health-insurance5" id="health-insurance5" value="0,00" maxlength="12"/></td>
+                            <td><input type="text" name="health-insurance1" id="health-insurance1" value="0,00"
+                                       maxlength="12"/></td>
+                            <td><input type="text" name="health-insurance2" id="health-insurance2" value="0,00"
+                                       maxlength="12"/></td>
+                            <td><input type="text" name="health-insurance3" id="health-insurance3" value="0,00"
+                                       maxlength="12"/></td>
+                            <td><input type="text" name="health-insurance4" id="health-insurance4" value="0,00"
+                                       maxlength="12"/></td>
+                            <td><input type="text" name="health-insurance5" id="health-insurance5" value="0,00"
+                                       maxlength="12"/></td>
                         </tr>
                         <tr>
                             <td>Расходы на страхование ИНОЕ, руб.</td>
-                            <td><input type="text" name="other-insurance1" id="other-insurance1" value="0,00" maxlength="12"/></td>
-                            <td><input type="text" name="other-insurance2" id="other-insurance2" value="0,00" maxlength="12"/></td>
-                            <td><input type="text" name="other-insurance3" id="other-insurance3" value="0,00" maxlength="12"/></td>
-                            <td><input type="text" name="other-insurance4" id="other-insurance4" value="0,00" maxlength="12"/></td>
-                            <td><input type="text" name="other-insurance5" id="other-insurance5" value="0,00" maxlength="12"/></td>
+                            <td><input type="text" name="other-insurance1" id="other-insurance1" value="0,00"
+                                       maxlength="12"/></td>
+                            <td><input type="text" name="other-insurance2" id="other-insurance2" value="0,00"
+                                       maxlength="12"/></td>
+                            <td><input type="text" name="other-insurance3" id="other-insurance3" value="0,00"
+                                       maxlength="12"/></td>
+                            <td><input type="text" name="other-insurance4" id="other-insurance4" value="0,00"
+                                       maxlength="12"/></td>
+                            <td><input type="text" name="other-insurance5" id="other-insurance5" value="0,00"
+                                       maxlength="12"/></td>
                         </tr>
                         </tbody>
                     </table>
@@ -489,8 +512,10 @@
                 <br>
                 <div class="line"></div>
                 <h5 id="overhead"><i class="fa-solid fa-dolly" style="color: #727a88"></i> Накладные расходы: </h5>
-                <button class="btn-hover-sm color-3" id="default-button"><i class="fa-solid fa-check"></i> По умолчанию</button>
-                <button class="btn-hover-sm color-3" id="clear-button"><i class="fa-solid fa-trash"></i> Очистить</button>
+                <button class="btn-hover-sm color-3" id="default-button"><i class="fa-solid fa-check"></i> По умолчанию
+                </button>
+                <button class="btn-hover-sm color-3" id="clear-button"><i class="fa-solid fa-trash"></i> Очистить
+                </button>
                 <br>
                 <div class="form-group">
                     <div class="input-container">
@@ -844,7 +869,10 @@
             <thead>
             <tr>
                 <th scope="col">№</th>
-                <th scope="col">Наименование ПЛ</th>
+                <th scope="col">
+                    Наименование ПЛ
+                    <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Поиск...">
+                </th>
                 <th scope="col">Цена ПЛ</th>
                 <th scope="col">Тип ПЛ</th>
                 <th scope="col">Дата</th>
@@ -881,6 +909,7 @@
             {% endfor %}
             </tbody>
         </table>
+        <div id="pagination-container"></div>
     </div>
 </div>
 <script>
@@ -1349,5 +1378,6 @@
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-modal.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-new.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-overheads.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/leasing-calculator-pagination.js') }}"></script>
 </body>
 </html>

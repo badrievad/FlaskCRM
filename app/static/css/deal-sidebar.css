@@ -9,11 +9,6 @@
     position: fixed;
     padding-top: 20px;
     transition: left 0.5s ease-in-out; /* Увеличено время перехода */
-    left: -250px; /* Изначально скрытый */
-}
-
-.sidebar.open {
-    left: 0;
 }
 
 .sidebar h2 {

@@ -101,6 +101,12 @@ function saveSelection() {
 
                 // Уведомление об успешном обновлении
                 showInfo("Ответственный успешно обновлен");
+
+                // Перезагружаем страницу через небольшую задержку
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000); // Задержка в 2 секунды перед перезагрузкой
+
             },
             error: function (error) {
                 console.error('Ошибка при обновлении данных:', error);

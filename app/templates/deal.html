@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-style.css') }}">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-stepper.css') }}">
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-sidebar.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-inside-responsible.css') }}">
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-toast-style.css') }}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
@@ -103,8 +105,17 @@
                 </div>
                 <div class="section">
                     <h3>Ответственный</h3>
-                    <p>{{ deal.created_by }}</p>
+                    <p>
+                        <span id="current-created-by">{{ deal.created_by }}</span>
+                        <i class="fa-solid fa-pen fa-xs" id="user-icon"></i>
+                    </p>
                     <p id="deal-created-at">{{ deal.created_at }}</p>
+
+                    <!-- Контейнер для выпадающего списка с кнопками -->
+                    <div id="user-dropdown"
+                         style="display: none; position: absolute; background-color: white; border: 1px solid #ccc; z-index: 1000; padding: 10px;">
+                        <!-- Сюда будет добавляться список пользователей и кнопки -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -172,5 +183,9 @@
         });
     });
 </script>
+
+<!-- Scripts -->
+<script src="{{ url_for('crm.static', filename='js/deal-inside-responsible.js') }}"></script>
+
 </body>
 </html>

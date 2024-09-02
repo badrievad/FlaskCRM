@@ -39,11 +39,13 @@ def create_app(debug=False):
     from .deal import deal_bp as deal_blueprint
     from .user import user_bp as user_blueprint
     from .leasing_calculator import leas_calc_bp as leas_calc_blueprint
+    from .deal_inside import deal_inside_bp as deal_inside_blueprint
 
     app.register_blueprint(crm_static_bp)
     app.register_blueprint(deal_blueprint)
     app.register_blueprint(user_blueprint)
     app.register_blueprint(leas_calc_blueprint)
+    app.register_blueprint(deal_inside_blueprint)
 
     cache.init_app(app)
     socketio.init_app(app)

@@ -1,19 +1,23 @@
 #toast-container > .toast-error {
+    font-family: 'Roboto', sans-serif;
     background-color: rgba(255, 77, 77, 0.6); /* Цвет фона для ошибки */
     backdrop-filter: blur(10px); /* Размытие фона */
 }
 
 #toast-container > .toast-success {
+    font-family: 'Roboto', sans-serif;
     background-color: rgba(21, 68, 23, 0.6); /* Цвет фона для успеха */
     backdrop-filter: blur(10px); /* Размытие фона */
 }
 
 #toast-container > .toast-info {
+    font-family: 'Roboto', sans-serif;
     background-color: rgba(33, 150, 243, 0.2); /* Цвет фона для информации */
     backdrop-filter: blur(10px); /* Размытие фона */
 }
 
 #toast-container > .toast-warning {
+    font-family: 'Roboto', sans-serif;
     background-color: rgba(255, 152, 0, 0.6); /* Цвет фона для предупреждения */
     backdrop-filter: blur(10px); /* Размытие фона */
 }

@@ -107,7 +107,10 @@
                     <h3>Ответственный</h3>
                     <p>
                         <span id="current-created-by" data-user-id="{{ deal.created_by }}">{{ deal.created_by }}</span>
-                        <i class="fa-solid fa-pen fa-xs" id="user-icon"></i>
+
+                        {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                            <i class="fa-solid fa-pen fa-xs" id="user-icon"></i>
+                        {% endif %}
                     </p>
                     <p id="deal-created-at">{{ deal.created_at }}</p>
 

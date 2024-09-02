@@ -27,9 +27,10 @@ def enter_into_deal(deal_id: int) -> render_template:
 
 @deal_inside_bp.route("/get-managers-and-admins", methods=["GET"])
 def get_managers_and_admins():
-    users = get_users_with_roles(
-        ["manager", "admin", "tester"]
-    )  # Функция, возвращающая пользователей с ролями manager, admin и tester
+    current_user_id = request.args.get(
+        "current_user_id"
+    )  # Получаем текущего ответственного пользователя
+    users = get_users_with_roles(["manager", "admin", "tester"], current_user_id)
     return jsonify(users)
 
 

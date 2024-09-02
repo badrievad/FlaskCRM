@@ -11,10 +11,13 @@ userIcon.addEventListener('click', function () {
     userItems = [];
     currentIndex = -1;
 
+    const currentCreatedBy = document.getElementById('current-created-by').getAttribute('data-user-id'); // Получаем текущего ответственного пользователя
+
     // Отправка AJAX-запроса на сервер для получения пользователей
     $.ajax({
         url: './get-managers-and-admins',
         method: 'GET',
+        data: {current_user_id: currentCreatedBy},  // Передаем ID текущего ответственного пользователя
         success: function (data) {
             // Обработка полученных данных и добавление пользователей в список
             data.forEach((user, index) => {

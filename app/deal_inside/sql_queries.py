@@ -5,9 +5,11 @@ from ..deal.models import Deal
 from ..user.models import User
 
 
-def get_users_with_roles(roles):
+def get_users_with_roles(roles, current_user_id):
     result = (
-        User.query.filter(User.role.in_(roles)).filter(User.id != current_user.id).all()
+        User.query.filter(User.role.in_(roles))
+        .filter(User.fullname != current_user_id)
+        .all()
     )
     return [{"name": user.fullname, "role": user.role} for user in result]
 

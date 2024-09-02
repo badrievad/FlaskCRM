@@ -2,7 +2,6 @@ import datetime
 
 from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import joinedload
 
 from . import deal_bp
 from .. import socketio, db

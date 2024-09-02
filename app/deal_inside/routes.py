@@ -6,7 +6,6 @@ from flask import (
     request,
     render_template,
 )
-from flask_login import current_user
 from logger import logging
 from .sql_queries import get_users_with_roles, update_deal_created_by
 from ..deal.models import Deal

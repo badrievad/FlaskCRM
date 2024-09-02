@@ -292,6 +292,16 @@
         console.log('Connected to SocketIO server');
     });
 
+    // Обработчик для получения сообщений
+    socket.on('update_created_by_all', function (data) {
+        // Обновляем текст в таблице на другой странице
+        var dealManagerCell = document.querySelector(`tr[id="deal-${data.deal_id}"] .deal-manager`);
+        if (dealManagerCell) {
+            console.log('Deal manager updated:', data.new_created_by);
+            dealManagerCell.textContent = data.new_created_by;
+        }
+    });
+
     socket.on('notification_new_deal', function (data) {
         // Настройки для toastr
         toastr.options = {

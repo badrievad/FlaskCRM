@@ -9,6 +9,7 @@ from flask import (
 from logger import logging
 from .sql_queries import get_users_with_roles, update_deal_created_by
 from ..deal.models import Deal
+from .. import socketio
 
 
 @deal_inside_bp.route("/<deal_id>", methods=["GET"])
@@ -22,6 +23,7 @@ def enter_into_deal(deal_id: int) -> render_template:
         "deal.html",
         deal=deal,
         leas_calc=leas_calc,
+        deal_id=deal_id,
     )
 
 
@@ -56,6 +58,22 @@ def update_created_by(deal_id):
 
         logging.info(
             f"Deal updated successfully: deal_id {deal_id} updated to created_by {new_created_by}"
+        )
+        # Отправка уведомления всем пользователям в комнате
+        socketio.emit(
+            "update_created_by",
+            {
+                "message": f"Ответственный успешно обновлен на {new_created_by}",
+                "new_created_by": new_created_by,  # Передаем новое значение
+            },
+            to=str(deal_id),
+        )
+        socketio.emit(
+            "update_created_by_all",
+            {
+                "new_created_by": new_created_by,  # Передаем новое значение
+                "deal_id": deal_id,
+            },
         )
         return jsonify({"message": "Deal updated successfully"}), 200
 

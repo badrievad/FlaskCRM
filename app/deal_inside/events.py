@@ -1,7 +1,9 @@
+from websocket import send
+
 from .. import socketio, db
 
 from datetime import datetime
-from flask_socketio import emit, join_room
+from flask_socketio import emit, join_room, leave_room
 from flask import session
 from app.deal_inside.models import DealSteps
 from logger import logging
@@ -12,22 +14,37 @@ from flask_login import current_user
 user_sessions = {}
 
 
-@socketio.on("connect")
-def handle_connect():
-    username = session.get("username")
-    if username:
-        user_sessions[username] = current_user.login
-        join_room(username)  # Присоединяем пользователя к комнате с его именем
-        logging.info(f"User {username} connected with session ID {current_user.login}")
+@socketio.on("join")
+def on_join(data):
+    username = data["username"]
+    room = data["room"]
+    if room:  # Проверяем, что комната не пустая
+        logging.info(f"{username} подключился к комнате {room}.")
+        join_room(room)
+        emit(f"{username} подключился к комнате {room}.", to=room)
+    else:
+        logging.info(f"Ошибка: не удалось подключиться, комната не указана.")
 
 
-@socketio.on("disconnect")
-def handle_disconnect():
-    username = session.get("username")
-    logging.info(f"User {username} disconnected")
-    if username and username in user_sessions:
-        del user_sessions[username]  # Удаляем запись при отключении
-        logging.info(f"User {username} disconnected")
+@socketio.on("leave")
+def on_leave(data):
+    username = data["username"]
+    room = data["room"]
+    if room:
+        leave_room(room)
+        emit(f"{username} покинул комнату {room}.", to=room)
+    else:
+        logging.info(f"Ошибка: не удалось выйти, комната не указана.")
+
+
+@socketio.on("update_data")
+def handle_update(data):
+    room = data["room"]
+    if room:
+        # Отправляем сообщение всем пользователям в комнате
+        emit(data["message"], to=room)
+    else:
+        logging.info(f"Ошибка: не удалось отправить данные, комната не указана.")
 
 
 @socketio.on("approve_step")

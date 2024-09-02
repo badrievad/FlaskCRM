@@ -99,9 +99,6 @@ function saveSelection() {
                 // Обновляем текст текущего ответственного
                 document.getElementById('current-created-by').textContent = selectedUser;
 
-                // Уведомление об успешном обновлении
-                showInfo("Ответственный успешно обновлен");
-
                 // Перезагружаем страницу через небольшую задержку
                 setTimeout(function () {
                     window.location.reload();
@@ -208,7 +205,7 @@ function showInfo(message, title) {
         onclick: null,
         showDuration: "300",
         hideDuration: "1000",
-        timeOut: "4000",
+        timeOut: "2000",
         extendedTimeOut: "1000",
         showEasing: "swing",
         hideEasing: "linear",

@@ -30,6 +30,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <link href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet"/>
     <script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
+
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
     <style>
         .hidden {
             display: none;
@@ -162,6 +165,38 @@
                 }
             });
         });
+    });
+</script>
+<
+<script type="text/javascript" charset="utf-8">
+    var socket = io();
+
+    // Подключаемся к комнате при загрузке страницы
+    var dealId = '{{ deal_id }}';  // Должно содержать только ID сделки
+    var room = dealId;  // Проверяем, что room устанавливается только как deal_id
+    var username = '{{ current_user.fullname }}';
+
+    socket.emit('join', {username: username, room: room});
+    console.log('Joined room: ' + room);
+
+    // Обработчик для получения сообщений
+    socket.on('update_created_by', function (data) {
+        // Обновляем текст текущего ответственного
+        document.getElementById('current-created-by').textContent = data.new_created_by;
+        // Отображаем уведомление
+        showInfo(data.message);
+    });
+
+    // Отключаемся от комнаты перед закрытием страницы
+    window.onbeforeunload = function () {
+        socket.emit('leave', {username: username, room: room});
+        console.log('Left room: ' + room);
+    };
+
+    // Отключаемся от комнаты при клике на ссылку
+    document.querySelector('.clickable a').addEventListener('click', function (event) {
+        event.preventDefault(); // Останавливаем переход по ссылке
+        socket.emit('leave', {username: username, room: room});
     });
 </script>
 

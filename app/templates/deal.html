@@ -103,8 +103,27 @@
                 </div>
                 <div class="section">
                     <h3>Поставщик</h3>
-                    <p>Наименование: {{ deal.seller_name }}</p>
-                    <p>ИНН: {{ deal.seller_inn }}</p>
+                    <p>Наименование:
+                        <span id="supplier-name-display" class="supplier-display-text">{{ deal.seller_name }}</span>
+                        <input type="text" id="supplier-name-input" class="supplier-input-field"
+                               value="{{ deal.seller_name }}">
+                        <i class="fa-solid fa-pen fa-xs supplier-edit-icon" id="edit-supplier-name-icon"></i>
+                        <button id="save-supplier-name" class="supplier-action-button" style="display:none;">Сохранить
+                        </button>
+                        <button id="cancel-supplier-name" class="supplier-action-button" style="display:none;">
+                            Отменить
+                        </button>
+                    </p>
+                    <p>ИНН:
+                        <span id="supplier-inn-display" class="supplier-display-text">{{ deal.seller_inn }}</span>
+                        <input type="text" id="supplier-inn-input" class="supplier-input-field"
+                               value="{{ deal.seller_inn }}">
+                        <i class="fa-solid fa-pen fa-xs supplier-edit-icon" id="edit-supplier-inn-icon"></i>
+                        <button id="save-supplier-inn" class="supplier-action-button" style="display:none;">Сохранить
+                        </button>
+                        <button id="cancel-supplier-inn" class="supplier-action-button" style="display:none;">Отменить
+                        </button>
+                    </p>
                 </div>
                 <div class="section">
                     <h3>Ответственный</h3>

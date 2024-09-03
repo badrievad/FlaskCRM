@@ -60,7 +60,7 @@
 }
 
 .save-button:hover {
-    background-color: rgba(80, 134, 118, 0.80);
+    background-color: rgb(58, 101, 88);
 }
 
 .cancel-button {
@@ -69,7 +69,7 @@
 }
 
 .cancel-button:hover {
-    background-color: rgba(173, 108, 114, 0.8);
+    background-color: rgb(122, 70, 75);
 }
 
 /* Адаптивные стили для небольших экранов */
@@ -94,4 +94,76 @@
 #user-dropdown p.active {
     background-color: #e0e0e0; /* Цвет выделенного элемента */
     font-weight: bold; /* Подчеркнуть выделенный элемент */
+}
+
+/* Иконка редактирования для поставщика */
+.supplier-edit-icon {
+    margin-left: 10px;
+    color: #007bff; /* Синий цвет иконки */
+}
+
+.supplier-edit-icon:hover {
+    color: #0056b3; /* Темнее синий цвет при наведении */
+    cursor: pointer; /* Указатель мыши меняется на "руку" */
+}
+
+/* Поля ввода для поставщика */
+.supplier-input-field {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 5px;
+    font-size: 14px;
+    width: auto;
+    display: inline-block;
+    box-sizing: border-box;
+}
+
+/* Добавляем отступы для полей ввода */
+.supplier-input-field {
+    margin-left: 5px;
+}
+
+/* Стиль отображения текста для поставщика */
+.supplier-display-text {
+    display: inline;
+}
+
+/* Скрытые поля ввода по умолчанию */
+.supplier-input-field {
+    display: none;
+}
+
+/* Стиль для фокуса на поле ввода */
+.supplier-input-field:focus {
+    outline: none;
+    border-color: #007bff; /* Синий цвет рамки при фокусе */
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Синяя тень при фокусе */
+}
+
+/* Стили для кнопок действий */
+.supplier-action-button {
+    margin-left: 5px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#save-supplier-name, #save-supplier-inn {
+    background-color: #508676; /* Зеленый цвет для кнопки "Сохранить" */
+    color: white;
+}
+
+#save-supplier-name:hover, #save-supplier-inn:hover {
+    background-color: rgb(58, 101, 88); /* Темнее зеленый при наведении */
+}
+
+#cancel-supplier-name, #cancel-supplier-inn {
+    background-color: #ad6c72; /* Красный цвет для кнопки "Отменить" */
+    color: white;
+}
+
+#cancel-supplier-name:hover, #cancel-supplier-inn:hover {
+    background-color: rgb(122, 70, 75); /* Темнее красный при наведении */
 }

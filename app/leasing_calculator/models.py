@@ -63,6 +63,7 @@ class LeasCalculator(db.Model):
 
     insurance_id = db.Column(db.Integer, db.ForeignKey("insurances.id"), nullable=True)
     trance_id = db.Column(db.Integer, db.ForeignKey("tranches.id"), nullable=True)
+    seller_id = db.Column(db.Integer, db.ForeignKey("sellers.id"), nullable=True)
 
     date = db.Column(db.Date, nullable=False)
     date_ru = db.Column(db.String(50), nullable=True)
@@ -96,6 +97,8 @@ class LeasCalculator(db.Model):
         back_populates="leas_calculator",
         cascade="all, delete-orphan",
     )
+
+    seller = relationship("Seller", back_populates="leas_calculator")
 
     def to_dict(self):
         return {
@@ -327,3 +330,15 @@ class CalculateResultSchedule(db.Model):
 
     # Обратное отношение к LeasCalculator
     leas_calculator = relationship("LeasCalculator", back_populates="payment_schedules")
+
+
+class Seller(db.Model):
+    """Модель для хранения информации о продавце"""
+
+    __tablename__ = "sellers"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    inn = db.Column(db.String(255), nullable=False)
+
+    leas_calculator = relationship("LeasCalculator", back_populates="seller")

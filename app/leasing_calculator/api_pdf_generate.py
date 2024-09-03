@@ -18,6 +18,8 @@ class PDFGeneratorClient:
             **self.user_info,
         }
 
+        logging.info(f"Sending POST request to {url} with payload: {payload}")
+
         response = requests.post(url, json=payload)
 
         if response.status_code == 200:

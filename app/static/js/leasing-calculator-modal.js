@@ -133,7 +133,23 @@ function makeEditable(id, isSelect = false) {
     }
 }
 
+function toggleButtons(disabled) {
+    const buttons = document.querySelectorAll('.copy-btn, .save-btn, .close-btn');
+
+    buttons.forEach(button => {
+        button.disabled = disabled;
+        if (disabled) {
+            button.classList.add('disabled');
+        } else {
+            button.classList.remove('disabled');
+        }
+    });
+}
+
 function saveChanges(userFullName) {
+    // Блокируем кнопки перед началом операции
+    toggleButtons(true);
+
     var dealId = document.getElementById('item-deal-modal-select').value;
     var dealText = dealId ? document.getElementById('item-deal-modal-select').options[document.getElementById('item-deal-modal-select').selectedIndex].text : '';
 
@@ -148,9 +164,11 @@ function saveChanges(userFullName) {
 
     if (confirm('Вы уверены, что хотите сохранить изменения?')) {
         fetch(`/crm/calculator/update/${calcId}`, {
-            method: 'POST', headers: {
+            method: 'POST',
+            headers: {
                 'Content-Type': 'application/json',
-            }, body: JSON.stringify(data),
+            },
+            body: JSON.stringify(data),
         }).then(response => response.json())
             .then(responseData => {
                 if (responseData.success) {
@@ -161,7 +179,14 @@ function saveChanges(userFullName) {
                 } else {
                     showError(responseData.message, "Ошибка сохранения изменений:");
                 }
-            }).catch(error => console.error('Error:', error));
+            }).catch(error => console.error('Error:', error))
+            .finally(() => {
+                // Разблокируем кнопки после завершения операции
+                toggleButtons(false);
+            });
+    } else {
+        // Разблокируем кнопки, если пользователь отменил действие
+        toggleButtons(false);
     }
 }
 

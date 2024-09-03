@@ -69,9 +69,6 @@ data = {
     },
 }
 
-# Пример использования данных
-print(data)
-
 # Создаем новый экземпляр Excel
 excel = win32com.client.Dispatch("Excel.Application")
 excel.Visible = False

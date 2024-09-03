@@ -96,36 +96,68 @@
     font-weight: bold; /* Подчеркнуть выделенный элемент */
 }
 
-/* Иконка редактирования для поставщика */
-.supplier-edit-icon {
-    margin-left: 10px;
+/* Заголовок поставщика с иконкой и кнопками */
+.supplier-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px; /* Отступ между иконкой и кнопками */
+}
+
+/* Иконка редактирования */
+#edit-name-icon {
     color: #007bff; /* Синий цвет иконки */
-}
-
-.supplier-edit-icon:hover {
-    color: #0056b3; /* Темнее синий цвет при наведении */
     cursor: pointer; /* Указатель мыши меняется на "руку" */
+    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+    font-size: 13px;
 }
 
-/* Поля ввода для поставщика */
+#edit-name-icon:hover {
+    color: #0056b3; /* Темно-синий цвет при наведении */
+    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
+/* Стили для кнопок действий */
+.supplier-action-button {
+    padding: 10px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Кнопка "Сохранить" */
+#save-supplier {
+    background-color: #508676; /* Зеленый цвет кнопки */
+    color: white;
+    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
+#save-supplier:hover {
+    background-color: rgb(58, 101, 88); /* Темно-зеленый цвет при наведении */
+    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
+/* Кнопка "Отменить" */
+#cancel-supplier {
+    background-color: #ad6c72; /* Красный цвет кнопки */
+    color: white;
+    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
+#cancel-supplier:hover {
+    background-color: rgb(122, 70, 75); /* Темно-красный цвет при наведении */
+    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+}
+
+/* Стили для полей ввода */
 .supplier-input-field {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 5px;
     font-size: 14px;
-    width: auto;
+    width: 50% !important;
     display: inline-block;
     box-sizing: border-box;
-}
-
-/* Добавляем отступы для полей ввода */
-.supplier-input-field {
-    margin-left: 5px;
-}
-
-/* Стиль отображения текста для поставщика */
-.supplier-display-text {
-    display: inline;
 }
 
 /* Скрытые поля ввода по умолчанию */
@@ -140,30 +172,4 @@
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Синяя тень при фокусе */
 }
 
-/* Стили для кнопок действий */
-.supplier-action-button {
-    margin-left: 5px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-}
 
-#save-supplier-name, #save-supplier-inn {
-    background-color: #508676; /* Зеленый цвет для кнопки "Сохранить" */
-    color: white;
-}
-
-#save-supplier-name:hover, #save-supplier-inn:hover {
-    background-color: rgb(58, 101, 88); /* Темнее зеленый при наведении */
-}
-
-#cancel-supplier-name, #cancel-supplier-inn {
-    background-color: #ad6c72; /* Красный цвет для кнопки "Отменить" */
-    color: white;
-}
-
-#cancel-supplier-name:hover, #cancel-supplier-inn:hover {
-    background-color: rgb(122, 70, 75); /* Темнее красный при наведении */
-}

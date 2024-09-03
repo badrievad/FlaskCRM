@@ -1,5 +1,3 @@
-from flask_login import current_user
-
 from .. import db
 from ..deal.models import Deal
 from ..user.models import User

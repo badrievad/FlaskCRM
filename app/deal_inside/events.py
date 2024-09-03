@@ -1,5 +1,3 @@
-from websocket import send
-
 from .. import socketio, db
 
 from datetime import datetime
@@ -7,7 +5,6 @@ from flask_socketio import emit, join_room, leave_room
 from flask import session
 from app.deal_inside.models import DealSteps
 from logger import logging
-from flask_login import current_user
 
 
 # Словарь для хранения сопоставления username и socket.id
@@ -23,7 +20,7 @@ def on_join(data):
         join_room(room)
         emit(f"{username} подключился к комнате {room}.", to=room)
     else:
-        logging.info(f"Ошибка: не удалось подключиться, комната не указана.")
+        logging.info("Ошибка: не удалось подключиться, комната не указана.")
 
 
 @socketio.on("leave")
@@ -34,7 +31,7 @@ def on_leave(data):
         leave_room(room)
         emit(f"{username} покинул комнату {room}.", to=room)
     else:
-        logging.info(f"Ошибка: не удалось выйти, комната не указана.")
+        logging.info("Ошибка: не удалось выйти, комната не указана.")
 
 
 @socketio.on("update_data")
@@ -44,7 +41,7 @@ def handle_update(data):
         # Отправляем сообщение всем пользователям в комнате
         emit(data["message"], to=room)
     else:
-        logging.info(f"Ошибка: не удалось отправить данные, комната не указана.")
+        logging.info("Ошибка: не удалось отправить данные, комната не указана.")
 
 
 @socketio.on("approve_step")

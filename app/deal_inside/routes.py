@@ -8,6 +8,7 @@ from flask import (
 )
 from logger import logging
 from .sql_queries import get_users_with_roles, update_deal_created_by
+from ..config import suggestions_token
 from ..deal.models import Deal
 from .. import socketio
 
@@ -24,6 +25,7 @@ def enter_into_deal(deal_id: int) -> render_template:
         deal=deal,
         leas_calc=leas_calc,
         deal_id=deal_id,
+        suggestions_token=suggestions_token,
     )
 
 

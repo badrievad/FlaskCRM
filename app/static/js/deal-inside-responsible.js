@@ -215,104 +215,88 @@ function showInfo(message, title) {
     toastr.info(message, title);
 }
 
-// Редактирование названия поставщика
-document.getElementById('edit-supplier-name-icon').addEventListener('click', function () {
+// Редактирование информации о поставщике
+document.getElementById('edit-name-icon').addEventListener('click', function () {
     var nameDisplay = document.getElementById('supplier-name-display');
     var nameInput = document.getElementById('supplier-name-input');
-    var saveButton = document.getElementById('save-supplier-name');
-    var cancelButton = document.getElementById('cancel-supplier-name');
-    var editIcon = document.getElementById('edit-supplier-name-icon');
-
-    nameDisplay.style.display = 'none';
-    nameInput.style.display = 'inline';
-    nameInput.focus();
-    saveButton.style.display = 'inline-block';
-    cancelButton.style.display = 'inline-block';
-    editIcon.style.display = 'none'; // Скрываем иконку
-
-    // Обработчик клавиш на поле ввода
-    nameInput.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            cancelEditingName();
-        } else if (event.key === 'Enter') {
-            saveEditingName();
-        }
-    });
-});
-
-// Редактирование ИНН поставщика
-document.getElementById('edit-supplier-inn-icon').addEventListener('click', function () {
     var innDisplay = document.getElementById('supplier-inn-display');
     var innInput = document.getElementById('supplier-inn-input');
-    var saveButton = document.getElementById('save-supplier-inn');
-    var cancelButton = document.getElementById('cancel-supplier-inn');
-    var editIcon = document.getElementById('edit-supplier-inn-icon');
+    var saveButton = document.getElementById('save-supplier');
+    var cancelButton = document.getElementById('cancel-supplier');
+    var editIcon = document.getElementById('edit-name-icon');
 
+    // Скрываем отображение текста и показываем поля ввода
+    nameDisplay.style.display = 'none';
+    nameInput.style.display = 'inline';
     innDisplay.style.display = 'none';
     innInput.style.display = 'inline';
-    innInput.focus();
+
+    // Скрываем иконку редактирования и показываем кнопки
+    editIcon.style.display = 'none';
     saveButton.style.display = 'inline-block';
     cancelButton.style.display = 'inline-block';
-    editIcon.style.display = 'none'; // Скрываем иконку
 
-    // Обработчик клавиш на поле ввода
-    innInput.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape') {
-            cancelEditingInn();
-        } else if (event.key === 'Enter') {
-            saveEditingInn();
-        }
-    });
+    // Фокусируемся на первом поле ввода
+    nameInput.focus();
+
+    // Обработчик клавиш на полях ввода
+    nameInput.addEventListener('keydown', handleKeyEvents);
+    innInput.addEventListener('keydown', handleKeyEvents);
 });
 
-// Кнопка "Отменить" для имени поставщика
-document.getElementById('cancel-supplier-name').addEventListener('click', cancelEditingName);
+// Обработчик для кнопки "Отменить"
+document.getElementById('cancel-supplier').addEventListener('click', cancelEditing);
 
-// Кнопка "Сохранить" для имени поставщика
-document.getElementById('save-supplier-name').addEventListener('click', saveEditingName);
-
-// Кнопка "Отменить" для ИНН поставщика
-document.getElementById('cancel-supplier-inn').addEventListener('click', cancelEditingInn);
-
-// Кнопка "Сохранить" для ИНН поставщика
-document.getElementById('save-supplier-inn').addEventListener('click', saveEditingInn);
+// Обработчик для кнопки "Сохранить"
+document.getElementById('save-supplier').addEventListener('click', saveEditing);
 
 // Функции для отмены редактирования
-function cancelEditingName() {
-    var editIcon = document.getElementById('edit-supplier-name-icon');
-    document.getElementById('supplier-name-display').style.display = 'inline';
-    document.getElementById('supplier-name-input').style.display = 'none';
-    document.getElementById('save-supplier-name').style.display = 'none';
-    document.getElementById('cancel-supplier-name').style.display = 'none';
-    editIcon.style.display = 'inline'; // Показываем иконку
-}
+function cancelEditing() {
+    var nameDisplay = document.getElementById('supplier-name-display');
+    var nameInput = document.getElementById('supplier-name-input');
+    var innDisplay = document.getElementById('supplier-inn-display');
+    var innInput = document.getElementById('supplier-inn-input');
+    var saveButton = document.getElementById('save-supplier');
+    var cancelButton = document.getElementById('cancel-supplier');
+    var editIcon = document.getElementById('edit-name-icon');
 
-function cancelEditingInn() {
-    var editIcon = document.getElementById('edit-supplier-inn-icon');
-    document.getElementById('supplier-inn-display').style.display = 'inline';
-    document.getElementById('supplier-inn-input').style.display = 'none';
-    document.getElementById('save-supplier-inn').style.display = 'none';
-    document.getElementById('cancel-supplier-inn').style.display = 'none';
-    editIcon.style.display = 'inline'; // Показываем иконку
+    // Восстанавливаем исходное состояние
+    nameDisplay.style.display = 'inline';
+    nameInput.style.display = 'none';
+    innDisplay.style.display = 'inline';
+    innInput.style.display = 'none';
+
+    // Скрываем кнопки и возвращаем иконку редактирования
+    saveButton.style.display = 'none';
+    cancelButton.style.display = 'none';
+    editIcon.style.display = 'inline';
 }
 
 // Функции для сохранения редактирования
-function saveEditingName() {
+function saveEditing() {
     var newName = document.getElementById('supplier-name-input').value;
-    var editIcon = document.getElementById('edit-supplier-name-icon');
-    document.getElementById('supplier-name-display').textContent = newName;
-    cancelEditingName();
-    editIcon.style.display = 'inline'; // Показываем иконку
+    var newInn = document.getElementById('supplier-inn-input').value;
+    var nameDisplay = document.getElementById('supplier-name-display');
+    var innDisplay = document.getElementById('supplier-inn-display');
+
+    // Обновляем отображаемые значения
+    nameDisplay.textContent = newName;
+    innDisplay.textContent = newInn;
+
+    // Скрываем поля ввода и кнопки, возвращаем текст и иконку
+    cancelEditing();
+
     // Здесь можно добавить AJAX-запрос для сохранения изменений на сервере
 }
 
-function saveEditingInn() {
-    var newInn = document.getElementById('supplier-inn-input').value;
-    var editIcon = document.getElementById('edit-supplier-inn-icon');
-    document.getElementById('supplier-inn-display').textContent = newInn;
-    cancelEditingInn();
-    editIcon.style.display = 'inline'; // Показываем иконку
-    // Здесь можно добавить AJAX-запрос для сохранения изменений на сервере
+// Обработчик для клавиш ESC и Enter
+function handleKeyEvents(event) {
+    if (event.key === 'Escape') {
+        cancelEditing();
+    } else if (event.key === 'Enter') {
+        saveEditing();
+    }
 }
+
 
 

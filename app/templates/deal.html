@@ -102,27 +102,23 @@
                     <p>ИНН: {{ deal.company_inn }}</p>
                 </div>
                 <div class="section">
-                    <h3>Поставщик</h3>
+                    <h3 class="supplier-header" style="margin-bottom: 0">
+                        Поставщик
+                        <i class="fa-solid fa-pen fa-xs" id="edit-name-icon"></i>
+                        <button id="save-supplier" class="supplier-action-button" style="display:none;">Сохранить
+                        </button>
+                        <button id="cancel-supplier" class="supplier-action-button" style="display:none;">Отменить
+                        </button>
+                    </h3>
                     <p>Наименование:
                         <span id="supplier-name-display" class="supplier-display-text">{{ deal.seller_name }}</span>
                         <input type="text" id="supplier-name-input" class="supplier-input-field"
                                value="{{ deal.seller_name }}">
-                        <i class="fa-solid fa-pen fa-xs supplier-edit-icon" id="edit-supplier-name-icon"></i>
-                        <button id="save-supplier-name" class="supplier-action-button" style="display:none;">Сохранить
-                        </button>
-                        <button id="cancel-supplier-name" class="supplier-action-button" style="display:none;">
-                            Отменить
-                        </button>
                     </p>
                     <p>ИНН:
                         <span id="supplier-inn-display" class="supplier-display-text">{{ deal.seller_inn }}</span>
                         <input type="text" id="supplier-inn-input" class="supplier-input-field"
                                value="{{ deal.seller_inn }}">
-                        <i class="fa-solid fa-pen fa-xs supplier-edit-icon" id="edit-supplier-inn-icon"></i>
-                        <button id="save-supplier-inn" class="supplier-action-button" style="display:none;">Сохранить
-                        </button>
-                        <button id="cancel-supplier-inn" class="supplier-action-button" style="display:none;">Отменить
-                        </button>
                     </p>
                 </div>
                 <div class="section">
@@ -142,6 +138,9 @@
                         <!-- Сюда будет добавляться список пользователей и кнопки -->
                     </div>
                 </div>
+                <script>
+                    var suggestionsToken = "{{ suggestions_token }}";
+                </script>
             </div>
         </div>
     </div>
@@ -221,6 +220,6 @@
 
 <!-- Scripts -->
 <script src="{{ url_for('crm.static', filename='js/deal-inside-responsible.js') }}"></script>
-
+<script src="{{ url_for('crm.static', filename='js/deal-inside-dadata.js') }}"></script>
 </body>
 </html>

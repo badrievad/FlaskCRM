@@ -1247,5 +1247,3 @@ function setValidationHandlers() {
 
 // Установка обработчиков при загрузке страницы
 document.addEventListener('DOMContentLoaded', setValidationHandlers);
-
-

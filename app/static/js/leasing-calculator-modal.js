@@ -209,41 +209,58 @@ function saveChanges(userFullName) {
 
 
 function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
+    // Находим строку таблицы по calcId
     var row = document.querySelector(`tr[data-id="${calcId}"]`);
     if (row) {
-        // Обновляем имя предмета, если элемент существует
+        // Обновляем имя предмета
         var itemNameElement = row.querySelector('.item-name');
         if (itemNameElement) {
             itemNameElement.innerText = updatedData.item_name;
         }
 
-        // Обновляем цену предмета, если элемент существует
+        // Обновляем цену предмета
         var itemPriceElement = row.querySelector('.item-price');
         if (itemPriceElement) {
             itemPriceElement.innerText = updatedData.item_price;
         }
 
-        // Обновляем тип предмета, если элемент существует
+        // Обновляем тип предмета
         var itemTypeElement = row.querySelector('.item-type');
         if (itemTypeElement) {
             itemTypeElement.innerText = updatedData.item_type;
         }
 
-        // Обновляем иконку зависимости от dealId
+        // Обновляем иконку сделки
         var dealIconElement = row.querySelector('td i.fa-link, td i.fa-unlink');
         if (dealIconElement) {
+            // Уничтожаем старый тултип, если он есть
+            if (dealIconElement._tippy) {
+                dealIconElement._tippy.destroy();
+            }
+
             if (dealId) {
                 // Если есть dealId, используем иконку fa-link
                 dealIconElement.className = 'fa-solid fa-link';
-                dealIconElement.setAttribute('title', 'КП привязано к сделке');
+                dealIconElement.id = 'fa-link'; // Меняем id на fa-link
                 showInfo("", "КП успешно добавлено в сделку");
+
+                // Создаем новый тултип для fa-link
+                tippy(dealIconElement, {
+                    content: 'КП привязан к сделке',
+                    placement: 'top',
+                });
 
             } else {
                 // Если dealId нет, используем иконку fa-unlink
                 dealIconElement.className = 'fa-solid fa-unlink';
-                dealIconElement.setAttribute('title', 'КП не привязано к сделке');
+                dealIconElement.id = 'fa-unlink'; // Меняем id на fa-unlink
                 showInfo("", "КП не привязано к сделке");
 
+                // Создаем новый тултип для fa-unlink
+                tippy(dealIconElement, {
+                    content: 'КП не привязано к сделке',
+                    placement: 'top',
+                });
             }
         }
 
@@ -251,3 +268,27 @@ function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
         row.setAttribute('onclick', `openModal('${updatedData.item_name}', '${updatedData.date_ru}', '${updatedData.item_price}', '${updatedData.item_type}', '${dealText}', '${calcId}', '${userFullName}', '${dealId}')`);
     }
 }
+
+
+// Инициализация тултипов при загрузке страницы
+function initializeTooltips() {
+    // Используем общий селектор для всех иконок, чтобы привязать тултипы при загрузке страницы
+    const dealIconElements = document.querySelectorAll('i.fa-link, i.fa-unlink');
+
+    dealIconElements.forEach(dealIconElement => {
+        if (dealIconElement.id === 'fa-link') {
+            tippy(dealIconElement, {
+                content: 'КП привязано к сделке',
+                placement: 'top',
+            });
+        } else if (dealIconElement.id === 'fa-unlink') {
+            tippy(dealIconElement, {
+                content: 'КП не привязано к сделке',
+                placement: 'top',
+            });
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", initializeTooltips);
+

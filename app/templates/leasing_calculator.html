@@ -51,6 +51,11 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <!-- Tippy.js -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css"/>
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
+
     <style>
         .hidden {
             display: none;
@@ -910,10 +915,10 @@
                     <td>{{ calc.manager_login }}</td>
                     <td>
                         {% if calc.deal_id %}
-                            <i class="fa-solid fa-link"></i>
+                            <i class="fa-solid fa-link" id="fa-link"></i>
                             <!-- Иконка цепочки для привязанных КП -->
                         {% else %}
-                            <i class="fa-solid fa-unlink"></i>
+                            <i class="fa-solid fa-unlink" id="fa-unlink"></i>
                             <!-- Иконка разорванной цепочки для непривязанных КП -->
                         {% endif %}
                     </td>
@@ -1306,8 +1311,8 @@
         newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "ДЛ |", "${calculation.id}", "{{ user_fullname }}", "")`);
 
         var dealIcon = calculation.deal_id
-            ? '<i class="fa-solid fa-link"></i>'
-            : '<i class="fa-solid fa-unlink"></i>'; // Иконки с меньшим размером
+            ? '<i class="fa-solid fa-link" id="fa-link"></i>'
+            : '<i class="fa-solid fa-unlink" id="fa-unlink"></i>'; // Иконки с меньшим размером
 
         newRow.innerHTML = `
                         <td>${calcListBody.rows.length + 1}</td>

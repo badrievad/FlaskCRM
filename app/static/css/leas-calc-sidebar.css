@@ -47,13 +47,24 @@
 }
 
 .clickable-in {
-    padding: 10px;
+    position: relative; /* Для обеспечения правильной работы с абсолютным позиционированием */
+    padding: 0;
     margin-bottom: 25px;
     text-align: left;
     cursor: pointer;
     transition: background 0.3s;
     font-size: 14px;
     color: #cccccc;
+}
+
+.clickable-in a {
+    display: block; /* Ссылка занимает всю область <li> */
+    width: 100%;
+    height: 100%;
+    padding: 10px; /* Переносим padding на ссылку */
+    box-sizing: border-box; /* Чтобы padding учитывался в ширине/высоте */
+    text-decoration: none; /* Убираем подчеркивание */
+    color: inherit; /* Сохраняем цвет текста */
 }
 
 .sidebar ul li:hover {

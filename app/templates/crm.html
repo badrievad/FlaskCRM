@@ -53,18 +53,18 @@
 <div class="sidebar">
     <h2>StellarCRM</h2><br><br><br>
     <ul>
-        <li onclick="toggleSubmenu('deals-submenu')"><i class="fas fa-handshake"></i> Список сделок</li>
+        <li onclick="toggleSubmenu('deals-submenu')" class="default-li"><i class="fas fa-handshake"></i> Список сделок</li>
         <ul id="deals-submenu" class="submenu">
-            <li id="active-deals-link" onclick="showForm('active-deals')">Активные сделки (0)</li>
-            <li id="archived-deals-link" onclick="showForm('archived-deals')">Архивные сделки (0)</li>
+            <li id="active-deals-link" onclick="showForm('active-deals')" class="default-li">Активные сделки (0)</li>
+            <li id="archived-deals-link" onclick="showForm('archived-deals')" class="default-li">Архивные сделки (0)</li>
         </ul>
-        <li onclick="showForm('task')"><i class="fas fa-tasks"></i> Создать сделку</li>
+        <li onclick="showForm('task')" class="default-li"><i class="fas fa-tasks"></i> Создать сделку</li>
         <br><br><br><br>
         <ul>
-            <li><a class="nav-link" href="{{ url_for('leas_calc.get_leasing_calculator') }}"><i
-                    class="fa-solid fa-calculator"></i>
-                Лизинговый
-                калькулятор</a>
+            <li class="clickable-in">
+                <a class="nav-link" href="{{ url_for('leas_calc.get_leasing_calculator') }}">
+                    <i class="fa-solid fa-calculator"></i> Лизинговый калькулятор
+                </a>
             </li>
         </ul>
     </ul>

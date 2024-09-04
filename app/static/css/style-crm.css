@@ -53,7 +53,8 @@ html {
     flex-grow: 1;
 }
 
-.sidebar ul li {
+.sidebar ul .default-li {
+    position: relative;
     padding: 15px;
     text-align: center;
     cursor: pointer;
@@ -173,12 +174,42 @@ html {
     cursor: pointer;
 }
 
-.nav-link {
-    color: rgb(255, 255, 255);
+/* Стили для элемента <li> */
+.clickable-in {
+    position: relative;
+    padding: 0;
+    margin-bottom: 25px;
+    cursor: pointer;
+    font-size: 14px;
 }
 
-.nav-link:hover {
-    color: rgb(255, 255, 255);
+/* Ссылка должна занимать всю площадь <li> */
+.clickable-in a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    text-decoration: none;
+    color: #cccccc;
+    transition: color 0.3s; /* Только цвет текста, без фона */
+}
+
+/* Ховер применяется только к элементу <a> */
+.clickable-in a:hover {
+    color: #cccccc; /* Цвет текста при ховере */
+}
+
+/* Ховер применяется только к <li> */
+.clickable-in:hover {
+    background-color: rgba(255, 255, 255, 0.08); /* Фон при ховере */
+    color: #ffffff; /* Цвет текста при ховере */
+}
+
+/* Иконка с отступом */
+.clickable-in i {
+    margin-right: 10px;
+    vertical-align: middle; /* Выровнять иконку по центру строки */
 }
 
 #deal-title {

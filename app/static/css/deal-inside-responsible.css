@@ -172,4 +172,12 @@
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Синяя тень при фокусе */
 }
 
+/* Переопределение шрифта для SweetAlert2 */
+.swal2-popup {
+    font-family: 'Roboto', sans-serif;
+}
 
+/* Дополнительно, можно поменять стили для кнопок */
+.swal2-confirm, .swal2-cancel {
+    font-family: 'Roboto', sans-serif;
+}

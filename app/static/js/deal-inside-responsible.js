@@ -79,41 +79,55 @@ function setActiveUser(index) {
 function saveSelection() {
     const path = window.location.pathname;
     const dealId = path.split('/').pop();
+
     if (selectedUser) {
-        // Подтверждение передачи прав
-        const isConfirmed = confirm(`Вы точно хотите передать права новому пользователю: ${selectedUser}? У вас больше не будет возможности вносить изменения в сделку`);
+        // Вместо стандартного confirm используем SweetAlert2
+        Swal.fire({
+            text: `Вы точно хотите передать права новому пользователю: ${selectedUser}? У вас больше не будет возможности вносить изменения в сделку.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#67a2d5',
+            cancelButtonColor: '#ad6c72',
+            confirmButtonText: 'Да, передать права',
+            cancelButtonText: 'Отменить'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Если пользователь подтвердил действие
+                $.ajax({
+                    url: `./update-created-by/${dealId}`,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({created_by: selectedUser}),
+                    success: function (response) {
+                        console.log(response.message);
+                        userDropdown.style.display = 'none'; // Закрыть dropdown
 
-        if (!isConfirmed) {
-            return; // Если пользователь нажал "Cancel", прерываем выполнение функции
-        }
+                        // Обновляем текст текущего ответственного
+                        document.getElementById('current-created-by').textContent = selectedUser;
 
-        $.ajax({
-            url: `./update-created-by/${dealId}`,
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({created_by: selectedUser}),
-            success: function (response) {
-                console.log(response.message);
-                userDropdown.style.display = 'none'; // Закрыть dropdown
+                        // Перезагружаем страницу через небольшую задержку
+                        setTimeout(function () {
+                            window.location.reload();
+                        }, 2000); // Задержка в 2 секунды перед перезагрузкой
 
-                // Обновляем текст текущего ответственного
-                document.getElementById('current-created-by').textContent = selectedUser;
-
-                // Перезагружаем страницу через небольшую задержку
-                setTimeout(function () {
-                    window.location.reload();
-                }, 2000); // Задержка в 2 секунды перед перезагрузкой
-
-            },
-            error: function (error) {
-                console.error('Ошибка при обновлении данных:', error);
-                showError("Произошла ошибка при обновлении данных", "Ошибка");
+                    },
+                    error: function (error) {
+                        console.error('Ошибка при обновлении данных:', error);
+                        showError("Произошла ошибка при обновлении данных", "Ошибка");
+                    }
+                });
             }
         });
     } else {
-        alert('Пожалуйста, выберите пользователя.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Ошибка',
+            text: 'Пожалуйста, выберите пользователя.',
+            confirmButtonText: 'ОК'
+        });
     }
 }
+
 
 // Функция для отмены выбора
 function cancelSelection() {

@@ -1119,24 +1119,49 @@ document.addEventListener('DOMContentLoaded', function () {
     document.querySelector('.copy-btn').addEventListener('click', function () {
         var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
 
-        if (confirm("Вы хотите создать КП на основе этой?")) {
-            fetch(`./calculator/copy-commercial-offer/${calcId}`, {
-                method: 'GET',
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        populateForm(data);
-                    } else {
-                        alert("Ошибка при получении данных КП");
-                    }
+        // Используем SweetAlert2 для подтверждения
+        Swal.fire({
+            text: 'Вы хотите создать КП на основе этой?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#5182ad',
+            cancelButtonColor: '#ad6c72',
+            confirmButtonText: 'Да, скопировать все поля',
+            cancelButtonText: 'Отменить'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Если пользователь подтвердил действие
+                fetch(`./calculator/copy-commercial-offer/${calcId}`, {
+                    method: 'GET',
                 })
-                .catch(error => {
-                    console.error('Ошибка:', error);
-                    alert("Ошибка при получении данных КП");
-                });
-        }
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            populateForm(data);
+                        } else {
+                            // Используем SweetAlert2 для ошибки
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Ошибка',
+                                text: 'Ошибка при получении данных КП',
+                                confirmButtonText: 'ОК'
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                        // Используем SweetAlert2 для ошибки
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ошибка',
+                            text: 'Ошибка при получении данных КП',
+                            confirmButtonText: 'ОК'
+                        });
+                    });
+            }
+        });
     });
+
 
     function formatDate(dateString) {
         if (!dateString) return "";

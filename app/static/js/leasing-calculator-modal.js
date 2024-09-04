@@ -162,33 +162,45 @@ function saveChanges(userFullName) {
 
     var calcId = document.getElementById('modal-table').getAttribute('data-calc-id');
 
-    if (confirm('Вы уверены, что хотите сохранить изменения?')) {
-        fetch(`/crm/calculator/update/${calcId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        }).then(response => response.json())
-            .then(responseData => {
-                if (responseData.success) {
-                    updateTableRow(calcId, responseData.data, userFullName, data.deal_id, data.deal_text);
-                    closeModal(); // Закрываем модальное окно после сохранения
-                    showSuccess(responseData.message, "Успешно");
-
-                } else {
-                    showError(responseData.message, "Ошибка сохранения изменений:");
-                }
-            }).catch(error => console.error('Error:', error))
-            .finally(() => {
-                // Разблокируем кнопки после завершения операции
-                toggleButtons(false);
-            });
-    } else {
-        // Разблокируем кнопки, если пользователь отменил действие
-        toggleButtons(false);
-    }
+    // Вместо стандартного confirm используем SweetAlert2
+    Swal.fire({
+        text: 'Вы уверены, что хотите сохранить изменения?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#5182ad',
+        cancelButtonColor: '#ad6c72',
+        confirmButtonText: 'Да, сохранить',
+        cancelButtonText: 'Отменить'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Если пользователь подтвердил действие
+            fetch(`/crm/calculator/update/${calcId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            }).then(response => response.json())
+                .then(responseData => {
+                    if (responseData.success) {
+                        updateTableRow(calcId, responseData.data, userFullName, data.deal_id, data.deal_text);
+                        closeModal(); // Закрываем модальное окно после сохранения
+                        showSuccess(responseData.message, "Успешно");
+                    } else {
+                        showError(responseData.message, "Ошибка сохранения изменений:");
+                    }
+                }).catch(error => console.error('Error:', error))
+                .finally(() => {
+                    // Разблокируем кнопки после завершения операции
+                    toggleButtons(false);
+                });
+        } else {
+            // Разблокируем кнопки, если пользователь отменил действие
+            toggleButtons(false);
+        }
+    });
 }
+
 
 function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
     var row = document.querySelector(`tr[data-id="${calcId}"]`);

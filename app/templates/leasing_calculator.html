@@ -47,6 +47,10 @@
     <script src="https://unpkg.com/htmx.org@2.0.1"></script>
     <script src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js" defer></script>
 
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
         .hidden {
             display: none;
@@ -120,6 +124,15 @@
             transform: scale(1.5); /* Увеличение размера при наведении */
         }
 
+        /* Переопределение шрифта для SweetAlert2 */
+        .swal2-popup {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* Дополнительно, можно поменять стили для кнопок */
+        .swal2-confirm, .swal2-cancel {
+            font-family: 'Roboto', sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -948,274 +961,289 @@
 </script>
 <script>
     document.getElementById('calculate-button').addEventListener('click', function () {
-        var loader = document.getElementById('loader');
-        var calculateButton = document.getElementById('calculate-button');
-        var preCalculateButton = document.getElementById('pre-calculate-button');
+        // Модальное окно подтверждения с SweetAlert2
+        Swal.fire({
+            text: 'Вы точно хотите запустить расчет с текущими данными?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#5789b9',
+            cancelButtonColor: '#ad6c72',
+            confirmButtonText: 'Да, запустить',
+            cancelButtonText: 'Отменить'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Если пользователь подтвердил, то выполняем расчет
+                var loader = document.getElementById('loader');
+                var calculateButton = document.getElementById('calculate-button');
+                var preCalculateButton = document.getElementById('pre-calculate-button');
 
-        calculateButton.disabled = true; // Заблокировать кнопку
-        preCalculateButton.disabled = true; // Заблокировать кнопку
-        calculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
-        preCalculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
-        loader.style.display = 'flex'; // Показать круг загрузки
+                calculateButton.disabled = true; // Заблокировать кнопку
+                preCalculateButton.disabled = true; // Заблокировать кнопку
+                calculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
+                preCalculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
+                loader.style.display = 'flex'; // Показать круг загрузки
 
-        // Найти активную вкладку
-        var itemType = document.querySelector('.tabs button.active');
-        var activeTabText = itemType ? itemType.innerText.trim() : '';
+                // Найти активную вкладку
+                var itemType = document.querySelector('.tabs button.active');
+                var activeTabText = itemType ? itemType.innerText.trim() : '';
 
-        // Найти состояние имущества
-        var itemCondition = document.querySelector('.button-group button.active')
-        var conditionText = itemCondition ? itemCondition.innerText.trim() : '';
+                // Найти состояние имущества
+                var itemCondition = document.querySelector('.button-group button.active')
+                var conditionText = itemCondition ? itemCondition.innerText.trim() : '';
 
-        // Найти состояние НДС
-        var itemVAT = document.querySelector('.button-group-nds button.active')
-        var vatText = itemVAT ? itemVAT.innerText.trim() : '';
+                // Найти состояние НДС
+                var itemVAT = document.querySelector('.button-group-nds button.active')
+                var vatText = itemVAT ? itemVAT.innerText.trim() : '';
 
-        // Найти состояние задатка
-        var itemDeposit = document.querySelector('.button-group-deposit button.active')
-        var depositText = itemDeposit ? itemDeposit.innerText.trim() : '';
+                // Найти состояние задатка
+                var itemDeposit = document.querySelector('.button-group-deposit button.active')
+                var depositText = itemDeposit ? itemDeposit.innerText.trim() : '';
 
-        // Найти состояние выкупного
-        var itemRedemption = document.querySelector('.button-group-redemption button.active')
-        var redemptionText = itemRedemption ? itemRedemption.innerText.trim() : '';
+                // Найти состояние выкупного
+                var itemRedemption = document.querySelector('.button-group-redemption button.active')
+                var redemptionText = itemRedemption ? itemRedemption.innerText.trim() : '';
 
-        // Найти цену ПЛ
-        var itemPrice = document.getElementById('cost-value').value;
+                // Найти цену ПЛ
+                var itemPrice = document.getElementById('cost-value').value;
 
-        // Найти остальные поля
-        var itemYear = document.getElementById('production-year-value').value;
-        var itemName = document.getElementById('item-name').value;
-        var currency = document.getElementById('currency').value;
-        var foreignCost = document.getElementById('foreign-cost-value').value;
-        var initialPayment = document.getElementById('initial-payment-value').value;
-        var creditSum = document.getElementById('credit-value').value;
-        var creditTerm = document.getElementById('term-value').value;
-        var bankCommission = document.getElementById('commission-value').value;
-        var lkmbCommission = document.getElementById('commission-lkmb-value').value;
-        var firstPaymentDate = document.getElementById('payment-date-value').value;
+                // Найти остальные поля
+                var itemYear = document.getElementById('production-year-value').value;
+                var itemName = document.getElementById('item-name').value;
+                var currency = document.getElementById('currency').value;
+                var foreignCost = document.getElementById('foreign-cost-value').value;
+                var initialPayment = document.getElementById('initial-payment-value').value;
+                var creditSum = document.getElementById('credit-value').value;
+                var creditTerm = document.getElementById('term-value').value;
+                var bankCommission = document.getElementById('commission-value').value;
+                var lkmbCommission = document.getElementById('commission-lkmb-value').value;
+                var firstPaymentDate = document.getElementById('payment-date-value').value;
 
-        var insuranceCasko1 = document.getElementById('insurance-casko1').value;
-        var insuranceCasko2 = document.getElementById('insurance-casko2').value;
-        var insuranceCasko3 = document.getElementById('insurance-casko3').value;
-        var insuranceCasko4 = document.getElementById('insurance-casko4').value;
-        var insuranceCasko5 = document.getElementById('insurance-casko5').value;
+                var insuranceCasko1 = document.getElementById('insurance-casko1').value;
+                var insuranceCasko2 = document.getElementById('insurance-casko2').value;
+                var insuranceCasko3 = document.getElementById('insurance-casko3').value;
+                var insuranceCasko4 = document.getElementById('insurance-casko4').value;
+                var insuranceCasko5 = document.getElementById('insurance-casko5').value;
 
-        var insuranceOsago1 = document.getElementById('insurance-osago1').value;
-        var insuranceOsago2 = document.getElementById('insurance-osago2').value;
-        var insuranceOsago3 = document.getElementById('insurance-osago3').value;
-        var insuranceOsago4 = document.getElementById('insurance-osago4').value;
-        var insuranceOsago5 = document.getElementById('insurance-osago5').value;
+                var insuranceOsago1 = document.getElementById('insurance-osago1').value;
+                var insuranceOsago2 = document.getElementById('insurance-osago2').value;
+                var insuranceOsago3 = document.getElementById('insurance-osago3').value;
+                var insuranceOsago4 = document.getElementById('insurance-osago4').value;
+                var insuranceOsago5 = document.getElementById('insurance-osago5').value;
 
-        var healthInsurance1 = document.getElementById('health-insurance1').value;
-        var healthInsurance2 = document.getElementById('health-insurance2').value;
-        var healthInsurance3 = document.getElementById('health-insurance3').value;
-        var healthInsurance4 = document.getElementById('health-insurance4').value;
-        var healthInsurance5 = document.getElementById('health-insurance5').value;
+                var healthInsurance1 = document.getElementById('health-insurance1').value;
+                var healthInsurance2 = document.getElementById('health-insurance2').value;
+                var healthInsurance3 = document.getElementById('health-insurance3').value;
+                var healthInsurance4 = document.getElementById('health-insurance4').value;
+                var healthInsurance5 = document.getElementById('health-insurance5').value;
 
-        var otherInsurance1 = document.getElementById('other-insurance1').value;
-        var otherInsurance2 = document.getElementById('other-insurance2').value;
-        var otherInsurance3 = document.getElementById('other-insurance3').value;
-        var otherInsurance4 = document.getElementById('other-insurance4').value;
-        var otherInsurance5 = document.getElementById('other-insurance5').value;
+                var otherInsurance1 = document.getElementById('other-insurance1').value;
+                var otherInsurance2 = document.getElementById('other-insurance2').value;
+                var otherInsurance3 = document.getElementById('other-insurance3').value;
+                var otherInsurance4 = document.getElementById('other-insurance4').value;
+                var otherInsurance5 = document.getElementById('other-insurance5').value;
 
-        var agentCommission = document.getElementById('agent-commission-value').value;
-        var managerBonus = document.getElementById('manager-bonus-value').value;
-        var tracker = document.getElementById('tracker-value').value;
-        var mayak = document.getElementById('mayak-value').value;
-        var fedresurs = document.getElementById('fedresurs-value').value;
-        var gsm = document.getElementById('gsm-value').value;
-        var mail = document.getElementById('mail-value').value;
-        var deprTransport = document.getElementById('depr-transport-value').value;
-        var travel = document.getElementById('travel-value').value;
-        var stationery = document.getElementById('stationery-value').value;
-        var internet = document.getElementById('internet-value').value;
-        var pledge = document.getElementById('pledge-value').value;
-        var bankPledge = document.getElementById('bank-pledge-value').value;
-        var express = document.getElementById('express-value').value;
-        var egrn = document.getElementById('egrn-value').value;
-        var egrul = document.getElementById('egrul-value').value;
-        var inputPeriod = document.getElementById('input-period').value;
+                var agentCommission = document.getElementById('agent-commission-value').value;
+                var managerBonus = document.getElementById('manager-bonus-value').value;
+                var tracker = document.getElementById('tracker-value').value;
+                var mayak = document.getElementById('mayak-value').value;
+                var fedresurs = document.getElementById('fedresurs-value').value;
+                var gsm = document.getElementById('gsm-value').value;
+                var mail = document.getElementById('mail-value').value;
+                var deprTransport = document.getElementById('depr-transport-value').value;
+                var travel = document.getElementById('travel-value').value;
+                var stationery = document.getElementById('stationery-value').value;
+                var internet = document.getElementById('internet-value').value;
+                var pledge = document.getElementById('pledge-value').value;
+                var bankPledge = document.getElementById('bank-pledge-value').value;
+                var express = document.getElementById('express-value').value;
+                var egrn = document.getElementById('egrn-value').value;
+                var egrul = document.getElementById('egrul-value').value;
+                var inputPeriod = document.getElementById('input-period').value;
 
-        var tranche1Size = Math.abs(parseFloat(document.getElementById('tranche1-size').value.replace(',', '.')) || 0);
-        var tranche2Size = Math.abs(parseFloat(document.getElementById('tranche2-size').value.replace(',', '.')) || 0);
-        var tranche3Size = Math.abs(parseFloat(document.getElementById('tranche3-size').value.replace(',', '.')) || 0);
-        var tranche4Size = Math.abs(parseFloat(document.getElementById('tranche4-size').value.replace(',', '.')) || 0);
-        var tranche5Size = Math.abs(parseFloat(document.getElementById('tranche5-size').value.replace(',', '.')) || 0);
+                var tranche1Size = Math.abs(parseFloat(document.getElementById('tranche1-size').value.replace(',', '.')) || 0);
+                var tranche2Size = Math.abs(parseFloat(document.getElementById('tranche2-size').value.replace(',', '.')) || 0);
+                var tranche3Size = Math.abs(parseFloat(document.getElementById('tranche3-size').value.replace(',', '.')) || 0);
+                var tranche4Size = Math.abs(parseFloat(document.getElementById('tranche4-size').value.replace(',', '.')) || 0);
+                var tranche5Size = Math.abs(parseFloat(document.getElementById('tranche5-size').value.replace(',', '.')) || 0);
 
-        // Суммирование значений
-        var totalSize = tranche1Size + tranche2Size + tranche3Size + tranche4Size + tranche5Size;
+                // Суммирование значений
+                var totalSize = tranche1Size + tranche2Size + tranche3Size + tranche4Size + tranche5Size;
 
-        // Проверка суммы
-        if (totalSize !== 100) {
-            showError('Сумма всех траншей должна быть равна 100%. Текущая сумма: ' + totalSize + '%', 'Ошибка валидации');
-            loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-            calculateButton.disabled = false; // Разблокировать кнопку
-            calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-            preCalculateButton.disabled = false; // Разблокировать кнопку
-            preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-            scrollToTrancheTable();
-            return false;
-        }
-
-        var tranche1Rate = document.getElementById('tranche1-rate').value;
-        var tranche2Rate = document.getElementById('tranche2-rate').value;
-        var tranche3Rate = document.getElementById('tranche3-rate').value;
-        var tranche4Rate = document.getElementById('tranche4-rate').value;
-        var tranche5Rate = document.getElementById('tranche5-rate').value;
-
-        var tranche1Fee = document.getElementById('tranche1-fee').value;
-        var tranche2Fee = document.getElementById('tranche2-fee').value;
-        var tranche3Fee = document.getElementById('tranche3-fee').value;
-        var tranche4Fee = document.getElementById('tranche4-fee').value;
-        var tranche5Fee = document.getElementById('tranche5-fee').value;
-
-        var tranche1OwnFee = document.getElementById('tranche1-own-fee').value;
-        var tranche2OwnFee = document.getElementById('tranche2-own-fee').value;
-        var tranche3OwnFee = document.getElementById('tranche3-own-fee').value;
-        var tranche4OwnFee = document.getElementById('tranche4-own-fee').value;
-        var tranche5OwnFee = document.getElementById('tranche5-own-fee').value;
-
-        var tranche1CreditDate = document.getElementById('tranche1-credit-date').value;
-        var tranche2CreditDate = document.getElementById('tranche2-credit-date').value;
-        var tranche3CreditDate = document.getElementById('tranche3-credit-date').value;
-        var tranche4CreditDate = document.getElementById('tranche4-credit-date').value;
-        var tranche5CreditDate = document.getElementById('tranche5-credit-date').value;
-
-        // Отправка задачи в Celery с активной вкладкой
-        fetch('./calculator/start-task', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                itemType: activeTabText,
-                itemCondition: conditionText,
-                vat: vatText,  // Поставщик выделяет НДС или нет
-                deposit: depositText,  // Поставщик распределяет задаток или нет
-                redemption: redemptionText,  // Поставщик распределяет выкупной или нет
-                itemYear: itemYear,
-                itemPrice: itemPrice,
-                itemName: itemName,
-                currency: currency,
-                foreignCost: foreignCost,
-                initialPayment: initialPayment,
-                creditSum: creditSum,
-                creditTerm: creditTerm,
-                bankCommission: bankCommission,
-                lkmbCommission: lkmbCommission,
-                firstPaymentDate: firstPaymentDate,
-                insurances: {
-                    insurance1: {
-                        casko: insuranceCasko1,
-                        osago: insuranceOsago1,
-                        health: healthInsurance1,
-                        other: otherInsurance1,
-                    },
-                    insurance2: {
-                        casko: insuranceCasko2,
-                        osago: insuranceOsago2,
-                        health: healthInsurance2,
-                        other: otherInsurance2,
-                    },
-                    insurance3: {
-                        casko: insuranceCasko3,
-                        osago: insuranceOsago3,
-                        health: healthInsurance3,
-                        other: otherInsurance3,
-                    },
-                    insurance4: {
-                        casko: insuranceCasko4,
-                        osago: insuranceOsago4,
-                        health: healthInsurance4,
-                        other: otherInsurance4,
-                    },
-                    insurance5: {
-                        casko: insuranceCasko5,
-                        osago: insuranceOsago5,
-                        health: healthInsurance5,
-                        other: otherInsurance5,
-                    },
-                },
-                agentCommission: agentCommission,
-                managerBonus: managerBonus,
-                tracker: tracker,
-                mayak: mayak,
-                fedresurs: fedresurs,
-                gsm: gsm,
-                mail: mail,
-                deprTransport: deprTransport,
-                travel: travel,
-                stationery: stationery,
-                internet: internet,
-                pledge: pledge,
-                bankPledge: bankPledge,
-                express: express,
-                egrn: egrn,
-                egrul: egrul,
-                inputPeriod: inputPeriod,
-                tranches: {
-                    tranche1: {
-                        size: tranche1Size,
-                        interestRate: tranche1Rate,
-                        fee: tranche1Fee,
-                        ownFee: tranche1OwnFee,
-                        creditDate: tranche1CreditDate,
-                    },
-                    tranche2: {
-                        size: tranche2Size,
-                        interestRate: tranche2Rate,
-                        fee: tranche2Fee,
-                        ownFee: tranche2OwnFee,
-                        creditDate: tranche2CreditDate,
-                    },
-                    tranche3: {
-                        size: tranche3Size,
-                        interestRate: tranche3Rate,
-                        fee: tranche3Fee,
-                        ownFee: tranche3OwnFee,
-                        creditDate: tranche3CreditDate,
-                    },
-                    tranche4: {
-                        size: tranche4Size,
-                        interestRate: tranche4Rate,
-                        fee: tranche4Fee,
-                        ownFee: tranche4OwnFee,
-                        creditDate: tranche4CreditDate,
-                    },
-                    tranche5: {
-                        size: tranche5Size,
-                        interestRate: tranche5Rate,
-                        fee: tranche5Fee,
-                        ownFee: tranche5OwnFee,
-                        creditDate: tranche5CreditDate,
-                    },
-                },
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.task_id) {
-                    // Периодическая проверка состояния задачи
-                    checkTaskStatus(data.task_id, activeTabText, itemPrice, initialPayment,
-                        creditTerm, itemName);
-                } else {
-                    showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
+                // Проверка суммы
+                if (totalSize !== 100) {
+                    showError('Сумма всех траншей должна быть равна 100%. Текущая сумма: ' + totalSize + '%', 'Ошибка валидации');
                     loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
                     calculateButton.disabled = false; // Разблокировать кнопку
                     calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     preCalculateButton.disabled = false; // Разблокировать кнопку
                     preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                    scrollToTrancheTable();
+                    return false;
                 }
-            })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                showError('Произошла ошибка при отправке задачи', 'Ошибка');
-                loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                calculateButton.disabled = false; // Разблокировать кнопку
-                calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                preCalculateButton.disabled = false; // Разблокировать кнопку
-                preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-            });
+
+                var tranche1Rate = document.getElementById('tranche1-rate').value;
+                var tranche2Rate = document.getElementById('tranche2-rate').value;
+                var tranche3Rate = document.getElementById('tranche3-rate').value;
+                var tranche4Rate = document.getElementById('tranche4-rate').value;
+                var tranche5Rate = document.getElementById('tranche5-rate').value;
+
+                var tranche1Fee = document.getElementById('tranche1-fee').value;
+                var tranche2Fee = document.getElementById('tranche2-fee').value;
+                var tranche3Fee = document.getElementById('tranche3-fee').value;
+                var tranche4Fee = document.getElementById('tranche4-fee').value;
+                var tranche5Fee = document.getElementById('tranche5-fee').value;
+
+                var tranche1OwnFee = document.getElementById('tranche1-own-fee').value;
+                var tranche2OwnFee = document.getElementById('tranche2-own-fee').value;
+                var tranche3OwnFee = document.getElementById('tranche3-own-fee').value;
+                var tranche4OwnFee = document.getElementById('tranche4-own-fee').value;
+                var tranche5OwnFee = document.getElementById('tranche5-own-fee').value;
+
+                var tranche1CreditDate = document.getElementById('tranche1-credit-date').value;
+                var tranche2CreditDate = document.getElementById('tranche2-credit-date').value;
+                var tranche3CreditDate = document.getElementById('tranche3-credit-date').value;
+                var tranche4CreditDate = document.getElementById('tranche4-credit-date').value;
+                var tranche5CreditDate = document.getElementById('tranche5-credit-date').value;
+
+                // Отправка задачи в Celery с активной вкладкой
+                fetch('./calculator/start-task', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        itemType: activeTabText,
+                        itemCondition: conditionText,
+                        vat: vatText,  // Поставщик выделяет НДС или нет
+                        deposit: depositText,  // Поставщик распределяет задаток или нет
+                        redemption: redemptionText,  // Поставщик распределяет выкупной или нет
+                        itemYear: itemYear,
+                        itemPrice: itemPrice,
+                        itemName: itemName,
+                        currency: currency,
+                        foreignCost: foreignCost,
+                        initialPayment: initialPayment,
+                        creditSum: creditSum,
+                        creditTerm: creditTerm,
+                        bankCommission: bankCommission,
+                        lkmbCommission: lkmbCommission,
+                        firstPaymentDate: firstPaymentDate,
+                        insurances: {
+                            insurance1: {
+                                casko: insuranceCasko1,
+                                osago: insuranceOsago1,
+                                health: healthInsurance1,
+                                other: otherInsurance1,
+                            },
+                            insurance2: {
+                                casko: insuranceCasko2,
+                                osago: insuranceOsago2,
+                                health: healthInsurance2,
+                                other: otherInsurance2,
+                            },
+                            insurance3: {
+                                casko: insuranceCasko3,
+                                osago: insuranceOsago3,
+                                health: healthInsurance3,
+                                other: otherInsurance3,
+                            },
+                            insurance4: {
+                                casko: insuranceCasko4,
+                                osago: insuranceOsago4,
+                                health: healthInsurance4,
+                                other: otherInsurance4,
+                            },
+                            insurance5: {
+                                casko: insuranceCasko5,
+                                osago: insuranceOsago5,
+                                health: healthInsurance5,
+                                other: otherInsurance5,
+                            },
+                        },
+                        agentCommission: agentCommission,
+                        managerBonus: managerBonus,
+                        tracker: tracker,
+                        mayak: mayak,
+                        fedresurs: fedresurs,
+                        gsm: gsm,
+                        mail: mail,
+                        deprTransport: deprTransport,
+                        travel: travel,
+                        stationery: stationery,
+                        internet: internet,
+                        pledge: pledge,
+                        bankPledge: bankPledge,
+                        express: express,
+                        egrn: egrn,
+                        egrul: egrul,
+                        inputPeriod: inputPeriod,
+                        tranches: {
+                            tranche1: {
+                                size: tranche1Size,
+                                interestRate: tranche1Rate,
+                                fee: tranche1Fee,
+                                ownFee: tranche1OwnFee,
+                                creditDate: tranche1CreditDate,
+                            },
+                            tranche2: {
+                                size: tranche2Size,
+                                interestRate: tranche2Rate,
+                                fee: tranche2Fee,
+                                ownFee: tranche2OwnFee,
+                                creditDate: tranche2CreditDate,
+                            },
+                            tranche3: {
+                                size: tranche3Size,
+                                interestRate: tranche3Rate,
+                                fee: tranche3Fee,
+                                ownFee: tranche3OwnFee,
+                                creditDate: tranche3CreditDate,
+                            },
+                            tranche4: {
+                                size: tranche4Size,
+                                interestRate: tranche4Rate,
+                                fee: tranche4Fee,
+                                ownFee: tranche4OwnFee,
+                                creditDate: tranche4CreditDate,
+                            },
+                            tranche5: {
+                                size: tranche5Size,
+                                interestRate: tranche5Rate,
+                                fee: tranche5Fee,
+                                ownFee: tranche5OwnFee,
+                                creditDate: tranche5CreditDate,
+                            },
+                        },
+                    })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.task_id) {
+                            // Периодическая проверка состояния задачи
+                            checkTaskStatus(data.task_id, activeTabText, itemPrice, initialPayment,
+                                creditTerm, itemName);
+                        } else {
+                            showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
+                            loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                            calculateButton.disabled = false; // Разблокировать кнопку
+                            calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                            preCalculateButton.disabled = false; // Разблокировать кнопку
+                            preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Ошибка:', error);
+                        showError('Произошла ошибка при отправке задачи', 'Ошибка');
+                        loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                        calculateButton.disabled = false; // Разблокировать кнопку
+                        calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                        preCalculateButton.disabled = false; // Разблокировать кнопку
+                        preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                    });
+            }
+        });
     });
+
 
     function checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
                              creditTerm, itemName) {

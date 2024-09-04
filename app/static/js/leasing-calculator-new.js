@@ -4,31 +4,81 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function deleteCalculation(event, calcId) {
     event.stopPropagation(); // Остановить всплытие события, чтобы не вызывать openModal
-    if (confirm("Вы уверены, что хотите удалить этот расчет?")) {
-        fetch(`./calculator/delete/${calcId}`, {
-            method: 'POST',
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.querySelector(`i[data-id='${calcId}']`).closest('tr').remove();
-                } else {
-                    alert('Ошибка при удалении расчета: ' + data.message);
-                }
+
+    // Используем SweetAlert2 для подтверждения
+    Swal.fire({
+        text: 'Вы уверены, что хотите удалить это КП?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#ad6c72',
+        cancelButtonColor: '#5789b9',
+        confirmButtonText: 'Да, удалить',
+        cancelButtonText: 'Отменить'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Если пользователь подтвердил действие
+            fetch(`./calculator/delete/${calcId}`, {
+                method: 'POST',
             })
-            .catch(error => {
-                console.error('Ошибка:', error);
-                alert('Произошла ошибка при удалении расчета.');
-            });
-    }
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Удаляем строку расчета из таблицы
+                        document.querySelector(`i[data-id='${calcId}']`).closest('tr').remove();
+                        // Уведомление об успешном удалении
+                        Swal.fire({
+                            title: 'Удалено!',
+                            text: 'КП было успешно удалено.',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
+                    } else {
+                        // Показать ошибку через SweetAlert2
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ошибка',
+                            text: 'Ошибка при удалении расчета: ' + data.message,
+                            confirmButtonText: 'ОК',
+                            confirmButtonColor: '#5789b9'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    // Показать ошибку через SweetAlert2
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ошибка',
+                        text: 'Произошла ошибка при удалении расчета.',
+                        confirmButtonText: 'ОК'
+                    });
+                });
+        }
+    });
 }
+
 
 function downloadCalculation(event, calcId) {
     event.stopPropagation(); // Остановить всплытие события, чтобы не вызывать openModal
-    if (confirm("Вы уверены, что хотите скачать этот расчет?")) {
-        window.location.href = `./calculator/download/${calcId}`;
-    }
+
+    // Используем SweetAlert2 для подтверждения
+    Swal.fire({
+        text: 'Вы уверены, что хотите скачать это КП?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#5789b9',
+        cancelButtonColor: '#ad6c72',
+        confirmButtonText: 'Да, скачать',
+        cancelButtonText: 'Отменить'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Если пользователь подтвердил действие
+            window.location.href = `./calculator/download/${calcId}`;
+        }
+    });
 }
+
 
 function filterTable() {
     var input, filter, table, tr, td, i, txtValue;

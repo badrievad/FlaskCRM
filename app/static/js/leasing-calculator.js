@@ -1102,9 +1102,13 @@ document.addEventListener('DOMContentLoaded', function () {
             updateCostInRubles();
         }
         closeModal();
-        simpleScrollTest();
-        showSuccess('Данные из предыдущего расчета были успешно скопированы', 'Выполнено');
-
+        Swal.fire({
+            title: 'Скопировано!',
+            text: 'Данные из предыдущего КП были успешно скопированы',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+        });
     }
 
     function simpleScrollTest() {

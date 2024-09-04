@@ -185,7 +185,13 @@ function saveChanges(userFullName) {
                     if (responseData.success) {
                         updateTableRow(calcId, responseData.data, userFullName, data.deal_id, data.deal_text);
                         closeModal(); // Закрываем модальное окно после сохранения
-                        showSuccess(responseData.message, "Успешно");
+                        Swal.fire({
+                            title: 'Обновлено!',
+                            text: 'Данные успешно обновлены',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false,
+                        });
                     } else {
                         showError(responseData.message, "Ошибка сохранения изменений:");
                     }

@@ -387,3 +387,10 @@ def get_deals_archived() -> jsonify:
             "deals_archived": archived_deals_count,
         }
     )
+
+
+@deal_bp.route("/crm/deals/merge-deals", methods=["POST"])
+def merge_deals() -> jsonify:
+    data = request.get_json()
+    logging.info(f"Merge deals: {data}")
+    return jsonify({"result": "ok"})

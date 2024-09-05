@@ -53,10 +53,12 @@
 <div class="sidebar">
     <h2>StellarCRM</h2><br><br><br>
     <ul>
-        <li onclick="toggleSubmenu('deals-submenu')" class="default-li"><i class="fas fa-handshake"></i> Список сделок</li>
+        <li onclick="toggleSubmenu('deals-submenu')" class="default-li"><i class="fas fa-handshake"></i> Список сделок
+        </li>
         <ul id="deals-submenu" class="submenu">
             <li id="active-deals-link" onclick="showForm('active-deals')" class="default-li">Активные сделки (0)</li>
-            <li id="archived-deals-link" onclick="showForm('archived-deals')" class="default-li">Архивные сделки (0)</li>
+            <li id="archived-deals-link" onclick="showForm('archived-deals')" class="default-li">Архивные сделки (0)
+            </li>
         </ul>
         <li onclick="showForm('task')" class="default-li"><i class="fas fa-tasks"></i> Создать сделку</li>
         <br><br><br><br>
@@ -83,10 +85,12 @@
 <div class="main-content">
     <div id="active-deals" class="card">
         <h2>Активные сделки</h2>
+        <button id="merge-deals-button" disabled>Объединить сделки</button>
         <h4 id="filter-search"><i class="fa-solid fa-magnifying-glass"></i></h4>
         <table class="deal-table">
             <thead>
             <tr>
+                <th></th>
                 <th>№</th>
                 <th>№ ДЛ</th>
                 <th id="filter-header">Лизингополучатель</th>
@@ -97,6 +101,7 @@
             </tr>
             </thead>
             <tr id="filter-row" class="hidden filter-row">
+                <th></th>
                 <th></th>
                 <th><input type="text" id="filter-input-dl" class="filter-input-dl" placeholder="Поиск..."></th>
                 <th><input type="text" id="filter-input" class="filter-input" placeholder="Поиск..."></th>
@@ -164,7 +169,7 @@
         <script src="{{ url_for('crm.static', filename='js/main-filter.js') }}"></script>
     </div>
 </div>
-
+<script src="{{ url_for('crm.static', filename='js/deal-merge-deals.js') }}"></script>
 <script>
     function updateDealCounts(activeCount, archivedCount) {
         var activeDealsLink = document.getElementById('active-deals-link');
@@ -220,25 +225,29 @@
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
                     var dealItem = `
-                            <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
-                                <td>${index + 1}</td>
-                                <td class="deal-dl">${deal.dl_number}</td>
-                                <td class="deal-title">${deal.title}</td>
-                                <td class="deal-product">${deal.product}</td>
-                                <td class="deal-manager">${deal.created_by}</td>
-                                <td class="deal-created">${new Date(deal.created_at).toLocaleString()}</td>
-                                <td>
-                                    ${(deal.created_by === userName || userRole === 'admin') ? `
-                                        <div class="btn-container">
-                                            <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
-                                                <i class="fa-regular fa-square-minus"></i>
-                                            </button>
-                                        </div>
-                                    ` : ''}
-                                </td>
-                            </tr>`;
+                        <tr id="deal-${deal.id}">
+                            <td onclick="toggleCheckbox(${deal.id}, event)">
+                                <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
+                            </td>
+                            <td onclick="enterIntoDeal(${deal.id})">${index + 1}</td>
+                            <td class="deal-dl" onclick="enterIntoDeal(${deal.id})">${deal.dl_number}</td>
+                            <td class="deal-title" onclick="enterIntoDeal(${deal.id})">${deal.title}</td>
+                            <td class="deal-product" onclick="enterIntoDeal(${deal.id})">${deal.product}</td>
+                            <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">${deal.created_by}</td>
+                            <td class="deal-created" onclick="enterIntoDeal(${deal.id})">${new Date(deal.created_at).toLocaleString()}</td>
+                            <td>
+                                ${(deal.created_by === userName || userRole === 'admin') ? `
+                                    <div class="btn-container">
+                                        <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
+                                            <i class="fa-regular fa-square-minus"></i>
+                                        </button>
+                                    </div>
+                                ` : ''}
+                            </td>
+                        </tr>`;
                     dealsList.insertAdjacentHTML('beforeend', dealItem);
                 });
+
             });
     });
 
@@ -479,13 +488,16 @@
         var dealsList = document.getElementById('deal-rows');
         var currentIndex = dealsList.children.length + 1; // Calculate the new index
         var dealItem = `
-                            <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
-                                <td>${currentIndex + 1}</td>
-                                <td class="deal-dl">${data.dl_number}</td>
-                                <td class="deal-title">${data.title}</td>
-                                <td class="deal-product">${data.product}</td>
-                                <td class="deal-manager">${data.created_by}</td>
-                                <td class="deal-created">${data.created_at}</td>
+                            <tr id="deal-${data.id}">
+                                <td onclick="toggleCheckbox(${data.id}, event)">
+                                    <input type="checkbox" class="deal-checkbox" data-deal-id="${data.id}" id="checkbox-${data.id}" style="cursor: pointer;">
+                                </td>
+                                <td onclick="enterIntoDeal(${data.id})">${currentIndex + 1}</td>
+                                <td class="deal-dl" onclick="enterIntoDeal(${data.id})">${data.dl_number}</td>
+                                <td class="deal-title" onclick="enterIntoDeal(${data.id})">${data.title}</td>
+                                <td class="deal-product" onclick="enterIntoDeal(${data.id})">${data.product}</td>
+                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">${data.created_by}</td>
+                                <td class="deal-created" onclick="enterIntoDeal(${data.id})">${data.created_at}</td>
                                 <td>
                                     ${(data.created_by === userName || userRole === 'admin') ? `
                                         <div class="btn-container">
@@ -578,16 +590,19 @@
             dealItem.remove();
             {#updateIndexes('deal-rows'); // Recalculate indexes#}
 
-            // Переместить сделку в архивный список
+            // Переместить сделку в активный список
             var activeDealsList = document.getElementById('deal-rows');
             var activedDealItem = `
-                            <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
-                                <td>${currentIndex + 1}</td>
-                                <td class="deal-dl">${data.dl_number}</td>
-                                <td class="deal-title">${data.title}</td>
-                                <td class="deal-product">${data.product}</td>
-                                <td class="deal-manager">${data.created_by}</td>
-                                <td class="deal-created">${data.created_at}</td>
+                            <tr id="deal-${data.id}">
+                                <td onclick="toggleCheckbox(${data.id}, event)">
+                                    <input type="checkbox" class="deal-checkbox" id="checkbox-${data.id}" data-deal-id="${data.id}" style="cursor: pointer;">
+                                </td>
+                                <td onclick="enterIntoDeal(${data.id})">${currentIndex + 1}</td>
+                                <td class="deal-dl" onclick="enterIntoDeal(${data.id})">${data.dl_number}</td>
+                                <td class="deal-title" onclick="enterIntoDeal(${data.id})">${data.title}</td>
+                                <td class="deal-product" onclick="enterIntoDeal(${data.id})">${data.product}</td>
+                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">${data.created_by}</td>
+                                <td class="deal-created" onclick="enterIntoDeal(${data.id})">${data.created_at}</td>
                                 <td>
                                     ${(data.created_by === userName || userRole === 'admin') ? `
                                         <div class="btn-container">

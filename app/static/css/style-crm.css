@@ -390,3 +390,27 @@ th, td {
     color: rgba(199, 199, 199, 0.8); /* Цвет текста при наведении, например, красный */
     border-color: rgba(199, 199, 199, 0.05); /* Цвет рамки при наведении, например, красный */
 }
+
+#merge-deals-button {
+    background-color: rgba(42, 168, 71, 0.2); /* Цвет кнопки */
+    color: white; /* Цвет текста */
+    border: none; /* Убираем границы */
+    padding: 10px 20px; /* Отступы внутри кнопки */
+    font-size: 14px; /* Размер текста */
+    cursor: pointer; /* Указатель на кнопке */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Плавный переход при наведении */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень под кнопкой */
+    width: 200px;
+    margin-left: 250px;
+}
+
+#merge-deals-button:hover {
+    background-color: rgba(33, 136, 56, 0.4); /* Цвет кнопки при наведении */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Увеличенная тень при наведении */
+}
+
+#merge-deals-button:disabled {
+    background-color: rgba(204, 204, 204, 0.24); /* Цвет кнопки, когда она отключена */
+    cursor: not-allowed; /* Курсор при отключенной кнопке */
+    box-shadow: none; /* Убираем тень для отключённой кнопки */
+}

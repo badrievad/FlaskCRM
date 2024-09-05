@@ -1,4 +1,4 @@
-from .models import Seller, LeasCalculator
+from .models import Seller
 from .. import db
 
 

@@ -26,7 +26,6 @@ from .. import db, cache
 from ..celery_utils import is_celery_alive
 from ..config import FORM_OFFERS_PATH
 from ..deal.deals_validate import DealsValidate
-from ..deal.models import Deal
 from ..leasing_calculator.celery_tasks import long_task
 from ..leasing_calculator.models import (
     LeasCalculator,

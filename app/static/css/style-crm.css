@@ -414,3 +414,36 @@ th, td {
     cursor: not-allowed; /* Курсор при отключенной кнопке */
     box-shadow: none; /* Убираем тень для отключённой кнопки */
 }
+
+input[type="checkbox"] {
+    /* Убираем стандартные стили браузера */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    /* Размер чекбокса */
+    margin-top: 7px;
+    width: 17px;
+    height: 17px;
+    border-radius: 4px; /* Закругленные углы */
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1); /* Фон для невыбранного чекбокса */
+}
+
+input[type="checkbox"]:checked {
+    background-color: #1e6034; /* Цвет фона для выбранного чекбокса */
+    border-color: #1e6034; /* Изменяем цвет границы */
+}
+
+/* Добавляем псевдоэлемент для галочки */
+input[type="checkbox"]:checked::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    margin-left: 5px;
+    margin-top: 1px;
+}

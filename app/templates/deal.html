@@ -117,13 +117,14 @@
                     <p>Наименование:
                         <span id="supplier-name-display" class="supplier-display-text">{{ deal.seller_name }}</span>
                         <input type="text" id="supplier-name-input" class="supplier-input-field"
-                               value="{{ deal.seller_name }}">
+                               value="{{ deal.seller_name }}" maxlength="255">
                     </p>
                     <p>ИНН:
                         <span id="supplier-inn-display" class="supplier-display-text">{{ deal.seller_inn }}</span>
                         <input type="text" id="supplier-inn-input" class="supplier-input-field"
-                               value="{{ deal.seller_inn }}">
+                               value="{{ deal.seller_inn }}" maxlength="20">
                     </p>
+                    <input type="hidden" id="supplier-info" placeholder="">
                 </div>
                 <div class="section">
                     <h3>Ответственный</h3>

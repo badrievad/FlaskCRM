@@ -288,10 +288,29 @@ function cancelEditing() {
 
 // Функции для сохранения редактирования
 function saveEditing() {
-    var newName = document.getElementById('supplier-name-input').value;
-    var newInn = document.getElementById('supplier-inn-input').value;
+    var newName = document.getElementById('supplier-name-input').value.trim();
+    var newInn = document.getElementById('supplier-inn-input').value.trim();
     var nameDisplay = document.getElementById('supplier-name-display');
     var innDisplay = document.getElementById('supplier-inn-display');
+    var dealId = getDealIdFromUrl();  // Извлекаем ID сделки из URL
+
+    // Проверка на пустое имя
+    if (!newName) {
+        alert('Введите корректное наименование поставщика.');
+        return;
+    }
+
+    // Проверка длины ИНН
+    if (newInn.length !== 10 && newInn.length !== 12) {
+        alert('ИНН должен содержать 10 или 12 символов.');
+        return;
+    }
+
+    // Проверка, что ИНН состоит только из цифр
+    if (!/^\d+$/.test(newInn)) {
+        alert('ИНН должен содержать только цифры.');
+        return;
+    }
 
     // Обновляем отображаемые значения
     nameDisplay.textContent = newName;
@@ -300,8 +319,25 @@ function saveEditing() {
     // Скрываем поля ввода и кнопки, возвращаем текст и иконку
     cancelEditing();
 
-    // Здесь можно добавить AJAX-запрос для сохранения изменений на сервере
+    // AJAX-запрос для сохранения изменений на сервере
+    $.ajax({
+        url: '/crm/calculator/update-seller',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            title: newName,
+            inn: newInn,
+            deal_id: dealId
+        }),
+        success: function (response) {
+            console.log(response.message); // Выводим сообщение об успешном обновлении
+        },
+        error: function (xhr, status, error) {
+            console.error('Ошибка при обновлении данных продавца:', xhr.responseText);
+        }
+    });
 }
+
 
 // Обработчик для клавиш ESC и Enter
 function handleKeyEvents(event) {
@@ -310,6 +346,15 @@ function handleKeyEvents(event) {
     } else if (event.key === 'Enter') {
         saveEditing();
     }
+}
+
+function getDealIdFromUrl() {
+    // Получаем путь URL
+    var path = window.location.pathname;
+
+    // Разбиваем путь на сегменты и возвращаем последний элемент (ID)
+    var segments = path.split('/');
+    return segments[segments.length - 1];  // Возвращает ID (в вашем случае 613)
 }
 
 

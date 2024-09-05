@@ -21,9 +21,12 @@ from .api_for_leas_culc import upload_schedule
 from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
 from .other_utils import validate_item_price
 from .pydantic_models import ValidateFields
+from .sql_queries import create_or_update_seller_and_link_to_leas_calc
 from .. import db, cache
 from ..celery_utils import is_celery_alive
 from ..config import FORM_OFFERS_PATH
+from ..deal.deals_validate import DealsValidate
+from ..deal.models import Deal
 from ..leasing_calculator.celery_tasks import long_task
 from ..leasing_calculator.models import (
     LeasCalculator,
@@ -345,3 +348,27 @@ def upload_schedules():
     upload_schedule(data)
 
     return jsonify({"message": "Schedules successfully uploaded"}), 201
+
+
+@leas_calc_bp.route("/crm/calculator/update-seller", methods=["POST"])
+def update_seller():
+    data = request.get_json()
+    data_validated = DealsValidate(data)
+
+    # Получаем новое имя и ИНН из данных запроса
+    new_name = data_validated.get_company_name or data.get("title")
+    new_inn = data_validated.get_company_inn or data.get("inn")
+    deal_id = data.get("deal_id")
+
+    if not new_name or not new_inn or not deal_id:
+        return (
+            jsonify({"error": "Invalid input: name, INN, and deal_id are required"}),
+            400,
+        )
+
+    # Создаем или обновляем продавца и привязываем его к LeasCalculator
+    response_data, status_code = create_or_update_seller_and_link_to_leas_calc(
+        new_name, new_inn, deal_id
+    )
+
+    return jsonify(response_data), status_code

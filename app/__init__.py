@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_socketio import SocketIO
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 from .celery_utils import celery_init_app
 from .config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND
@@ -22,6 +23,7 @@ crm_static_bp = Blueprint(
 def create_app(debug=False):
     """Create an application."""
     app = Flask(__name__)
+    CORS(app)
     app.debug = debug
     app.config.from_pyfile("config.py")
 

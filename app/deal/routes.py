@@ -1,4 +1,5 @@
 import datetime
+from collections import defaultdict
 
 from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
@@ -331,31 +332,49 @@ def get_deals_active() -> jsonify:
     user_fullname = request.args.get(
         "user_fullname"
     )  # Получаем параметр из строки запроса
-    active_deals: list[Deal] = (
-        Deal.query.filter_by(status="active").order_by(desc(Deal.created_at)).all()
+
+    # Получаем все активные сделки
+    active_deals_query = Deal.query.filter_by(status="active").order_by(
+        desc(Deal.created_at)
     )
+
+    if user_fullname:
+        active_deals_query = active_deals_query.filter_by(created_by=user_fullname)
+
+    active_deals: list[Deal] = active_deals_query.all()
     active_deals_count: int = len(active_deals)
     archived_deals_count: int = Deal.query.filter_by(status="archived").count()
-    if user_fullname:
-        active_deals: list[Deal] = (
-            Deal.query.filter_by(status="active", created_by=user_fullname)
-            .order_by(desc(Deal.created_at))
-            .all()
+
+    # Группируем сделки по group_id
+    grouped_deals = defaultdict(list)  # Для хранения сгруппированных сделок
+    for deal in active_deals:
+        group_key = (
+            deal.group_id if deal.group_id else deal.id
+        )  # Если нет group_id, используем id как ключ
+        grouped_deals[group_key].append(deal)
+
+    # Формируем ответ с объединенными сделками
+    deals_response = []
+    for group, deals in grouped_deals.items():
+        # Соединяем номера ДЛ через запятую
+        dl_numbers = ", ".join([deal.dl_number for deal in deals])
+        # Берем информацию из первой сделки в группе для остальных полей
+        first_deal = deals[0]
+        deals_response.append(
+            {
+                "id": first_deal.id,  # Используем id первой сделки для идентификатора строки
+                "dl_number": dl_numbers,
+                "product": first_deal.product,
+                "title": first_deal.title,
+                "company_inn": first_deal.company_inn,
+                "created_by": first_deal.created_by,
+                "created_at": first_deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
+            }
         )
+
     return jsonify(
         {
-            "deals": [
-                {
-                    "id": deal.id,
-                    "dl_number": deal.dl_number,
-                    "product": deal.product,
-                    "title": deal.title,
-                    "company_inn": deal.company_inn,
-                    "created_by": deal.created_by,
-                    "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
-                }
-                for deal in active_deals
-            ],
+            "deals": deals_response,
             "deals_active": active_deals_count,
             "deals_archived": archived_deals_count,
         }
@@ -393,29 +412,101 @@ def get_deals_archived() -> jsonify:
 @deal_bp.route("/crm/deals/merge-deals", methods=["POST"])
 def merge_deals():
     try:
-        # Получаем данные из запроса
         data = request.get_json()
-        deal_ids = data.get("deals")  # Список ID сделок для объединения
+        deal_ids = data.get("deals")
 
-        if not deal_ids or len(deal_ids) < 2:
+        if len(deal_ids) < 2:
             return (
                 jsonify(
-                    {"error": "Должно быть выбрано минимум 2 сделки для объединения"}
+                    {"success": False, "message": "Необходимо выбрать минимум 2 сделки"}
                 ),
                 400,
             )
 
-        # Вызов функции для объединения сделок
+        # Получаем сделки из базы данных по переданным ID
+        selected_deals = Deal.query.filter(Deal.id.in_(deal_ids)).all()
+
+        if not selected_deals:
+            return jsonify({"success": False, "message": "Сделки не найдены"}), 404
+
+        # Проверяем, что все сделки принадлежат одной компании и одному менеджеру
+        first_company_inn = selected_deals[0].company_inn
+        first_manager = selected_deals[0].created_by
+
+        for deal in selected_deals:
+            if (
+                deal.company_inn != first_company_inn
+                or deal.created_by != first_manager
+            ):
+                return (
+                    jsonify(
+                        {
+                            "success": False,
+                            "message": "Все сделки должны принадлежать одному лизингополучателю и одному менеджеру",
+                        }
+                    ),
+                    400,
+                )
+
+        # Если проверки пройдены, выполняем объединение сделок
         group_id, error = merge_deals_in_db(deal_ids)
 
         if error:
             return jsonify({"error": error}), 404
 
-        return (
-            jsonify({"message": "Сделки успешно объединены", "group_id": group_id}),
-            200,
-        )
+        return jsonify({"success": True, "message": "Сделки успешно объединены"}), 200
 
     except Exception as e:
-        logging.error(f"Error while merging deals: {str(e)}")
-        return jsonify({"error": "Ошибка при объединении сделок"}), 500
+        logging.exception(f"Error while merging deals: {str(e)}")
+        return (
+            jsonify(
+                {"success": False, "message": "Произошла ошибка при объединении сделок"}
+            ),
+            500,
+        )
+
+
+@deal_bp.route("/crm/deals/group/<int:deal_id>", methods=["GET"])
+def get_deals_by_group(deal_id):
+    deal = Deal.query.get(deal_id)
+    if not deal:
+        return jsonify({"error": "Сделка не найдена"}), 404
+
+    if deal.group_id:
+        # Если у сделки есть group_id, получаем все сделки с этим group_id
+        grouped_deals = Deal.query.filter_by(group_id=deal.group_id).all()
+        return (
+            jsonify(
+                {
+                    "group_id": deal.group_id,
+                    "deals": [
+                        {
+                            "id": d.id,
+                            "dl_number": d.dl_number,
+                            "company": d.title,  # Измените на правильное поле для компании
+                            "manager": d.created_by,  # Измените на правильное поле для менеджера
+                        }
+                        for d in grouped_deals
+                    ],
+                }
+            ),
+            200,
+        )
+    else:
+        # Если group_id нет, возвращаем только текущую сделку
+        return (
+            jsonify(
+                {
+                    "group_id": None,
+                    "deals": [
+                        {
+                            "id": deal.id,
+                            "dl_number": deal.dl_number,
+                            "company": deal.title,  # Измените на правильное поле для компании
+                            "manager": deal.created_by,  # Измените на правильное поле для менеджера
+                        }
+                    ],
+                }
+            ),
+            200,
+        )

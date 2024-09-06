@@ -1,5 +1,6 @@
-document.getElementById('merge-deals-button').addEventListener('click', function () {
-    var selectedDeals = getSelectedDeals();
+document.getElementById('merge-deals-button').addEventListener('click', async function () {
+    // Ждем выполнения getSelectedDeals и получения массива сделок
+    var selectedDeals = await getSelectedDeals();
 
     if (selectedDeals.length < 2) {
         Swal.fire({
@@ -42,16 +43,17 @@ document.getElementById('merge-deals-button').addEventListener('click', function
                         width: 400,
                         showConfirmButton: false,
                     });
-                    console.log(response.message);
                 },
                 error: function (xhr, status, error) {
+                    var response = JSON.parse(xhr.responseText);
                     Swal.fire({
                         icon: 'error',
                         title: 'Ошибка',
-                        text: 'Ошибка при объединении сделок: ' + xhr.responseText,
-                        confirmButtonText: 'ОК'
+                        text: 'Ошибка при объединении сделок: ' + response.message,
+                        confirmButtonText: 'ОК',
+                        confirmButtonColor: '#7892ad',
                     });
-                    console.error('Ошибка при объединении сделок:', xhr.responseText);
+                    console.error('Ошибка при объединении сделок:', response.message);
                 }
             });
         }
@@ -59,12 +61,11 @@ document.getElementById('merge-deals-button').addEventListener('click', function
 });
 
 
-function toggleCheckbox(dealId, event) {
+async function toggleCheckbox(dealId, event) {
     // Останавливаем всплытие события для предотвращения клика на строке
     event.stopPropagation();
 
-    // Проверка: если клик был по самому чекбоксу, не меняем состояние чекбокса вручную,
-    // но продолжаем проверку состояния кнопки
+    // Проверка: если клик был по самому чекбоксу, не меняем состояние чекбокса вручную
     if (event.target.tagName === 'INPUT' && event.target.type === 'checkbox') {
         // Чекбокс уже переключается самим браузером, мы просто продолжаем
         // проверку состояния после клика
@@ -76,32 +77,68 @@ function toggleCheckbox(dealId, event) {
     }
 
     // Проверяем, можно ли объединять сделки после изменения состояния чекбокса
-    var selectedDeals = getSelectedDeals();
+    try {
+        var selectedDeals = await getSelectedDeals();  // Ждём выполнения async функции
 
-    if (canMergeDeals(selectedDeals)) {
-        document.getElementById('merge-deals-button').disabled = false;
-    } else {
-        document.getElementById('merge-deals-button').disabled = true;
+        if (canMergeDeals(selectedDeals)) {
+            document.getElementById('merge-deals-button').disabled = false;
+        } else {
+            document.getElementById('merge-deals-button').disabled = true;
+        }
+    } catch (error) {
+        console.error('Ошибка при получении сделок:', error);
     }
 }
 
 
-function getSelectedDeals() {
+async function getSelectedDeals() {
     var selectedDeals = [];
-    document.querySelectorAll('.deal-checkbox:checked').forEach(checkbox => {
-        selectedDeals.push({
-            id: checkbox.dataset.dealId,
-            company: checkbox.closest('tr').querySelector('.deal-title').textContent.trim(),
-            manager: checkbox.closest('tr').querySelector('.deal-manager').textContent.trim()
-        });
-    });
+
+    // Асинхронный цикл для обработки всех чекбоксов
+    for (let checkbox of document.querySelectorAll('.deal-checkbox:checked')) {
+        var dealId = checkbox.dataset.dealId;
+        var company = checkbox.closest('tr').querySelector('.deal-title').textContent.trim();
+        var manager = checkbox.closest('tr').querySelector('.deal-manager').textContent.trim();
+
+        // Проверяем, есть ли у сделки group_id
+        let response = await fetch(`/crm/deals/group/${dealId}`);
+        let data = await response.json();
+
+        if (data.group_id) {
+            // Если у сделки есть group_id, добавляем все сделки в этой группе
+            data.deals.forEach(deal => {
+                // Проверяем, что сделка ещё не добавлена
+                if (!selectedDeals.some(d => d.id === deal.id)) {
+                    selectedDeals.push({
+                        id: deal.id,
+                        company: deal.company || company,  // Используем компанию из ответа
+                        manager: deal.manager || manager   // Используем менеджера из ответа
+                    });
+                }
+            });
+        } else {
+            // Если group_id нет, добавляем только эту сделку
+            selectedDeals.push({
+                id: dealId,
+                company: company,
+                manager: manager
+            });
+        }
+    }
+
     return selectedDeals;
 }
 
 
 function canMergeDeals(deals) {
-    if (deals.length < 2) {
-        return false; // Нужно минимум 2 сделки для объединения
+    if (!Array.isArray(deals) || deals.length === 0) {
+        return false; // Если массив сделок пустой или не является массивом
+    }
+
+    // Проверка: если выбрано меньше 2 чекбоксов, то нельзя объединить
+    const checkedCheckboxes = document.querySelectorAll('.deal-checkbox:checked').length;
+    if (checkedCheckboxes < 2) {
+        return false;
     }
 
     const firstDealCompany = deals[0].company;
@@ -110,8 +147,6 @@ function canMergeDeals(deals) {
     // Проверяем, что все выбранные сделки принадлежат одной компании и менеджеру
     const canMerge = deals.every(deal => deal.company === firstDealCompany && deal.manager === firstDealManager);
 
-    if (!canMerge) {
-    }
-
     return canMerge;
 }
+

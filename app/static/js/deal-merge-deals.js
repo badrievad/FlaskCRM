@@ -235,7 +235,7 @@ function updateDealsTable() {
 
             data.deals.forEach((deal, index) => {
                 var dealItem = `
-                    <tr id="deal-${deal.id}">
+                    <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
                         <td onclick="toggleCheckbox(${deal.id}, event)">
                             <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
                         </td>

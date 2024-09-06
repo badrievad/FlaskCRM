@@ -490,6 +490,7 @@ def merge_deals():
         if error:
             return jsonify({"error": error}), 404
 
+        socketio.emit("update_deals_table")
         return jsonify({"success": True, "message": "Сделки успешно объединены"}), 200
 
     except Exception as e:

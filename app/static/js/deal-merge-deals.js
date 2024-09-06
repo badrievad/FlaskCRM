@@ -6,7 +6,8 @@ document.getElementById('merge-deals-button').addEventListener('click', async fu
             icon: 'warning',
             title: 'Недостаточно сделок',
             text: 'Выберите как минимум 2 сделки для объединения',
-            confirmButtonText: 'ОК'
+            confirmButtonText: 'ОК',
+            confirmButtonColor: '#67a2d5',
         });
         return;  // Если выбрано меньше 2 сделок, не продолжаем выполнение
     }
@@ -39,7 +40,7 @@ document.getElementById('merge-deals-button').addEventListener('click', async fu
                         showConfirmButton: false,
                     }).then(() => {
                         // После успешного уведомления перезагружаем страницу
-                        window.location.reload();
+                        updateDealsTable();
                     });
                 },
                 error: function (xhr, status, error) {
@@ -147,4 +148,137 @@ function canMergeDeals(deals) {
 
     return canMerge;
 }
+
+// Функция для обновления таблицы сделок
+function updateDealsTable() {
+    fetch('/crm/deals/active')
+        .then(response => response.json())
+        .then(data => {
+            var dealsList = document.getElementById('deal-rows');
+            dealsList.innerHTML = ''; // Очищаем существующие строки
+
+            data.deals.forEach((deal, index) => {
+                var dealItem = `
+                    <tr id="deal-${deal.id}">
+                        <td onclick="toggleCheckbox(${deal.id}, event)">
+                            <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
+                        </td>
+                        <td>${index + 1}</td>
+                        <td class="deal-dl">${deal.dl_number}</td>
+                        <td class="deal-title">${deal.title}</td>
+                        <td class="deal-product">${deal.product}</td>
+                        <td class="deal-manager">${deal.created_by}</td>
+                        <td class="deal-created">${new Date(deal.created_at).toLocaleString()}</td>
+                        <td>
+                            <div class="btn-container">
+                                <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
+                                    <i class="fa-regular fa-square-minus"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+                dealsList.insertAdjacentHTML('beforeend', dealItem);
+            });
+
+            // После перерисовки таблицы заново прикрепляем события для чекбоксов
+            attachCheckboxEvents();
+            checkSelectedDeals();  // Проверяем состояние кнопки после обновления таблицы
+        })
+        .catch(error => {
+            console.error('Ошибка при получении сделок:', error);
+        });
+}
+
+// Функция для привязки событий к чекбоксам
+function attachCheckboxEvents() {
+    document.querySelectorAll('.deal-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', async function (event) {
+            toggleCheckbox(this.dataset.dealId, event);  // Вызываем toggleCheckbox при изменении состояния
+        });
+    });
+}
+
+// Функция для проверки состояния кнопки "Объединить сделки"
+// Функция для проверки состояния кнопки "Объединить сделки"
+async function checkSelectedDeals() {
+    var selectedDeals = await getSelectedDeals();
+    document.getElementById('merge-deals-button').disabled = !canMergeDeals(selectedDeals);
+}
+
+// Функция для управления состоянием чекбоксов и объединения сделок
+async function toggleCheckbox(dealId, event) {
+    // Останавливаем всплытие события для предотвращения клика на строке
+    event.stopPropagation();
+
+    // Если клик был по самому чекбоксу, позволим браузеру обработать событие
+    if (event.target.tagName === 'INPUT' && event.target.type === 'checkbox') {
+        // Просто вызываем проверку состояния после обработки клика браузером
+        await checkSelectedDeals();
+        return; // Выход из функции, так как мы не хотим переключать чекбокс вручную
+    }
+
+    // Переключаем состояние чекбокса вручную, если клик был не по чекбоксу
+    var checkbox = document.getElementById(`checkbox-${dealId}`);
+    checkbox.checked = !checkbox.checked;
+
+    // Проверяем состояние кнопки
+    await checkSelectedDeals();
+}
+
+// Функция для обновления таблицы сделок
+function updateDealsTable() {
+    fetch('/crm/deals/active')
+        .then(response => response.json())
+        .then(data => {
+            var dealsList = document.getElementById('deal-rows');
+            dealsList.innerHTML = ''; // Очищаем существующие строки
+
+            data.deals.forEach((deal, index) => {
+                var dealItem = `
+                    <tr id="deal-${deal.id}">
+                        <td onclick="toggleCheckbox(${deal.id}, event)">
+                            <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
+                        </td>
+                        <td>${index + 1}</td>
+                        <td class="deal-dl">${deal.dl_number}</td>
+                        <td class="deal-title">${deal.title}</td>
+                        <td class="deal-product">${deal.product}</td>
+                        <td class="deal-manager">${deal.created_by}</td>
+                        <td class="deal-created">${new Date(deal.created_at).toLocaleString()}</td>
+                        <td>
+                            <div class="btn-container">
+                                <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
+                                    <i class="fa-regular fa-square-minus"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`;
+                dealsList.insertAdjacentHTML('beforeend', dealItem);
+            });
+
+            // После перерисовки таблицы заново прикрепляем события для чекбоксов
+            attachCheckboxEvents();
+            checkSelectedDeals();  // Проверяем состояние кнопки после обновления таблицы
+        })
+        .catch(error => {
+            console.error('Ошибка при получении сделок:', error);
+        });
+}
+
+// Функция для привязки событий к чекбоксам
+function attachCheckboxEvents() {
+    document.querySelectorAll('.deal-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', async function (event) {
+            await checkSelectedDeals();  // Проверяем состояние кнопки при изменении чекбокса
+        });
+    });
+}
+
+// Проверка и активация кнопки при загрузке
+document.addEventListener('DOMContentLoaded', function () {
+    attachCheckboxEvents();
+    checkSelectedDeals();  // Проверяем состояние кнопки после загрузки страницы
+});
+
+
 

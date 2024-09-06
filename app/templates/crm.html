@@ -315,6 +315,11 @@
         }
     });
 
+    // Обновляем после группировки сделок
+    socket.on('update_deals_table', function () {
+        updateDealsTable();  // Перезагружаем таблицу для всех подключённых пользователей
+    });
+
     socket.on('notification_new_deal', function (data) {
         // Настройки для toastr
         toastr.options = {

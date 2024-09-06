@@ -50,7 +50,7 @@ def create_app(debug=False):
     app.register_blueprint(deal_inside_blueprint)
 
     cache.init_app(app)
-    socketio.init_app(app)
+    socketio.init_app(app, cors_allowed_origins="*")
     db.init_app(app)
     login_manager.init_app(app)
     celery_init_app(app)

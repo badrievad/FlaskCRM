@@ -59,37 +59,6 @@ document.getElementById('merge-deals-button').addEventListener('click', async fu
     });
 });
 
-
-async function toggleCheckbox(dealId, event) {
-    // Останавливаем всплытие события для предотвращения клика на строке
-    event.stopPropagation();
-
-    // Проверка: если клик был по самому чекбоксу, не меняем состояние чекбокса вручную
-    if (event.target.tagName === 'INPUT' && event.target.type === 'checkbox') {
-        // Чекбокс уже переключается самим браузером, мы просто продолжаем
-        // проверку состояния после клика
-    } else {
-        // Получаем сам чекбокс
-        var checkbox = document.getElementById(`checkbox-${dealId}`);
-        // Переключаем состояние чекбокса вручную, если клик был не по самому чекбоксу
-        checkbox.checked = !checkbox.checked;
-    }
-
-    // Проверяем, можно ли объединять сделки после изменения состояния чекбокса
-    try {
-        var selectedDeals = await getSelectedDeals();  // Ждём выполнения async функции
-
-        if (canMergeDeals(selectedDeals)) {
-            document.getElementById('merge-deals-button').disabled = false;
-        } else {
-            document.getElementById('merge-deals-button').disabled = true;
-        }
-    } catch (error) {
-        console.error('Ошибка при получении сделок:', error);
-    }
-}
-
-
 async function getSelectedDeals() {
     var selectedDeals = [];
 
@@ -128,7 +97,6 @@ async function getSelectedDeals() {
     return selectedDeals;
 }
 
-
 function canMergeDeals(deals) {
     if (!Array.isArray(deals) || deals.length === 0) {
         return false; // Если массив сделок пустой или не является массивом
@@ -149,56 +117,6 @@ function canMergeDeals(deals) {
     return canMerge;
 }
 
-// Функция для обновления таблицы сделок
-function updateDealsTable() {
-    fetch('/crm/deals/active')
-        .then(response => response.json())
-        .then(data => {
-            var dealsList = document.getElementById('deal-rows');
-            dealsList.innerHTML = ''; // Очищаем существующие строки
-
-            data.deals.forEach((deal, index) => {
-                var dealItem = `
-                    <tr id="deal-${deal.id}">
-                        <td onclick="toggleCheckbox(${deal.id}, event)">
-                            <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
-                        </td>
-                        <td>${index + 1}</td>
-                        <td class="deal-dl">${deal.dl_number}</td>
-                        <td class="deal-title">${deal.title}</td>
-                        <td class="deal-product">${deal.product}</td>
-                        <td class="deal-manager">${deal.created_by}</td>
-                        <td class="deal-created">${new Date(deal.created_at).toLocaleString()}</td>
-                        <td>
-                            <div class="btn-container">
-                                <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
-                                    <i class="fa-regular fa-square-minus"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>`;
-                dealsList.insertAdjacentHTML('beforeend', dealItem);
-            });
-
-            // После перерисовки таблицы заново прикрепляем события для чекбоксов
-            attachCheckboxEvents();
-            checkSelectedDeals();  // Проверяем состояние кнопки после обновления таблицы
-        })
-        .catch(error => {
-            console.error('Ошибка при получении сделок:', error);
-        });
-}
-
-// Функция для привязки событий к чекбоксам
-function attachCheckboxEvents() {
-    document.querySelectorAll('.deal-checkbox').forEach(checkbox => {
-        checkbox.addEventListener('change', async function (event) {
-            toggleCheckbox(this.dataset.dealId, event);  // Вызываем toggleCheckbox при изменении состояния
-        });
-    });
-}
-
-// Функция для проверки состояния кнопки "Объединить сделки"
 // Функция для проверки состояния кнопки "Объединить сделки"
 async function checkSelectedDeals() {
     var selectedDeals = await getSelectedDeals();

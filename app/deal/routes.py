@@ -4,6 +4,7 @@ from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
 
 from . import deal_bp
+from .sql_queries import merge_deals_in_db
 from .. import socketio, db
 
 from .deals_db import write_deal_to_db, write_deal_path_to_db
@@ -390,7 +391,31 @@ def get_deals_archived() -> jsonify:
 
 
 @deal_bp.route("/crm/deals/merge-deals", methods=["POST"])
-def merge_deals() -> jsonify:
-    data = request.get_json()
-    logging.info(f"Merge deals: {data}")
-    return jsonify({"result": "ok"})
+def merge_deals():
+    try:
+        # Получаем данные из запроса
+        data = request.get_json()
+        deal_ids = data.get("deals")  # Список ID сделок для объединения
+
+        if not deal_ids or len(deal_ids) < 2:
+            return (
+                jsonify(
+                    {"error": "Должно быть выбрано минимум 2 сделки для объединения"}
+                ),
+                400,
+            )
+
+        # Вызов функции для объединения сделок
+        group_id, error = merge_deals_in_db(deal_ids)
+
+        if error:
+            return jsonify({"error": error}), 404
+
+        return (
+            jsonify({"message": "Сделки успешно объединены", "group_id": group_id}),
+            200,
+        )
+
+    except Exception as e:
+        logging.error(f"Error while merging deals: {str(e)}")
+        return jsonify({"error": "Ошибка при объединении сделок"}), 500

@@ -1106,7 +1106,7 @@ document.addEventListener('DOMContentLoaded', function () {
             title: 'Скопировано!',
             text: 'Данные из предыдущего КП были успешно скопированы',
             icon: 'success',
-            timer: 2000,
+            timer: 1000,
             showConfirmButton: false,
         });
     }

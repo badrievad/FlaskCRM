@@ -23,6 +23,7 @@ class Deal(db.Model):
     )
     deals_count = db.Column(db.Integer, default=1)
     deal_path = db.Column(db.String(500), nullable=True)
+    group_id = db.Column(db.String(50), nullable=True)
 
     leas_calculators = relationship("LeasCalculator", back_populates="deal")
 

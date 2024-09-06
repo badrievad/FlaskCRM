@@ -1,22 +1,63 @@
 document.getElementById('merge-deals-button').addEventListener('click', function () {
     var selectedDeals = getSelectedDeals();
 
-    $.ajax({
-        url: '/crm/deals/merge-deals',
-        method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
-            deals: selectedDeals
-        }),
-        success: function (response) {
-            // Обновляем таблицу
-            console.log(response.message);
-        },
-        error: function (xhr, status, error) {
-            console.error('Ошибка при объединении сделок:', xhr.responseText);
+    if (selectedDeals.length < 2) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Недостаточно сделок',
+            text: 'Выберите как минимум 2 сделки для объединения',
+            confirmButtonText: 'ОК'
+        });
+        return; // Если выбрано меньше 2 сделок, не продолжаем выполнение
+    }
+
+    // Извлекаем только ID сделок из массива объектов
+    var dealIds = selectedDeals.map(deal => deal.id);
+
+    // Используем SweetAlert2 для подтверждения действия
+    Swal.fire({
+        text: `Вы действительно хотите объединить ${selectedDeals.length} сделки?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#67a2d5',
+        cancelButtonColor: '#ad6c72',
+        confirmButtonText: 'Да, объединить',
+        cancelButtonText: 'Отмена'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Если пользователь подтвердил, выполняем AJAX-запрос
+            $.ajax({
+                url: '/crm/deals/merge-deals',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    deals: dealIds // Отправляем только идентификаторы сделок
+                }),
+                success: function (response) {
+                    // Обновляем таблицу
+                    Swal.fire({
+                        icon: 'success',
+                        text: 'Сделки успешно объединены',
+                        timer: 1000,
+                        width: 400,
+                        showConfirmButton: false,
+                    });
+                    console.log(response.message);
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ошибка',
+                        text: 'Ошибка при объединении сделок: ' + xhr.responseText,
+                        confirmButtonText: 'ОК'
+                    });
+                    console.error('Ошибка при объединении сделок:', xhr.responseText);
+                }
+            });
         }
     });
 });
+
 
 function toggleCheckbox(dealId, event) {
     // Останавливаем всплытие события для предотвращения клика на строке

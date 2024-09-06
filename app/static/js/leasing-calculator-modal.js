@@ -189,7 +189,7 @@ function saveChanges(userFullName) {
                             title: 'Обновлено!',
                             text: 'Данные успешно обновлены',
                             icon: 'success',
-                            timer: 2000,
+                            timer: 1000,
                             showConfirmButton: false,
                         });
                     } else {

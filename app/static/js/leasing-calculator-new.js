@@ -30,7 +30,7 @@ function deleteCalculation(event, calcId) {
                             title: 'Удалено!',
                             text: 'КП было успешно удалено.',
                             icon: 'success',
-                            timer: 2000,
+                            timer: 1000,
                             showConfirmButton: false,
                         });
                     } else {

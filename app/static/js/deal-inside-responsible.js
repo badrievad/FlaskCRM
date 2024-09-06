@@ -296,19 +296,31 @@ function saveEditing() {
 
     // Проверка на пустое имя
     if (!newName) {
-        alert('Введите корректное наименование поставщика.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Ошибка!',
+            text: 'Введите корректное наименование поставщика.',
+        });
         return;
     }
 
     // Проверка длины ИНН
     if (newInn.length !== 10 && newInn.length !== 12) {
-        alert('ИНН должен содержать 10 или 12 символов.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Ошибка!',
+            text: 'ИНН должен содержать 10 или 12 символов.',
+        });
         return;
     }
 
     // Проверка, что ИНН состоит только из цифр
     if (!/^\d+$/.test(newInn)) {
-        alert('ИНН должен содержать только цифры.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Ошибка!',
+            text: 'ИНН должен содержать только цифры.',
+        });
         return;
     }
 
@@ -330,9 +342,19 @@ function saveEditing() {
             deal_id: dealId
         }),
         success: function (response) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Успешно!',
+                text: response.message,
+            });
             console.log(response.message); // Выводим сообщение об успешном обновлении
         },
         error: function (xhr, status, error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ошибка!',
+                text: 'Ошибка при обновлении данных продавца.',
+            });
             console.error('Ошибка при обновлении данных продавца:', xhr.responseText);
         }
     });

@@ -1,6 +1,5 @@
 document.getElementById('merge-deals-button').addEventListener('click', async function () {
-    // Ждем выполнения getSelectedDeals и получения массива сделок
-    var selectedDeals = await getSelectedDeals();
+    var selectedDeals = await getSelectedDeals();  // Получаем выбранные сделки
 
     if (selectedDeals.length < 2) {
         Swal.fire({
@@ -9,11 +8,10 @@ document.getElementById('merge-deals-button').addEventListener('click', async fu
             text: 'Выберите как минимум 2 сделки для объединения',
             confirmButtonText: 'ОК'
         });
-        return; // Если выбрано меньше 2 сделок, не продолжаем выполнение
+        return;  // Если выбрано меньше 2 сделок, не продолжаем выполнение
     }
 
-    // Извлекаем только ID сделок из массива объектов
-    var dealIds = selectedDeals.map(deal => deal.id);
+    var dealIds = selectedDeals.map(deal => deal.id);  // Извлекаем только ID сделок
 
     // Используем SweetAlert2 для подтверждения действия
     Swal.fire({
@@ -26,22 +24,22 @@ document.getElementById('merge-deals-button').addEventListener('click', async fu
         cancelButtonText: 'Отмена'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Если пользователь подтвердил, выполняем AJAX-запрос
+            // Выполняем AJAX-запрос к вашему роуту
             $.ajax({
                 url: '/crm/deals/merge-deals',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({
-                    deals: dealIds // Отправляем только идентификаторы сделок
-                }),
+                data: JSON.stringify({deals: dealIds}),
                 success: function (response) {
-                    // Обновляем таблицу
                     Swal.fire({
                         icon: 'success',
                         text: 'Сделки успешно объединены',
                         timer: 1000,
                         width: 400,
                         showConfirmButton: false,
+                    }).then(() => {
+                        // После успешного уведомления перезагружаем страницу
+                        window.location.reload();
                     });
                 },
                 error: function (xhr, status, error) {

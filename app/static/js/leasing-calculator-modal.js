@@ -1,6 +1,6 @@
 // Функция для получения активных сделок
 function fetchActiveDeals(userFullname, selectElementId, dealId) {
-    return fetch(`/crm/deals/active?user_fullname=${encodeURIComponent(userFullname)}`)
+    return fetch(`/crm/deals/active-for-bind?user_fullname=${encodeURIComponent(userFullname)}`)
         .then(response => response.json())
         .then(data => {
             // Обработка данных после получения ответа

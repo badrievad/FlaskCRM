@@ -355,7 +355,7 @@ def get_deals_active() -> jsonify:
 
     # Формируем ответ с объединенными сделками
     deals_response = []
-    for group, deals in grouped_deals.items():
+    for _group, deals in grouped_deals.items():
         # Соединяем номера ДЛ через запятую
         dl_numbers = ", ".join([deal.dl_number for deal in deals])
         # Берем информацию из первой сделки в группе для остальных полей
@@ -375,6 +375,42 @@ def get_deals_active() -> jsonify:
     return jsonify(
         {
             "deals": deals_response,
+            "deals_active": active_deals_count,
+            "deals_archived": archived_deals_count,
+        }
+    )
+
+
+@deal_bp.route("/crm/deals/active-for-bind", methods=["GET"])
+def get_deals_active_for_bind() -> jsonify:
+    user_fullname = request.args.get(
+        "user_fullname"
+    )  # Получаем параметр из строки запроса
+    active_deals: list[Deal] = (
+        Deal.query.filter_by(status="active").order_by(desc(Deal.created_at)).all()
+    )
+    active_deals_count: int = len(active_deals)
+    archived_deals_count: int = Deal.query.filter_by(status="archived").count()
+    if user_fullname:
+        active_deals: list[Deal] = (
+            Deal.query.filter_by(status="active", created_by=user_fullname)
+            .order_by(desc(Deal.created_at))
+            .all()
+        )
+    return jsonify(
+        {
+            "deals": [
+                {
+                    "id": deal.id,
+                    "dl_number": deal.dl_number,
+                    "product": deal.product,
+                    "title": deal.title,
+                    "company_inn": deal.company_inn,
+                    "created_by": deal.created_by,
+                    "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                }
+                for deal in active_deals
+            ],
             "deals_active": active_deals_count,
             "deals_archived": archived_deals_count,
         }

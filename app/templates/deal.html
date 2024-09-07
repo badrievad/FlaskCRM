@@ -107,9 +107,6 @@
                     <p>Электронная почта: {{ deal.company_email }}</p>
                     <p>Подписант: {{ deal.company_signer }}</p>
                 </div>
-                <script>
-                    var suggestionsToken = "{{ suggestions_token }}";
-                </script>
             </div>
         </div>
         {% for item in leas_calculators %}
@@ -117,60 +114,84 @@
                 <div class="left">
                     <div class="section">
                         <h3>№ договора лизинга</h3>
-                        <p>{{ item.dl_number }}</p> <!-- Поля из deals -->
+                        <p>{{ item.dl_number }}</p>
                     </div>
                     <div class="section">
                         <h3>Предмет лизинга</h3>
-                        <p>{{ item.leas_calc.item_name if item.leas_calc.item_name else '-' }}</p>
-                        <!-- Поля из leas_calc -->
+                        <p>{{ item.leas_calc.item_name }}</p>
                     </div>
                     <div class="section">
                         <h3>Стоимость предмета лизинга</h3>
-                        <p>{{ item.leas_calc.item_price_str + ' ₽' if item.leas_calc.item_price_str else '-' }}</p>
+                        <p>{{ item.leas_calc.item_price_str + ' ₽' }}</p>
                     </div>
                     <div class="section">
                         <h3>Аванс</h3>
-                        <p>{{ item.leas_calc.initial_payment_str + ' ₽' if item.leas_calc.initial_payment_str else '-' }}</p>
+                        <p>{{ item.leas_calc.initial_payment_str + ' ₽' }}</p>
                     </div>
                     <div class="section">
                         <h3>Срок лизинга</h3>
-                        <p>{{ (item.leas_calc.credit_term | string) + ' мес.' if item.leas_calc.credit_term else '-' }}</p>
+                        <p>{{ (item.leas_calc.credit_term | string) + ' мес.' }}</p>
                     </div>
                 </div>
                 <div class="right">
                     <div class="section">
                         <h3 class="supplier-header">
                             Поставщик
-                            <i class="fa-solid fa-pen fa-xs" id="edit-name-icon-{{ loop.index }}"></i>
-                            <button id="save-supplier-{{ loop.index }}" class="supplier-action-button"
-                                    style="display:none;">
-                                Сохранить
+                            <i class="fa-solid fa-pen fa-xs edit-name-icon" id="edit-name-icon-{{ loop.index }}"
+                               data-index="{{ loop.index }}" style="font-size: 12px"></i>
+                            <button id="save-supplier-{{ loop.index }}" class="supplier-action-button save-supplier"
+                                    style="display:none;" data-index="{{ loop.index }}">Сохранить
                             </button>
-                            <button id="cancel-supplier-{{ loop.index }}" class="supplier-action-button"
-                                    style="display:none;">
-                                Отменить
+                            <button id="cancel-supplier-{{ loop.index }}" class="supplier-action-button cancel-supplier"
+                                    style="display:none;" data-index="{{ loop.index }}">Отменить
                             </button>
                         </h3>
                         <p>Наименование:
                             <span id="supplier-name-display-{{ loop.index }}">{{ item.leas_calc.seller.name }}</span>
                             <input type="text" id="supplier-name-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.name }}">
+                                   value="{{ item.leas_calc.seller.name }}" class="supplier-input-field">
                         </p>
                         <p>ИНН:
                             <span id="supplier-inn-display-{{ loop.index }}">{{ item.leas_calc.seller.inn }}</span>
                             <input type="text" id="supplier-inn-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.inn }}">
+                                   value="{{ item.leas_calc.seller.inn }}" class="supplier-input-field">
                         </p>
                     </div>
-                    <p>ОГРН: {{ item.leas_calc.seller.ogrn if item.leas_calc.seller.ogrn else '-' }}</p>
-                    <p>Адрес: {{ item.leas_calc.seller.address if item.leas_calc.seller.address else '-' }}</p>
-                    <p>Телефон: {{ item.leas_calc.seller.phone if item.leas_calc.seller.phone else '-' }}</p>
-                    <p>Электронная почта: {{ item.leas_calc.seller.email if item.leas_calc.seller.email else '-' }}</p>
-                    <p>Подписант: {{ item.leas_calc.seller.signer if item.leas_calc.seller.signer else '-' }}</p>
+                    <p>ОГРН: {{ item.leas_calc.seller.ogrn }}</p>
+                    <p>Адрес: {{ item.leas_calc.seller.address }}</p>
+                    <p>Телефон: {{ item.leas_calc.seller.phone }}</p>
+                    <p>Электронная почта: {{ item.leas_calc.seller.email }}</p>
+                    <p>Подписант: {{ item.leas_calc.seller.signer }}</p>
+                    <input type="hidden" id="supplier-info-{{ loop.index }}" placeholder="">
                 </div>
             </div>
         {% endfor %}
 
+        <script>
+            var token = "{{ suggestions_token }}";
+            // Инициализация подсказок для каждого поля
+            {% for item in leas_calculators %}
+                $("#supplier-name-input-{{ loop.index }}").suggestions({
+                    token: token,  // Используйте Jinja для вставки переменной
+                    type: "PARTY",
+                    onSelect: function (suggestion) {
+                        $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+                        $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
+                        $("#supplier-info-{{ loop.index }}").val(JSON.stringify(suggestion));
+                    }
+                });
+
+                $("#supplier-inn-input-{{ loop.index }}").suggestions({
+                    token: token,  // Используйте Jinja для вставки переменной
+                    type: "PARTY",
+                    onSelect: function (suggestion) {
+                        $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
+                        $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+                        $("#supplier-info-{{ loop.index }}").val(JSON.stringify(suggestion));
+                    }
+                });
+            {% endfor %}
+        </script>
     </div>
     <div id="history" class="tab-content">
         <h2>История</h2>
@@ -248,6 +269,5 @@
 
 <!-- Scripts -->
 <script src="{{ url_for('crm.static', filename='js/deal-inside-responsible.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/deal-inside-dadata.js') }}"></script>
 </body>
 </html>

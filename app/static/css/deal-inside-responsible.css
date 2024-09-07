@@ -96,24 +96,16 @@
     font-weight: bold; /* Подчеркнуть выделенный элемент */
 }
 
-/* Заголовок поставщика с иконкой и кнопками */
-.supplier-header {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px; /* Отступ между иконкой и кнопками */
-}
-
 /* Иконка редактирования */
-#edit-name-icon {
-    color: #007bff; /* Синий цвет иконки */
-    cursor: pointer; /* Указатель мыши меняется на "руку" */
-    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+.edit-name-icon {
+    color: #007bff;
+    cursor: pointer;
+    transition: color 0.3s ease;
     font-size: 13px;
 }
 
-#edit-name-icon:hover {
-    color: #0056b3; /* Темно-синий цвет при наведении */
-    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+.edit-name-icon:hover {
+    color: #0056b3;
 }
 
 /* Стили для кнопок действий */
@@ -123,54 +115,46 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
 /* Кнопка "Сохранить" */
-#save-supplier {
-    background-color: #508676; /* Зеленый цвет кнопки */
+.save-supplier {
+    background-color: #508676;
     color: white;
-    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
 }
 
-#save-supplier:hover {
-    background-color: rgb(58, 101, 88); /* Темно-зеленый цвет при наведении */
-    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+.save-supplier:hover {
+    background-color: rgb(58, 101, 88);
 }
 
 /* Кнопка "Отменить" */
-#cancel-supplier {
-    background-color: #ad6c72; /* Красный цвет кнопки */
+.cancel-supplier {
+    background-color: #ad6c72;
     color: white;
-    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
 }
 
-#cancel-supplier:hover {
-    background-color: rgb(122, 70, 75); /* Темно-красный цвет при наведении */
-    transition: color 0.3s ease; /* Плавное изменение цвета при наведении */
+.cancel-supplier:hover {
+    background-color: rgb(122, 70, 75);
 }
 
 /* Стили для полей ввода */
 .supplier-input-field {
+    display: none; /* Скрываем поля ввода по умолчанию */
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 5px;
     font-size: 14px;
     width: 50% !important;
-    display: inline-block;
     box-sizing: border-box;
 }
 
-/* Скрытые поля ввода по умолчанию */
-.supplier-input-field {
-    display: none;
-}
-
-/* Стиль для фокуса на поле ввода */
 .supplier-input-field:focus {
     outline: none;
-    border-color: #007bff; /* Синий цвет рамки при фокусе */
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Синяя тень при фокусе */
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
+
 
 /* Переопределение шрифта для SweetAlert2 */
 .swal2-popup {

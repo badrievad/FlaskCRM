@@ -229,72 +229,71 @@ function showInfo(message, title) {
     toastr.info(message, title);
 }
 
-// Редактирование информации о поставщике
-document.getElementById('edit-name-icon').addEventListener('click', function () {
-    var nameDisplay = document.getElementById('supplier-name-display');
-    var nameInput = document.getElementById('supplier-name-input');
-    var innDisplay = document.getElementById('supplier-inn-display');
-    var innInput = document.getElementById('supplier-inn-input');
-    var saveButton = document.getElementById('save-supplier');
-    var cancelButton = document.getElementById('cancel-supplier');
-    var editIcon = document.getElementById('edit-name-icon');
+// Используем делегирование событий для иконки редактирования
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('edit-name-icon')) {
+        var index = event.target.getAttribute('data-index');
+        toggleEditMode(index, true);
+    }
+});
 
-    // Скрываем отображение текста и показываем поля ввода
-    nameDisplay.style.display = 'none';
-    nameInput.style.display = 'inline';
-    innDisplay.style.display = 'none';
-    innInput.style.display = 'inline';
-
-    // Скрываем иконку редактирования и показываем кнопки
-    editIcon.style.display = 'none';
-    saveButton.style.display = 'inline-block';
-    cancelButton.style.display = 'inline-block';
-
-    // Фокусируемся на первом поле ввода
-    nameInput.focus();
-
-    // Обработчик клавиш на полях ввода
-    nameInput.addEventListener('keydown', handleKeyEvents);
-    innInput.addEventListener('keydown', handleKeyEvents);
+// Обработчик для кнопки "Сохранить"
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('save-supplier')) {
+        var index = event.target.getAttribute('data-index');
+        saveEditing(index);
+    }
 });
 
 // Обработчик для кнопки "Отменить"
-document.getElementById('cancel-supplier').addEventListener('click', cancelEditing);
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('cancel-supplier')) {
+        var index = event.target.getAttribute('data-index');
+        toggleEditMode(index, false);
+    }
+});
 
-// Обработчик для кнопки "Сохранить"
-document.getElementById('save-supplier').addEventListener('click', saveEditing);
+// Функция переключения режима редактирования
+function toggleEditMode(index, isEditing) {
+    var nameDisplay = document.getElementById(`supplier-name-display-${index}`);
+    var nameInput = document.getElementById(`supplier-name-input-${index}`);
+    var innDisplay = document.getElementById(`supplier-inn-display-${index}`);
+    var innInput = document.getElementById(`supplier-inn-input-${index}`);
+    var saveButton = document.getElementById(`save-supplier-${index}`);
+    var cancelButton = document.getElementById(`cancel-supplier-${index}`);
+    var editIcon = document.getElementById(`edit-name-icon-${index}`);
 
-// Функции для отмены редактирования
-function cancelEditing() {
-    var nameDisplay = document.getElementById('supplier-name-display');
-    var nameInput = document.getElementById('supplier-name-input');
-    var innDisplay = document.getElementById('supplier-inn-display');
-    var innInput = document.getElementById('supplier-inn-input');
-    var saveButton = document.getElementById('save-supplier');
-    var cancelButton = document.getElementById('cancel-supplier');
-    var editIcon = document.getElementById('edit-name-icon');
-
-    // Восстанавливаем исходное состояние
-    nameDisplay.style.display = 'inline';
-    nameInput.style.display = 'none';
-    innDisplay.style.display = 'inline';
-    innInput.style.display = 'none';
-
-    // Скрываем кнопки и возвращаем иконку редактирования
-    saveButton.style.display = 'none';
-    cancelButton.style.display = 'none';
-    editIcon.style.display = 'inline';
+    if (isEditing) {
+        // Включаем режим редактирования
+        nameDisplay.style.display = 'none';
+        nameInput.style.display = 'inline';
+        innDisplay.style.display = 'none';
+        innInput.style.display = 'inline';
+        editIcon.style.display = 'none';
+        saveButton.style.display = 'inline-block';
+        cancelButton.style.display = 'inline-block';
+        nameInput.focus();
+    } else {
+        // Выключаем режим редактирования
+        nameDisplay.style.display = 'inline';
+        nameInput.style.display = 'none';
+        innDisplay.style.display = 'inline';
+        innInput.style.display = 'none';
+        editIcon.style.display = 'inline';
+        saveButton.style.display = 'none';
+        cancelButton.style.display = 'none';
+    }
 }
 
-// Функции для сохранения редактирования
-function saveEditing() {
-    var newName = document.getElementById('supplier-name-input').value.trim();
-    var newInn = document.getElementById('supplier-inn-input').value.trim();
-    var nameDisplay = document.getElementById('supplier-name-display');
-    var innDisplay = document.getElementById('supplier-inn-display');
-    var dealId = getDealIdFromUrl();  // Извлекаем ID сделки из URL
+// Функция сохранения изменений
+function saveEditing(index) {
+    var newName = document.getElementById(`supplier-name-input-${index}`).value.trim();
+    var newInn = document.getElementById(`supplier-inn-input-${index}`).value.trim();
+    var nameDisplay = document.getElementById(`supplier-name-display-${index}`);
+    var innDisplay = document.getElementById(`supplier-inn-display-${index}`);
+    var dealId = getDealIdFromUrl();  // Предполагается, что эта функция у вас уже есть
 
-    // Проверка на пустое имя
+    // Валидация данных
     if (!newName) {
         Swal.fire({
             icon: 'warning',
@@ -304,22 +303,11 @@ function saveEditing() {
         return;
     }
 
-    // Проверка длины ИНН
-    if (newInn.length !== 10 && newInn.length !== 12) {
+    if (newInn.length !== 10 && newInn.length !== 12 || !/^\d+$/.test(newInn)) {
         Swal.fire({
             icon: 'warning',
             title: 'Ошибка!',
-            text: 'ИНН должен содержать 10 или 12 символов.',
-        });
-        return;
-    }
-
-    // Проверка, что ИНН состоит только из цифр
-    if (!/^\d+$/.test(newInn)) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Ошибка!',
-            text: 'ИНН должен содержать только цифры.',
+            text: 'ИНН должен содержать 10 или 12 цифр.',
         });
         return;
     }
@@ -328,10 +316,10 @@ function saveEditing() {
     nameDisplay.textContent = newName;
     innDisplay.textContent = newInn;
 
-    // Скрываем поля ввода и кнопки, возвращаем текст и иконку
-    cancelEditing();
+    // Выключаем режим редактирования
+    toggleEditMode(index, false);
 
-    // AJAX-запрос для сохранения изменений на сервере
+    // Отправляем данные на сервер
     $.ajax({
         url: '/crm/calculator/update-seller',
         method: 'POST',
@@ -347,7 +335,6 @@ function saveEditing() {
                 title: 'Успешно!',
                 text: response.message,
             });
-            console.log(response.message); // Выводим сообщение об успешном обновлении
         },
         error: function (xhr, status, error) {
             Swal.fire({
@@ -355,10 +342,10 @@ function saveEditing() {
                 title: 'Ошибка!',
                 text: 'Ошибка при обновлении данных продавца.',
             });
-            console.error('Ошибка при обновлении данных продавца:', xhr.responseText);
         }
     });
 }
+
 
 
 // Обработчик для клавиш ESC и Enter

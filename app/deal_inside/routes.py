@@ -30,7 +30,7 @@ def enter_into_deal(deal_id: int) -> render_template:
         # Получаем все связанные сделки по group_id, включая текущую сделку
         related_deals = Deal.query.filter_by(group_id=group_id).all()
     else:
-        logging.info(f"Group ID: None")
+        logging.info("Group ID: None")
         # Если group_id пуст, возвращаем только текущую сделку
         related_deals = [deal]
 

@@ -79,54 +79,6 @@
                     <p>{{ deal.product }}</p>
                 </div>
                 <div class="section">
-                    <h3>№ договора лизинга</h3>
-                    <p>{{ deal.dl_number }}</p>
-                </div>
-                <div class="section">
-                    <h3>Предмет лизинга</h3>
-                    <p>{{ leas_calc.item_name if leas_calc.item_name else '-' }}</p>
-                </div>
-                <div class="section">
-                    <h3>Стоимость предмета лизинга</h3>
-                    <p>{{ leas_calc.item_price_str + ' ₽' if leas_calc.item_price_str else '-' }}</p>
-                </div>
-                <div class="section">
-                    <h3>Аванс</h3>
-                    <p>{{ leas_calc.initial_payment_str + ' ₽' if leas_calc.initial_payment_str else '-' }}</p>
-                </div>
-                <div class="section">
-                    <h3>Срок лизинга</h3>
-                    <p>{{ (leas_calc.credit_term | string) + ' мес.' if leas_calc.credit_term else '-' }}</p>
-                </div>
-            </div>
-            <div class="right">
-                <div class="section">
-                    <h3>Клиент</h3>
-                    <p>Наименование: {{ deal.title }}</p>
-                    <p>ИНН: {{ deal.company_inn }}</p>
-                </div>
-                <div class="section">
-                    <h3 class="supplier-header" style="margin-bottom: 0">
-                        Поставщик
-                        <i class="fa-solid fa-pen fa-xs" id="edit-name-icon"></i>
-                        <button id="save-supplier" class="supplier-action-button" style="display:none;">Сохранить
-                        </button>
-                        <button id="cancel-supplier" class="supplier-action-button" style="display:none;">Отменить
-                        </button>
-                    </h3>
-                    <p>Наименование:
-                        <span id="supplier-name-display" class="supplier-display-text">{{ deal.seller_name }}</span>
-                        <input type="text" id="supplier-name-input" class="supplier-input-field"
-                               value="{{ deal.seller_name }}" maxlength="255">
-                    </p>
-                    <p>ИНН:
-                        <span id="supplier-inn-display" class="supplier-display-text">{{ deal.seller_inn }}</span>
-                        <input type="text" id="supplier-inn-input" class="supplier-input-field"
-                               value="{{ deal.seller_inn }}" maxlength="20">
-                    </p>
-                    <input type="hidden" id="supplier-info" placeholder="">
-                </div>
-                <div class="section">
                     <h3>Ответственный</h3>
                     <p>
                         <span id="current-created-by" data-user-id="{{ deal.created_by }}">{{ deal.created_by }}</span>
@@ -143,11 +95,82 @@
                         <!-- Сюда будет добавляться список пользователей и кнопки -->
                     </div>
                 </div>
+            </div>
+            <div class="right">
+                <div class="section">
+                    <h3>Клиент</h3>
+                    <p>Наименование: {{ deal.title }}</p>
+                    <p>ИНН: {{ deal.company_inn }}</p>
+                    <p>ОГРН: {{ deal.company_ogrn }}</p>
+                    <p>Адрес: {{ deal.company_address }}</p>
+                    <p>Телефон: {{ deal.company_phone }}</p>
+                    <p>Электронная почта: {{ deal.company_email }}</p>
+                    <p>Подписант: {{ deal.company_signer }}</p>
+                </div>
                 <script>
                     var suggestionsToken = "{{ suggestions_token }}";
                 </script>
             </div>
         </div>
+        {% for item in leas_calculators %}
+            <div class="deal-info">
+                <div class="left">
+                    <div class="section">
+                        <h3>№ договора лизинга</h3>
+                        <p>{{ item.dl_number }}</p> <!-- Поля из deals -->
+                    </div>
+                    <div class="section">
+                        <h3>Предмет лизинга</h3>
+                        <p>{{ item.leas_calc.item_name if item.leas_calc.item_name else '-' }}</p>
+                        <!-- Поля из leas_calc -->
+                    </div>
+                    <div class="section">
+                        <h3>Стоимость предмета лизинга</h3>
+                        <p>{{ item.leas_calc.item_price_str + ' ₽' if item.leas_calc.item_price_str else '-' }}</p>
+                    </div>
+                    <div class="section">
+                        <h3>Аванс</h3>
+                        <p>{{ item.leas_calc.initial_payment_str + ' ₽' if item.leas_calc.initial_payment_str else '-' }}</p>
+                    </div>
+                    <div class="section">
+                        <h3>Срок лизинга</h3>
+                        <p>{{ (item.leas_calc.credit_term | string) + ' мес.' if item.leas_calc.credit_term else '-' }}</p>
+                    </div>
+                </div>
+                <div class="right">
+                    <div class="section">
+                        <h3 class="supplier-header">
+                            Поставщик
+                            <i class="fa-solid fa-pen fa-xs" id="edit-name-icon-{{ loop.index }}"></i>
+                            <button id="save-supplier-{{ loop.index }}" class="supplier-action-button"
+                                    style="display:none;">
+                                Сохранить
+                            </button>
+                            <button id="cancel-supplier-{{ loop.index }}" class="supplier-action-button"
+                                    style="display:none;">
+                                Отменить
+                            </button>
+                        </h3>
+                        <p>Наименование:
+                            <span id="supplier-name-display-{{ loop.index }}">{{ item.leas_calc.seller.name }}</span>
+                            <input type="text" id="supplier-name-input-{{ loop.index }}"
+                                   value="{{ item.leas_calc.seller.name }}">
+                        </p>
+                        <p>ИНН:
+                            <span id="supplier-inn-display-{{ loop.index }}">{{ item.leas_calc.seller.inn }}</span>
+                            <input type="text" id="supplier-inn-input-{{ loop.index }}"
+                                   value="{{ item.leas_calc.seller.inn }}">
+                        </p>
+                    </div>
+                    <p>ОГРН: {{ item.leas_calc.seller.ogrn if item.leas_calc.seller.ogrn else '-' }}</p>
+                    <p>Адрес: {{ item.leas_calc.seller.address if item.leas_calc.seller.address else '-' }}</p>
+                    <p>Телефон: {{ item.leas_calc.seller.phone if item.leas_calc.seller.phone else '-' }}</p>
+                    <p>Электронная почта: {{ item.leas_calc.seller.email if item.leas_calc.seller.email else '-' }}</p>
+                    <p>Подписант: {{ item.leas_calc.seller.signer if item.leas_calc.seller.signer else '-' }}</p>
+                </div>
+            </div>
+        {% endfor %}
+
     </div>
     <div id="history" class="tab-content">
         <h2>История</h2>

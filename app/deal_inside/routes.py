@@ -15,15 +15,42 @@ from .. import socketio
 
 @deal_inside_bp.route("/<deal_id>", methods=["GET"])
 def enter_into_deal(deal_id: int) -> render_template:
+    # Находим сделку по deal_id
     deal: Deal = Deal.query.options(joinedload(Deal.leas_calculators)).get(deal_id)
-    if deal.leas_calculators:
-        leas_calc = deal.leas_calculators[0]
+
+    # Проверяем, что сделка найдена
+    if not deal:
+        return "Сделка не найдена", 404
+
+    # Получаем group_id сделки
+    group_id = deal.group_id
+
+    if group_id:
+        logging.info(f"Group ID: {group_id}")
+        # Получаем все связанные сделки по group_id, включая текущую сделку
+        related_deals = Deal.query.filter_by(group_id=group_id).all()
     else:
-        leas_calc = {}
+        logging.info(f"Group ID: None")
+        # Если group_id пуст, возвращаем только текущую сделку
+        related_deals = [deal]
+
+    # Собираем уникальные лизинговые калькуляторы, связанные с этими сделками
+    leas_calculators = []
+    for related_deal in related_deals:
+        for leas_calc in related_deal.leas_calculators:
+            leas_calc_with_deal_info = {
+                "leas_calc": leas_calc,
+                "dl_number": related_deal.dl_number,  # Поля из deals
+                "deal_title": related_deal.title,
+                "company_inn": related_deal.company_inn,
+                "created_by": related_deal.created_by,
+                "created_at": related_deal.created_at,
+            }
+            leas_calculators.append(leas_calc_with_deal_info)
     return render_template(
         "deal.html",
         deal=deal,
-        leas_calc=leas_calc,
+        leas_calculators=leas_calculators,  # Передаем список всех связанных лизингодателей с полями из deals
         deal_id=deal_id,
         suggestions_token=suggestions_token,
     )

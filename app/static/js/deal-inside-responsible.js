@@ -259,6 +259,16 @@ function toggleEditMode(index, isEditing) {
     var nameInput = document.getElementById(`supplier-name-input-${index}`);
     var innDisplay = document.getElementById(`supplier-inn-display-${index}`);
     var innInput = document.getElementById(`supplier-inn-input-${index}`);
+    var ogrnDisplay = document.getElementById(`supplier-ogrn-display-${index}`);
+    var ogrnInput = document.getElementById(`supplier-ogrn-input-${index}`);
+    var addressDisplay = document.getElementById(`supplier-address-display-${index}`);
+    var addressInput = document.getElementById(`supplier-address-input-${index}`);
+    var phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
+    var phoneInput = document.getElementById(`supplier-phone-input-${index}`);
+    var emailDisplay = document.getElementById(`supplier-email-display-${index}`);
+    var emailInput = document.getElementById(`supplier-email-input-${index}`);
+    var signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
+    var signerInput = document.getElementById(`supplier-signer-input-${index}`);
     var saveButton = document.getElementById(`save-supplier-${index}`);
     var cancelButton = document.getElementById(`cancel-supplier-${index}`);
     var editIcon = document.getElementById(`edit-name-icon-${index}`);
@@ -269,6 +279,16 @@ function toggleEditMode(index, isEditing) {
         nameInput.style.display = 'inline';
         innDisplay.style.display = 'none';
         innInput.style.display = 'inline';
+        ogrnDisplay.style.display = 'none';
+        ogrnInput.style.display = 'inline';
+        addressDisplay.style.display = 'none';
+        addressInput.style.display = 'inline';
+        phoneDisplay.style.display = 'none';
+        phoneInput.style.display = 'inline';
+        emailDisplay.style.display = 'none';
+        emailInput.style.display = 'inline';
+        signerDisplay.style.display = 'none';
+        signerInput.style.display = 'inline';
         editIcon.style.display = 'none';
         saveButton.style.display = 'inline-block';
         cancelButton.style.display = 'inline-block';
@@ -279,6 +299,16 @@ function toggleEditMode(index, isEditing) {
         nameInput.style.display = 'none';
         innDisplay.style.display = 'inline';
         innInput.style.display = 'none';
+        ogrnDisplay.style.display = 'inline';
+        ogrnInput.style.display = 'none';
+        addressDisplay.style.display = 'inline';
+        addressInput.style.display = 'none';
+        phoneDisplay.style.display = 'inline';
+        phoneInput.style.display = 'none';
+        emailDisplay.style.display = 'inline';
+        emailInput.style.display = 'none';
+        signerDisplay.style.display = 'inline';
+        signerInput.style.display = 'none';
         editIcon.style.display = 'inline';
         saveButton.style.display = 'none';
         cancelButton.style.display = 'none';
@@ -289,8 +319,18 @@ function toggleEditMode(index, isEditing) {
 function saveEditing(index) {
     var newName = document.getElementById(`supplier-name-input-${index}`).value.trim();
     var newInn = document.getElementById(`supplier-inn-input-${index}`).value.trim();
+    var newOgrn = document.getElementById(`supplier-ogrn-input-${index}`).value.trim();
+    var newAddress = document.getElementById(`supplier-address-input-${index}`).value.trim();
+    var newPhone = document.getElementById(`supplier-phone-input-${index}`).value.trim();
+    var newEmail = document.getElementById(`supplier-email-input-${index}`).value.trim();
+    var newSigner = document.getElementById(`supplier-signer-input-${index}`).value.trim();
     var nameDisplay = document.getElementById(`supplier-name-display-${index}`);
     var innDisplay = document.getElementById(`supplier-inn-display-${index}`);
+    var ogrnDisplay = document.getElementById(`supplier-ogrn-display-${index}`);
+    var addressDisplay = document.getElementById(`supplier-address-display-${index}`);
+    var phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
+    var emailDisplay = document.getElementById(`supplier-email-display-${index}`);
+    var signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
     var dealId = getDealIdFromUrl();  // Предполагается, что эта функция у вас уже есть
 
     // Валидация данных
@@ -315,6 +355,11 @@ function saveEditing(index) {
     // Обновляем отображаемые значения
     nameDisplay.textContent = newName;
     innDisplay.textContent = newInn;
+    ogrnDisplay.textContent = newOgrn;
+    addressDisplay.textContent = newAddress;
+    phoneDisplay.textContent = newPhone;
+    emailDisplay.textContent = newEmail;
+    signerDisplay.textContent = newSigner;
 
     // Выключаем режим редактирования
     toggleEditMode(index, false);
@@ -327,6 +372,11 @@ function saveEditing(index) {
         data: JSON.stringify({
             title: newName,
             inn: newInn,
+            ogrn: newOgrn,
+            address: newAddress,
+            phone: newPhone,
+            email: newEmail,
+            signer: newSigner,
             deal_id: dealId
         }),
         success: function (response) {
@@ -345,8 +395,6 @@ function saveEditing(index) {
         }
     });
 }
-
-
 
 // Обработчик для клавиш ESC и Enter
 function handleKeyEvents(event) {

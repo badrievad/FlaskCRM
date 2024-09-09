@@ -156,13 +156,34 @@
                             <input type="text" id="supplier-inn-input-{{ loop.index }}"
                                    value="{{ item.leas_calc.seller.inn }}" class="supplier-input-field">
                         </p>
+
+                        <p>ОГРН:
+                            <span id="supplier-ogrn-display-{{ loop.index }}">{{ item.leas_calc.seller.ogrn }}</span>
+                            <input type="text" id="supplier-ogrn-input-{{ loop.index }}"
+                                   value="{{ item.leas_calc.seller.ogrn }}" class="supplier-input-field">
+                        </p>
+                        <p>Адрес:
+                            <span id="supplier-address-display-{{ loop.index }}">{{ item.leas_calc.seller.address }}</span>
+                            <input type="text" id="supplier-address-input-{{ loop.index }}"
+                                   value="{{ item.leas_calc.seller.address }}" class="supplier-input-field">
+                        </p>
+                        <p>Телефон:
+                            <span id="supplier-phone-display-{{ loop.index }}">{{ item.leas_calc.seller.phone }}</span>
+                            <input type="text" id="supplier-phone-input-{{ loop.index }}"
+                                   value="{{ item.leas_calc.seller.phone }}" class="supplier-input-field">
+                        </p>
+                        <p>Электронная почта:
+                            <span id="supplier-email-display-{{ loop.index }}">{{ item.leas_calc.seller.email }}</span>
+                            <input type="text" id="supplier-email-input-{{ loop.index }}"
+                                   value="{{ item.leas_calc.seller.email }}" class="supplier-input-field">
+                        </p>
+                        <p>Подписант:
+                            <span id="supplier-signer-display-{{ loop.index }}">{{ item.leas_calc.seller.signer }}</span>
+                            <input type="text" id="supplier-signer-input-{{ loop.index }}"
+                                   value="{{ item.leas_calc.seller.signer }}" class="supplier-input-field">
+                        </p>
+                        <input type="hidden" id="supplier-info-{{ loop.index }}" placeholder="">
                     </div>
-                    <p>ОГРН: {{ item.leas_calc.seller.ogrn }}</p>
-                    <p>Адрес: {{ item.leas_calc.seller.address }}</p>
-                    <p>Телефон: {{ item.leas_calc.seller.phone }}</p>
-                    <p>Электронная почта: {{ item.leas_calc.seller.email }}</p>
-                    <p>Подписант: {{ item.leas_calc.seller.signer }}</p>
-                    <input type="hidden" id="supplier-info-{{ loop.index }}" placeholder="">
                 </div>
             </div>
         {% endfor %}
@@ -175,8 +196,17 @@
                     token: token,  // Используйте Jinja для вставки переменной
                     type: "PARTY",
                     onSelect: function (suggestion) {
+                        console.log(suggestion);
+
                         $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
                         $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
+                        $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
+                        $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.value);
+                        if (suggestion.data?.management?.name) {
+                            $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
+                        } else {
+                            $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
+                        }
                         $("#supplier-info-{{ loop.index }}").val(JSON.stringify(suggestion));
                     }
                 });
@@ -186,7 +216,20 @@
                     type: "PARTY",
                     onSelect: function (suggestion) {
                         $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
+                        $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
+                        $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.value);
                         $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+                        $("#supplier-info-{{ loop.index }}").val(JSON.stringify(suggestion));
+                    }
+                });
+
+                $("#supplier-ogrn-input-{{ loop.index }}").suggestions({
+                    token: token,  // Используйте Jinja для вставки переменной
+                    type: "PARTY",
+                    onSelect: function (suggestion) {
+                        $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
+                        $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+                        $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
                         $("#supplier-info-{{ loop.index }}").val(JSON.stringify(suggestion));
                     }
                 });

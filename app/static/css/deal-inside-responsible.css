@@ -145,7 +145,7 @@
     border-radius: 4px;
     padding: 5px;
     font-size: 14px;
-    width: 50% !important;
+    width: 70% !important;
     box-sizing: border-box;
 }
 
@@ -165,3 +165,16 @@
 .swal2-confirm, .swal2-cancel {
     font-family: 'Roboto', sans-serif;
 }
+
+.supplier-section {
+    display: grid;
+    grid-template-columns: 150px 1fr; /* Первая колонка для заголовков, вторая для полей */
+    align-items: center; /* Выравнивание по вертикали */
+    gap: 0 20px; /* Отступы между колонками и строками */
+    margin-bottom: 10px; /* Отступ снизу для каждой строки */
+}
+
+.supplier-section p {
+    margin: 0;
+}
+

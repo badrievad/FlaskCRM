@@ -110,7 +110,7 @@
             </div>
         </div>
         {% for item in leas_calculators %}
-            <div class="deal-info">
+            <div class="deal-info" data-id="{{ item.leas_calc.id }}" id="deal-section-{{ loop.index }}">
                 <div class="left">
                     <div class="section">
                         <h3>№ договора лизинга</h3>
@@ -150,31 +150,34 @@
                             <span>Наименование:</span>
                             <span id="supplier-name-display-{{ loop.index }}">{{ item.leas_calc.seller.name }}</span>
                             <input type="text" id="supplier-name-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.name }}" class="supplier-input-field">
+                                   value="{{ item.leas_calc.seller.name }}" class="supplier-input-field"
+                                   maxlength="255">
                         </div>
                         <div class="supplier-section">
                             <span>ИНН:</span>
                             <span id="supplier-inn-display-{{ loop.index }}">{{ item.leas_calc.seller.inn }}</span>
                             <input type="text" id="supplier-inn-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.inn }}" class="supplier-input-field">
+                                   value="{{ item.leas_calc.seller.inn }}" class="supplier-input-field" maxlength="20">
                         </div>
                         <div class="supplier-section">
                             <span>ОГРН:</span>
                             <span id="supplier-ogrn-display-{{ loop.index }}">{{ item.leas_calc.seller.ogrn }}</span>
                             <input type="text" id="supplier-ogrn-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.ogrn }}" class="supplier-input-field">
+                                   value="{{ item.leas_calc.seller.ogrn }}" class="supplier-input-field" maxlength="20">
                         </div>
                         <div class="supplier-section">
                             <span>Адрес:</span>
                             <span id="supplier-address-display-{{ loop.index }}">{{ item.leas_calc.seller.address }}</span>
                             <input type="text" id="supplier-address-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.address }}" class="supplier-input-field">
+                                   value="{{ item.leas_calc.seller.address }}" class="supplier-input-field"
+                                   maxlength="255">
                         </div>
                         <div class="supplier-section">
                             <span>Телефон:</span>
                             <span id="supplier-phone-display-{{ loop.index }}">{{ item.leas_calc.seller.phone }}</span>
                             <input type="text" id="supplier-phone-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.phone }}" class="supplier-input-field">
+                                   value="{{ item.leas_calc.seller.phone }}" class="supplier-input-field"
+                                   maxlength="20">
                         </div>
                         <div class="supplier-section">
                             <span>Электронная почта:</span>
@@ -186,10 +189,9 @@
                             <span>Подписант:</span>
                             <span id="supplier-signer-display-{{ loop.index }}">{{ item.leas_calc.seller.signer }}</span>
                             <input type="text" id="supplier-signer-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.signer }}" class="supplier-input-field">
+                                   value="{{ item.leas_calc.seller.signer }}" class="supplier-input-field"
+                                   maxlength="100">
                         </div>
-
-                        <input type="hidden" id="supplier-info-{{ loop.index }}" placeholder="">
                     </div>
                 </div>
             </div>
@@ -213,7 +215,6 @@
                         } else {
                             $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
                         }
-                        $("#supplier-info-{{ loop.index }}").val(JSON.stringify(suggestion));
                     }
                 });
 
@@ -230,7 +231,6 @@
                         } else {
                             $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
                         }
-                        $("#supplier-info-{{ loop.index }}").val(JSON.stringify(suggestion));
                     }
                 });
 
@@ -247,7 +247,6 @@
                         } else {
                             $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
                         }
-                        $("#supplier-info-{{ loop.index }}").val(JSON.stringify(suggestion));
                     }
                 });
             {% endfor %}

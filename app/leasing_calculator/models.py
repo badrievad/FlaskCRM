@@ -343,6 +343,7 @@ class Seller(db.Model):
     ogrn = db.Column(db.String(255), nullable=False, unique=True)
     address = db.Column(db.String(255), nullable=True)
     phone = db.Column(db.String(255), nullable=True)
+    email = db.Column(db.String(255), nullable=True)
     signer = db.Column(db.String(255), nullable=True)
 
     leas_calculator = relationship("LeasCalculator", back_populates="seller")

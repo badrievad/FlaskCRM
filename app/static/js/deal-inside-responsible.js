@@ -331,7 +331,7 @@ function saveEditing(index) {
     var phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
     var emailDisplay = document.getElementById(`supplier-email-display-${index}`);
     var signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
-    var dealId = getDealIdFromUrl();  // Предполагается, что эта функция у вас уже есть
+    var calcId = getCalcIdFromSection(index);
 
     // Валидация данных
     if (!newName) {
@@ -339,6 +339,7 @@ function saveEditing(index) {
             icon: 'warning',
             title: 'Ошибка!',
             text: 'Введите корректное наименование поставщика.',
+            confirmButtonColor: '#67a2d5',
         });
         return;
     }
@@ -348,6 +349,7 @@ function saveEditing(index) {
             icon: 'warning',
             title: 'Ошибка!',
             text: 'ИНН должен содержать 10 или 12 цифр.',
+            confirmButtonColor: '#67a2d5',
         });
         return;
     }
@@ -377,20 +379,38 @@ function saveEditing(index) {
             phone: newPhone,
             email: newEmail,
             signer: newSigner,
-            deal_id: dealId
+            calc_id: calcId
         }),
         success: function (response) {
             Swal.fire({
                 icon: 'success',
                 title: 'Успешно!',
-                text: response.message,
+                text: 'Данные продавца обновлены.',
+                showConfirmButton: false,
+                timer: 2000,
             });
         },
         error: function (xhr, status, error) {
+            // Обновляем значения полей, чтобы сделать их пустыми
+            nameDisplay.textContent = '';
+            innDisplay.textContent = '';
+            ogrnDisplay.textContent = '';
+            addressDisplay.textContent = '';
+            phoneDisplay.textContent = '';
+            emailDisplay.textContent = '';
+            signerDisplay.textContent = '';
+
+            document.getElementById(`supplier-ogrn-input-${index}`).value = '';
+            document.getElementById(`supplier-address-input-${index}`).value = '';
+            document.getElementById(`supplier-phone-input-${index}`).value = '';
+            document.getElementById(`supplier-email-input-${index}`).value = '';
+            document.getElementById(`supplier-signer-input-${index}`).value = '';
+
+            // Выводим сообщение об ошибке
             Swal.fire({
                 icon: 'error',
-                title: 'Ошибка!',
                 text: 'Ошибка при обновлении данных продавца.',
+                confirmButtonColor: '#67a2d5',
             });
         }
     });
@@ -405,14 +425,17 @@ function handleKeyEvents(event) {
     }
 }
 
-function getDealIdFromUrl() {
-    // Получаем путь URL
-    var path = window.location.pathname;
+function getCalcIdFromSection(index) {
+    // Получаем секцию по ID
+    const section = document.getElementById(`deal-section-${index}`);
 
-    // Разбиваем путь на сегменты и возвращаем последний элемент (ID)
-    var segments = path.split('/');
-    return segments[segments.length - 1];  // Возвращает ID (в вашем случае 613)
+    // Если секция найдена, получаем значение data-id
+    if (section) {
+        return section.dataset.id;
+    } else {
+        console.error(`Section with index ${index} not found`);
+        return null;
+    }
 }
-
 
 

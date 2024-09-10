@@ -357,9 +357,14 @@ def update_seller():
     # Получаем новое имя и ИНН из данных запроса
     new_name = data_validated.get_company_name or data.get("title")
     new_inn = data_validated.get_company_inn or data.get("inn")
-    deal_id = data.get("deal_id")
+    new_ogrn = data_validated.get_company_ogrn or data.get("ogrn")
+    new_address = data.get("address")
+    new_phone = data.get("phone")
+    new_email = data.get("email")
+    new_signer = data.get("signer")
+    calc_id = data.get("calc_id")
 
-    if not new_name or not new_inn or not deal_id:
+    if not new_name or not new_inn or not calc_id:
         return (
             jsonify({"error": "Invalid input: name, INN, and deal_id are required"}),
             400,
@@ -367,7 +372,14 @@ def update_seller():
 
     # Создаем или обновляем продавца и привязываем его к LeasCalculator
     response_data, status_code = create_or_update_seller_and_link_to_leas_calc(
-        new_name, new_inn, deal_id
+        new_name,
+        new_inn,
+        new_ogrn,
+        new_address,
+        new_phone,
+        new_email,
+        new_signer,
+        calc_id,
     )
 
     return jsonify(response_data), status_code

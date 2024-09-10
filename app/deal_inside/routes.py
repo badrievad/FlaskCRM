@@ -11,6 +11,7 @@ from .sql_queries import get_users_with_roles, update_deal_created_by
 from ..config import suggestions_token
 from ..deal.models import Deal
 from .. import socketio
+from ..leasing_calculator.models import Seller
 
 
 @deal_inside_bp.route("/<deal_id>", methods=["GET"])
@@ -111,3 +112,32 @@ def update_created_by(deal_id):
             f"Unexpected error occurred while updating deal_id {deal_id}: {str(e)}"
         )
         return jsonify({"error": "An unexpected error occurred"}), 500
+
+
+@deal_inside_bp.route("/check-seller-inn", methods=["POST"])
+def check_inn():
+    inn = request.json.get("inn")
+
+    if not inn:
+        return jsonify({"error": "ИНН не предоставлен"}), 400
+
+    # Поиск в базе данных
+    seller = Seller.query.filter_by(inn=inn).first()
+
+    if seller:
+        return (
+            jsonify(
+                {
+                    "name": seller.name,
+                    "inn": seller.inn,
+                    "ogrn": seller.ogrn,
+                    "address": seller.address,
+                    "phone": seller.phone,
+                    "email": seller.email,
+                    "signer": seller.signer,
+                }
+            ),
+            200,
+        )
+    else:
+        return jsonify({"message": "Продавец не найден в базе"}), 404

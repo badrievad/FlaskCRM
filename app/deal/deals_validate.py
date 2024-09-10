@@ -29,3 +29,12 @@ class DealsValidate:
         else:
             info: dict = {}
         return info.get("data", {}).get("inn", "")
+
+    @property
+    def get_company_ogrn(self) -> str:
+        info_json: json = self._data.get("info")
+        if info_json:
+            info: dict = json.loads(info_json)
+        else:
+            info: dict = {}
+        return info.get("data", {}).get("ogrn", "")

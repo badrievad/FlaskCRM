@@ -198,59 +198,142 @@
         {% endfor %}
         <script>
             var token = "{{ suggestions_token }}";
+
+            // Функция для проверки ИНН в базе данных
+            function checkInnInDatabase(inn) {
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: '/crm/deal/inside/check-seller-inn',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({inn: inn}),
+                        success: function (response) {
+                            resolve(response);  // Возвращаем данные из базы
+                        },
+                        error: function (xhr) {
+                            if (xhr.status === 404) {
+                                resolve(null);  // Если продавец не найден в базе
+                            } else {
+                                reject('Ошибка при проверке ИНН в базе');
+                            }
+                        }
+                    });
+                });
+            }
+
             // Инициализация подсказок для каждого поля
             {% for item in leas_calculators %}
                 $("#supplier-name-input-{{ loop.index }}").suggestions({
-                    token: token,  // Используйте Jinja для вставки переменной
+                    token: token,
                     type: "PARTY",
                     onSelect: function (suggestion) {
-                        console.log(suggestion);
+                        var inn = suggestion.data.inn;
 
-                        $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
-                        $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
-                        $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
-                        $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
-                        if (suggestion.data?.management?.name) {
-                            $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
-                        } else {
-                            $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
-                        }
+                        // Проверяем ИНН в базе данных
+                        checkInnInDatabase(inn).then(function (seller) {
+                            if (seller) {
+                                // Если продавец найден в базе, используем его данные
+                                $("#supplier-name-input-{{ loop.index }}").val(seller.name);
+                                $("#supplier-inn-input-{{ loop.index }}").val(seller.inn);
+                                $("#supplier-ogrn-input-{{ loop.index }}").val(seller.ogrn);
+                                $("#supplier-address-input-{{ loop.index }}").val(seller.address);
+                                $("#supplier-phone-input-{{ loop.index }}").val(seller.phone);
+                                $("#supplier-email-input-{{ loop.index }}").val(seller.email);
+                                $("#supplier-signer-input-{{ loop.index }}").val(seller.signer);
+                            } else {
+                                // Если продавец не найден в базе, используем данные Dadata
+                                $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+                                $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
+                                $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
+                                $("#supplier-phone-input-{{ loop.index }}").val('');
+                                $("#supplier-email-input-{{ loop.index }}").val('');
+                                $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
+                                if (suggestion.data?.management?.name) {
+                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
+                                } else {
+                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
+                                }
+                            }
+                        }).catch(function (error) {
+                            console.error('Ошибка при проверке ИНН в базе данных:', error);
+                        });
                     }
                 });
 
+                // Для ИНН
                 $("#supplier-inn-input-{{ loop.index }}").suggestions({
-                    token: token,  // Используйте Jinja для вставки переменной
+                    token: token,
                     type: "PARTY",
                     onSelect: function (suggestion) {
-                        $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
-                        $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
-                        $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
-                        $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
-                        if (suggestion.data?.management?.name) {
-                            $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
-                        } else {
-                            $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
-                        }
+                        var inn = suggestion.data.inn;
+
+                        // Проверяем ИНН в базе данных
+                        checkInnInDatabase(inn).then(function (seller) {
+                            if (seller) {
+                                // Если продавец найден в базе, используем его данные
+                                $("#supplier-name-input-{{ loop.index }}").val(seller.name);
+                                $("#supplier-inn-input-{{ loop.index }}").val(seller.inn);
+                                $("#supplier-ogrn-input-{{ loop.index }}").val(seller.ogrn);
+                                $("#supplier-phone-input-{{ loop.index }}").val(seller.phone);
+                                $("#supplier-email-input-{{ loop.index }}").val(seller.email);
+                                $("#supplier-address-input-{{ loop.index }}").val(seller.address);
+                                $("#supplier-signer-input-{{ loop.index }}").val(seller.signer);
+                            } else {
+                                // Если продавец не найден в базе, используем данные Dadata
+                                $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+                                $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
+                                $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
+                                $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
+                                if (suggestion.data?.management?.name) {
+                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
+                                } else {
+                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
+                                }
+                            }
+                        }).catch(function (error) {
+                            console.error('Ошибка при проверке ИНН в базе данных:', error);
+                        });
                     }
                 });
 
+                // Для ОГРН
                 $("#supplier-ogrn-input-{{ loop.index }}").suggestions({
-                    token: token,  // Используйте Jinja для вставки переменной
+                    token: token,
                     type: "PARTY",
                     onSelect: function (suggestion) {
-                        $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
-                        $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
-                        $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
-                        $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
-                        if (suggestion.data?.management?.name) {
-                            $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
-                        } else {
-                            $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
-                        }
+                        var inn = suggestion.data.inn;
+
+                        // Проверяем ОГРН в базе данных
+                        checkInnInDatabase(inn).then(function (seller) {  // Используем ту же функцию для проверки ОГРН
+                            if (seller) {
+                                // Если продавец найден в базе, используем его данные
+                                $("#supplier-name-input-{{ loop.index }}").val(seller.name);
+                                $("#supplier-inn-input-{{ loop.index }}").val(seller.inn);
+                                $("#supplier-ogrn-input-{{ loop.index }}").val(seller.ogrn);
+                                $("#supplier-phone-input-{{ loop.index }}").val(seller.phone);
+                                $("#supplier-email-input-{{ loop.index }}").val(seller.email);
+                                $("#supplier-address-input-{{ loop.index }}").val(seller.address);
+                                $("#supplier-signer-input-{{ loop.index }}").val(seller.signer);
+                            } else {
+                                // Если продавец не найден в базе, используем данные Dadata
+                                $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+                                $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
+                                $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
+                                $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
+                                if (suggestion.data?.management?.name) {
+                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
+                                } else {
+                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
+                                }
+                            }
+                        }).catch(function (error) {
+                            console.error('Ошибка при проверке ОГРН в базе данных:', error);
+                        });
                     }
                 });
             {% endfor %}
         </script>
+
     </div>
     <div id="history" class="tab-content">
         <h2>История</h2>

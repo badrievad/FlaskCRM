@@ -215,7 +215,7 @@ function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
     // Находим строку таблицы по calcId
     var row = document.querySelector(`tr[data-id="${calcId}"]`);
     if (row) {
-        // Обновляем имя предмета
+        // Сохраняем dealText в атрибуте данных строки таблицы
         var itemNameElement = row.querySelector('.item-name');
         if (itemNameElement) {
             itemNameElement.innerText = updatedData.item_name;
@@ -248,7 +248,7 @@ function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
 
                 // Создаем новый тултип для fa-link
                 tippy(dealIconElement, {
-                    content: 'КП привязан к сделке',
+                    content: 'КП привязан к сделке: ' + dealText.replace("(КП подвязано)", ""),
                     placement: 'top',
                 });
 
@@ -268,19 +268,21 @@ function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
 
         // Обновляем атрибут onclick в строке
         row.setAttribute('onclick', `openModal('${updatedData.item_name}', '${updatedData.date_ru}', '${updatedData.item_price}', '${updatedData.item_type}', '${dealText}', '${calcId}', '${userFullName}', '${dealId}')`);
+        row.setAttribute('data-deal-text', dealText.replace("(КП подвязано)", ""));
     }
 }
 
 
 // Инициализация тултипов при загрузке страницы
 function initializeTooltips() {
-    // Используем общий селектор для всех иконок, чтобы привязать тултипы при загрузке страницы
     const dealIconElements = document.querySelectorAll('i.fa-link, i.fa-unlink');
 
     dealIconElements.forEach(dealIconElement => {
+        var dealText = dealIconElement.closest('tr').getAttribute('data-deal-text') || '';
+
         if (dealIconElement.id === 'fa-link') {
             tippy(dealIconElement, {
-                content: 'КП привязано к сделке',
+                content: 'КП привязан к сделке: ' + dealText,
                 placement: 'top',
             });
         } else if (dealIconElement.id === 'fa-unlink') {

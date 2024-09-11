@@ -906,6 +906,7 @@
             <tbody id="calc-list-body">
             {% for calc in calc_list %}
                 <tr data-id="{{ calc.id }}"
+                    data-deal-text="ДЛ {{ calc.deal.dl_number }} | {{ calc.deal.title }}"
                     onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}', '{{ calc.item_price_str }}', '{{ calc.item_type }}', 'ДЛ {{ calc.deal.dl_number }} | {{ calc.deal.title }}', '{{ calc.id }}', '{{ user_fullname }}', '{{ calc.deal_id }}')">
                     <td>{{ loop.index }}</td>
                     <td class="item-name">{{ calc.item_name }}</td>
@@ -1309,7 +1310,7 @@
 
         newRow.setAttribute('data-id', calculation.id);
         newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "ДЛ |", "${calculation.id}", "{{ user_fullname }}", "")`);
-
+        newRow.setAttribute('data-deal-text', "");
         var dealIcon = calculation.deal_id
             ? '<i class="fa-solid fa-link" id="fa-link"></i>'
             : '<i class="fa-solid fa-unlink" id="fa-unlink"></i>'; // Иконки с меньшим размером

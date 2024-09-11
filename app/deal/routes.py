@@ -13,6 +13,7 @@ from .deals_validate import DealsValidate
 from .work_with_folders import CompanyFolderAPI
 
 from ..deal.models import Deal
+from ..leasing_calculator.models import LeasCalculator
 from ..user.auth_utils import _tester_required
 from ..user.models import User
 from ..config import suggestions_token
@@ -397,6 +398,7 @@ def get_deals_active_for_bind() -> jsonify:
             .order_by(desc(Deal.created_at))
             .all()
         )
+
     return jsonify(
         {
             "deals": [
@@ -408,6 +410,11 @@ def get_deals_active_for_bind() -> jsonify:
                     "company_inn": deal.company_inn,
                     "created_by": deal.created_by,
                     "created_at": deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
+                    "leas_calc": (
+                        "(КП подвязано)"
+                        if LeasCalculator.query.filter_by(deal_id=deal.id).first()
+                        else ""
+                    ),
                 }
                 for deal in active_deals
             ],

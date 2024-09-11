@@ -23,6 +23,15 @@ def update_calculation_service(calc_id, data):
         deal = calc.deal
         deal_id = data.get("deal_id")
 
+        updated_data = {
+            "id": calc.id,
+            "item_name": calc.item_name,
+            "item_price": calc.item_price_str,
+            "item_type": calc.item_type,
+            "date_ru": calc.date_ru,
+            "title": deal.title if deal else "",
+        }
+
         if deal_id in [None, "", "-"]:
             logging.info(
                 f"Deal_id: {deal_id}. Detaching offer from deal or deal not selected"
@@ -35,12 +44,26 @@ def update_calculation_service(calc_id, data):
             logging.info(f"Number of linked calculators: {offers_count}")
 
             if offers_count >= deals_count:
-                return {
-                    "success": False,
-                    "message": f"Невозможно привязать КП к сделке. Уже привязано: {offers_count}. "
-                    f"Можно привязать до: {deals_count}",
-                    "status_code": 400,
-                }
+                if int(deal.id) == int(deal_id):
+                    logging.info(f"Deal {deal.id} is already linked to calculator")
+                    for key, value in data.items():
+                        setattr(calc, key, None if value in ["-", "", None] else value)
+
+                    db.session.commit()
+
+                    return {
+                        "success": True,
+                        "message": "Изменения успешно сохранены",
+                        "data": updated_data,
+                        "status_code": 200,
+                    }
+                else:
+                    return {
+                        "success": False,
+                        "message": f"Невозможно привязать КП к сделке. Уже привязано: {offers_count}. "
+                        f"Можно привязать до: {deals_count}",
+                        "status_code": 400,
+                    }
 
         for key, value in data.items():
             setattr(calc, key, None if value in ["-", "", None] else value)
@@ -55,15 +78,6 @@ def update_calculation_service(calc_id, data):
 
         #  Сохраняем КП и расчет в папке сделки
         folder_api.copy_commercial_offer_to_deal(deal_id, path_to_xlsx, path_to_pdf)
-
-        updated_data = {
-            "id": calc.id,
-            "item_name": calc.item_name,
-            "item_price": calc.item_price_str,
-            "item_type": calc.item_type,
-            "date_ru": calc.date_ru,
-            "title": deal.title if deal else "",
-        }
 
         return {
             "success": True,

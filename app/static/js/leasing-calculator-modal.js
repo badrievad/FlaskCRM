@@ -25,7 +25,10 @@ function updateSelectElement(deals, selectElementId, dealId) {
     deals.forEach(deal => {
         var option = document.createElement("option");
         option.value = deal.id;
-        option.text = "ДЛ " + deal.dl_number + " | " + deal.title; // Используйте поле, которое хотите отобразить
+        // Используем тернарный оператор для проверки наличия leas_calc
+        option.text = deal.leas_calc ?
+            "ДЛ " + deal.dl_number + " | " + deal.title + " " + deal.leas_calc :
+            "!ДЛ " + deal.dl_number + " | " + deal.title + " " + deal.leas_calc;
 
         // Если option.value равно переданному dealId, делаем его selected
         if (option.value == dealId) {
@@ -242,7 +245,6 @@ function updateTableRow(calcId, updatedData, userFullName, dealId, dealText) {
                 // Если есть dealId, используем иконку fa-link
                 dealIconElement.className = 'fa-solid fa-link';
                 dealIconElement.id = 'fa-link'; // Меняем id на fa-link
-                showInfo("", "КП успешно добавлено в сделку");
 
                 // Создаем новый тултип для fa-link
                 tippy(dealIconElement, {

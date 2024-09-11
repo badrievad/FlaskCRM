@@ -137,8 +137,10 @@
                     <div class="section">
                         <h3 class="supplier-header">
                             Поставщик
-                            <i class="fa-solid fa-pen fa-xs edit-name-icon" id="edit-name-icon-{{ loop.index }}"
-                               data-index="{{ loop.index }}" style="font-size: 12px"></i>
+                            {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                                <i class="fa-solid fa-pen fa-xs edit-name-icon" id="edit-name-icon-{{ loop.index }}"
+                                   data-index="{{ loop.index }}" style="font-size: 12px"></i>
+                            {% endif %}
                             <button id="save-supplier-{{ loop.index }}" class="supplier-action-button save-supplier"
                                     style="display:none;" data-index="{{ loop.index }}">Сохранить
                             </button>

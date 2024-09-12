@@ -128,6 +128,8 @@ body {
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 5px;
+    position: relative;
+    z-index: 1; /* Для правильной работы с другими элементами */
 }
 
 .deal-info .left,
@@ -145,4 +147,23 @@ body {
 
 .deal-info .section p {
     margin: 5px 0;
+}
+
+.icon-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    z-index: 2; /* Поднимаем иконку над другими элементами */
+}
+
+.remove-section-icon {
+    color: #858484;
+    font-size: 18px;
+    transition: color 0.3s ease; /* Плавный переход цвета */
+}
+
+.remove-section-icon:hover {
+    color: #6c6c6c; /* Цвет при наведении */
+    transition: color 0.3s ease; /* Плавный переход цвета */
 }

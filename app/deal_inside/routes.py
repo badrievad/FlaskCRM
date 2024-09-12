@@ -11,6 +11,7 @@ from .sql_queries import (
     get_users_with_roles,
     update_deal_created_by,
     delete_seller_by_calc_id,
+    delete_calculator_section,
 )
 from ..config import suggestions_token
 from ..deal.models import Deal
@@ -168,6 +169,38 @@ def delete_seller():
                 {
                     "success": False,
                     "message": "Ошибка при удалении поставщика",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )
+
+
+@deal_inside_bp.route("/delete-section", methods=["POST"])
+def delete_section():
+    try:
+        # Получаем данные из запроса
+        data = request.get_json()
+        calc_id = data.get("calc_id")
+
+        # Проверяем, что calc_id передан
+        if not calc_id:
+            return jsonify({"success": False, "message": "calc_id не передан"}), 400
+
+        # Вызов функции для удаления секции
+        success, message = delete_calculator_section(calc_id)
+
+        if success:
+            return jsonify({"success": True, "message": message}), 200
+        else:
+            return jsonify({"success": False, "message": message}), 404
+
+    except Exception as e:
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Ошибка при удалении секции",
                     "error": str(e),
                 }
             ),

@@ -111,6 +111,11 @@
         </div>
         {% for item in leas_calculators %}
             <div class="deal-info" data-id="{{ item.leas_calc.id }}" id="deal-section-{{ loop.index }}">
+                <div class="icon-container">
+                    <i class="fa-solid fa-circle-xmark remove-section-icon" id="remove-section-icon-{{ loop.index }}"
+                       data-index="{{ loop.index }}" data-id="{{ item.leas_calc.id }}" style="font-size: 25px"
+                       data-dl-number="{{ item.dl_number }}"></i>
+                </div>
                 <div class="left">
                     <div class="section">
                         <h3>№ договора лизинга</h3>
@@ -420,5 +425,6 @@
 <!-- Scripts -->
 <script src="{{ url_for('crm.static', filename='js/deal-inside-responsible.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/deal-inside-delete-seller.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/deal-inside-delete-group.js') }}"></script>
 </body>
 </html>

@@ -71,3 +71,30 @@ def delete_seller_by_calc_id(calc_id):
         db.session.rollback()
         logging.error(f"Ошибка при удалении продавца для calc_id {calc_id}: {str(e)}")
         return False, str(e)
+
+
+def delete_calculator_section(calc_id):
+    try:
+        # Находим запись LeasCalculator по calc_id
+        calculator = LeasCalculator.query.get(calc_id)
+
+        if not calculator:
+            return False, "Запись не найдена"
+
+        # Находим сделку, связанную с калькулятором
+        deal = Deal.query.filter_by(id=calculator.deal_id).first()
+
+        if not deal:
+            return False, "Сделка, связанная с калькулятором, не найдена"
+
+        # Обнуляем deal_id у калькулятора и group_id у сделки
+        calculator.deal_id = None
+        deal.group_id = None
+
+        db.session.commit()
+
+        return True, "Договор успешно отвязан от сделки"
+
+    except Exception as e:
+        db.session.rollback()  # Откат транзакции в случае ошибки
+        return False, f"Ошибка при отвязке секции: {str(e)}"

@@ -108,6 +108,19 @@
     color: #0056b3;
 }
 
+/* Иконка редактирования */
+.edit-delete-icon {
+    color: #7a3c3c;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    font-size: 18px;
+}
+
+.edit-delete-icon:hover {
+    color: #4b2626;
+}
+
+
 /* Стили для кнопок действий */
 .supplier-action-button {
     padding: 10px 10px;

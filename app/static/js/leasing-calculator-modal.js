@@ -188,12 +188,20 @@ function saveChanges(userFullName) {
                     if (responseData.success) {
                         updateTableRow(calcId, responseData.data, userFullName, data.deal_id, data.deal_text);
                         closeModal(); // Закрываем модальное окно после сохранения
-                        Swal.fire({
-                            title: 'Обновлено!',
-                            text: 'Данные успешно обновлены',
-                            icon: 'success',
-                            timer: 1000,
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: "top-end",
                             showConfirmButton: false,
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.onmouseenter = Swal.stopTimer;
+                                toast.onmouseleave = Swal.resumeTimer;
+                            }
+                        });
+                        Toast.fire({
+                            icon: "success",
+                            title: "Данные успешно обновлены."
                         });
                     } else {
                         showError(responseData.message, "Ошибка сохранения изменений:");

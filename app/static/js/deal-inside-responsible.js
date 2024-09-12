@@ -272,6 +272,7 @@ function toggleEditMode(index, isEditing) {
     var saveButton = document.getElementById(`save-supplier-${index}`);
     var cancelButton = document.getElementById(`cancel-supplier-${index}`);
     var editIcon = document.getElementById(`edit-name-icon-${index}`);
+    var deleteIcon = document.getElementById(`edit-delete-icon-${index}`);
 
     if (isEditing) {
         // Включаем режим редактирования
@@ -290,6 +291,9 @@ function toggleEditMode(index, isEditing) {
         signerDisplay.style.display = 'none';
         signerInput.style.display = 'inline';
         editIcon.style.display = 'none';
+        if (deleteIcon) {  // Проверяем, существует ли элемент
+            deleteIcon.style.display = 'none';  // Скрыть
+        }
         saveButton.style.display = 'inline-block';
         cancelButton.style.display = 'inline-block';
         nameInput.focus();
@@ -310,6 +314,9 @@ function toggleEditMode(index, isEditing) {
         signerDisplay.style.display = 'inline';
         signerInput.style.display = 'none';
         editIcon.style.display = 'inline';
+        if (deleteIcon) {  // Проверяем, существует ли элемент
+            deleteIcon.style.display = 'inline';  // Скрыть
+        }
         saveButton.style.display = 'none';
         cancelButton.style.display = 'none';
     }
@@ -382,13 +389,37 @@ function saveEditing(index) {
             calc_id: calcId
         }),
         success: function (response) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Успешно!',
-                text: 'Данные продавца обновлены.',
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
                 showConfirmButton: false,
                 timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
             });
+            Toast.fire({
+                icon: "success",
+                title: "Данные продавца обновлены."
+            });
+
+            // Проверяем, существует ли иконка удаления
+            var deleteIcon = document.getElementById(`edit-delete-icon-${index}`);
+            if (!deleteIcon) {
+                // Создаем новую иконку удаления, если её нет
+                deleteIcon = document.createElement('i');
+                deleteIcon.classList.add('fa-solid', 'fa-xmark', 'edit-delete-icon');
+                deleteIcon.id = `edit-delete-icon-${index}`;
+                deleteIcon.setAttribute('data-index', index);
+
+                // Добавляем иконку в нужное место в DOM
+                var parentElement = document.getElementById(`edit-name-icon-${index}`).parentElement;
+                if (parentElement) {
+                    parentElement.appendChild(deleteIcon);
+                }
+            }
         },
         error: function (xhr, status, error) {
             // Обновляем значения полей, чтобы сделать их пустыми
@@ -416,15 +447,6 @@ function saveEditing(index) {
     });
 }
 
-// Обработчик для клавиш ESC и Enter
-function handleKeyEvents(event) {
-    if (event.key === 'Escape') {
-        cancelEditing();
-    } else if (event.key === 'Enter') {
-        saveEditing();
-    }
-}
-
 function getCalcIdFromSection(index) {
     // Получаем секцию по ID
     const section = document.getElementById(`deal-section-${index}`);
@@ -437,5 +459,3 @@ function getCalcIdFromSection(index) {
         return null;
     }
 }
-
-

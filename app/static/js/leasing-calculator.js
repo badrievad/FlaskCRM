@@ -1102,13 +1102,21 @@ document.addEventListener('DOMContentLoaded', function () {
             updateCostInRubles();
         }
         closeModal();
-        Swal.fire({
-            title: 'Скопировано!',
-            text: 'Данные из предыдущего КП были успешно скопированы',
-            icon: 'success',
-            timer: 1000,
-            showConfirmButton: false,
-        });
+        const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Данные из предыдущего КП были успешно скопированы."
+            });
     }
 
     function simpleScrollTest() {

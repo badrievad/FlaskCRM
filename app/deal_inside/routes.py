@@ -7,7 +7,11 @@ from flask import (
     render_template,
 )
 from logger import logging
-from .sql_queries import get_users_with_roles, update_deal_created_by
+from .sql_queries import (
+    get_users_with_roles,
+    update_deal_created_by,
+    delete_seller_by_calc_id,
+)
 from ..config import suggestions_token
 from ..deal.models import Deal
 from .. import socketio
@@ -141,3 +145,31 @@ def check_inn():
         )
     else:
         return jsonify({"message": "Продавец не найден в базе"}), 404
+
+
+@deal_inside_bp.route("/delete-seller", methods=["POST"])
+def delete_seller():
+    try:
+        data = request.get_json()
+        calc_id = data.get("calc_id")
+
+        # Вызываем сервисную функцию для удаления seller_id
+        success, message = delete_seller_by_calc_id(calc_id)
+
+        if not success:
+            return jsonify({"success": False, "message": message}), 404
+
+        return jsonify({"success": True, "message": message}), 200
+
+    except Exception as e:
+        logging.exception(f"Ошибка при удалении продавца: {str(e)}")
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "Ошибка при удалении поставщика",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )

@@ -139,7 +139,13 @@
                             Поставщик
                             {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
                                 <i class="fa-solid fa-pen fa-xs edit-name-icon" id="edit-name-icon-{{ loop.index }}"
-                                   data-index="{{ loop.index }}" style="font-size: 12px"></i>
+                                   data-index="{{ loop.index }}" style="font-size: 14px"
+                                   data-leas-calc-id="{{ item.leas_calc.id }}"></i>
+                            {% endif %}
+                            {% if (current_user.role in ['admin'] or current_user.fullname == deal.created_by) and item.leas_calc.seller_id is not none %}
+                                <i class="fa-solid fa-xmark edit-delete-icon" id="edit-delete-icon-{{ loop.index }}"
+                                   data-index="{{ loop.index }}"
+                                   data-leas-calc-id="{{ item.leas_calc.id }}"></i>
                             {% endif %}
                             <button id="save-supplier-{{ loop.index }}" class="supplier-action-button save-supplier"
                                     style="display:none;" data-index="{{ loop.index }}">Сохранить
@@ -413,5 +419,6 @@
 
 <!-- Scripts -->
 <script src="{{ url_for('crm.static', filename='js/deal-inside-responsible.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/deal-inside-delete-seller.js') }}"></script>
 </body>
 </html>

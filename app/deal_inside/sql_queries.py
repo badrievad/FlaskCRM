@@ -1,6 +1,8 @@
 from .. import db
 from ..deal.models import Deal
+from ..leasing_calculator.models import LeasCalculator
 from ..user.models import User
+from logger import logging
 
 
 def get_users_with_roles(roles, current_user_id):
@@ -48,3 +50,24 @@ def update_deal_created_by(deal_id, new_created_by):
         except Exception as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
             return None, str(e)
+
+
+def delete_seller_by_calc_id(calc_id):
+    try:
+        # Найти КП по calc_id
+        calculator = LeasCalculator.query.get(calc_id)
+
+        if not calculator:
+            return False, "КП не найдено"
+
+        # Убираем seller_id
+        calculator.seller_id = None
+
+        db.session.commit()
+
+        return True, "Поставщик удален"
+
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Ошибка при удалении продавца для calc_id {calc_id}: {str(e)}")
+        return False, str(e)

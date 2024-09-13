@@ -109,103 +109,130 @@
                 </div>
             </div>
         </div>
-        {% for item in leas_calculators %}
-            <div class="deal-info" data-id="{{ item.leas_calc.id }}" id="deal-section-{{ loop.index }}">
+
+        {% for item in deals_info %}
+            <div class="deal-info" data-id="{{ item.leas_calc.id if item.leas_calc else '' }}"
+                 id="deal-section-{{ loop.index }}">
                 <div class="icon-container">
-                    <i class="fa-solid fa-circle-xmark remove-section-icon" id="remove-section-icon-{{ loop.index }}"
-                       data-index="{{ loop.index }}" data-id="{{ item.leas_calc.id }}" style="font-size: 25px"
-                       data-dl-number="{{ item.dl_number }}"></i>
+                    {% if (current_user.role in ['admin'] or current_user.fullname == deal.created_by) and item.dl_number != deal.dl_number %}
+                        <i class="fa-solid fa-circle-xmark remove-section-icon"
+                           id="remove-section-icon-{{ loop.index }}"
+                           data-index="{{ loop.index }}" data-id="{{ item.leas_calc.id }}" style="font-size: 25px"
+                           data-dl-number="{{ item.dl_number }}"></i>
+                    {% endif %}
                 </div>
                 <div class="left">
                     <div class="section">
                         <h3>№ договора лизинга</h3>
                         <p>{{ item.dl_number }}</p>
                     </div>
-                    <div class="section">
-                        <h3>Предмет лизинга</h3>
-                        <p>{{ item.leas_calc.item_name }}</p>
-                    </div>
-                    <div class="section">
-                        <h3>Стоимость предмета лизинга</h3>
-                        <p>{{ item.leas_calc.item_price_str + ' ₽' }}</p>
-                    </div>
-                    <div class="section">
-                        <h3>Аванс</h3>
-                        <p>{{ item.leas_calc.initial_payment_str + ' ₽' }}</p>
-                    </div>
-                    <div class="section">
-                        <h3>Срок лизинга</h3>
-                        <p>{{ (item.leas_calc.credit_term | string) + ' мес.' }}</p>
-                    </div>
+
+                    {% if item.leas_calc %}
+                        <div class="section">
+                            <h3>Предмет лизинга</h3>
+                            <p>{{ item.leas_calc.item_name }}</p>
+                        </div>
+                        <div class="section">
+                            <h3>Стоимость предмета лизинга</h3>
+                            <p>{{ item.leas_calc.item_price_str + ' ₽' }}</p>
+                        </div>
+                        <div class="section">
+                            <h3>Аванс</h3>
+                            <p>{{ item.leas_calc.initial_payment_str + ' ₽' }}</p>
+                        </div>
+                        <div class="section">
+                            <h3>Срок лизинга</h3>
+                            <p>{{ (item.leas_calc.credit_term | string) + ' мес.' }}</p>
+                        </div>
+                    {% else %}
+                        <div class="section">
+                            <p><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #cc8985;"></i> К
+                                этому договору еще не привязан КП.</p>
+                            <!-- Кнопка для привязки КП -->
+                            {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                                <button class="attach-kp-button"
+                                        onclick="location.href='http://dev-lkmb/crm/calculator'">
+                                    <i class="fa-solid fa-paperclip"></i> Привязать КП
+                                </button>
+                            {% endif %}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="right">
-                    <div class="section">
-                        <h3 class="supplier-header">
-                            Поставщик
-                            {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
-                                <i class="fa-solid fa-pen fa-xs edit-name-icon" id="edit-name-icon-{{ loop.index }}"
-                                   data-index="{{ loop.index }}" style="font-size: 14px"
-                                   data-leas-calc-id="{{ item.leas_calc.id }}"></i>
-                            {% endif %}
-                            {% if (current_user.role in ['admin'] or current_user.fullname == deal.created_by) and item.leas_calc.seller_id is not none %}
-                                <i class="fa-solid fa-xmark edit-delete-icon" id="edit-delete-icon-{{ loop.index }}"
-                                   data-index="{{ loop.index }}"
-                                   data-leas-calc-id="{{ item.leas_calc.id }}"></i>
-                            {% endif %}
-                            <button id="save-supplier-{{ loop.index }}" class="supplier-action-button save-supplier"
-                                    style="display:none;" data-index="{{ loop.index }}">Сохранить
-                            </button>
-                            <button id="cancel-supplier-{{ loop.index }}" class="supplier-action-button cancel-supplier"
-                                    style="display:none;" data-index="{{ loop.index }}">Отменить
-                            </button>
-                        </h3>
-                        <div class="supplier-section">
-                            <span>Наименование:</span>
-                            <span id="supplier-name-display-{{ loop.index }}">{{ item.leas_calc.seller.name }}</span>
-                            <input type="text" id="supplier-name-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.name }}" class="supplier-input-field"
-                                   maxlength="255">
+                    {% if item.leas_calc %}
+                        <div class="section">
+                            <h3 class="supplier-header">
+                                Поставщик
+                                {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                                    <i class="fa-solid fa-pen fa-xs edit-name-icon" id="edit-name-icon-{{ loop.index }}"
+                                       data-index="{{ loop.index }}" style="font-size: 14px"
+                                       data-leas-calc-id="{{ item.leas_calc.id }}"></i>
+                                {% endif %}
+                                {% if (current_user.role in ['admin'] or current_user.fullname == deal.created_by) and item.leas_calc.seller_id %}
+                                    <i class="fa-solid fa-xmark edit-delete-icon" id="edit-delete-icon-{{ loop.index }}"
+                                       data-index="{{ loop.index }}"
+                                       data-leas-calc-id="{{ item.leas_calc.id }}"></i>
+                                {% endif %}
+                                <button id="save-supplier-{{ loop.index }}" class="supplier-action-button save-supplier"
+                                        style="display:none;" data-index="{{ loop.index }}">Сохранить
+                                </button>
+                                <button id="cancel-supplier-{{ loop.index }}"
+                                        class="supplier-action-button cancel-supplier"
+                                        style="display:none;" data-index="{{ loop.index }}">Отменить
+                                </button>
+                            </h3>
+                            <div class="supplier-section">
+                                <span>Наименование:</span>
+                                <span id="supplier-name-display-{{ loop.index }}">{{ item.leas_calc.seller.name }}</span>
+                                <input type="text" id="supplier-name-input-{{ loop.index }}"
+                                       value="{{ item.leas_calc.seller.name }}" class="supplier-input-field"
+                                       maxlength="255">
+                            </div>
+                            <div class="supplier-section">
+                                <span>ИНН:</span>
+                                <span id="supplier-inn-display-{{ loop.index }}">{{ item.leas_calc.seller.inn }}</span>
+                                <input type="text" id="supplier-inn-input-{{ loop.index }}"
+                                       value="{{ item.leas_calc.seller.inn }}" class="supplier-input-field"
+                                       maxlength="20">
+                            </div>
+                            <div class="supplier-section">
+                                <span>ОГРН:</span>
+                                <span id="supplier-ogrn-display-{{ loop.index }}">{{ item.leas_calc.seller.ogrn }}</span>
+                                <input type="text" id="supplier-ogrn-input-{{ loop.index }}"
+                                       value="{{ item.leas_calc.seller.ogrn }}" class="supplier-input-field"
+                                       maxlength="20">
+                            </div>
+                            <div class="supplier-section">
+                                <span>Адрес:</span>
+                                <span id="supplier-address-display-{{ loop.index }}">{{ item.leas_calc.seller.address }}</span>
+                                <input type="text" id="supplier-address-input-{{ loop.index }}"
+                                       value="{{ item.leas_calc.seller.address }}" class="supplier-input-field"
+                                       maxlength="255">
+                            </div>
+                            <div class="supplier-section">
+                                <span>Телефон:</span>
+                                <span id="supplier-phone-display-{{ loop.index }}">{{ item.leas_calc.seller.phone }}</span>
+                                <input type="text" id="supplier-phone-input-{{ loop.index }}"
+                                       value="{{ item.leas_calc.seller.phone }}" class="supplier-input-field"
+                                       maxlength="20">
+                            </div>
+                            <div class="supplier-section">
+                                <span>Электронная почта:</span>
+                                <span id="supplier-email-display-{{ loop.index }}">{{ item.leas_calc.seller.email }}</span>
+                                <input type="text" id="supplier-email-input-{{ loop.index }}"
+                                       value="{{ item.leas_calc.seller.email }}" class="supplier-input-field">
+                            </div>
+                            <div class="supplier-section">
+                                <span>Подписант:</span>
+                                <span id="supplier-signer-display-{{ loop.index }}">{{ item.leas_calc.seller.signer }}</span>
+                                <input type="text" id="supplier-signer-input-{{ loop.index }}"
+                                       value="{{ item.leas_calc.seller.signer }}" class="supplier-input-field"
+                                       maxlength="100">
+                            </div>
                         </div>
-                        <div class="supplier-section">
-                            <span>ИНН:</span>
-                            <span id="supplier-inn-display-{{ loop.index }}">{{ item.leas_calc.seller.inn }}</span>
-                            <input type="text" id="supplier-inn-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.inn }}" class="supplier-input-field" maxlength="20">
-                        </div>
-                        <div class="supplier-section">
-                            <span>ОГРН:</span>
-                            <span id="supplier-ogrn-display-{{ loop.index }}">{{ item.leas_calc.seller.ogrn }}</span>
-                            <input type="text" id="supplier-ogrn-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.ogrn }}" class="supplier-input-field" maxlength="20">
-                        </div>
-                        <div class="supplier-section">
-                            <span>Адрес:</span>
-                            <span id="supplier-address-display-{{ loop.index }}">{{ item.leas_calc.seller.address }}</span>
-                            <input type="text" id="supplier-address-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.address }}" class="supplier-input-field"
-                                   maxlength="255">
-                        </div>
-                        <div class="supplier-section">
-                            <span>Телефон:</span>
-                            <span id="supplier-phone-display-{{ loop.index }}">{{ item.leas_calc.seller.phone }}</span>
-                            <input type="text" id="supplier-phone-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.phone }}" class="supplier-input-field"
-                                   maxlength="20">
-                        </div>
-                        <div class="supplier-section">
-                            <span>Электронная почта:</span>
-                            <span id="supplier-email-display-{{ loop.index }}">{{ item.leas_calc.seller.email }}</span>
-                            <input type="text" id="supplier-email-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.email }}" class="supplier-input-field">
-                        </div>
-                        <div class="supplier-section">
-                            <span>Подписант:</span>
-                            <span id="supplier-signer-display-{{ loop.index }}">{{ item.leas_calc.seller.signer }}</span>
-                            <input type="text" id="supplier-signer-input-{{ loop.index }}"
-                                   value="{{ item.leas_calc.seller.signer }}" class="supplier-input-field"
-                                   maxlength="100">
-                        </div>
-                    </div>
+                    {% else %}
+                        <!-- Если нет leas_calc или нет seller, можно отобразить сообщение или оставить пустым -->
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}
@@ -235,7 +262,7 @@
             }
 
             // Инициализация подсказок для каждого поля
-            {% for item in leas_calculators %}
+            {% for item in deals_info %}
                 $("#supplier-name-input-{{ loop.index }}").suggestions({
                     token: token,
                     type: "PARTY",

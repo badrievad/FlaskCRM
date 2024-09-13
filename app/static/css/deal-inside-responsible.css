@@ -191,3 +191,27 @@
     margin: 0;
 }
 
+.attach-kp-button {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: none;
+    color: white; /* Белый цвет текста */
+    padding: 7px 15px; /* Отступы */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px; /* Размер шрифта */
+    margin: 10px 0; /* Отступы сверху и снизу */
+    cursor: pointer;
+    border-radius: 5px; /* Скругленные углы */
+    transition: background-color 0.3s ease; /* Плавный переход цвета */
+}
+
+.attach-kp-button:hover {
+    background-color: rgba(0, 0, 0, 0.40);
+}
+
+.attach-kp-button i {
+    margin-right: 8px; /* Отступ между иконкой и текстом */
+}
+
+

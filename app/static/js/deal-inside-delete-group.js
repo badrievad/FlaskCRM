@@ -20,7 +20,7 @@ document.addEventListener('click', function (event) {
                     url: '/crm/deal/inside/delete-section',
                     method: 'POST',
                     contentType: 'application/json',
-                    data: JSON.stringify({calc_id: calcId}),
+                    data: JSON.stringify({calc_id: calcId, dl_number: dlNumber}),
                     success: function (response) {
                         const Toast = Swal.mixin({
                             toast: true,

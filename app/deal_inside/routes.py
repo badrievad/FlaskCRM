@@ -40,23 +40,37 @@ def enter_into_deal(deal_id: int) -> render_template:
         # Если group_id пуст, возвращаем только текущую сделку
         related_deals = [deal]
 
-    # Собираем уникальные лизинговые калькуляторы, связанные с этими сделками
-    leas_calculators = []
+    # Собираем информацию о связанных договорах и их лизинговых калькуляторах
+    deals_info = []
     for related_deal in related_deals:
-        for leas_calc in related_deal.leas_calculators:
-            leas_calc_with_deal_info = {
-                "leas_calc": leas_calc,
-                "dl_number": related_deal.dl_number,  # Поля из deals
+        if related_deal.leas_calculators:
+            for leas_calc in related_deal.leas_calculators:
+                deal_info = {
+                    "leas_calc": leas_calc,
+                    "dl_number": related_deal.dl_number,
+                    "deal_title": related_deal.title,
+                    "company_inn": related_deal.company_inn,
+                    "created_by": related_deal.created_by,
+                    "created_at": related_deal.created_at,
+                }
+                deals_info.append(deal_info)
+        else:
+            # Если у договора нет лизинговых калькуляторов, добавляем информацию о договоре без leas_calc
+            deal_info = {
+                "leas_calc": None,
+                "dl_number": related_deal.dl_number,
                 "deal_title": related_deal.title,
                 "company_inn": related_deal.company_inn,
                 "created_by": related_deal.created_by,
                 "created_at": related_deal.created_at,
             }
-            leas_calculators.append(leas_calc_with_deal_info)
+            deals_info.append(deal_info)
+
+    logging.info(f"Deals info: {deals_info}")
     return render_template(
         "deal.html",
         deal=deal,
-        leas_calculators=leas_calculators,  # Передаем список всех связанных лизингодателей с полями из deals
+        deals_info=deals_info,  # Передаем список всех связанных договоров с их лизинговыми калькуляторами
         deal_id=deal_id,
         suggestions_token=suggestions_token,
     )
@@ -182,13 +196,10 @@ def delete_section():
         # Получаем данные из запроса
         data = request.get_json()
         calc_id = data.get("calc_id")
-
-        # Проверяем, что calc_id передан
-        if not calc_id:
-            return jsonify({"success": False, "message": "calc_id не передан"}), 400
+        dl_number = data.get("dl_number")
 
         # Вызов функции для удаления секции
-        success, message = delete_calculator_section(calc_id)
+        success, message = delete_calculator_section(calc_id, dl_number)
 
         if success:
             return jsonify({"success": True, "message": message}), 200

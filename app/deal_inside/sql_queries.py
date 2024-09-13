@@ -73,22 +73,23 @@ def delete_seller_by_calc_id(calc_id):
         return False, str(e)
 
 
-def delete_calculator_section(calc_id):
+def delete_calculator_section(calc_id, dl_number):
     try:
         # Находим запись LeasCalculator по calc_id
-        calculator = LeasCalculator.query.get(calc_id)
-
-        if not calculator:
-            return False, "Запись не найдена"
+        if calc_id:
+            calculator = LeasCalculator.query.get(calc_id)
+        else:
+            calculator = None
 
         # Находим сделку, связанную с калькулятором
-        deal = Deal.query.filter_by(id=calculator.deal_id).first()
+        deal = Deal.query.filter_by(dl_number=dl_number).first()
 
         if not deal:
-            return False, "Сделка, связанная с калькулятором, не найдена"
+            return False, "Сделка по № ДЛ не найдена"
 
         # Обнуляем deal_id у калькулятора и group_id у сделки
-        calculator.deal_id = None
+        if calculator:
+            calculator.deal_id = None
         deal.group_id = None
 
         db.session.commit()

@@ -172,21 +172,53 @@ def deal_to_archive(deal_id) -> jsonify:
     api_folder: CompanyFolderAPI = CompanyFolderAPI()
     if deal:
         try:
+            # Получаем group_id основной сделки
+            group_id = deal.group_id
+
+            if group_id:
+                # Находим все сделки с таким же group_id
+                related_deals = Deal.query.filter_by(group_id=group_id).all()
+            else:
+                # Если group_id отсутствует, работаем только с текущей сделкой
+                related_deals = [deal]
+
             # Начинаем транзакцию
-            deal.status = "archived"
-            deal.archived_at = datetime.datetime.now()
-            old_dl_number = deal.dl_number_windows
-            deal.dl_number = "б/н"
-            deal.dl_number_windows = "б-н"
+            old_dl_numbers = (
+                {}
+            )  # Словарь для хранения исходных значений dl_number_windows
+
+            for related_deal in related_deals:
+                old_dl_number = (
+                    related_deal.dl_number_windows
+                )  # Сохраняем старое значение
+                old_dl_numbers[related_deal.id] = (
+                    old_dl_number  # Сохраняем в словарь с ключом id сделки
+                )
+
+                related_deal.status = "archived"
+                related_deal.archived_at = datetime.datetime.now()
+                related_deal.dl_number = "б/н"
+                related_deal.dl_number_windows = "б-н"
+
             db.session.commit()
-            path_to_folder = api_folder.active_or_archive_folder(
-                deal_id, old_dl_number, "archive"
-            )
-            logging.info("Обновляем путь к папке со сделкой (Архивная)")
-            logging.info(f"New path: {path_to_folder}")
-            logging.info(f"Deal ID: {deal_id}")
-            write_deal_path_to_db(path_to_folder, deal_id)
-            socketio.emit("deal_to_archive", deal.to_json())
+
+            # Обновляем пути к папкам для каждой сделки
+            for related_deal in related_deals:
+                old_dl_number = old_dl_numbers.get(
+                    related_deal.id
+                )  # Получаем старое значение из словаря
+
+                path_to_folder = api_folder.active_or_archive_folder(
+                    related_deal.id, old_dl_number, "archive"
+                )
+                logging.info("Обновляем путь к папке со сделкой (Архивная)")
+                logging.info(f"New path: {path_to_folder}")
+                logging.info(f"Deal ID: {related_deal.id}")
+                write_deal_path_to_db(path_to_folder, related_deal.id)
+
+                # Отправляем уведомление по SocketIO
+                socketio.emit("deal_to_archive", related_deal.to_json())
+
             session_username = session.get("username")
             if session_username:
                 socketio.emit(
@@ -211,7 +243,7 @@ def deal_to_archive(deal_id) -> jsonify:
                 jsonify(
                     {
                         "result": "error",
-                        "message": "Failed to archive deal from database",
+                        "message": "Failed to archive deal in database",
                     }
                 ),
                 500,

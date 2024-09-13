@@ -121,17 +121,7 @@ def delete_deal(deal_id) -> jsonify:
 
             # Уведомление через socketio
             socketio.emit("delete_deal", {"id": deal_id})
-            session_username = session.get("username")
-            if session_username:
-                socketio.emit(
-                    "notification_delete_deal_well",
-                    {"message": deal.title},
-                    room=session_username,
-                )
-            else:
-                logging.info(
-                    "Не удалось отправить уведомление: session_username не найден."
-                )
+
             return jsonify({"result": "success"}), 200
 
         except PermissionError as e:
@@ -219,17 +209,6 @@ def deal_to_archive(deal_id) -> jsonify:
                 # Отправляем уведомление по SocketIO
                 socketio.emit("deal_to_archive", related_deal.to_json())
 
-            session_username = session.get("username")
-            if session_username:
-                socketio.emit(
-                    "notification_archive_deal_well",
-                    {"message": deal.title},
-                    room=session_username,
-                )
-            else:
-                logging.info(
-                    "Не удалось отправить уведомление: session_username не найден."
-                )
             return jsonify({"result": "success"}), 200
         except PermissionError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
@@ -286,17 +265,6 @@ def deal_to_active(deal_id) -> jsonify:
             write_deal_path_to_db(path_to_folder, deal_id)
 
             socketio.emit("deal_to_active", deal.to_json())
-            session_username = session.get("username")
-            if session_username:
-                socketio.emit(
-                    "notification_active_deal_well",
-                    {"message": deal.title},
-                    room=session_username,
-                )
-            else:
-                logging.info(
-                    "Не удалось отправить уведомление: session_username не найден."
-                )
             return jsonify({"result": "success"}), 200
         except PermissionError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки

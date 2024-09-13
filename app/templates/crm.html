@@ -369,78 +369,6 @@
         toastr.error(data.message, 'Сделку удалить невозможно. Открыт файл:');
     });
 
-    socket.on('notification_archive_deal_well', function (data) {
-        // Настройки для toastr
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "3000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-
-        // Показываем уведомление
-        toastr.info(data.message, 'Сделка успешно отправлена в архив');
-    });
-
-    socket.on('notification_active_deal_well', function (data) {
-        // Настройки для toastr
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "3000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-
-        // Показываем уведомление
-        toastr.info(data.message, 'Сделка успешно возвращена в активные');
-    });
-
-    socket.on('notification_delete_deal_well', function (data) {
-        // Настройки для toastr
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "3000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-
-        // Показываем уведомление
-        toastr.info(data.message, 'Сделка успешно удалена');
-    });
-
     socket.on('notification_to_archive_deal', function (data) {
         // Настройки для toastr
         toastr.options = {
@@ -529,7 +457,6 @@
         var dealItem = document.getElementById(`deal-${data.id}`);
         if (dealItem) {
             dealItem.remove();
-            {#updateIndexes('deal-rows-archived'); // Recalculate indexes#}
         } else {
             console.log('Deal item not found:', data.id);
         }
@@ -708,21 +635,96 @@
     }
 
     function confirmDelete(dealId) {
-        if (confirm("Вы уверены, что хотите удалить сделку?")) {
-            deleteDeal(dealId);
-        }
+        Swal.fire({
+            text: 'Вы уверены, что хотите удалить сделку?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Да, удалить',
+            cancelButtonText: 'Отмена',
+            confirmButtonColor: '#67a2d5',
+            cancelButtonColor: '#ad6c72',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteDeal(dealId);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Сделка была успешно удалена."
+                });
+            }
+        });
     }
 
     function confirmArchive(dealId) {
-        if (confirm("Вы уверены, что хотите переместить сделку в архив?")) {
-            dealToArchive(dealId);
-        }
+        Swal.fire({
+            text: 'Вы хотите переместить сделку в архив?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Да, архивировать',
+            cancelButtonText: 'Отмена',
+            confirmButtonColor: '#67a2d5',
+            cancelButtonColor: '#ad6c72',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dealToArchive(dealId);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Сделка была успешно перемещена в архив."
+                });
+            }
+        });
     }
 
     function confirmActive(dealId) {
-        if (confirm("Вы уверены, что хотите вернуть сделку в активные?")) {
-            dealToActive(dealId);
-        }
+        Swal.fire({
+            text: 'Вы уверены, что хотите вернуть сделку в активные?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Да, вернуть',
+            cancelButtonText: 'Отмена',
+            confirmButtonColor: '#67a2d5',
+            cancelButtonColor: '#ad6c72',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                dealToActive(dealId);
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Сделка была успешно возвращена в активные."
+                });
+            }
+        });
     }
 </script>
 </body>

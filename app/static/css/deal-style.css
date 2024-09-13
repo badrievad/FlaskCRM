@@ -129,7 +129,6 @@ body {
     background-color: #f9f9f9;
     border-radius: 5px;
     position: relative;
-    z-index: 1; /* Для правильной работы с другими элементами */
 }
 
 .deal-info .left,

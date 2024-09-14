@@ -84,21 +84,6 @@ def create_deal() -> jsonify:
         )
         socketio.emit("new_deal", deal_data)  # Send to all connected clients
 
-        # Определяем, куда отправлять уведомление
-        session_username = session.get("username")
-        logging.info(f"session: {session}")
-        logging.info(f"session_username (create deal): {session_username}")
-        if session_username:
-            socketio.emit(
-                "notification_new_deal",
-                {"message": company_name},
-                room=session_username,
-            )
-        else:
-            logging.info(
-                "Не удалось отправить уведомление: session_username не найден."
-            )
-
         return jsonify(deal_data), 201
 
     except Exception as e:

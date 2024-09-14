@@ -574,6 +574,21 @@
                 var newDeal = JSON.parse(xhr.responseText);
                 socket.emit('new_deal', newDeal);
                 showForm('active-deals');
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "top-end",
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "Сделка создана."
+                });
             }
         };
         var data = JSON.stringify({

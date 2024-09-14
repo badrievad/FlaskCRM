@@ -320,31 +320,6 @@
         updateDealsTable();  // Перезагружаем таблицу для всех подключённых пользователей
     });
 
-    socket.on('notification_new_deal', function (data) {
-        // Настройки для toastr
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "3000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-
-        // Показываем уведомление
-        toastr.success(data.message, 'Создана сделка');
-    });
-
-
     socket.on('notification_delete_deal', function (data) {
         // Настройки для toastr
         toastr.options = {

@@ -38,3 +38,35 @@ class DealsValidate:
         else:
             info: dict = {}
         return info.get("data", {}).get("ogrn", "")
+
+    @property
+    def get_company_kpp(self) -> str:
+        info_json: json = self._data.get("info")
+        if info_json:
+            info: dict = json.loads(info_json)
+        else:
+            info: dict = {}
+        return info.get("data", {}).get("kpp", "-")
+
+    @property
+    def get_company_address(self) -> str:
+        info_json: json = self._data.get("info")
+        if info_json:
+            info: dict = json.loads(info_json)
+        else:
+            info: dict = {}
+        return info.get("data", {}).get("address", {}).get("unrestricted_value", "")
+
+    @property
+    def get_company_signer(self) -> str:
+        info_json: json = self._data.get("info")
+        if info_json:
+            info: dict = json.loads(info_json)
+        else:
+            info: dict = {}
+
+        management: str = info.get("data", {}).get("management", {}).get("name", "")
+        if management:
+            return management
+
+        return info.get("data", {}).get("name", {}).get("full", "")

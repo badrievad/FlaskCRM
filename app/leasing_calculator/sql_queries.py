@@ -1,20 +1,20 @@
 from .models import Seller, LeasCalculator
+from .other_utils import dadata_info
 from .. import db
 
 
 def create_or_update_seller_and_link_to_leas_calc(
-    new_name, new_inn, new_ogrn, new_address, new_phone, new_email, new_signer, calc_id
+    new_name, new_inn, new_address, new_phone, new_email, new_signer, calc_id
 ):
     """Создаем или обновляем продавца и привязываем его к LeasCalculator"""
     # Проверяем, существует ли продавец с таким ИНН
     seller = Seller.query.filter_by(inn=new_inn).first()
+    new_ogrn = dadata_info(new_inn).get("data", {}).get("ogrn", "")
 
     if seller:
         # Если продавец существует, обновляем его имя, если оно изменилось
         if seller.name != new_name:
             seller.name = new_name
-        if seller.ogrn != new_ogrn:
-            seller.ogrn = new_ogrn
         if seller.address != new_address:
             seller.address = new_address
         if seller.phone != new_phone:

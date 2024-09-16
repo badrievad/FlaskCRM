@@ -33,7 +33,6 @@ function deleteSellerId(index) {
                     // Обновляем отображаемые значения на фронтенде после успешного удаления
                     document.getElementById(`supplier-name-display-${index}`).textContent = '';
                     document.getElementById(`supplier-inn-display-${index}`).textContent = '';
-                    document.getElementById(`supplier-ogrn-display-${index}`).textContent = '';
                     document.getElementById(`supplier-address-display-${index}`).textContent = '';
                     document.getElementById(`supplier-phone-display-${index}`).textContent = '';
                     document.getElementById(`supplier-email-display-${index}`).textContent = '';
@@ -41,7 +40,6 @@ function deleteSellerId(index) {
 
                     document.getElementById(`supplier-name-input-${index}`).value = '';
                     document.getElementById(`supplier-inn-input-${index}`).value = '';
-                    document.getElementById(`supplier-ogrn-input-${index}`).value = '';
                     document.getElementById(`supplier-address-input-${index}`).value = '';
                     document.getElementById(`supplier-phone-input-${index}`).value = '';
                     document.getElementById(`supplier-email-input-${index}`).value = '';

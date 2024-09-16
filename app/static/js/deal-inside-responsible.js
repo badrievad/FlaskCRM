@@ -259,8 +259,6 @@ function toggleEditMode(index, isEditing) {
     var nameInput = document.getElementById(`supplier-name-input-${index}`);
     var innDisplay = document.getElementById(`supplier-inn-display-${index}`);
     var innInput = document.getElementById(`supplier-inn-input-${index}`);
-    var ogrnDisplay = document.getElementById(`supplier-ogrn-display-${index}`);
-    var ogrnInput = document.getElementById(`supplier-ogrn-input-${index}`);
     var addressDisplay = document.getElementById(`supplier-address-display-${index}`);
     var addressInput = document.getElementById(`supplier-address-input-${index}`);
     var phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
@@ -280,8 +278,6 @@ function toggleEditMode(index, isEditing) {
         nameInput.style.display = 'inline';
         innDisplay.style.display = 'none';
         innInput.style.display = 'inline';
-        ogrnDisplay.style.display = 'none';
-        ogrnInput.style.display = 'inline';
         addressDisplay.style.display = 'none';
         addressInput.style.display = 'inline';
         phoneDisplay.style.display = 'none';
@@ -303,8 +299,6 @@ function toggleEditMode(index, isEditing) {
         nameInput.style.display = 'none';
         innDisplay.style.display = 'inline';
         innInput.style.display = 'none';
-        ogrnDisplay.style.display = 'inline';
-        ogrnInput.style.display = 'none';
         addressDisplay.style.display = 'inline';
         addressInput.style.display = 'none';
         phoneDisplay.style.display = 'inline';
@@ -326,14 +320,12 @@ function toggleEditMode(index, isEditing) {
 function saveEditing(index) {
     var newName = document.getElementById(`supplier-name-input-${index}`).value.trim();
     var newInn = document.getElementById(`supplier-inn-input-${index}`).value.trim();
-    var newOgrn = document.getElementById(`supplier-ogrn-input-${index}`).value.trim();
     var newAddress = document.getElementById(`supplier-address-input-${index}`).value.trim();
     var newPhone = document.getElementById(`supplier-phone-input-${index}`).value.trim();
     var newEmail = document.getElementById(`supplier-email-input-${index}`).value.trim();
     var newSigner = document.getElementById(`supplier-signer-input-${index}`).value.trim();
     var nameDisplay = document.getElementById(`supplier-name-display-${index}`);
     var innDisplay = document.getElementById(`supplier-inn-display-${index}`);
-    var ogrnDisplay = document.getElementById(`supplier-ogrn-display-${index}`);
     var addressDisplay = document.getElementById(`supplier-address-display-${index}`);
     var phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
     var emailDisplay = document.getElementById(`supplier-email-display-${index}`);
@@ -364,7 +356,6 @@ function saveEditing(index) {
     // Обновляем отображаемые значения
     nameDisplay.textContent = newName;
     innDisplay.textContent = newInn;
-    ogrnDisplay.textContent = newOgrn;
     addressDisplay.textContent = newAddress;
     phoneDisplay.textContent = newPhone;
     emailDisplay.textContent = newEmail;
@@ -381,7 +372,6 @@ function saveEditing(index) {
         data: JSON.stringify({
             title: newName,
             inn: newInn,
-            ogrn: newOgrn,
             address: newAddress,
             phone: newPhone,
             email: newEmail,
@@ -425,13 +415,11 @@ function saveEditing(index) {
             // Обновляем значения полей, чтобы сделать их пустыми
             nameDisplay.textContent = '';
             innDisplay.textContent = '';
-            ogrnDisplay.textContent = '';
             addressDisplay.textContent = '';
             phoneDisplay.textContent = '';
             emailDisplay.textContent = '';
             signerDisplay.textContent = '';
 
-            document.getElementById(`supplier-ogrn-input-${index}`).value = '';
             document.getElementById(`supplier-address-input-${index}`).value = '';
             document.getElementById(`supplier-phone-input-${index}`).value = '';
             document.getElementById(`supplier-email-input-${index}`).value = '';

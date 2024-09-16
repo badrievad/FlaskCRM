@@ -357,7 +357,6 @@ def update_seller():
     # Получаем новое имя и ИНН из данных запроса
     new_name = data_validated.get_company_name or data.get("title")
     new_inn = data_validated.get_company_inn or data.get("inn")
-    new_ogrn = data_validated.get_company_ogrn or data.get("ogrn")
     new_address = data.get("address")
     new_phone = data.get("phone")
     new_email = data.get("email")
@@ -374,7 +373,6 @@ def update_seller():
     response_data, status_code = create_or_update_seller_and_link_to_leas_calc(
         new_name,
         new_inn,
-        new_ogrn,
         new_address,
         new_phone,
         new_email,

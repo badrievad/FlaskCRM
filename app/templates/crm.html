@@ -60,9 +60,8 @@
         <li onclick="toggleSubmenu('deals-submenu')" class="default-li"><i class="fas fa-handshake"></i> Список сделок
         </li>
         <ul id="deals-submenu" class="submenu">
-            <li id="active-deals-link" onclick="showForm('active-deals')" class="default-li">Активные сделки (0)</li>
-            <li id="archived-deals-link" onclick="showForm('archived-deals')" class="default-li">Архивные сделки (0)
-            </li>
+            <li id="active-deals-link" onclick="showForm('active-deals')" class="default-li">Активные сделки</li>
+            <li id="archived-deals-link" onclick="showForm('archived-deals')" class="default-li">Архивные сделки</li>
         </ul>
         <li onclick="showForm('task')" class="default-li"><i class="fas fa-tasks"></i> Создать сделку</li>
         <br><br><br><br>
@@ -175,19 +174,6 @@
 </div>
 <script src="{{ url_for('crm.static', filename='js/deal-merge-deals.js') }}"></script>
 <script>
-    function updateDealCounts(activeCount, archivedCount) {
-        var activeDealsLink = document.getElementById('active-deals-link');
-        var archivedDealsLink = document.getElementById('archived-deals-link');
-
-        if (activeDealsLink && archivedDealsLink) {
-            activeDealsLink.innerHTML = `Активные сделки (${activeCount})`;
-            archivedDealsLink.innerHTML = `Архивные сделки (${archivedCount})`;
-        } else {
-            console.error('Elements with IDs "active-deals-link" and "archived-deals-link" not found.');
-        }
-    }
-</script>
-<script>
     function toggleSubmenu(id) {
         var submenu = document.getElementById(id);
         if (submenu.classList.contains('show')) {
@@ -224,7 +210,6 @@
         fetch('/crm/deals/active')
             .then(response => response.json())
             .then(data => {
-                updateDealCounts(data.deals_active, data.deals_archived);
                 var dealsList = document.getElementById('deal-rows');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
@@ -261,7 +246,6 @@
         fetch('/crm/deals/archived')
             .then(response => response.json())
             .then(data => {
-                updateDealCounts(data.deals_active, data.deals_archived);
                 var dealsList = document.getElementById('deal-rows-archived');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
@@ -422,9 +406,6 @@
                             </tr>`;
         dealsList.insertAdjacentHTML('afterbegin', dealItem);
 
-        // Обновить количество активных сделок
-        var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
-        updateDealCounts(parseInt(activeDealsCount) + 1, parseInt(document.getElementById('archived-deals-link').textContent.match(/\d+/)[0]));
     });
 
     socket.on('delete_deal', function (data) {
@@ -435,11 +416,6 @@
         } else {
             console.log('Deal item not found:', data.id);
         }
-
-        // Обновить количество архивных сделок
-        var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
-        var archivedDealsCount = document.getElementById('archived-deals-link').textContent.match(/\d+/)[0];
-        updateDealCounts(parseInt(activeDealsCount), parseInt(archivedDealsCount) - 1);
     });
 
     socket.on('deal_to_archive', function (data) {
@@ -484,11 +460,6 @@
         } else {
             console.log('Deal item not found:', data.id);
         }
-
-        // Обновить количество активных и архивных сделок
-        var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
-        var archivedDealsCount = document.getElementById('archived-deals-link').textContent.match(/\d+/)[0];
-        updateDealCounts(parseInt(activeDealsCount) - 1, parseInt(archivedDealsCount) + 1);
     });
 
     socket.on('deal_to_active', function (data) {
@@ -528,11 +499,6 @@
         } else {
             console.log('Deal item not found:', data.id);
         }
-
-        // Обновить количество активных и архивных сделок
-        var activeDealsCount = document.getElementById('active-deals-link').textContent.match(/\d+/)[0];
-        var archivedDealsCount = document.getElementById('archived-deals-link').textContent.match(/\d+/)[0];
-        updateDealCounts(parseInt(activeDealsCount) + 1, parseInt(archivedDealsCount) - 1);
     });
 
     document.getElementById('create-deal-form').addEventListener('submit', function (event) {

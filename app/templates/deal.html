@@ -99,13 +99,12 @@
             <div class="right">
                 <div class="section">
                     <h3>Клиент</h3>
-                    <p>Наименование: {{ deal.title }}</p>
-                    <p>ИНН: {{ deal.company_inn }}</p>
-                    <p>ОГРН: {{ deal.company_ogrn }}</p>
-                    <p>Адрес: {{ deal.company_address }}</p>
-                    <p>Телефон: {{ deal.company_phone }}</p>
-                    <p>Электронная почта: {{ deal.company_email }}</p>
-                    <p>Подписант: {{ deal.company_signer }}</p>
+                    <p>Наименование: {{ deal.client.name }}</p>
+                    <p>ИНН: {{ deal.client.inn }}</p>
+                    <p>Адрес: {{ deal.client.address }}</p>
+                    <p>Телефон: {{ deal.client.phone }}</p>
+                    <p>Электронная почта: {{ deal.client.email }}</p>
+                    <p>Подписант: {{ deal.client.signer }}</p>
                 </div>
             </div>
         </div>
@@ -196,13 +195,6 @@
                                        maxlength="20">
                             </div>
                             <div class="supplier-section">
-                                <span>ОГРН:</span>
-                                <span id="supplier-ogrn-display-{{ loop.index }}">{{ item.leas_calc.seller.ogrn }}</span>
-                                <input type="text" id="supplier-ogrn-input-{{ loop.index }}"
-                                       value="{{ item.leas_calc.seller.ogrn }}" class="supplier-input-field"
-                                       maxlength="20">
-                            </div>
-                            <div class="supplier-section">
                                 <span>Адрес:</span>
                                 <span id="supplier-address-display-{{ loop.index }}">{{ item.leas_calc.seller.address }}</span>
                                 <input type="text" id="supplier-address-input-{{ loop.index }}"
@@ -275,7 +267,6 @@
                                 // Если продавец найден в базе, используем его данные
                                 $("#supplier-name-input-{{ loop.index }}").val(seller.name);
                                 $("#supplier-inn-input-{{ loop.index }}").val(seller.inn);
-                                $("#supplier-ogrn-input-{{ loop.index }}").val(seller.ogrn);
                                 $("#supplier-address-input-{{ loop.index }}").val(seller.address);
                                 $("#supplier-phone-input-{{ loop.index }}").val(seller.phone);
                                 $("#supplier-email-input-{{ loop.index }}").val(seller.email);
@@ -284,7 +275,6 @@
                                 // Если продавец не найден в базе, используем данные Dadata
                                 $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
                                 $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
-                                $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
                                 $("#supplier-phone-input-{{ loop.index }}").val('');
                                 $("#supplier-email-input-{{ loop.index }}").val('');
                                 $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
@@ -313,7 +303,6 @@
                                 // Если продавец найден в базе, используем его данные
                                 $("#supplier-name-input-{{ loop.index }}").val(seller.name);
                                 $("#supplier-inn-input-{{ loop.index }}").val(seller.inn);
-                                $("#supplier-ogrn-input-{{ loop.index }}").val(seller.ogrn);
                                 $("#supplier-phone-input-{{ loop.index }}").val(seller.phone);
                                 $("#supplier-email-input-{{ loop.index }}").val(seller.email);
                                 $("#supplier-address-input-{{ loop.index }}").val(seller.address);
@@ -322,7 +311,6 @@
                                 // Если продавец не найден в базе, используем данные Dadata
                                 $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
                                 $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
-                                $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
                                 $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
                                 if (suggestion.data?.management?.name) {
                                     $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
@@ -332,42 +320,6 @@
                             }
                         }).catch(function (error) {
                             console.error('Ошибка при проверке ИНН в базе данных:', error);
-                        });
-                    }
-                });
-
-                // Для ОГРН
-                $("#supplier-ogrn-input-{{ loop.index }}").suggestions({
-                    token: token,
-                    type: "PARTY",
-                    onSelect: function (suggestion) {
-                        var inn = suggestion.data.inn;
-
-                        // Проверяем ОГРН в базе данных
-                        checkInnInDatabase(inn).then(function (seller) {  // Используем ту же функцию для проверки ОГРН
-                            if (seller) {
-                                // Если продавец найден в базе, используем его данные
-                                $("#supplier-name-input-{{ loop.index }}").val(seller.name);
-                                $("#supplier-inn-input-{{ loop.index }}").val(seller.inn);
-                                $("#supplier-ogrn-input-{{ loop.index }}").val(seller.ogrn);
-                                $("#supplier-phone-input-{{ loop.index }}").val(seller.phone);
-                                $("#supplier-email-input-{{ loop.index }}").val(seller.email);
-                                $("#supplier-address-input-{{ loop.index }}").val(seller.address);
-                                $("#supplier-signer-input-{{ loop.index }}").val(seller.signer);
-                            } else {
-                                // Если продавец не найден в базе, используем данные Dadata
-                                $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
-                                $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
-                                $("#supplier-ogrn-input-{{ loop.index }}").val(suggestion.data.ogrn);
-                                $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
-                                if (suggestion.data?.management?.name) {
-                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
-                                } else {
-                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
-                                }
-                            }
-                        }).catch(function (error) {
-                            console.error('Ошибка при проверке ОГРН в базе данных:', error);
                         });
                     }
                 });

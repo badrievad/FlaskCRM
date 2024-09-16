@@ -1,5 +1,7 @@
+from logger import logging
 from datetime import datetime
 
+from sqlalchemy import Sequence
 from sqlalchemy.orm import relationship
 
 from .. import db
@@ -24,21 +26,30 @@ class Deal(db.Model):
     deals_count = db.Column(db.Integer, default=1)
     deal_path = db.Column(db.String(500), nullable=True)
     group_id = db.Column(db.String(50), nullable=True)
+    client_id = db.Column(db.Integer, db.ForeignKey("clients.id"))
+
+    sequence_number = db.Column(db.Integer, nullable=False)
+    year = db.Column(db.String(2), nullable=False)
+
+    __table_args__ = (
+        db.UniqueConstraint("sequence_number", "year", name="uq_sequence_year"),
+    )
 
     leas_calculators = relationship("LeasCalculator", back_populates="deal")
+    client = relationship("Client", back_populates="deals")
 
     @classmethod
     def generate_dl_number(cls):
-        current_year = str(datetime.now().year)[2:]
-        start_number = 1
+        current_year = datetime.now().strftime("%y")  # Последние две цифры года
 
-        while True:
-            for_web = f"{start_number}/{current_year}"
-            for_windows = f"{start_number}-{current_year}"
-            existing_deal = cls.query.filter_by(dl_number=for_web).first()
-            if not existing_deal:
-                return for_web, for_windows
-            start_number += 1
+        # Получаем следующее значение из последовательности
+        sequence = Sequence("deal_sequence")
+        sequence_value = db.session.execute(sequence)
+
+        dl_number = f"{sequence_value}/{current_year}"
+        dl_number_windows = f"{sequence_value}-{current_year}"
+
+        return sequence_value, current_year, dl_number, dl_number_windows
 
     def to_json(self) -> dict:
         """При добавлении или удалении столбца в модели всегда корректируем эту функцию!"""
@@ -56,6 +67,8 @@ class Deal(db.Model):
             "archived_at": archived_at,
             "dl_number": self.dl_number,
             "dl_number_windows": self.dl_number_windows,
+            "sequence_number": self.sequence_number,
+            "year": self.year,
         }
 
     def can_add_leas_calculator(self):
@@ -63,3 +76,19 @@ class Deal(db.Model):
         Проверяет, можно ли добавить еще один LeasCalculator к этой сделке.
         """
         return len(self.leas_calculators) < self.deals_count
+
+
+class Client(db.Model):
+    __tablename__ = "clients"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    inn = db.Column(db.String(20), nullable=False)
+    ogrn = db.Column(db.String(20), nullable=False)
+    kpp = db.Column(db.String(20), nullable=True)
+    address = db.Column(db.String(200), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+    email = db.Column(db.String(100), nullable=True)
+    signer = db.Column(db.String(100), nullable=True)
+
+    deals = relationship("Deal", back_populates="client")

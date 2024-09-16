@@ -19,10 +19,15 @@ from .. import socketio
 from ..leasing_calculator.models import Seller
 
 
+from sqlalchemy.orm import joinedload
+
+
 @deal_inside_bp.route("/<deal_id>", methods=["GET"])
-def enter_into_deal(deal_id: int) -> render_template:
-    # Находим сделку по deal_id
-    deal: Deal = Deal.query.options(joinedload(Deal.leas_calculators)).get(deal_id)
+def enter_into_deal(deal_id: int):
+    # Находим сделку по deal_id, загружаем связанного клиента
+    deal: Deal = Deal.query.options(
+        joinedload(Deal.leas_calculators), joinedload(Deal.client)
+    ).get(deal_id)
 
     # Проверяем, что сделка найдена
     if not deal:
@@ -33,8 +38,14 @@ def enter_into_deal(deal_id: int) -> render_template:
 
     if group_id:
         logging.info(f"Group ID: {group_id}")
-        # Получаем все связанные сделки по group_id, включая текущую сделку
-        related_deals = Deal.query.filter_by(group_id=group_id).all()
+        # Получаем все связанные сделки по group_id, включая текущую сделку, загружаем клиентов
+        related_deals = (
+            Deal.query.options(
+                joinedload(Deal.leas_calculators), joinedload(Deal.client)
+            )
+            .filter_by(group_id=group_id)
+            .all()
+        )
     else:
         logging.info("Group ID: None")
         # Если group_id пуст, возвращаем только текущую сделку
@@ -43,15 +54,17 @@ def enter_into_deal(deal_id: int) -> render_template:
     # Собираем информацию о связанных договорах и их лизинговых калькуляторах
     deals_info = []
     for related_deal in related_deals:
+        # Получаем данные клиента
+        client = related_deal.client
+
         if related_deal.leas_calculators:
             for leas_calc in related_deal.leas_calculators:
                 deal_info = {
                     "leas_calc": leas_calc,
                     "dl_number": related_deal.dl_number,
-                    "deal_title": related_deal.title,
-                    "company_inn": related_deal.company_inn,
                     "created_by": related_deal.created_by,
                     "created_at": related_deal.created_at,
+                    "client": client,  # Добавляем информацию о клиенте
                 }
                 deals_info.append(deal_info)
         else:
@@ -59,10 +72,9 @@ def enter_into_deal(deal_id: int) -> render_template:
             deal_info = {
                 "leas_calc": None,
                 "dl_number": related_deal.dl_number,
-                "deal_title": related_deal.title,
-                "company_inn": related_deal.company_inn,
                 "created_by": related_deal.created_by,
                 "created_at": related_deal.created_at,
+                "client": client,  # Добавляем информацию о клиенте
             }
             deals_info.append(deal_info)
 
@@ -149,7 +161,6 @@ def check_inn():
                 {
                     "name": seller.name,
                     "inn": seller.inn,
-                    "ogrn": seller.ogrn,
                     "address": seller.address,
                     "phone": seller.phone,
                     "email": seller.email,

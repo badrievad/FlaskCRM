@@ -1,5 +1,8 @@
 import re
 
+from ..config import suggestions_token
+from dadata import Dadata
+
 
 def validate_item_price(price: str) -> str:
     # Проверка на наличие букв в строке
@@ -37,3 +40,9 @@ def validate_item_price(price: str) -> str:
     # Формируем окончательный результат
     formatted_price: str = integer_part_with_spaces + "," + fractional_part
     return formatted_price
+
+
+def dadata_info(inn: str) -> dict:
+    dadata = Dadata(suggestions_token)
+    result = dadata.find_by_id("party", inn)[0]
+    return result

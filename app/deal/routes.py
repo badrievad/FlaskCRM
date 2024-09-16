@@ -8,7 +8,7 @@ from . import deal_bp
 from .sql_queries import merge_deals_in_db
 from .. import socketio, db
 
-from .deals_db import write_deal_to_db, write_deal_path_to_db
+from .deals_db import write_deal_to_db, write_deal_path_to_db, get_or_create_client
 from .deals_validate import DealsValidate
 from .work_with_folders import CompanyFolderAPI
 
@@ -47,7 +47,8 @@ def send_notification(socket_path: str, error_message: str) -> jsonify:
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
 def create_deal() -> jsonify:
     api_folder = CompanyFolderAPI()
-    deal = DealsValidate(request.get_json())
+    deal_data = request.get_json()
+    deal = DealsValidate(deal_data)
     company_name = deal.get_company_name
     name_without_special_symbols = deal.get_name_without_special_symbols
     company_inn = deal.get_company_inn
@@ -57,16 +58,20 @@ def create_deal() -> jsonify:
         if not api_folder.is_available():
             raise Exception("CompanyFolderAPI недоступен")
 
+        # Обработка клиента
+        client_id = get_or_create_client(deal)
+
         # Запись сделки в базу данных
-        deal_data = write_deal_to_db(
-            company_name,
-            name_without_special_symbols,
-            company_inn,
-            current_user.fullname,
-            datetime.datetime.now(),
+        deal_record = write_deal_to_db(
+            title=company_name,
+            name_without_special_symbols=name_without_special_symbols,
+            company_inn=company_inn,
+            created_by=current_user.fullname,
+            created_at=datetime.datetime.now(),
+            client_id=client_id,
         )
-        deal_id = str(deal_data["id"])
-        dl_number = deal_data["dl_number_windows"]
+        deal_id = str(deal_record["id"])
+        dl_number = deal_record["dl_number_windows"]
 
         # Создание папки через API
         created_folder = api_folder.create_folder(
@@ -79,12 +84,12 @@ def create_deal() -> jsonify:
 
         # Логирование и уведомление
         logging.info(
-            f"{current_user} создал новую сделку. Название сделки: {company_name}. "
-            f"ID сделки: {deal_id}. Дата создания: {deal_data['created_at']}."
+            f"{current_user.fullname} создал новую сделку. Название сделки: {company_name}. "
+            f"ID сделки: {deal_id}. Дата создания: {deal_record['created_at']}."
         )
-        socketio.emit("new_deal", deal_data)  # Send to all connected clients
+        socketio.emit("new_deal", deal_record)  # Send to all connected clients
 
-        return jsonify(deal_data), 201
+        return jsonify(deal_record), 201
 
     except Exception as e:
         # Откат транзакции в случае ошибки
@@ -239,7 +244,9 @@ def deal_to_active(deal_id) -> jsonify:
             deal.status = "active"
             deal.archived_at = None
             deal.created_at = datetime.datetime.now()
-            deal.dl_number, deal.dl_number_windows = Deal.generate_dl_number()
+            deal.sequence_number, deal.year, deal.dl_number, deal.dl_number_windows = (
+                Deal.generate_dl_number()
+            )
             db.session.commit()
             path_to_folder = api_folder.active_or_archive_folder(
                 deal_id, deal.dl_number_windows, "active"

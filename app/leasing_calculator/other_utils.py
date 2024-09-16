@@ -2,6 +2,7 @@ import re
 
 from ..config import suggestions_token
 from dadata import Dadata
+from logger import logging
 
 
 def validate_item_price(price: str) -> str:
@@ -43,6 +44,11 @@ def validate_item_price(price: str) -> str:
 
 
 def dadata_info(inn: str) -> dict:
-    dadata = Dadata(suggestions_token)
-    result = dadata.find_by_id("party", inn)[0]
+    try:
+        dadata = Dadata(suggestions_token)
+        result = dadata.find_by_id("party", inn)[0]
+    except Exception as e:
+        logging.error(f"Error: {e}")
+        result = {}
+
     return result

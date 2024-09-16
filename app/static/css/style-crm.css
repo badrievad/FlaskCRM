@@ -447,3 +447,9 @@ input[type="checkbox"]:checked::before {
     margin-left: 5px;
     margin-top: 1px;
 }
+
+
+.logo {
+    width: 40px;
+    height: auto;
+}

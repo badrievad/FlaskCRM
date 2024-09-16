@@ -151,20 +151,34 @@ async function toggleCheckbox(dealId, event) {
     await checkSelectedDeals();
 }
 
+const currentUser = {
+    role: '{{ current_user.role }}',
+    fullname: '{{ current_user.fullname }}'
+};
+
 // Функция для обновления таблицы сделок
 function updateDealsTable() {
     fetch('/crm/deals/active')
         .then(response => response.json())
         .then(data => {
-            var dealsList = document.getElementById('deal-rows');
+            const dealsList = document.getElementById('deal-rows');
             dealsList.innerHTML = ''; // Очищаем существующие строки
 
             data.deals.forEach((deal, index) => {
-                var dealItem = `
-                    <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
+                let checkboxCell = '';
+                if (currentUser.role === 'admin' || currentUser.fullname === deal.created_by) {
+                    checkboxCell = `
                         <td onclick="toggleCheckbox(${deal.id}, event)">
                             <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
-                        </td>
+                        </td>`;
+                } else {
+                    checkboxCell = `
+                            <td>
+                            </td>`;
+                }
+                const dealItem = `
+                    <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
+                        ${checkboxCell}
                         <td>${index + 1}</td>
                         <td class="deal-dl">${deal.dl_number}</td>
                         <td class="deal-title">${deal.title}</td>

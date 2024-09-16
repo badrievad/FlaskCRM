@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poiret+One&display=swap" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
@@ -55,7 +56,11 @@
 <body>
 
 <div class="sidebar">
-    <h2>StellarCRM</h2><br><br><br>
+    <h2 style="margin-bottom: 50px; font-family: 'Poiret One', cursive;">
+        <img src="{{ url_for('crm.static', filename='images/atom.png') }}"
+             alt="Логотип StellarCRM" class="logo">
+        StellarCRM
+    </h2>
     <ul>
         <li onclick="toggleSubmenu('deals-submenu')" class="default-li"><i class="fas fa-handshake"></i> Список сделок
         </li>
@@ -88,7 +93,7 @@
 <div class="main-content">
     <div id="active-deals" class="card">
         <h2>Активные сделки</h2>
-        <button id="merge-deals-button" disabled>Объединить сделки</button>
+        <button id="merge-deals-button" disabled><i class="fa-solid fa-code-merge"></i> Объединить сделки</button>
         <h4 id="filter-search"><i class="fa-solid fa-magnifying-glass"></i></h4>
         <table class="deal-table">
             <thead>
@@ -96,10 +101,10 @@
                 <th></th>
                 <th>№</th>
                 <th>№ ДЛ</th>
-                <th id="filter-header">Лизингополучатель</th>
-                <th id="filter-header-product">Продукт</th>
-                <th id="filter-header-manager">Менеджер</th>
-                <th id="filter-header-create">Дата создания сделки</th>
+                <th id="filter-header"><i class="fa-solid fa-user-tie fa-sm"></i> Лизингополучатель</th>
+                <th id="filter-header-product"><i class="fa-solid fa-business-time fa-sm"></i> Продукт</th>
+                <th id="filter-header-manager"><i class="fa-regular fa-user fa-sm"></i> Менеджер</th>
+                <th id="filter-header-create"><i class="fa-regular fa-calendar fa-sm"></i> Дата создания сделки</th>
                 <th></th>
             </tr>
             </thead>
@@ -129,11 +134,13 @@
             <tr>
                 <th>№</th>
                 <th>№ ДЛ</th>
-                <th id="filter-header-archived">Лизингополучатель</th>
-                <th id="filter-header-product-archived">Продукт</th>
-                <th id="filter-header-manager-archived">Менеджер</th>
-                <th id="filter-header-created-archived">Дата создания сделки</th>
-                <th id="filter-header-to-archive-archived">Дата добавления в архив</th>
+                <th id="filter-header-archived"><i class="fa-solid fa-user-tie fa-sm"></i> Лизингополучатель</th>
+                <th id="filter-header-product-archived"><i class="fa-solid fa-business-time fa-sm"></i>Продукт</th>
+                <th id="filter-header-manager-archived"><i class="fa-regular fa-user fa-sm"></i> Менеджер</th>
+                <th id="filter-header-created-archived"><i class="fa-regular fa-calendar"></i> Дата создания сделки</th>
+                <th id="filter-header-to-archive-archived"><i class="fa-regular fa-calendar"></i> Дата добавления в
+                    архив
+                </th>
                 <th></th>
             </tr>
             </thead>
@@ -210,14 +217,23 @@
         fetch('/crm/deals/active')
             .then(response => response.json())
             .then(data => {
-                var dealsList = document.getElementById('deal-rows');
+                const dealsList = document.getElementById('deal-rows');
                 dealsList.innerHTML = ''; // Очистить существующие элементы
                 data.deals.forEach((deal, index) => {
-                    var dealItem = `
-                        <tr id="deal-${deal.id}">
+                    let checkboxCell = '';
+                    if (userRole === 'admin' || userName === deal.created_by) {
+                        checkboxCell = `
                             <td onclick="toggleCheckbox(${deal.id}, event)">
                                 <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
-                            </td>
+                            </td>`;
+                    } else {
+                        checkboxCell = `
+                            <td>
+                            </td>`;
+                    }
+                    const dealItem = `
+                        <tr id="deal-${deal.id}">
+                            ${checkboxCell}
                             <td onclick="enterIntoDeal(${deal.id})">${index + 1}</td>
                             <td class="deal-dl" onclick="enterIntoDeal(${deal.id})">${deal.dl_number}</td>
                             <td class="deal-title" onclick="enterIntoDeal(${deal.id})">${deal.title}</td>

@@ -453,3 +453,11 @@ input[type="checkbox"]:checked::before {
     width: 40px;
     height: auto;
 }
+
+.darkened-section {
+    background-color: rgba(0, 0, 0, 0.1); /* Черный цвет с прозрачностью 60% */
+    padding: 10px;
+    border-radius: 20px;
+    color: #fff;
+    margin: 15px; /* Центрируем элемент */
+}

@@ -78,16 +78,21 @@
             </li>
         </ul>
     </ul>
-    <div class="user-photo">
-        <img src="{{ user_url }}" alt="User Photo" class="profile-image">
+    <!-- Начало затемненной области -->
+    <div class="darkened-section">
+        <div class="user-photo">
+            <img src="{{ user_url }}" alt="User Photo" class="profile-image">
+        </div>
+        <h6>{{ current_user }}</h6>
+        <h6>Должность: {{ user_role }}</h6>
     </div>
-    <h6>{{ current_user }}</h6>
-    <h6>Должность: {{ user_role }}</h6>
     <h6>
         <a class="nav-link exit-link" href="{{ url_for('user.exit_user') }}">
             <i class="fa-solid fa-right-from-bracket"></i> Выйти из аккаунта
         </a>
     </h6>
+
+    <!-- Конец затемненной области -->
 </div>
 
 <div class="main-content">

@@ -19,9 +19,6 @@ from .. import socketio
 from ..leasing_calculator.models import Seller
 
 
-from sqlalchemy.orm import joinedload
-
-
 @deal_inside_bp.route("/<deal_id>", methods=["GET"])
 def enter_into_deal(deal_id: int):
     # Находим сделку по deal_id, загружаем связанного клиента

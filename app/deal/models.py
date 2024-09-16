@@ -1,4 +1,3 @@
-from logger import logging
 from datetime import datetime
 
 from sqlalchemy import Sequence

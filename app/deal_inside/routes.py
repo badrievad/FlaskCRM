@@ -12,6 +12,7 @@ from .sql_queries import (
     update_deal_created_by,
     delete_seller_by_calc_id,
     delete_calculator_section,
+    update_client_in_db,
 )
 from ..config import suggestions_token
 from ..deal.models import Deal
@@ -225,3 +226,28 @@ def delete_section():
             ),
             500,
         )
+
+
+@deal_inside_bp.route("/update-client", methods=["POST"])
+def update_client_info():
+    data = request.get_json()
+
+    if not data:
+        return jsonify({"success": False, "message": "Нет данных в запросе"}), 400
+
+    deal_id = data.get("deal_id")
+    if not deal_id:
+        return jsonify({"success": False, "message": "Не указан deal_id"}), 400
+
+    # Получаем обновленную информацию о клиенте
+    new_address = data.get("address")
+    new_phone = data.get("phone")
+    new_email = data.get("email")
+    new_signer = data.get("signer")
+
+    # Вызываем функцию обновления клиента в базе данных
+    response_data, status_code = update_client_in_db(
+        deal_id, new_address, new_phone, new_email, new_signer
+    )
+
+    return jsonify(response_data), status_code

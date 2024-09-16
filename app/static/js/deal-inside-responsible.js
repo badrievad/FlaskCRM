@@ -131,7 +131,6 @@ function saveSelection() {
 
 // Функция для отмены выбора
 function cancelSelection() {
-    console.log('Отменено');
     userDropdown.style.display = 'none'; // Закрыть dropdown
 }
 
@@ -165,27 +164,6 @@ document.addEventListener('click', function (event) {
         userDropdown.style.display = 'none';
     }
 });
-
-function showSuccess(message, title) {
-    toastr.options = {
-        closeButton: true,
-        debug: false,
-        newestOnTop: false,
-        progressBar: true,
-        positionClass: "toast-bottom-right",
-        preventDuplicates: false,
-        onclick: null,
-        showDuration: "300",
-        hideDuration: "1000",
-        timeOut: "5000",
-        extendedTimeOut: "1000",
-        showEasing: "swing",
-        hideEasing: "linear",
-        showMethod: "fadeIn",
-        hideMethod: "fadeOut"
-    };
-    toastr.success(message, title);
-}
 
 function showError(message, title) {
     toastr.options = {
@@ -232,7 +210,7 @@ function showInfo(message, title) {
 // Используем делегирование событий для иконки редактирования
 document.addEventListener('click', function (event) {
     if (event.target.classList.contains('edit-name-icon')) {
-        var index = event.target.getAttribute('data-index');
+        const index = event.target.getAttribute('data-index');
         toggleEditMode(index, true);
     }
 });
@@ -240,7 +218,7 @@ document.addEventListener('click', function (event) {
 // Обработчик для кнопки "Сохранить"
 document.addEventListener('click', function (event) {
     if (event.target.classList.contains('save-supplier')) {
-        var index = event.target.getAttribute('data-index');
+        const index = event.target.getAttribute('data-index');
         saveEditing(index);
     }
 });
@@ -248,29 +226,29 @@ document.addEventListener('click', function (event) {
 // Обработчик для кнопки "Отменить"
 document.addEventListener('click', function (event) {
     if (event.target.classList.contains('cancel-supplier')) {
-        var index = event.target.getAttribute('data-index');
+        const index = event.target.getAttribute('data-index');
         toggleEditMode(index, false);
     }
 });
 
 // Функция переключения режима редактирования
 function toggleEditMode(index, isEditing) {
-    var nameDisplay = document.getElementById(`supplier-name-display-${index}`);
-    var nameInput = document.getElementById(`supplier-name-input-${index}`);
-    var innDisplay = document.getElementById(`supplier-inn-display-${index}`);
-    var innInput = document.getElementById(`supplier-inn-input-${index}`);
-    var addressDisplay = document.getElementById(`supplier-address-display-${index}`);
-    var addressInput = document.getElementById(`supplier-address-input-${index}`);
-    var phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
-    var phoneInput = document.getElementById(`supplier-phone-input-${index}`);
-    var emailDisplay = document.getElementById(`supplier-email-display-${index}`);
-    var emailInput = document.getElementById(`supplier-email-input-${index}`);
-    var signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
-    var signerInput = document.getElementById(`supplier-signer-input-${index}`);
-    var saveButton = document.getElementById(`save-supplier-${index}`);
-    var cancelButton = document.getElementById(`cancel-supplier-${index}`);
-    var editIcon = document.getElementById(`edit-name-icon-${index}`);
-    var deleteIcon = document.getElementById(`edit-delete-icon-${index}`);
+    const nameDisplay = document.getElementById(`supplier-name-display-${index}`);
+    const nameInput = document.getElementById(`supplier-name-input-${index}`);
+    const innDisplay = document.getElementById(`supplier-inn-display-${index}`);
+    const innInput = document.getElementById(`supplier-inn-input-${index}`);
+    const addressDisplay = document.getElementById(`supplier-address-display-${index}`);
+    const addressInput = document.getElementById(`supplier-address-input-${index}`);
+    const phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
+    const phoneInput = document.getElementById(`supplier-phone-input-${index}`);
+    const emailDisplay = document.getElementById(`supplier-email-display-${index}`);
+    const emailInput = document.getElementById(`supplier-email-input-${index}`);
+    const signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
+    const signerInput = document.getElementById(`supplier-signer-input-${index}`);
+    const saveButton = document.getElementById(`save-supplier-${index}`);
+    const cancelButton = document.getElementById(`cancel-supplier-${index}`);
+    const editIcon = document.getElementById(`edit-name-icon-${index}`);
+    const deleteIcon = document.getElementById(`edit-delete-icon-${index}`);
 
     if (isEditing) {
         // Включаем режим редактирования
@@ -318,19 +296,19 @@ function toggleEditMode(index, isEditing) {
 
 // Функция сохранения изменений
 function saveEditing(index) {
-    var newName = document.getElementById(`supplier-name-input-${index}`).value.trim();
-    var newInn = document.getElementById(`supplier-inn-input-${index}`).value.trim();
-    var newAddress = document.getElementById(`supplier-address-input-${index}`).value.trim();
-    var newPhone = document.getElementById(`supplier-phone-input-${index}`).value.trim();
-    var newEmail = document.getElementById(`supplier-email-input-${index}`).value.trim();
-    var newSigner = document.getElementById(`supplier-signer-input-${index}`).value.trim();
-    var nameDisplay = document.getElementById(`supplier-name-display-${index}`);
-    var innDisplay = document.getElementById(`supplier-inn-display-${index}`);
-    var addressDisplay = document.getElementById(`supplier-address-display-${index}`);
-    var phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
-    var emailDisplay = document.getElementById(`supplier-email-display-${index}`);
-    var signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
-    var calcId = getCalcIdFromSection(index);
+    const newName = document.getElementById(`supplier-name-input-${index}`).value.trim();
+    const newInn = document.getElementById(`supplier-inn-input-${index}`).value.trim();
+    const newAddress = document.getElementById(`supplier-address-input-${index}`).value.trim();
+    const newPhone = document.getElementById(`supplier-phone-input-${index}`).value.trim();
+    const newEmail = document.getElementById(`supplier-email-input-${index}`).value.trim();
+    const newSigner = document.getElementById(`supplier-signer-input-${index}`).value.trim();
+    const nameDisplay = document.getElementById(`supplier-name-display-${index}`);
+    const innDisplay = document.getElementById(`supplier-inn-display-${index}`);
+    const addressDisplay = document.getElementById(`supplier-address-display-${index}`);
+    const phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
+    const emailDisplay = document.getElementById(`supplier-email-display-${index}`);
+    const signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
+    const calcId = getCalcIdFromSection(index);
 
     // Валидация данных
     if (!newName) {
@@ -378,7 +356,7 @@ function saveEditing(index) {
             signer: newSigner,
             calc_id: calcId
         }),
-        success: function (response) {
+        success: function () {
             const Toast = Swal.mixin({
                 toast: true,
                 position: "top-end",
@@ -396,7 +374,7 @@ function saveEditing(index) {
             });
 
             // Проверяем, существует ли иконка удаления
-            var deleteIcon = document.getElementById(`edit-delete-icon-${index}`);
+            let deleteIcon = document.getElementById(`edit-delete-icon-${index}`);
             if (!deleteIcon) {
                 // Создаем новую иконку удаления, если её нет
                 deleteIcon = document.createElement('i');
@@ -405,13 +383,13 @@ function saveEditing(index) {
                 deleteIcon.setAttribute('data-index', index);
 
                 // Добавляем иконку в нужное место в DOM
-                var parentElement = document.getElementById(`edit-name-icon-${index}`).parentElement;
+                let parentElement = document.getElementById(`edit-name-icon-${index}`).parentElement;
                 if (parentElement) {
                     parentElement.appendChild(deleteIcon);
                 }
             }
         },
-        error: function (xhr, status, error) {
+        error: function () {
             // Обновляем значения полей, чтобы сделать их пустыми
             nameDisplay.textContent = '';
             innDisplay.textContent = '';
@@ -446,4 +424,180 @@ function getCalcIdFromSection(index) {
         console.error(`Section with index ${index} not found`);
         return null;
     }
+}
+
+
+// Используем делегирование событий для иконки редактирования клиента
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('edit-client-icon')) {
+        toggleEditModeClient(true);
+    }
+});
+
+// Обработчик для кнопки "Сохранить"
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('save-client')) {
+        saveEditingClient();
+    }
+});
+
+// Обработчик для кнопки "Отменить"
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('cancel-client')) {
+        toggleEditModeClient(false);
+    }
+});
+
+// Функция переключения режима редактирования клиента
+function toggleEditModeClient(isEditing) {
+    const nameDisplayClient = document.getElementById(`client-name-display`);
+    const nameInputClient = document.getElementById(`client-name-input`);
+    const innDisplayClient = document.getElementById(`client-inn-display`);
+    const innInputClient = document.getElementById(`client-inn-input`);
+    const addressDisplayClient = document.getElementById(`client-address-display`);
+    const addressInputClient = document.getElementById(`client-address-input`);
+    const phoneDisplayClient = document.getElementById(`client-phone-display`);
+    const phoneInputClient = document.getElementById(`client-phone-input`);
+    const emailDisplayClient = document.getElementById(`client-email-display`);
+    const emailInputClient = document.getElementById(`client-email-input`);
+    const signerDisplayClient = document.getElementById(`client-signer-display`);
+    const signerInputClient = document.getElementById(`client-signer-input`);
+    const saveButtonClient = document.getElementById(`save-client`);
+    const cancelButtonClient = document.getElementById(`cancel-client`);
+    const editIconClient = document.getElementById(`edit-client-icon`);
+
+    if (isEditing) {
+        // Включаем режим редактирования
+        nameDisplayClient.style.display = 'none';
+        nameInputClient.style.display = 'inline';
+        innDisplayClient.style.display = 'none';
+        innInputClient.style.display = 'inline';
+        addressDisplayClient.style.display = 'none';
+        addressInputClient.style.display = 'inline';
+        phoneDisplayClient.style.display = 'none';
+        phoneInputClient.style.display = 'inline';
+        emailDisplayClient.style.display = 'none';
+        emailInputClient.style.display = 'inline';
+        signerDisplayClient.style.display = 'none';
+        signerInputClient.style.display = 'inline';
+        editIconClient.style.display = 'none';
+        saveButtonClient.style.display = 'inline-block';
+        cancelButtonClient.style.display = 'inline-block';
+        nameInputClient.focus();
+    } else {
+        // Выключаем режим редактирования
+        nameDisplayClient.style.display = 'inline';
+        nameInputClient.style.display = 'none';
+        innDisplayClient.style.display = 'inline';
+        innInputClient.style.display = 'none';
+        addressDisplayClient.style.display = 'inline';
+        addressInputClient.style.display = 'none';
+        phoneDisplayClient.style.display = 'inline';
+        phoneInputClient.style.display = 'none';
+        emailDisplayClient.style.display = 'inline';
+        emailInputClient.style.display = 'none';
+        signerDisplayClient.style.display = 'inline';
+        signerInputClient.style.display = 'none';
+        editIconClient.style.display = 'inline';
+        saveButtonClient.style.display = 'none';
+        cancelButtonClient.style.display = 'none';
+    }
+}
+
+// Функция сохранения изменений
+function saveEditingClient() {
+    const newNameClient = document.getElementById(`client-name-input`).value.trim();
+    const newInnClient = document.getElementById(`client-inn-input`).value.trim();
+    const newAddressClient = document.getElementById(`client-address-input`).value.trim();
+    const newPhoneClient = document.getElementById(`client-phone-input`).value.trim();
+    const newEmailClient = document.getElementById(`client-email-input`).value.trim();
+    const newSignerClient = document.getElementById(`client-signer-input`).value.trim();
+    const nameDisplayClient = document.getElementById(`client-name-display`);
+    const innDisplayClient = document.getElementById(`client-inn-display`);
+    const addressDisplayClient = document.getElementById(`client-address-display`);
+    const phoneDisplayClient = document.getElementById(`client-phone-display`);
+    const emailDisplayClient = document.getElementById(`client-email-display`);
+    const signerDisplayClient = document.getElementById(`client-signer-display`);
+    const saveClientButton = document.getElementById('save-client');
+    const dealId = saveClientButton.getAttribute('deal-id');
+
+    // Валидация данных
+    if (!newNameClient) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Ошибка!',
+            text: 'Введите корректное наименование поставщика.',
+            confirmButtonColor: '#67a2d5',
+        });
+        return;
+    }
+
+    if (newInnClient.length !== 10 && newInnClient.length !== 12 || !/^\d+$/.test(newInnClient)) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Ошибка!',
+            text: 'ИНН должен содержать 10 или 12 цифр.',
+            confirmButtonColor: '#67a2d5',
+        });
+        return;
+    }
+
+    // Обновляем отображаемые значения
+    nameDisplayClient.textContent = newNameClient;
+    innDisplayClient.textContent = newInnClient;
+    addressDisplayClient.textContent = newAddressClient;
+    phoneDisplayClient.textContent = newPhoneClient;
+    emailDisplayClient.textContent = newEmailClient;
+    signerDisplayClient.textContent = newSignerClient;
+
+    // Выключаем режим редактирования
+    toggleEditModeClient(false);
+
+    // Отправляем данные на сервер
+    $.ajax({
+        url: '/crm/deal/inside/update-client',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            deal_id: dealId,
+            address: newAddressClient,
+            phone: newPhoneClient,
+            email: newEmailClient,
+            signer: newSignerClient,
+        }),
+        success: function () {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "Данные клиента обновлены."
+            });
+        },
+        error: function () {
+            // Обновляем значения полей, чтобы сделать их пустыми
+            phoneDisplayClient.textContent = '';
+            emailDisplayClient.textContent = '';
+
+            document.getElementById(`client-address-input`).value = '';
+            document.getElementById(`client-phone-input`).value = '';
+            document.getElementById(`client-email-input`).value = '';
+            document.getElementById(`client-signer-input`).value = '';
+
+            // Выводим сообщение об ошибке
+            Swal.fire({
+                icon: 'error',
+                text: 'Ошибка при обновлении данных клиента.',
+                confirmButtonColor: '#67a2d5',
+            });
+        }
+    });
 }

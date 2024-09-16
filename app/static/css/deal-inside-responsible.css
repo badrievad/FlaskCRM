@@ -97,14 +97,14 @@
 }
 
 /* Иконка редактирования */
-.edit-name-icon {
+.edit-name-icon, .edit-client-icon {
     color: #007bff;
     cursor: pointer;
     transition: color 0.3s ease;
     font-size: 13px;
 }
 
-.edit-name-icon:hover {
+.edit-name-icon:hover, .edit-client-icon:hover {
     color: #0056b3;
 }
 
@@ -122,7 +122,7 @@
 
 
 /* Стили для кнопок действий */
-.supplier-action-button {
+.supplier-action-button, .client-action-button {
     padding: 10px 10px;
     border: none;
     border-radius: 4px;
@@ -132,27 +132,27 @@
 }
 
 /* Кнопка "Сохранить" */
-.save-supplier {
+.save-supplier, .save-client {
     background-color: #508676;
     color: white;
 }
 
-.save-supplier:hover {
+.save-supplier:hover, .save-client:hover {
     background-color: rgb(58, 101, 88);
 }
 
 /* Кнопка "Отменить" */
-.cancel-supplier {
+.cancel-supplier, .cancel-client {
     background-color: #ad6c72;
     color: white;
 }
 
-.cancel-supplier:hover {
+.cancel-supplier:hover, .cancel-client:hover {
     background-color: rgb(122, 70, 75);
 }
 
 /* Стили для полей ввода */
-.supplier-input-field {
+.supplier-input-field, .client-input-field {
     display: none; /* Скрываем поля ввода по умолчанию */
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -162,7 +162,7 @@
     box-sizing: border-box;
 }
 
-.supplier-input-field:focus {
+.supplier-input-field:focus, .client-input-field:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
@@ -179,7 +179,7 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.supplier-section {
+.supplier-section, .client-section {
     display: grid;
     grid-template-columns: 150px 1fr; /* Первая колонка для заголовков, вторая для полей */
     align-items: center; /* Выравнивание по вертикали */
@@ -187,7 +187,7 @@
     margin-bottom: 10px; /* Отступ снизу для каждой строки */
 }
 
-.supplier-section p {
+.supplier-section p, .client-section p {
     margin: 0;
 }
 

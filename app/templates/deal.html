@@ -82,7 +82,6 @@
                     <h3>Ответственный</h3>
                     <p>
                         <span id="current-created-by" data-user-id="{{ deal.created_by }}">{{ deal.created_by }}</span>
-
                         {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
                             <i class="fa-solid fa-pen fa-xs" id="user-icon"></i>
                         {% endif %}
@@ -98,13 +97,62 @@
             </div>
             <div class="right">
                 <div class="section">
-                    <h3>Клиент</h3>
-                    <p>Наименование: {{ deal.client.name }}</p>
-                    <p>ИНН: {{ deal.client.inn }}</p>
-                    <p>Адрес: {{ deal.client.address }}</p>
-                    <p>Телефон: {{ deal.client.phone }}</p>
-                    <p>Электронная почта: {{ deal.client.email }}</p>
-                    <p>Подписант: {{ deal.client.signer }}</p>
+                    <h3 class="client-header">
+                        Клиент
+                        {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                            <i class="fa-solid fa-pen fa-xs edit-client-icon" id="edit-client-icon"
+                               style="font-size: 14px"></i>
+                        {% endif %}
+                        <button id="save-client" class="client-action-button save-client" deal-id="{{ deal.id }}"
+                                style="display:none;">Сохранить
+                        </button>
+                        <button id="cancel-client"
+                                class="client-action-button cancel-client"
+                                style="display:none;">Отменить
+                        </button>
+                    </h3>
+                    <div class="client-section">
+                        <span>Наименование:</span>
+                        <span id="client-name-display">{{ deal.client.name }}</span>
+                        <input type="text" id="client-name-input"
+                               value="{{ deal.client.name }}" class="client-input-field"
+                               maxlength="255" readonly>
+                    </div>
+                    <div class="client-section">
+                        <span>ИНН:</span>
+                        <span id="client-inn-display">{{ deal.client.inn }}</span>
+                        <input type="text" id="client-inn-input"
+                               value="{{ deal.client.inn }}" class="client-input-field"
+                               maxlength="20" readonly>
+                    </div>
+                    <div class="client-section">
+                        <span>Адрес:</span>
+                        <span id="client-address-display">{{ deal.client.address }}</span>
+                        <input type="text" id="client-address-input"
+                               value="{{ deal.client.address }}" class="client-input-field"
+                               maxlength="255">
+                    </div>
+                    <div class="client-section">
+                        <span>Телефон:</span>
+                        <span id="client-phone-display">{{ deal.client.phone }}</span>
+                        <input type="text" id="client-phone-input"
+                               value="{{ deal.client.phone }}" class="client-input-field"
+                               maxlength="20">
+                    </div>
+                    <div class="client-section">
+                        <span>Электронная почта:</span>
+                        <span id="client-email-display">{{ deal.client.email }}</span>
+                        <input type="text" id="client-email-input"
+                               value="{{ deal.client.email }}" class="client-input-field"
+                               maxlength="100">
+                    </div>
+                    <div class="client-section">
+                        <span>Подписант:</span>
+                        <span id="client-signer-display">{{ deal.client.signer }}</span>
+                        <input type="text" id="client-signer-input"
+                               value="{{ deal.client.signer }}" class="client-input-field"
+                               maxlength="255">
+                    </div>
                 </div>
             </div>
         </div>

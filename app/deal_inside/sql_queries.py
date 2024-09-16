@@ -1,5 +1,7 @@
+from sqlalchemy.exc import SQLAlchemyError
+
 from .. import db
-from ..deal.models import Deal
+from ..deal.models import Deal, Client
 from ..leasing_calculator.models import LeasCalculator
 from ..user.models import User
 from logger import logging
@@ -99,3 +101,57 @@ def delete_calculator_section(calc_id, dl_number):
     except Exception as e:
         db.session.rollback()  # Откат транзакции в случае ошибки
         return False, f"Ошибка при отвязке секции: {str(e)}"
+
+
+def update_client_in_db(deal_id, new_address, new_phone, new_email, new_signer):
+    try:
+        # Находим сделку по deal_id
+        deal = Deal.query.get(deal_id)
+        if not deal:
+            return {"success": False, "message": "Сделка не найдена"}, 404
+
+        # Получаем client_id из сделки
+        client_id = deal.client_id
+        if not client_id:
+            return {"success": False, "message": "Клиент не связан с этой сделкой"}, 404
+
+        # Находим клиента по client_id
+        client = Client.query.get(client_id)
+        if not client:
+            return {"success": False, "message": "Клиент не найден"}, 404
+
+        # Обновляем поля клиента, если они изменились
+        updated = False
+        if new_address is not None and client.address != new_address:
+            client.address = new_address
+            updated = True
+        if new_phone is not None and client.phone != new_phone:
+            client.phone = new_phone
+            updated = True
+        if new_email is not None and client.email != new_email:
+            client.email = new_email
+            updated = True
+        if new_signer is not None and client.signer != new_signer:
+            client.signer = new_signer
+            updated = True
+
+        if updated:
+            db.session.commit()
+            return {"success": True, "message": "Данные клиента успешно обновлены"}, 200
+        else:
+            return {"success": True, "message": "Нет изменений в данных клиента"}, 200
+
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        logging.error(f"Ошибка при обновлении данных клиента: {e}")
+        return {
+            "success": False,
+            "message": "Ошибка базы данных при обновлении данных клиента",
+        }, 500
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Неизвестная ошибка при обновлении данных клиента: {e}")
+        return {
+            "success": False,
+            "message": "Произошла ошибка при обновлении данных клиента",
+        }, 500

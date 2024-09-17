@@ -98,7 +98,7 @@ class LeasCalculator(db.Model):
         cascade="all, delete-orphan",
     )
 
-    seller = relationship("Seller", back_populates="leas_calculator")
+    seller = relationship("Seller", back_populates="leas_calculators")
 
     def to_dict(self):
         return {
@@ -339,11 +339,17 @@ class Seller(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    inn = db.Column(db.String(255), nullable=False, unique=True)
-    ogrn = db.Column(db.String(255), nullable=False, unique=True)
+    inn = db.Column(db.String(20), nullable=False, unique=True)
+    ogrn = db.Column(db.String(20), nullable=False)
+    okato = db.Column(db.String(20), nullable=True)
+    kpp = db.Column(db.String(20), nullable=True)
     address = db.Column(db.String(255), nullable=True)
-    phone = db.Column(db.String(255), nullable=True)
-    email = db.Column(db.String(255), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+    email = db.Column(db.String(100), nullable=True)
     signer = db.Column(db.String(255), nullable=True)
+    based_on = db.Column(db.String(200), nullable=True)
+    current_account = db.Column(db.String(30), nullable=True)
+    bank_id = db.Column(db.Integer, db.ForeignKey("banks.id"), nullable=True)
 
-    leas_calculator = relationship("LeasCalculator", back_populates="seller")
+    leas_calculators = relationship("LeasCalculator", back_populates="seller")
+    bank = relationship("Bank", back_populates="sellers")

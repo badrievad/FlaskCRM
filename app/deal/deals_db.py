@@ -60,6 +60,7 @@ def get_or_create_client(client_data: DealsValidate):
             inn=inn,
             ogrn=client_data.get_company_ogrn,
             kpp=client_data.get_company_kpp,
+            okato=client_data.get_company_okato,
             address=client_data.get_company_address,
             signer=client_data.get_company_signer,
             phone="",

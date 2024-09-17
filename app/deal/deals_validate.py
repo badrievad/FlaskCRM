@@ -49,6 +49,15 @@ class DealsValidate:
         return info.get("data", {}).get("kpp", "-")
 
     @property
+    def get_company_okato(self) -> str:
+        info_json: json = self._data.get("info")
+        if info_json:
+            info: dict = json.loads(info_json)
+        else:
+            info: dict = {}
+        return info.get("data", {}).get("okato", "-")
+
+    @property
     def get_company_address(self) -> str:
         info_json: json = self._data.get("info")
         if info_json:

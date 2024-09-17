@@ -1,5 +1,5 @@
 from .models import Seller, LeasCalculator
-from .other_utils import dadata_info
+from .other_utils import dadata_info_company, dadata_result
 from .. import db
 
 
@@ -9,7 +9,10 @@ def create_or_update_seller_and_link_to_leas_calc(
     """Создаем или обновляем продавца и привязываем его к LeasCalculator"""
     # Проверяем, существует ли продавец с таким ИНН
     seller = Seller.query.filter_by(inn=new_inn).first()
-    new_ogrn = dadata_info(new_inn).get("data", {}).get("ogrn", "")
+    dadata_info: dict = dadata_info_company(new_inn)
+    ogrn = dadata_result(dadata_info)["ogrn"]
+    okato = dadata_result(dadata_info)["okato"]
+    kpp = dadata_result(dadata_info)["kpp"]
 
     if seller:
         # Если продавец существует, обновляем его имя, если оно изменилось
@@ -29,7 +32,9 @@ def create_or_update_seller_and_link_to_leas_calc(
         seller = Seller(
             name=new_name,
             inn=new_inn,
-            ogrn=new_ogrn,
+            ogrn=ogrn,
+            okato=okato,
+            kpp=kpp,
             address=new_address,
             phone=new_phone,
             email=new_email,

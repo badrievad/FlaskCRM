@@ -82,12 +82,33 @@ class Client(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
-    inn = db.Column(db.String(20), nullable=False)
+    inn = db.Column(db.String(20), nullable=False, unique=True)
     ogrn = db.Column(db.String(20), nullable=False)
+    okato = db.Column(db.String(20), nullable=True)
     kpp = db.Column(db.String(20), nullable=True)
     address = db.Column(db.String(200), nullable=True)
     phone = db.Column(db.String(20), nullable=True)
     email = db.Column(db.String(100), nullable=True)
     signer = db.Column(db.String(100), nullable=True)
+    based_on = db.Column(db.String(200), nullable=True)
+    current_account = db.Column(db.String(30), nullable=True)
+    bank_id = db.Column(db.Integer, db.ForeignKey("banks.id"), nullable=True)
 
     deals = relationship("Deal", back_populates="client")
+    bank = relationship("Bank", back_populates="clients")
+
+
+class Bank(db.Model):
+    __tablename__ = "banks"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), nullable=False)
+    inn = db.Column(db.String(20), nullable=False, unique=True)
+    kpp = db.Column(db.String(20), nullable=False)
+    bic = db.Column(db.String(20), nullable=False)
+    address = db.Column(db.String(255), nullable=True)
+    phone = db.Column(db.String(20), nullable=True)
+    correspondent_account = db.Column(db.String(20), nullable=True)
+
+    clients = relationship("Client", back_populates="bank")
+    sellers = relationship("Seller", back_populates="bank")

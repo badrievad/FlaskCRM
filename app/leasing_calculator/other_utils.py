@@ -43,7 +43,7 @@ def validate_item_price(price: str) -> str:
     return formatted_price
 
 
-def dadata_info(inn: str) -> dict:
+def dadata_info_company(inn: str) -> dict:
     try:
         dadata = Dadata(suggestions_token)
         result = dadata.find_by_id("party", inn)[0]
@@ -52,3 +52,14 @@ def dadata_info(inn: str) -> dict:
         result = {}
 
     return result
+
+
+def dadata_result(dadata_object: dict) -> dict:
+    return {
+        "inn": dadata_object.get("data", {}).get("inn", "-"),
+        "kpp": dadata_object.get("data", {}).get("kpp", "-"),
+        "ogrn": dadata_object.get("data", {}).get("ogrn", "-"),
+        "okato": dadata_object.get("data", {}).get("okato", "-"),
+        "name": dadata_object.get("value", "-"),
+        "address": dadata_object.get("data", {}).get("address", {}.get("value", "-")),
+    }

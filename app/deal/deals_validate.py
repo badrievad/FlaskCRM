@@ -1,4 +1,5 @@
 import json
+from datetime import datetime, date
 
 
 class DealsValidate:
@@ -79,3 +80,21 @@ class DealsValidate:
             return management
 
         return info.get("data", {}).get("name", {}).get("full", "")
+
+    @property
+    def get_company_reg_date(self) -> date | None:
+        info_json: str = self._data.get("info")
+        if info_json:
+            info: dict = json.loads(info_json)
+        else:
+            info: dict = {}
+        ogrn_date_ms = info.get("data", {}).get("ogrn_date", "")
+        if ogrn_date_ms:
+            try:
+                ogrn_date_s = int(ogrn_date_ms) / 1000
+                dt = datetime.fromtimestamp(ogrn_date_s)
+                return dt.date()  # Возвращаем объект datetime.date
+            except (ValueError, TypeError):
+                return None
+        else:
+            return None

@@ -13,6 +13,7 @@ def create_or_update_seller_and_link_to_leas_calc(
     ogrn = dadata_result(dadata_info)["ogrn"]
     okato = dadata_result(dadata_info)["okato"]
     kpp = dadata_result(dadata_info)["kpp"]
+    reg_date = dadata_result(dadata_info)["reg_date"]
 
     if seller:
         # Если продавец существует, обновляем его имя, если оно изменилось
@@ -35,6 +36,7 @@ def create_or_update_seller_and_link_to_leas_calc(
             ogrn=ogrn,
             okato=okato,
             kpp=kpp,
+            registration_date=reg_date,
             address=new_address,
             phone=new_phone,
             email=new_email,

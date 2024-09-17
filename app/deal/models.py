@@ -92,6 +92,7 @@ class Client(db.Model):
     signer = db.Column(db.String(100), nullable=True)
     based_on = db.Column(db.String(200), nullable=True)
     current_account = db.Column(db.String(30), nullable=True)
+    date_of_registration = db.Column(db.Date, nullable=True)
     bank_id = db.Column(db.Integer, db.ForeignKey("banks.id"), nullable=True)
 
     deals = relationship("Deal", back_populates="client")

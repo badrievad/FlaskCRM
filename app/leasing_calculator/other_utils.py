@@ -1,4 +1,5 @@
 import re
+from datetime import datetime
 
 from ..config import suggestions_token
 from dadata import Dadata
@@ -55,11 +56,21 @@ def dadata_info_company(inn: str) -> dict:
 
 
 def dadata_result(dadata_object: dict) -> dict:
+    ogrn_date_ms = dadata_object.get("data", {}).get("ogrn_date", "")
+    if ogrn_date_ms:
+        try:
+            ogrn_date_s = int(ogrn_date_ms) / 1000
+            reg_date = datetime.fromtimestamp(ogrn_date_s).date()
+        except (ValueError, TypeError):
+            reg_date = "-"
+    else:
+        reg_date = "-"
     return {
         "inn": dadata_object.get("data", {}).get("inn", "-"),
         "kpp": dadata_object.get("data", {}).get("kpp", "-"),
         "ogrn": dadata_object.get("data", {}).get("ogrn", "-"),
         "okato": dadata_object.get("data", {}).get("okato", "-"),
         "name": dadata_object.get("value", "-"),
+        "reg_date": reg_date,
         "address": dadata_object.get("data", {}).get("address", {}.get("value", "-")),
     }

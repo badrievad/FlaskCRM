@@ -1266,7 +1266,7 @@
                     calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     preCalculateButton.disabled = false; // Разблокировать кнопку
                     preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                    showSuccess('Расчет по лизингу создан', 'Успешно');
+                    showSuccess('Расчет по лизингу создан');
                     scrollToOffers();
 
                     // Добавление нового расчета в начало списка
@@ -1332,25 +1332,22 @@
         calcListBody.insertBefore(newRow, calcListBody.firstChild);
     }
 
-    function showSuccess(message, title) {
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "5000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-        toastr.success(message, title);
+    function showSuccess(message) {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: message,
+        });
     }
 
     function showError(message, title) {

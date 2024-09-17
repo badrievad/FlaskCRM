@@ -362,6 +362,7 @@ def update_seller():
     new_email = data.get("email")
     new_signer = data.get("signer")
     calc_id = data.get("calc_id")
+    based_on = data.get("based_on")
 
     if not new_name or not new_inn or not calc_id:
         return (
@@ -378,6 +379,7 @@ def update_seller():
         new_email,
         new_signer,
         calc_id,
+        based_on,
     )
 
     return jsonify(response_data), status_code

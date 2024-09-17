@@ -62,7 +62,7 @@
     </div>
     <div id="general" class="tab-content active">
         <div class="stepper">
-            <div class="step completed">Отдел безопасности</div>
+            <div class="step">Отдел безопасности</div>
             <div class="step">Юридический отдел</div>
             <div class="step">Отдел рисков</div>
             <div class="step">Отдел лизинга</div>
@@ -151,6 +151,13 @@
                         <span id="client-signer-display">{{ deal.client.signer }}</span>
                         <input type="text" id="client-signer-input"
                                value="{{ deal.client.signer }}" class="client-input-field"
+                               maxlength="255">
+                    </div>
+                    <div class="client-section">
+                        <span>На основании:</span>
+                        <span id="client-based-display">{{ deal.client.based_on }}</span>
+                        <input type="text" id="client-based-input"
+                               value="{{ deal.client.based_on }}" class="client-input-field"
                                maxlength="255">
                     </div>
                 </div>
@@ -268,6 +275,13 @@
                                 <input type="text" id="supplier-signer-input-{{ loop.index }}"
                                        value="{{ item.leas_calc.seller.signer }}" class="supplier-input-field"
                                        maxlength="100">
+                            </div>
+                            <div class="supplier-section">
+                                <span>На основании:</span>
+                                <span id="supplier-based-display-{{ loop.index }}">{{ item.leas_calc.seller.based_on }}</span>
+                                <input type="text" id="supplier-based-input-{{ loop.index }}"
+                                       value="{{ item.leas_calc.seller.based_on }}" class="supplier-input-field"
+                                       maxlength="255">
                             </div>
                         </div>
                     {% else %}

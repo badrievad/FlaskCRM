@@ -15,6 +15,11 @@ class DealsValidate:
         return formatted_name
 
     @property
+    def get_company_based_on(self) -> str:
+        based_on = self._data.get("based_on", "")
+        return based_on
+
+    @property
     def get_name_without_special_symbols(self) -> str:
         forbidden_chars: set = {"\\", "/", ":", "*", "?", '"', "<", ">", "|"}
         name_without_special_symbols: str = "".join(

@@ -4,11 +4,18 @@ from .. import db
 
 
 def create_or_update_seller_and_link_to_leas_calc(
-    new_name, new_inn, new_address, new_phone, new_email, new_signer, calc_id
+    new_name,
+    new_inn,
+    new_address,
+    new_phone,
+    new_email,
+    new_signer,
+    calc_id,
+    new_based_on,
 ):
     """Создаем или обновляем продавца и привязываем его к LeasCalculator"""
     # Проверяем, существует ли продавец с таким ИНН
-    seller = Seller.query.filter_by(inn=new_inn).first()
+    seller: Seller = Seller.query.filter_by(inn=new_inn).first()
     dadata_info: dict = dadata_info_company(new_inn)
     ogrn = dadata_result(dadata_info)["ogrn"]
     okato = dadata_result(dadata_info)["okato"]
@@ -27,6 +34,8 @@ def create_or_update_seller_and_link_to_leas_calc(
             seller.email = new_email
         if seller.signer != new_signer:
             seller.signer = new_signer
+        if seller.based_on != new_based_on:
+            seller.based_on = new_based_on
         db.session.commit()
     else:
         # Если продавца нет, создаем нового
@@ -36,11 +45,12 @@ def create_or_update_seller_and_link_to_leas_calc(
             ogrn=ogrn,
             okato=okato,
             kpp=kpp,
-            registration_date=reg_date,
+            date_of_registration=reg_date,
             address=new_address,
             phone=new_phone,
             email=new_email,
             signer=new_signer,
+            based_on=new_based_on,
         )
         db.session.add(seller)
         db.session.commit()

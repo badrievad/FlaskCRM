@@ -63,6 +63,7 @@ def get_or_create_client(client_data: DealsValidate):
             okato=client_data.get_company_okato,
             address=client_data.get_company_address,
             signer=client_data.get_company_signer,
+            based_on=client_data.get_company_based_on,
             date_of_registration=client_data.get_company_reg_date,
             phone="",
             email="",

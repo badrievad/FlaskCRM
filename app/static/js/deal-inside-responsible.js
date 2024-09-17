@@ -245,6 +245,8 @@ function toggleEditMode(index, isEditing) {
     const emailInput = document.getElementById(`supplier-email-input-${index}`);
     const signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
     const signerInput = document.getElementById(`supplier-signer-input-${index}`);
+    const basedDisplay = document.getElementById(`supplier-based-display-${index}`);
+    const basedInput = document.getElementById(`supplier-based-input-${index}`);
     const saveButton = document.getElementById(`save-supplier-${index}`);
     const cancelButton = document.getElementById(`cancel-supplier-${index}`);
     const editIcon = document.getElementById(`edit-name-icon-${index}`);
@@ -264,6 +266,8 @@ function toggleEditMode(index, isEditing) {
         emailInput.style.display = 'inline';
         signerDisplay.style.display = 'none';
         signerInput.style.display = 'inline';
+        basedDisplay.style.display = 'none';
+        basedInput.style.display = 'inline';
         editIcon.style.display = 'none';
         if (deleteIcon) {  // Проверяем, существует ли элемент
             deleteIcon.style.display = 'none';  // Скрыть
@@ -285,6 +289,8 @@ function toggleEditMode(index, isEditing) {
         emailInput.style.display = 'none';
         signerDisplay.style.display = 'inline';
         signerInput.style.display = 'none';
+        basedDisplay.style.display = 'inline';
+        basedInput.style.display = 'none';
         editIcon.style.display = 'inline';
         if (deleteIcon) {  // Проверяем, существует ли элемент
             deleteIcon.style.display = 'inline';  // Скрыть
@@ -302,12 +308,14 @@ function saveEditing(index) {
     const newPhone = document.getElementById(`supplier-phone-input-${index}`).value.trim();
     const newEmail = document.getElementById(`supplier-email-input-${index}`).value.trim();
     const newSigner = document.getElementById(`supplier-signer-input-${index}`).value.trim();
+    const newBased = document.getElementById(`supplier-based-input-${index}`).value.trim();
     const nameDisplay = document.getElementById(`supplier-name-display-${index}`);
     const innDisplay = document.getElementById(`supplier-inn-display-${index}`);
     const addressDisplay = document.getElementById(`supplier-address-display-${index}`);
     const phoneDisplay = document.getElementById(`supplier-phone-display-${index}`);
     const emailDisplay = document.getElementById(`supplier-email-display-${index}`);
     const signerDisplay = document.getElementById(`supplier-signer-display-${index}`);
+    const basedDisplay = document.getElementById(`supplier-based-display-${index}`);
     const calcId = getCalcIdFromSection(index);
 
     // Валидация данных
@@ -338,6 +346,7 @@ function saveEditing(index) {
     phoneDisplay.textContent = newPhone;
     emailDisplay.textContent = newEmail;
     signerDisplay.textContent = newSigner;
+    basedDisplay.textContent = newBased;
 
     // Выключаем режим редактирования
     toggleEditMode(index, false);
@@ -354,7 +363,8 @@ function saveEditing(index) {
             phone: newPhone,
             email: newEmail,
             signer: newSigner,
-            calc_id: calcId
+            calc_id: calcId,
+            based_on: newBased
         }),
         success: function () {
             const Toast = Swal.mixin({
@@ -397,11 +407,13 @@ function saveEditing(index) {
             phoneDisplay.textContent = '';
             emailDisplay.textContent = '';
             signerDisplay.textContent = '';
+            basedDisplay.textContent = '';
 
             document.getElementById(`supplier-address-input-${index}`).value = '';
             document.getElementById(`supplier-phone-input-${index}`).value = '';
             document.getElementById(`supplier-email-input-${index}`).value = '';
             document.getElementById(`supplier-signer-input-${index}`).value = '';
+            document.getElementById(`supplier-based-input-${index}`).value = '';
 
             // Выводим сообщение об ошибке
             Swal.fire({
@@ -462,6 +474,8 @@ function toggleEditModeClient(isEditing) {
     const emailInputClient = document.getElementById(`client-email-input`);
     const signerDisplayClient = document.getElementById(`client-signer-display`);
     const signerInputClient = document.getElementById(`client-signer-input`);
+    const basedDisplayClient = document.getElementById(`client-based-display`);
+    const basedInputClient = document.getElementById(`client-based-input`);
     const saveButtonClient = document.getElementById(`save-client`);
     const cancelButtonClient = document.getElementById(`cancel-client`);
     const editIconClient = document.getElementById(`edit-client-icon`);
@@ -480,6 +494,8 @@ function toggleEditModeClient(isEditing) {
         emailInputClient.style.display = 'inline';
         signerDisplayClient.style.display = 'none';
         signerInputClient.style.display = 'inline';
+        basedDisplayClient.style.display = 'none';
+        basedInputClient.style.display = 'inline';
         editIconClient.style.display = 'none';
         saveButtonClient.style.display = 'inline-block';
         cancelButtonClient.style.display = 'inline-block';
@@ -498,6 +514,8 @@ function toggleEditModeClient(isEditing) {
         emailInputClient.style.display = 'none';
         signerDisplayClient.style.display = 'inline';
         signerInputClient.style.display = 'none';
+        basedDisplayClient.style.display = 'inline';
+        basedInputClient.style.display = 'none';
         editIconClient.style.display = 'inline';
         saveButtonClient.style.display = 'none';
         cancelButtonClient.style.display = 'none';
@@ -512,12 +530,14 @@ function saveEditingClient() {
     const newPhoneClient = document.getElementById(`client-phone-input`).value.trim();
     const newEmailClient = document.getElementById(`client-email-input`).value.trim();
     const newSignerClient = document.getElementById(`client-signer-input`).value.trim();
+    const newBasedClient = document.getElementById(`client-based-input`).value.trim();
     const nameDisplayClient = document.getElementById(`client-name-display`);
     const innDisplayClient = document.getElementById(`client-inn-display`);
     const addressDisplayClient = document.getElementById(`client-address-display`);
     const phoneDisplayClient = document.getElementById(`client-phone-display`);
     const emailDisplayClient = document.getElementById(`client-email-display`);
     const signerDisplayClient = document.getElementById(`client-signer-display`);
+    const basedDisplayClient = document.getElementById(`client-based-display`);
     const saveClientButton = document.getElementById('save-client');
     const dealId = saveClientButton.getAttribute('deal-id');
 
@@ -549,6 +569,7 @@ function saveEditingClient() {
     phoneDisplayClient.textContent = newPhoneClient;
     emailDisplayClient.textContent = newEmailClient;
     signerDisplayClient.textContent = newSignerClient;
+    basedDisplayClient.textContent = newBasedClient;
 
     // Выключаем режим редактирования
     toggleEditModeClient(false);
@@ -564,6 +585,7 @@ function saveEditingClient() {
             phone: newPhoneClient,
             email: newEmailClient,
             signer: newSignerClient,
+            based_on: newBasedClient
         }),
         success: function () {
             const Toast = Swal.mixin({
@@ -587,10 +609,8 @@ function saveEditingClient() {
             phoneDisplayClient.textContent = '';
             emailDisplayClient.textContent = '';
 
-            document.getElementById(`client-address-input`).value = '';
             document.getElementById(`client-phone-input`).value = '';
             document.getElementById(`client-email-input`).value = '';
-            document.getElementById(`client-signer-input`).value = '';
 
             // Выводим сообщение об ошибке
             Swal.fire({

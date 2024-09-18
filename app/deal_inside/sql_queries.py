@@ -103,7 +103,9 @@ def delete_calculator_section(calc_id, dl_number):
         return False, f"Ошибка при отвязке секции: {str(e)}"
 
 
-def update_client_in_db(deal_id, new_address, new_phone, new_email, new_signer):
+def update_client_in_db(
+    deal_id, new_address, new_phone, new_email, new_signer, new_base_on
+):
     try:
         # Находим сделку по deal_id
         deal = Deal.query.get(deal_id)
@@ -133,6 +135,9 @@ def update_client_in_db(deal_id, new_address, new_phone, new_email, new_signer):
             updated = True
         if new_signer is not None and client.signer != new_signer:
             client.signer = new_signer
+            updated = True
+        if new_base_on is not None and client.based_on != new_base_on:
+            client.based_on = new_base_on
             updated = True
 
         if updated:

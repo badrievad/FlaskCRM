@@ -244,10 +244,11 @@ def update_client_info():
     new_phone = data.get("phone")
     new_email = data.get("email")
     new_signer = data.get("signer")
+    new_base_on = data.get("base_on")
 
     # Вызываем функцию обновления клиента в базе данных
     response_data, status_code = update_client_in_db(
-        deal_id, new_address, new_phone, new_email, new_signer
+        deal_id, new_address, new_phone, new_email, new_signer, new_base_on
     )
 
     return jsonify(response_data), status_code

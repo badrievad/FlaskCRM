@@ -291,103 +291,111 @@
             </div>
         {% endfor %}
         <script>
-            var token = "{{ suggestions_token }}";
+            const token = "{{ suggestions_token }}";
+            const innCache = {};
 
-            // Функция для проверки ИНН в базе данных
-            function checkInnInDatabase(inn) {
-                return new Promise((resolve, reject) => {
-                    $.ajax({
+            async function checkInnInDatabase(inn) {
+                if (innCache[inn]) {
+                    return innCache[inn];
+                }
+                try {
+                    const response = await $.ajax({
                         url: '/crm/deal/inside/check-seller-inn',
                         method: 'POST',
                         contentType: 'application/json',
-                        data: JSON.stringify({inn: inn}),
-                        success: function (response) {
-                            resolve(response);  // Возвращаем данные из базы
-                        },
-                        error: function (xhr) {
-                            if (xhr.status === 404) {
-                                resolve(null);  // Если продавец не найден в базе
-                            } else {
-                                reject('Ошибка при проверке ИНН в базе');
-                            }
-                        }
+                        data: JSON.stringify({inn: inn})
                     });
+                    innCache[inn] = response;
+                    return response;
+                } catch (xhr) {
+                    if (xhr.status === 404) {
+                        innCache[inn] = null;
+                        return null;
+                    } else {
+                        throw new Error('Ошибка при проверке ИНН в базе');
+                    }
+                }
+            }
+
+            function initializeSuggestions(index) {
+                const supplierNameInput = `#supplier-name-input-${index}`;
+                const supplierInnInput = `#supplier-inn-input-${index}`;
+
+                const onSelectHandler = debounce(async function (suggestion) {
+                    const inn = suggestion.data.inn;
+
+                    try {
+                        const seller = await checkInnInDatabase(inn);
+                        if (seller) {
+                            // Используем данные из базы
+                            $(supplierNameInput).val(seller.name);
+                            $(supplierInnInput).val(seller.inn);
+                            $(`#supplier-address-input-${index}`).val(seller.address);
+                            $(`#supplier-phone-input-${index}`).val(seller.phone);
+                            $(`#supplier-email-input-${index}`).val(seller.email);
+                            $(`#supplier-signer-input-${index}`).val(seller.signer);
+                            $(`#supplier-based-input-${index}`).val(seller.based_on);
+                        } else {
+                            // Используем данные Dadata
+                            $(supplierNameInput).val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+                            $(supplierInnInput).val(suggestion.data.inn);
+                            $(`#supplier-phone-input-${index}`).val('');
+                            $(`#supplier-email-input-${index}`).val('');
+                            $(`#supplier-address-input-${index}`).val(suggestion.data.address.unrestricted_value);
+
+                            if (suggestion.data?.management?.name) {
+                                $(`#supplier-signer-input-${index}`).val(suggestion.data.management.name);
+                            } else {
+                                $(`#supplier-signer-input-${index}`).val(suggestion.data.name.full);
+                            }
+
+                            // Логика для "based_on"
+                            let formatDateReg = '';
+                            if (suggestion.data.state?.registration_date) {
+                                const date = new Date(suggestion.data.state.registration_date);
+                                formatDateReg = date.toLocaleDateString('ru-RU');
+                            }
+
+                            const basedOn = (suggestion.data.inn.length === 10)
+                                ? 'Устава'
+                                : `выписки Листа записи Единого государственного реестра индивидуальных предпринимателей от ${formatDateReg}`;
+
+                            $(`#supplier-based-input-${index}`).val(basedOn);
+                        }
+                    } catch (error) {
+                        console.error('Ошибка при проверке ИНН в базе данных:', error);
+                    }
+                }, 300); // Задержка в 300 мс
+
+                // Инициализация подсказок для названия
+                $(supplierNameInput).suggestions({
+                    token: token,
+                    type: "PARTY",
+                    onSelect: onSelectHandler
+                });
+
+                // Инициализация подсказок для ИНН
+                $(supplierInnInput).suggestions({
+                    token: token,
+                    type: "PARTY",
+                    onSelect: onSelectHandler
                 });
             }
 
-            // Инициализация подсказок для каждого поля
+            // Инициализация для каждого элемента
             {% for item in deals_info %}
-                $("#supplier-name-input-{{ loop.index }}").suggestions({
-                    token: token,
-                    type: "PARTY",
-                    onSelect: function (suggestion) {
-                        var inn = suggestion.data.inn;
-
-                        // Проверяем ИНН в базе данных
-                        checkInnInDatabase(inn).then(function (seller) {
-                            if (seller) {
-                                // Если продавец найден в базе, используем его данные
-                                $("#supplier-name-input-{{ loop.index }}").val(seller.name);
-                                $("#supplier-inn-input-{{ loop.index }}").val(seller.inn);
-                                $("#supplier-address-input-{{ loop.index }}").val(seller.address);
-                                $("#supplier-phone-input-{{ loop.index }}").val(seller.phone);
-                                $("#supplier-email-input-{{ loop.index }}").val(seller.email);
-                                $("#supplier-signer-input-{{ loop.index }}").val(seller.signer);
-                            } else {
-                                // Если продавец не найден в базе, используем данные Dadata
-                                $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
-                                $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
-                                $("#supplier-phone-input-{{ loop.index }}").val('');
-                                $("#supplier-email-input-{{ loop.index }}").val('');
-                                $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
-                                if (suggestion.data?.management?.name) {
-                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
-                                } else {
-                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
-                                }
-                            }
-                        }).catch(function (error) {
-                            console.error('Ошибка при проверке ИНН в базе данных:', error);
-                        });
-                    }
-                });
-
-                // Для ИНН
-                $("#supplier-inn-input-{{ loop.index }}").suggestions({
-                    token: token,
-                    type: "PARTY",
-                    onSelect: function (suggestion) {
-                        var inn = suggestion.data.inn;
-
-                        // Проверяем ИНН в базе данных
-                        checkInnInDatabase(inn).then(function (seller) {
-                            if (seller) {
-                                // Если продавец найден в базе, используем его данные
-                                $("#supplier-name-input-{{ loop.index }}").val(seller.name);
-                                $("#supplier-inn-input-{{ loop.index }}").val(seller.inn);
-                                $("#supplier-phone-input-{{ loop.index }}").val(seller.phone);
-                                $("#supplier-email-input-{{ loop.index }}").val(seller.email);
-                                $("#supplier-address-input-{{ loop.index }}").val(seller.address);
-                                $("#supplier-signer-input-{{ loop.index }}").val(seller.signer);
-                            } else {
-                                // Если продавец не найден в базе, используем данные Dadata
-                                $("#supplier-name-input-{{ loop.index }}").val(suggestion.data.name.short_with_opf.split(",")[0].trim());
-                                $("#supplier-inn-input-{{ loop.index }}").val(suggestion.data.inn);
-                                $("#supplier-address-input-{{ loop.index }}").val(suggestion.data.address.unrestricted_value);
-                                if (suggestion.data?.management?.name) {
-                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.management.name);
-                                } else {
-                                    $("#supplier-signer-input-{{ loop.index }}").val(suggestion.data.name.full);
-                                }
-                            }
-                        }).catch(function (error) {
-                            console.error('Ошибка при проверке ИНН в базе данных:', error);
-                        });
-                    }
-                });
+                initializeSuggestions({{ loop.index }});
             {% endfor %}
-        </script>
 
+            // Функция дебаунса
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                };
+            }
+        </script>
     </div>
     <div id="history" class="tab-content">
         <h2>История</h2>
@@ -432,12 +440,12 @@
 </script>
 <
 <script type="text/javascript" charset="utf-8">
-    var socket = io();
+    const socket = io();
 
     // Подключаемся к комнате при загрузке страницы
-    var dealId = '{{ deal_id }}';  // Должно содержать только ID сделки
-    var room = dealId;  // Проверяем, что room устанавливается только как deal_id
-    var username = '{{ current_user.fullname }}';
+    const dealId = '{{ deal_id }}';  // Должно содержать только ID сделки
+    const room = dealId;  // Проверяем, что room устанавливается только как deal_id
+    const username = '{{ current_user.fullname }}';
 
     socket.emit('join', {username: username, room: room});
     console.log('Joined room: ' + room);

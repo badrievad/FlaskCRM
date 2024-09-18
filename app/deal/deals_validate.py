@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, date
+from logger import logging
 
 
 class DealsValidate:
@@ -16,7 +17,18 @@ class DealsValidate:
 
     @property
     def get_company_based_on(self) -> str:
-        based_on = self._data.get("based_on", "")
+        try:
+            format_date_reg = self.get_company_reg_date.strftime("%d.%m.%Y")
+        except Exception as e:
+            logging.error(f"Error: {e}")
+            format_date_reg = ""
+
+        based_on = (
+            "Устава"
+            if len(self.get_company_inn) == 10
+            else f"выписки Листа записи "
+            f"Единого государственного реестра индивидуальных предпринимателей от {format_date_reg}"
+        )
         return based_on
 
     @property

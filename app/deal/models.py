@@ -108,7 +108,6 @@ class Bank(db.Model):
     kpp = db.Column(db.String(20), nullable=False)
     bic = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(255), nullable=True)
-    phone = db.Column(db.String(20), nullable=True)
     correspondent_account = db.Column(db.String(20), nullable=True)
 
     clients = relationship("Client", back_populates="bank")

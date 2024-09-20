@@ -12,6 +12,8 @@ def create_or_update_seller_and_link_to_leas_calc(
     new_signer,
     calc_id,
     new_based_on,
+    new_bank,
+    new_current,
 ):
     """Создаем или обновляем продавца и привязываем его к LeasCalculator"""
     # Проверяем, существует ли продавец с таким ИНН
@@ -21,6 +23,7 @@ def create_or_update_seller_and_link_to_leas_calc(
     okato = dadata_result(dadata_info)["okato"]
     kpp = dadata_result(dadata_info)["kpp"]
     reg_date = dadata_result(dadata_info)["reg_date"]
+    current_account = ""
 
     if seller:
         # Если продавец существует, обновляем его имя, если оно изменилось
@@ -36,6 +39,8 @@ def create_or_update_seller_and_link_to_leas_calc(
             seller.signer = new_signer
         if seller.based_on != new_based_on:
             seller.based_on = new_based_on
+        if seller.current_account != new_current:
+            seller.current_account = new_current
         db.session.commit()
     else:
         # Если продавца нет, создаем нового
@@ -51,6 +56,7 @@ def create_or_update_seller_and_link_to_leas_calc(
             email=new_email,
             signer=new_signer,
             based_on=new_based_on,
+            current_account=current_account,
         )
         db.session.add(seller)
         db.session.commit()

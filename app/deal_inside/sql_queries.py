@@ -104,7 +104,14 @@ def delete_calculator_section(calc_id, dl_number):
 
 
 def update_client_in_db(
-    deal_id, new_address, new_phone, new_email, new_signer, new_base_on
+    deal_id,
+    new_address,
+    new_phone,
+    new_email,
+    new_signer,
+    new_base_on,
+    new_bank,
+    new_current,
 ):
     try:
         # Находим сделку по deal_id
@@ -138,6 +145,9 @@ def update_client_in_db(
             updated = True
         if new_base_on is not None and client.based_on != new_base_on:
             client.based_on = new_base_on
+            updated = True
+        if new_current is not None and client.current_account != new_current:
+            client.current_account = new_current
             updated = True
 
         if updated:

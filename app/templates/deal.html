@@ -161,6 +161,20 @@
                                maxlength="255">
                     </div>
                     <h3 class="client-header">Реквизиты Клиента</h3>
+                    <div class="client-section">
+                        <span>Название Банка:</span>
+                        <span id="client-bank-display">{{ deal.client.bank.name }}</span>
+                        <input type="text" id="client-bank-input"
+                               value="{{ deal.client.bank.name }}" class="client-input-field"
+                               maxlength="100">
+                    </div>
+                    <div class="client-section">
+                        <span>Расчетный счет:</span>
+                        <span id="client-current-display">{{ deal.client.current_account }}</span>
+                        <input type="text" id="client-current-input"
+                               value="{{ deal.client.current_account }}" class="client-input-field"
+                               maxlength="20">
+                    </div>
                 </div>
             </div>
         </div>
@@ -285,6 +299,30 @@
                                        maxlength="255">
                             </div>
                              <h3 class="supplier-header">Реквизиты Поставщика</h3>
+                             <div class="supplier-section">
+                                <span>Название Банка:</span>
+                                {% if item.leas_calc and item.leas_calc.seller and item.leas_calc.seller.bank %}
+                                    <span id="supplier-bank-display-{{ loop.index }}">{{ item.leas_calc.seller.bank.name }}</span>
+                                {% else %}
+                                    <span id="supplier-bank-display-{{ loop.index }}"></span>
+                                {% endif %}
+                                <input type="text" id="supplier-bank-input-{{ loop.index }}"
+                                       value="{% if item.leas_calc and item.leas_calc.seller and item.leas_calc.seller.bank %}{{ item.leas_calc.seller.bank.name }}{% else %}{% endif %}"
+                                       class="supplier-input-field" maxlength="100">
+                            </div>
+                            <div class="supplier-section">
+                                <span>Расчетный счет:</span>
+                                {% if item.leas_calc and item.leas_calc.seller %}
+                                    <span id="supplier-current-display-{{ loop.index }}">{{ item.leas_calc.seller.current_account }}</span>
+                                    <input type="text" id="supplier-current-input-{{ loop.index }}"
+                                           value="{{ item.leas_calc.seller.current_account }}" class="supplier-input-field"
+                                           maxlength="20">
+                                {% else %}
+                                    <span id="supplier-current-display-{{ loop.index }}"></span>
+                                    <input type="text" id="supplier-current-input-{{ loop.index }}"
+                                           value="" class="supplier-input-field" maxlength="20">
+                                {% endif %}
+                            </div>
                         </div>
                     {% else %}
                         <!-- Если нет leas_calc или нет seller, можно отобразить сообщение или оставить пустым -->
@@ -337,6 +375,8 @@
                             $(`#supplier-email-input-${index}`).val(seller.email);
                             $(`#supplier-signer-input-${index}`).val(seller.signer);
                             $(`#supplier-based-input-${index}`).val(seller.based_on);
+                            $(`#supplier-current-input-${index}`).val(seller.current_account);
+
                         } else {
                             // Используем данные Dadata
                             $(supplierNameInput).val(suggestion.data.name.short_with_opf.split(",")[0].trim());
@@ -363,6 +403,10 @@
                                 : `выписки Листа записи Единого государственного реестра индивидуальных предпринимателей от ${formatDateReg}`;
 
                             $(`#supplier-based-input-${index}`).val(basedOn);
+                            $(`#supplier-current-input-${index}`).val('');
+                            $(`#supplier-bank-input-${index}`).val('');
+
+
                         }
                     } catch (error) {
                         console.error('Ошибка при проверке ИНН в базе данных:', error);

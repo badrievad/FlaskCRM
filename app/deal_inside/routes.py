@@ -15,16 +15,19 @@ from .sql_queries import (
     update_client_in_db,
 )
 from ..config import suggestions_token
-from ..deal.models import Deal
+from ..deal.models import Deal, Client
 from .. import socketio
-from ..leasing_calculator.models import Seller
+from ..leasing_calculator.models import Seller, LeasCalculator
 
 
 @deal_inside_bp.route("/<deal_id>", methods=["GET"])
 def enter_into_deal(deal_id: int):
-    # Находим сделку по deal_id, загружаем связанного клиента
+    # Загрузка сделки, лизинговых калькуляторов, продавца, банка продавца, клиента и банка клиента
     deal: Deal = Deal.query.options(
-        joinedload(Deal.leas_calculators), joinedload(Deal.client)
+        joinedload(Deal.leas_calculators)
+        .joinedload(LeasCalculator.seller)
+        .joinedload(Seller.bank),
+        joinedload(Deal.client).joinedload(Client.bank),
     ).get(deal_id)
 
     # Проверяем, что сделка найдена
@@ -36,10 +39,13 @@ def enter_into_deal(deal_id: int):
 
     if group_id:
         logging.info(f"Group ID: {group_id}")
-        # Получаем все связанные сделки по group_id, включая текущую сделку, загружаем клиентов
+        # Получаем все связанные сделки по group_id
         related_deals = (
             Deal.query.options(
-                joinedload(Deal.leas_calculators), joinedload(Deal.client)
+                joinedload(Deal.leas_calculators)
+                .joinedload(LeasCalculator.seller)
+                .joinedload(Seller.bank),
+                joinedload(Deal.client).joinedload(Client.bank),
             )
             .filter_by(group_id=group_id)
             .all()
@@ -52,27 +58,38 @@ def enter_into_deal(deal_id: int):
     # Собираем информацию о связанных договорах и их лизинговых калькуляторах
     deals_info = []
     for related_deal in related_deals:
-        # Получаем данные клиента
+        # Получаем данные клиента и его банка
         client = related_deal.client
+        client_bank = client.bank if client else None
 
         if related_deal.leas_calculators:
             for leas_calc in related_deal.leas_calculators:
+                # Получаем данные продавца и его банка
+                seller = leas_calc.seller
+                seller_bank = seller.bank if seller else None
+
                 deal_info = {
                     "leas_calc": leas_calc,
                     "dl_number": related_deal.dl_number,
                     "created_by": related_deal.created_by,
                     "created_at": related_deal.created_at,
-                    "client": client,  # Добавляем информацию о клиенте
+                    "client": client,  # Информация о клиенте
+                    "client_bank": client_bank,  # Информация о банке клиента
+                    "seller": seller,  # Информация о продавце
+                    "seller_bank": seller_bank,  # Информация о банке продавца
                 }
                 deals_info.append(deal_info)
         else:
-            # Если у договора нет лизинговых калькуляторов, добавляем информацию о договоре без leas_calc
+            # Если у сделки нет лизинговых калькуляторов
             deal_info = {
                 "leas_calc": None,
                 "dl_number": related_deal.dl_number,
                 "created_by": related_deal.created_by,
                 "created_at": related_deal.created_at,
-                "client": client,  # Добавляем информацию о клиенте
+                "client": client,
+                "client_bank": client_bank,
+                "seller": None,
+                "seller_bank": None,
             }
             deals_info.append(deal_info)
 
@@ -80,7 +97,7 @@ def enter_into_deal(deal_id: int):
     return render_template(
         "deal.html",
         deal=deal,
-        deals_info=deals_info,  # Передаем список всех связанных договоров с их лизинговыми калькуляторами
+        deals_info=deals_info,
         deal_id=deal_id,
         suggestions_token=suggestions_token,
     )
@@ -163,6 +180,9 @@ def check_inn():
                     "phone": seller.phone,
                     "email": seller.email,
                     "signer": seller.signer,
+                    "based_on": seller.based_on,
+                    # "bank": seller.bank,
+                    "current_account": seller.current_account,
                 }
             ),
             200,
@@ -245,10 +265,19 @@ def update_client_info():
     new_email = data.get("email")
     new_signer = data.get("signer")
     new_base_on = data.get("base_on")
+    new_bank = data.get("bank")
+    new_current = data.get("current")
 
     # Вызываем функцию обновления клиента в базе данных
     response_data, status_code = update_client_in_db(
-        deal_id, new_address, new_phone, new_email, new_signer, new_base_on
+        deal_id,
+        new_address,
+        new_phone,
+        new_email,
+        new_signer,
+        new_base_on,
+        new_bank,
+        new_current,
     )
 
     return jsonify(response_data), status_code

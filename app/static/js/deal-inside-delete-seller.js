@@ -37,6 +37,9 @@ function deleteSellerId(index) {
                     document.getElementById(`supplier-phone-display-${index}`).textContent = '';
                     document.getElementById(`supplier-email-display-${index}`).textContent = '';
                     document.getElementById(`supplier-signer-display-${index}`).textContent = '';
+                    document.getElementById(`supplier-based-display-${index}`).textContent = '';
+                    document.getElementById(`supplier-bank-display-${index}`).textContent = '';
+                    document.getElementById(`supplier-current-display-${index}`).textContent = '';
 
                     document.getElementById(`supplier-name-input-${index}`).value = '';
                     document.getElementById(`supplier-inn-input-${index}`).value = '';
@@ -44,6 +47,9 @@ function deleteSellerId(index) {
                     document.getElementById(`supplier-phone-input-${index}`).value = '';
                     document.getElementById(`supplier-email-input-${index}`).value = '';
                     document.getElementById(`supplier-signer-input-${index}`).value = '';
+                    document.getElementById(`supplier-based-input-${index}`).value = '';
+                    document.getElementById(`supplier-bank-input-${index}`).value = '';
+                    document.getElementById(`supplier-current-input-${index}`).value = '';
 
                     // Удаляем иконку удаления
                     var deleteIcon = document.getElementById(`edit-delete-icon-${index}`);

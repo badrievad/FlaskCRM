@@ -163,6 +163,7 @@
                     <h3 class="client-header">Реквизиты Клиента</h3>
                     <div class="client-section">
                         <span>Название Банка:</span>
+                        <input type="hidden" id="client-bank-info">
                         <span id="client-bank-display">{{ deal.client.bank.name }}</span>
                         <input type="text" id="client-bank-input"
                                value="{{ deal.client.bank.name }}" class="client-input-field"
@@ -521,5 +522,6 @@
 <script src="{{ url_for('crm.static', filename='js/deal-inside-responsible.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/deal-inside-delete-seller.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/deal-inside-delete-group.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/deal-inside-dadata-bank.js') }}"></script>
 </body>
 </html>

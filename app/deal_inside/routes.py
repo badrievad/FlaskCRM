@@ -1,3 +1,5 @@
+import json
+
 from sqlalchemy.orm import joinedload
 
 from . import deal_inside_bp
@@ -265,8 +267,10 @@ def update_client_info():
     new_email = data.get("email")
     new_signer = data.get("signer")
     new_base_on = data.get("base_on")
-    new_bank = data.get("bank")
+    new_bank: dict = json.loads(data.get("bank")) if data.get("bank") else None
     new_current = data.get("current")
+
+    logging.info(f"Bank: {new_bank}")
 
     # Вызываем функцию обновления клиента в базе данных
     response_data, status_code = update_client_in_db(

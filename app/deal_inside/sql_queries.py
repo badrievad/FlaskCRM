@@ -1,7 +1,7 @@
 from sqlalchemy.exc import SQLAlchemyError
 
 from .. import db
-from ..deal.models import Deal, Client
+from ..deal.models import Deal, Client, Bank
 from ..leasing_calculator.models import LeasCalculator
 from ..user.models import User
 from logger import logging
@@ -104,14 +104,14 @@ def delete_calculator_section(calc_id, dl_number):
 
 
 def update_client_in_db(
-    deal_id,
-    new_address,
-    new_phone,
-    new_email,
-    new_signer,
-    new_base_on,
-    new_bank,
-    new_current,
+    deal_id: str,
+    new_address: str,
+    new_phone: str,
+    new_email: str,
+    new_signer: str,
+    new_base_on: str,
+    new_bank: dict,
+    new_current: str,
 ):
     try:
         # Находим сделку по deal_id
@@ -150,23 +150,72 @@ def update_client_in_db(
             client.current_account = new_current
             updated = True
 
+        # Обработка обновления банка
+        if new_bank is not None:
+            bank_updated = False
+            bank_bic = new_bank.get("bic")
+            if bank_bic:
+                # Пытаемся найти банк по ИНН
+                bank = Bank.query.filter_by(bic=bank_bic).first()
+                if bank:
+                    # Обновляем данные банка, если они изменились
+                    bank_fields = [
+                        "name",
+                        "kpp",
+                        "bic",
+                        "address",
+                        "correspondent_account",
+                    ]
+                    for field in bank_fields:
+                        new_value = new_bank.get(field)
+                        if new_value is not None and getattr(bank, field) != new_value:
+                            setattr(bank, field, new_value)
+                            bank_updated = True
+                    if bank_updated:
+                        updated = True
+                else:
+                    # Создаем новый банк
+                    bank = Bank(
+                        name=new_bank.get("name"),
+                        inn=new_bank.get("inn"),
+                        kpp=new_bank.get("kpp"),
+                        bic=bank_bic,
+                        address=new_bank.get("address"),
+                        correspondent_account=new_bank.get("correspondent_account"),
+                    )
+                    db.session.add(bank)
+                    updated = True
+
+                # Привязываем банк к клиенту
+                if client.bank != bank:
+                    client.bank = bank
+                    updated = True
+            else:
+                return {"success": False, "message": "Не указан ИНН банка"}, 400
+
         if updated:
             db.session.commit()
-            return {"success": True, "message": "Данные клиента успешно обновлены"}, 200
+            return {
+                "success": True,
+                "message": "Данные клиента и банка успешно обновлены",
+            }, 200
         else:
-            return {"success": True, "message": "Нет изменений в данных клиента"}, 200
+            return {
+                "success": True,
+                "message": "Нет изменений в данных клиента и банка",
+            }, 200
 
     except SQLAlchemyError as e:
         db.session.rollback()
-        logging.error(f"Ошибка при обновлении данных клиента: {e}")
+        logging.error(f"Ошибка при обновлении данных клиента и банка: {e}")
         return {
             "success": False,
-            "message": "Ошибка базы данных при обновлении данных клиента",
+            "message": "Ошибка базы данных при обновлении данных клиента и банка",
         }, 500
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Неизвестная ошибка при обновлении данных клиента: {e}")
+        logging.error(f"Неизвестная ошибка при обновлении данных клиента и банка: {e}")
         return {
             "success": False,
-            "message": "Произошла ошибка при обновлении данных клиента",
+            "message": "Произошла ошибка при обновлении данных клиента и банка",
         }, 500

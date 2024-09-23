@@ -104,9 +104,9 @@ class Bank(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    inn = db.Column(db.String(20), nullable=False, unique=True)
+    inn = db.Column(db.String(20), nullable=False)
     kpp = db.Column(db.String(20), nullable=False)
-    bic = db.Column(db.String(20), nullable=False)
+    bic = db.Column(db.String(20), nullable=False, unique=True)
     address = db.Column(db.String(255), nullable=True)
     correspondent_account = db.Column(db.String(20), nullable=True)
 

@@ -568,6 +568,7 @@ function saveEditingClient() {
     const newSignerClient = document.getElementById(`client-signer-input`).value.trim();
     const newBasedClient = document.getElementById(`client-based-input`).value.trim();
     const newBankClient = document.getElementById(`client-bank-input`).value.trim();
+    const newBankClientInfo = document.getElementById(`client-bank-info`).value.trim();
     const newCurrentClient = document.getElementById(`client-current-input`).value.trim();
     const nameDisplayClient = document.getElementById(`client-name-display`);
     const innDisplayClient = document.getElementById(`client-inn-display`);
@@ -628,7 +629,7 @@ function saveEditingClient() {
             email: newEmailClient,
             signer: newSignerClient,
             based_on: newBasedClient,
-            bank: newBankClient,
+            bank: newBankClientInfo,
             current: newCurrentClient
         }),
         success: function () {

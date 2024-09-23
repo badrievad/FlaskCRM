@@ -617,6 +617,25 @@ function saveEditingClient() {
     // Выключаем режим редактирования
     toggleEditModeClient(false);
 
+    // Проверяем, что newBankClientInfo не пустой
+    if (!newBankClientInfo || newBankClientInfo.trim() === '') {
+        // Выводим Toast с сообщением
+        Swal.fire({
+            icon: 'warning',
+            title: 'Необходимо указать Банк',
+            text: "Банк нужно выбрать из всплывающего списка.",
+            showConfirmButton: true,
+            confirmButtonColor: '#67a2d5',
+        });
+
+        // Очищаем поля bankDisplayClient и newBankClient
+        $('#client-bank-display').text('');
+        $('#client-bank-input').val('');
+
+        // Прерываем выполнение AJAX-запроса
+        return;
+    }
+
     // Отправляем данные на сервер
     $.ajax({
         url: '/crm/deal/inside/update-client',

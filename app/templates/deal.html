@@ -161,6 +161,9 @@
                                maxlength="255">
                     </div>
                     <h3 class="client-header">Реквизиты Клиента</h3>
+                    <script>
+                        var initialBankName = "{{ deal.client.bank.name | default('') }}";
+                    </script>
                     <div class="client-section">
                         <span>Название Банка:</span>
                         <input type="hidden" id="client-bank-info">

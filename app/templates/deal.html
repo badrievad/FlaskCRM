@@ -310,6 +310,7 @@
                                 {% else %}
                                     <span id="supplier-bank-display-{{ loop.index }}"></span>
                                 {% endif %}
+                                <input type="hidden" id="supplier-bank-info-{{ loop.index }}">
                                 <input type="text" id="supplier-bank-input-{{ loop.index }}"
                                        value="{% if item.leas_calc and item.leas_calc.seller and item.leas_calc.seller.bank %}{{ item.leas_calc.seller.bank.name }}{% else %}{% endif %}"
                                        class="supplier-input-field" maxlength="100">
@@ -329,7 +330,6 @@
                             </div>
                         </div>
                     {% else %}
-                        <!-- Если нет leas_calc или нет seller, можно отобразить сообщение или оставить пустым -->
                     {% endif %}
                 </div>
             </div>
@@ -380,6 +380,7 @@
                             $(`#supplier-signer-input-${index}`).val(seller.signer);
                             $(`#supplier-based-input-${index}`).val(seller.based_on);
                             $(`#supplier-current-input-${index}`).val(seller.current_account);
+                            $(`#supplier-bank-input-${index}`).val(seller.bank.name);
 
                         } else {
                             // Используем данные Dadata

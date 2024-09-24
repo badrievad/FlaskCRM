@@ -455,7 +455,7 @@ input[type="checkbox"]:checked::before {
 }
 
 .darkened-section {
-    background-color: rgba(0, 0, 0, 0.1); /* Черный цвет с прозрачностью 60% */
+    background-color: rgba(0, 0, 0, 0.15);
     padding: 10px;
     border-radius: 20px;
     color: #fff;

@@ -311,10 +311,37 @@
                                     <span id="supplier-bank-display-{{ loop.index }}"></span>
                                 {% endif %}
                                 <input type="hidden" id="supplier-bank-info-{{ loop.index }}">
+
+                                {% set bank_name = '' %}
+                                {% if item.leas_calc and item.leas_calc.seller and item.leas_calc.seller.bank %}
+                                    {% set bank_name = item.leas_calc.seller.bank.name %}
+                                {% endif %}
+
                                 <input type="text" id="supplier-bank-input-{{ loop.index }}"
-                                       value="{% if item.leas_calc and item.leas_calc.seller and item.leas_calc.seller.bank %}{{ item.leas_calc.seller.bank.name }}{% else %}{% endif %}"
-                                       class="supplier-input-field" maxlength="100">
+                                   value="{{ bank_name }}" class="supplier-input-field"
+                                   maxlength="100"
+                                   data-initial-bank-name="{{ bank_name | escape }}">
                             </div>
+                            <script>
+                                $("#supplier-bank-input-{{ loop.index }}").suggestions({
+                                    token: "{{ suggestions_token }}",
+                                    type: "BANK",
+                                    /* Вызывается, когда пользователь выбирает одну из подсказок */
+                                    onSelect: function (suggestion) {
+                                        var bankData = {
+                                            name: suggestion.value,
+                                            inn: suggestion.data.inn,
+                                            kpp: suggestion.data.kpp,
+                                            bic: suggestion.data.bic,
+                                            address: suggestion.data.address.unrestricted_value,
+                                            correspondent_account: suggestion.data.correspondent_account
+                                        };
+                                        $("#supplier-bank-info-{{ loop.index }}").val(JSON.stringify(bankData));
+                                        $("#supplier-bank-display-{{ loop.index }}").text(suggestion.value);
+                                        $("#supplier-bank-input-{{ loop.index }}").val(suggestion.value);
+                                    }
+                                });
+                            </script>
                             <div class="supplier-section">
                                 <span>Расчетный счет:</span>
                                 {% if item.leas_calc and item.leas_calc.seller %}
@@ -380,7 +407,7 @@
                             $(`#supplier-signer-input-${index}`).val(seller.signer);
                             $(`#supplier-based-input-${index}`).val(seller.based_on);
                             $(`#supplier-current-input-${index}`).val(seller.current_account);
-                            $(`#supplier-bank-input-${index}`).val(seller.bank.name);
+                            $(`#supplier-bank-input-${index}`).val(seller.bank);
 
                         } else {
                             // Используем данные Dadata

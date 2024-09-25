@@ -322,6 +322,7 @@ function saveEditing(index) {
     const newSigner = document.getElementById(`supplier-signer-input-${index}`).value.trim();
     const newBased = document.getElementById(`supplier-based-input-${index}`).value.trim();
     const newBank = document.getElementById(`supplier-bank-input-${index}`).value.trim();
+    const newBankInfo = document.getElementById(`supplier-bank-info-${index}`).value.trim();
     const newCurrent = document.getElementById(`supplier-current-input-${index}`).value.trim();
     const nameDisplay = document.getElementById(`supplier-name-display-${index}`);
     const innDisplay = document.getElementById(`supplier-inn-display-${index}`);
@@ -334,7 +335,11 @@ function saveEditing(index) {
     const currentDisplay = document.getElementById(`supplier-current-display-${index}`);
     const calcId = getCalcIdFromSection(index);
 
-    // Валидация данных
+    // Получаем начальное название банка из атрибута data-initial-bank-name
+    const supplierBankInput = document.getElementById(`supplier-bank-input-${index}`);
+    const initialBankName = supplierBankInput.getAttribute('data-initial-bank-name') || '';
+
+    // Валидация
     if (!newName) {
         Swal.fire({
             icon: 'warning',
@@ -345,7 +350,7 @@ function saveEditing(index) {
         return;
     }
 
-    if (newInn.length !== 10 && newInn.length !== 12 || !/^\d+$/.test(newInn)) {
+    if ((newInn.length !== 10 && newInn.length !== 12) || !/^\d+$/.test(newInn)) {
         Swal.fire({
             icon: 'warning',
             title: 'Ошибка!',
@@ -383,7 +388,7 @@ function saveEditing(index) {
             signer: newSigner,
             calc_id: calcId,
             based_on: newBased,
-            bank: newBank,
+            bank: newBankInfo,
             current: newCurrent
         }),
         success: function () {
@@ -420,7 +425,7 @@ function saveEditing(index) {
             }
         },
         error: function () {
-            // Обновляем значения полей, чтобы сделать их пустыми
+            // Очищаем отображаемые значения
             nameDisplay.textContent = '';
             innDisplay.textContent = '';
             addressDisplay.textContent = '';
@@ -431,6 +436,7 @@ function saveEditing(index) {
             bankDisplay.textContent = '';
             currentDisplay.textContent = '';
 
+            // Очищаем значения полей ввода
             document.getElementById(`supplier-address-input-${index}`).value = '';
             document.getElementById(`supplier-phone-input-${index}`).value = '';
             document.getElementById(`supplier-email-input-${index}`).value = '';
@@ -581,7 +587,6 @@ function saveEditingClient() {
     const currentDisplayClient = document.getElementById(`client-current-display`);
     const saveClientButton = document.getElementById('save-client');
     const dealId = saveClientButton.getAttribute('deal-id');
-
     // Валидация данных
     if (!newNameClient) {
         Swal.fire({
@@ -616,25 +621,6 @@ function saveEditingClient() {
 
     // Выключаем режим редактирования
     toggleEditModeClient(false);
-
-    // Проверяем, что newBankClientInfo не пустой И newBankClient не равен initialBankName
-    if ((!newBankClientInfo || newBankClientInfo.trim() === '') && newBankClient !== initialBankName) {
-        // Выводим Toast с сообщением
-        Swal.fire({
-            icon: 'warning',
-            title: 'Необходимо указать Банк',
-            text: 'Банк нужно выбрать из выпадающего списка.',
-            showConfirmButton: true,
-            confirmButtonColor: '#67a2d5',
-        });
-
-        // Очищаем поля bankDisplayClient и newBankClient
-        $('#client-bank-display').text('');
-        $('#client-bank-input').val('');
-
-        // Прерываем выполнение AJAX-запроса
-        return;
-    }
 
     // Отправляем данные на сервер
     $.ajax({

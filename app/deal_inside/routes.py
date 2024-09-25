@@ -183,7 +183,7 @@ def check_inn():
                     "email": seller.email,
                     "signer": seller.signer,
                     "based_on": seller.based_on,
-                    # "bank": seller.bank,
+                    "bank": seller.bank.name,
                     "current_account": seller.current_account,
                 }
             ),

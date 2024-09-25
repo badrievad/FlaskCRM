@@ -363,7 +363,7 @@ def update_seller():
     new_signer = data.get("signer")
     calc_id = data.get("calc_id")
     based_on = data.get("based_on")
-    bank = data.get("bank")
+    bank = json.loads(data.get("bank")) if data.get("bank") else None
     current = data.get("current")
 
     if not new_name or not new_inn or not calc_id:

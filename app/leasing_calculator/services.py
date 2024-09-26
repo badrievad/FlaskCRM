@@ -21,6 +21,7 @@ def update_calculation_service(calc_id, data):
             }
 
         deal = calc.deal
+        logging.info(f"Found deal: {deal}")
         deal_id = data.get("deal_id")
 
         updated_data = {
@@ -44,6 +45,13 @@ def update_calculation_service(calc_id, data):
             logging.info(f"Number of linked calculators: {offers_count}")
 
             if offers_count >= deals_count:
+                if deal is None:
+                    return {
+                        "success": False,
+                        "message": f"Невозможно привязать КП к сделке. Уже привязано: {offers_count}. "
+                        f"Можно привязать до: {deals_count}. Сначала необходимо отвязать КП от сделки",
+                        "status_code": 400,
+                    }
                 if int(deal.id) == int(deal_id):
                     logging.info(f"Deal {deal.id} is already linked to calculator")
                     for key, value in data.items():
@@ -58,6 +66,7 @@ def update_calculation_service(calc_id, data):
                         "status_code": 200,
                     }
                 else:
+
                     return {
                         "success": False,
                         "message": f"Невозможно привязать КП к сделке. Уже привязано: {offers_count}. "

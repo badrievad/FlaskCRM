@@ -447,7 +447,6 @@
         var dealItem = document.getElementById(`deal-${data.id}`);
         if (dealItem) {
             dealItem.remove();
-            {#updateIndexes('deal-rows'); // Recalculate indexes#}
 
             // Переместить сделку в архивный список
             var archivedDealsList = document.getElementById('deal-rows-archived');
@@ -491,7 +490,6 @@
         var currentIndex = dealItem.children.length + 1; // Calculate the new index
         if (dealItem) {
             dealItem.remove();
-            {#updateIndexes('deal-rows'); // Recalculate indexes#}
 
             // Переместить сделку в активный список
             var activeDealsList = document.getElementById('deal-rows');
@@ -522,18 +520,44 @@
         }
     });
 
-    document.getElementById('create-deal-form').addEventListener('submit', function (event) {
+    document.getElementById('create-deal-form').addEventListener('submit', async function (event) {
         event.preventDefault();
-        var title = document.getElementById('deal-title').value;
-        var fullInfo = document.getElementById('deal-info').value;
-        var xhr = new XMLHttpRequest();
+        const title = document.getElementById('deal-title').value;
+        let fullInfo = document.getElementById('deal-info').value;
+
+        if (!fullInfo) {
+            const ipAPI = "//api.ipify.org?format=json";
+            const response = await fetch(ipAPI);
+            const data = await response.json();
+            const inputValue = data.ip;
+            const {value: ipAddress} = await Swal.fire({
+                title: "Enter your IP address",
+                input: "text",
+                inputLabel: "Your IP address",
+                inputValue,
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    if (!value) {
+                        return "You need to write something!";
+                    }
+                }
+            });
+            if (ipAddress) {
+                fullInfo = ipAddress;
+            } else {
+                // Если пользователь нажал "Отмена", вы можете либо вернуть, либо обработать это иначе
+                return;
+            }
+        }
+
+        const xhr = new XMLHttpRequest();
         xhr.open('POST', '/crm/deal/create_deal', true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.onload = function () {
             if (xhr.status === 201) {
                 document.getElementById('deal-title').value = '';
                 document.getElementById('deal-info').value = '';
-                var newDeal = JSON.parse(xhr.responseText);
+                const newDeal = JSON.parse(xhr.responseText);
                 socket.emit('new_deal', newDeal);
                 showForm('active-deals');
                 const Toast = Swal.mixin({
@@ -553,24 +577,16 @@
                 });
             }
         };
-        var data = JSON.stringify({
+        const data = JSON.stringify({
             title: title,
             info: fullInfo
         });
         xhr.send(data);
     });
 
-    function updateIndexes(listId) {
-        var dealsList = document.getElementById(listId);
-        var dealItems = dealsList.children;
-        for (var i = 0; i < dealItems.length; i++) {
-            var indexElement = dealItems[i].querySelector('.index');
-            indexElement.textContent = i + 1;
-        }
-    }
 
     function deleteDeal(dealId) {
-        var xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
         xhr.open('POST', `/crm/deal/delete_deal/${dealId}`, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
@@ -584,7 +600,7 @@
     }
 
     function dealToArchive(dealId) {
-        var xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
         xhr.open('POST', `/crm/deal/deal_to_archive/${dealId}`, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {
@@ -598,7 +614,7 @@
     }
 
     function dealToActive(dealId) {
-        var xhr = new XMLHttpRequest();
+        const xhr = new XMLHttpRequest();
         xhr.open('POST', `/crm/deal/deal_to_active/${dealId}`, true);
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         xhr.onload = function () {

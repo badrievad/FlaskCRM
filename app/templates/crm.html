@@ -526,21 +526,10 @@
         let fullInfo = document.getElementById('deal-info').value;
 
         if (!fullInfo) {
-            const ipAPI = "//api.ipify.org?format=json";
-            const response = await fetch(ipAPI);
-            const data = await response.json();
-            const inputValue = data.ip;
-            const {value: ipAddress} = await Swal.fire({
-                title: "Enter your IP address",
-                input: "text",
-                inputLabel: "Your IP address",
-                inputValue,
-                showCancelButton: true,
-                inputValidator: (value) => {
-                    if (!value) {
-                        return "You need to write something!";
-                    }
-                }
+            Swal.fire({
+                text: "Необходимо выбрать компанию из выпадающего списка",
+                icon: "warning",
+                confirmButtonColor: "#5789b9",
             });
             if (ipAddress) {
                 fullInfo = ipAddress;

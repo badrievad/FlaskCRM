@@ -461,3 +461,23 @@ input[type="checkbox"]:checked::before {
     color: #fff;
     margin: 15px; /* Центрируем элемент */
 }
+
+.load-more-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 0 auto;
+}
+
+.load-more-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.load-more-button:focus {
+    outline: none;
+}

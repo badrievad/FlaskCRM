@@ -130,6 +130,9 @@
             <!-- Динамически добавленные строки -->
             </tbody>
         </table>
+        <div id="load-more-container" style="text-align: center; margin-top: 20px;">
+            <button id="load-more-button" class="load-more-button">Показать ещё</button>
+        </div>
     </div>
     <div id="archived-deals" class="card hidden">
         <h2>Архивные сделки</h2>
@@ -219,47 +222,105 @@
     document.addEventListener('DOMContentLoaded', function () {
         const userName = '{{ user_name }}';
         const userRole = '{{ user_role }}';
+        const dealsPerPage = 10;
+        let currentIndex = 0;
+        let dealsData = []; // Для хранения всех сделок
+
         fetch('/crm/deals/active')
             .then(response => response.json())
             .then(data => {
-                const dealsList = document.getElementById('deal-rows');
-                dealsList.innerHTML = ''; // Очистить существующие элементы
-                data.deals.forEach((deal, index) => {
-                    let checkboxCell = '';
-                    if (userRole === 'admin' || userName === deal.created_by) {
-                        checkboxCell = `
-                            <td onclick="toggleCheckbox(${deal.id}, event)">
-                                <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
-                            </td>`;
-                    } else {
-                        checkboxCell = `
-                            <td>
-                            </td>`;
-                    }
-                    const dealItem = `
-                        <tr id="deal-${deal.id}">
-                            ${checkboxCell}
-                            <td onclick="enterIntoDeal(${deal.id})">${index + 1}</td>
-                            <td class="deal-dl" onclick="enterIntoDeal(${deal.id})">${deal.dl_number}</td>
-                            <td class="deal-title" onclick="enterIntoDeal(${deal.id})">${deal.title}</td>
-                            <td class="deal-product" onclick="enterIntoDeal(${deal.id})">${deal.product}</td>
-                            <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">${deal.created_by}</td>
-                            <td class="deal-created" onclick="enterIntoDeal(${deal.id})">${new Date(deal.created_at).toLocaleString()}</td>
-                            <td>
-                                ${(deal.created_by === userName || userRole === 'admin') ? `
-                                    <div class="btn-container">
-                                        <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
-                                            <i class="fa-regular fa-square-minus"></i>
-                                        </button>
-                                    </div>
-                                ` : ''}
-                            </td>
-                        </tr>`;
-                    dealsList.insertAdjacentHTML('beforeend', dealItem);
-                });
-
+                dealsData = data.deals; // Сохраняем все сделки
+                applyFilters(); // Отображаем первые сделки (с учетом возможных фильтров)
             });
+
+        // Добавить обработчики событий для фильтров
+        document.getElementById('filter-input-dl').addEventListener('input', applyFilters);
+        document.getElementById('filter-input').addEventListener('input', applyFilters);
+        document.getElementById('filter-input-product').addEventListener('input', applyFilters);
+        document.getElementById('filter-input-manager').addEventListener('input', applyFilters);
+        document.getElementById('filter-input-created').addEventListener('input', applyFilters);
+
+        document.getElementById('load-more-button').addEventListener('click', function () {
+            displayDeals(filteredDeals); // Отображаем следующие сделки (используя текущие отфильтрованные данные)
+        });
+
+        let filteredDeals = []; // Для хранения отфильтрованных данных
+
+        function displayDeals(dealsArray) {
+            const dealsList = document.getElementById('deal-rows');
+            const endIndex = currentIndex + dealsPerPage;
+            const dealsToDisplay = dealsArray.slice(currentIndex, endIndex);
+
+            dealsToDisplay.forEach((deal, index) => {
+                let checkboxCell = '';
+                if (userRole === 'admin' || userName === deal.created_by) {
+                    checkboxCell = `
+                    <td onclick="toggleCheckbox(${deal.id}, event)">
+                        <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
+                    </td>`;
+                } else {
+                    checkboxCell = `<td></td>`;
+                }
+                const dealItem = `
+                <tr id="deal-${deal.id}">
+                    ${checkboxCell}
+                    <td onclick="enterIntoDeal(${deal.id})">${currentIndex + index + 1}</td>
+                    <td class="deal-dl" onclick="enterIntoDeal(${deal.id})">${deal.dl_number}</td>
+                    <td class="deal-title" onclick="enterIntoDeal(${deal.id})">${deal.title}</td>
+                    <td class="deal-product" onclick="enterIntoDeal(${deal.id})">${deal.product}</td>
+                    <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">${deal.created_by}</td>
+                    <td class="deal-created" onclick="enterIntoDeal(${deal.id})">${new Date(deal.created_at).toLocaleString()}</td>
+                    <td>
+                        ${(deal.created_by === userName || userRole === 'admin') ? `
+                            <div class="btn-container">
+                                <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
+                                    <i class="fa-regular fa-square-minus"></i>
+                                </button>
+                            </div>
+                        ` : ''}
+                    </td>
+                </tr>`;
+                dealsList.insertAdjacentHTML('beforeend', dealItem);
+            });
+
+            currentIndex += dealsPerPage;
+
+            // Если все сделки загружены, скрыть кнопку "Показать ещё"
+            if (currentIndex >= dealsArray.length) {
+                document.getElementById('load-more-button').style.display = 'none';
+            } else {
+                document.getElementById('load-more-button').style.display = 'block';
+            }
+        }
+
+        function applyFilters() {
+            // Сбросить текущий индекс и очистить таблицу
+            currentIndex = 0;
+            const dealsList = document.getElementById('deal-rows');
+            dealsList.innerHTML = '';
+
+            // Получить значения фильтров
+            const dlFilter = document.getElementById('filter-input-dl').value.toLowerCase();
+            const titleFilter = document.getElementById('filter-input').value.toLowerCase();
+            const productFilter = document.getElementById('filter-input-product').value.toLowerCase();
+            const managerFilter = document.getElementById('filter-input-manager').value.toLowerCase();
+            const createdFilter = document.getElementById('filter-input-created').value.toLowerCase();
+
+            // Применить фильтры к данным
+            filteredDeals = dealsData.filter(deal => {
+                return (
+                    deal.dl_number.toLowerCase().includes(dlFilter) &&
+                    deal.title.toLowerCase().includes(titleFilter) &&
+                    deal.product.toLowerCase().includes(productFilter) &&
+                    deal.created_by.toLowerCase().includes(managerFilter) &&
+                    new Date(deal.created_at).toLocaleString().toLowerCase().includes(createdFilter)
+                );
+            });
+
+            displayDeals(filteredDeals);
+        }
     });
+
 
     document.addEventListener('DOMContentLoaded', function () {
         const userName = '{{ user_name }}';

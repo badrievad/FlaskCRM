@@ -211,165 +211,159 @@
         <div class="content">
             <div class="input-section">
                 <div class="form-group">
-                    <div class="input-container-item-name">
-                        <label for="name">Наименование имущества</label>
-                        <input type="text" id="item-name" name="item-name" maxlength="500">
-                    </div>
-                    <br>
-                    <div class="input-container-item-condition">
-                        <label>Состояние имущества:</label>
-                        <input type="hidden" id="item-condition" name="item-condition" value="new">
-                    </div>
-                    <div class="button-group">
-                        <button id="new-btn" class="toggle-btn active" data-value="new">Новое</button>
-                        <button id="used-btn" class="toggle-btn" data-value="used">Б/У</button>
-                    </div>
-                    <br>
-                    <div class="input-container">
-                        <label for="production-year">Год выпуска/изготовления ПЛ</label>
-                    </div>
-                    <div class="input-container">
-                        <input type="number" id="production-year-value" name="production-year-value" value="">
-                    </div>
-                    <br>
-                    <div class="input-container">
-                        <label for="currency">Валюта сделки</label>
-                    </div>
-                    <div class="input-container">
-                        <select id="currency" name="currency">
-                            <option value="rub" data-symbol="₽">₽</option>
-                            <option value="usd" data-symbol="$">$</option>
-                            <option value="eur" data-symbol="€">€</option>
-                            <option value="cny" data-symbol="¥">¥</option>
-                        </select>
+                    <div class="part-container">
+                        <div class="input-container-item-name item-container">
+                            <label for="name">Наименование имущества</label>
+                            <input type="text" id="item-name" name="item-name" maxlength="500">
+                        </div>
+                        <div class="input-container-item-condition">
+                            <label>Состояние имущества:</label>
+                            <input type="hidden" id="item-condition" name="item-condition" value="new">
+                        </div>
+                        <div class="button-group item-container">
+                            <button id="new-btn" class="toggle-btn active" data-value="new">Новое</button>
+                            <button id="used-btn" class="toggle-btn" data-value="used">Б/У</button>
+                        </div>
+                        <br>
+                        <div class="input-container">
+                            <label for="production-year">Год выпуска/изготовления ПЛ</label>
+                        </div>
+                        <div class="input-container item-container">
+                            <input type="number" id="production-year-value" name="production-year-value" value="">
+                        </div>
+                        <br>
+                        <div class="input-container">
+                            <label for="currency">Валюта сделки</label>
+                        </div>
+                        <div class="input-container">
+                            <select id="currency" name="currency">
+                                <option value="rub" data-symbol="₽">₽</option>
+                                <option value="usd" data-symbol="$">$</option>
+                                <option value="eur" data-symbol="€">€</option>
+                                <option value="cny" data-symbol="¥">¥</option>
+                            </select>
+                        </div>
                     </div>
                     <br>
                     <div class="line"></div>
-                    <div id="foreign-cost-section" class="foreign-cost-container">
-                        <div class="input-container">
-                            <label for="foreign-cost">Стоимость имущества в иностранной валюте</label>
-                            <input type="text" id="foreign-cost-display" name="foreign-cost-display"
-                                   value="10 000">
-                            <input type="hidden" id="foreign-cost-value" name="foreign-cost-value" value="10000">
+                    <div class="part-container">
+                        <div id="foreign-cost-section" class="foreign-cost-container item-container">
+                            <div class="input-container">
+                                <label for="foreign-cost">Стоимость имущества в иностранной валюте</label>
+                                <input type="text" id="foreign-cost-display" name="foreign-cost-display"
+                                       value="10 000">
+                                <input type="hidden" id="foreign-cost-value" name="foreign-cost-value" value="10000">
+                            </div>
+                            <div class="slider-container">
+                                <input type="range" id="foreign-cost" name="foreign-cost" min="10000" max="10000000"
+                                       value="10000" step="1000">
+                            </div>
+                            <div class="range-labels">
+                                <span id="foreign-min-label">10 тыс.</span>
+                                <span id="foreign-max-label">10 млн.</span>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="input-container item-container">
+                            <label for="cost">Стоимость имущества в рублях</label>
+                            <input type="text" id="cost-display" name="cost-display" value="1 000 000,00"
+                                   maxlength="15">
+                            <input type="hidden" id="cost-value" name="cost-value" value="1000000">
                         </div>
                         <div class="slider-container">
-                            <input type="range" id="foreign-cost" name="foreign-cost" min="10000" max="10000000"
-                                   value="10000" step="1000">
+                            <input type="range" id="cost" name="cost" min="100000" max="100000000" value="1000000"
+                                   step="100000">
                         </div>
                         <div class="range-labels">
-                            <span id="foreign-min-label">10 тыс.</span>
-                            <span id="foreign-max-label">10 млн.</span>
+                            <span>100 тыс. ₽</span>
+                            <span>100 млн ₽</span>
                         </div>
-                        <br>
-                    </div>
-                    <div class="input-container">
-                        <label for="cost">Стоимость имущества в рублях</label>
-                        <input type="text" id="cost-display" name="cost-display" value="1 000 000,00" maxlength="15">
-                        <input type="hidden" id="cost-value" name="cost-value" value="1000000">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="cost" name="cost" min="100000" max="100000000" value="1000000"
-                               step="100000">
-                    </div>
-                    <div class="range-labels">
-                        <span>100 тыс. ₽</span>
-                        <span>100 млн ₽</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label for="initial-payment">Первоначальный взнос</label>
-                        <div class="input-group">
-                            <input type="text" id="initial-payment-value-display" name="initial-payment-value-display"
-                                   value="100 000,00" placeholder="₽">
-                            <input type="hidden" id="initial-payment-value" name="initial-payment-value" value="100000"
-                                   placeholder="₽">
-                            <input type="number" id="initial-payment-percent" name="initial-payment-percent"
-                                   value="10.00"
-                                   placeholder="%" max="49.99">
+                        <div class="input-container">
+                            <label for="initial-payment">Первоначальный взнос</label>
+                            <div class="input-group">
+                                <input type="text" id="initial-payment-value-display"
+                                       name="initial-payment-value-display"
+                                       value="100 000,00" placeholder="₽">
+                                <input type="hidden" id="initial-payment-value" name="initial-payment-value"
+                                       value="100000"
+                                       placeholder="₽">
+                                <input type="number" id="initial-payment-percent" name="initial-payment-percent"
+                                       value="10.00"
+                                       placeholder="%" max="49.99">
+                                <span class="percent-label">%</span>
+                            </div>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="initial-payment" name="initial-payment" min="0" max="49" value="10"
+                                   step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0%</span>
+                            <span>49.99%</span>
+                        </div>
+                        <div class="input-container">
+                            <label for="credit-value">Размер кредита</label>
+                            <div class="input-group">
+                                <input type="text" id="credit-value-display" name="credit-value-display"
+                                       value="800 000,00" placeholder="₽">
+                                <input type="hidden" id="credit-value" name="credit-value" value="800000"
+                                       placeholder="₽">
+                                <input type="number" id="credit-percent" name="credit-percent" value="80.00"
+                                       placeholder="%" max="90">
+                                <span class="percent-label">%</span>
+                            </div>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="credit" name="credit" min="0" max="90" value="80"
+                                   step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0%</span>
+                            <span>90%</span>
+                        </div>
+                        <div class="input-container">
+                            <label for="term">Срок договора</label>
+                            <input type="number" id="term-value" name="term-value" value="36" max="100">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="term" name="term" min="6" max="60" value="36">
+                        </div>
+                        <div class="range-labels">
+                            <span>6 мес.</span>
+                            <span>60 мес.</span>
+                        </div>
+                        <div class="input-container">
+                            <label>Комиссия банка</label>
+                            <input type="number" id="commission-value" name="commission-value" value="0" placeholder="%"
+                                   max="3">
                             <span class="percent-label">%</span>
                         </div>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="initial-payment" name="initial-payment" min="0" max="49" value="10"
-                               step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0%</span>
-                        <span>49.99%</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label for="credit-value">Размер кредита</label>
-                        <div class="input-group">
-                            <input type="text" id="credit-value-display" name="credit-value-display"
-                                   value="800 000,00" placeholder="₽">
-                            <input type="hidden" id="credit-value" name="credit-value" value="800000"
-                                   placeholder="₽">
-                            <input type="number" id="credit-percent" name="credit-percent" value="80.00"
-                                   placeholder="%" max="90">
+                        <div class="slider-container">
+                            <input type="range" id="commission" name="commission" min="0" max="3" value="0" step="0.1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0%</span>
+                            <span>3%</span>
+                        </div>
+                        <div class="input-container">
+                            <label>Комиссия ООО "ЛКМБ-РТ"</label>
+                            <input type="number" id="commission-lkmb-value" name="commission-lkmb-value" value="1.8"
+                                   placeholder="%"
+                                   max="3">
                             <span class="percent-label">%</span>
                         </div>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="credit" name="credit" min="0" max="90" value="80"
-                               step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0%</span>
-                        <span>90%</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label for="term">Срок договора</label>
-                        <input type="number" id="term-value" name="term-value" value="36" max="100">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="term" name="term" min="6" max="60" value="36">
-                    </div>
-                    <div class="range-labels">
-                        <span>6 мес.</span>
-                        <span>60 мес.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Комиссия банка</label>
-                        <input type="number" id="commission-value" name="commission-value" value="0" placeholder="%"
-                               max="3">
-                        <span class="percent-label">%</span>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="commission" name="commission" min="0" max="3" value="0" step="0.1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0%</span>
-                        <span>3%</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Комиссия ООО "ЛКМБ-РТ"</label>
-                        <input type="number" id="commission-lkmb-value" name="commission-lkmb-value" value="1.8"
-                               placeholder="%"
-                               max="3">
-                        <span class="percent-label">%</span>
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="commission-lkmb" name="commission-lkmb" min="0" max="3" value="1.8"
-                               step="0.1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0%</span>
-                        <span>3%</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Дата первого лизингового платежа</label>
-                        <input type="date" id="payment-date-value" name="payment-date-value" value="">
+                        <div class="slider-container">
+                            <input type="range" id="commission-lkmb" name="commission-lkmb" min="0" max="3" value="1.8"
+                                   step="0.1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0%</span>
+                            <span>3%</span>
+                        </div>
+                        <div class="input-container">
+                            <label>Дата первого лизингового платежа</label>
+                            <input type="date" id="payment-date-value" name="payment-date-value" value="">
+                        </div>
                     </div>
                 </div>
                 <div class="line"></div>
@@ -540,296 +534,307 @@
                 <button class="btn-hover-sm color-3" id="clear-button"><i class="fa-solid fa-trash"></i> Очистить
                 </button>
                 <br>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Агентское вознаграждение, %</label>
-                        <input type="number" id="agent-commission-value" name="agent-commission-value" value="0"
-                               placeholder="%" maxlength="3">
-                        <span class="percent-label">%</span>
+                <div class="part-container">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Агентское вознаграждение, %</label>
+                            <input type="number" id="agent-commission-value" name="agent-commission-value" value="0"
+                                   placeholder="%" maxlength="3">
+                            <span class="percent-label">%</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="agent-commission" name="agent-commission" min="0" max="5" value="0"
+                                   step="0.1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0%</span>
+                            <span>5%</span>
+                        </div>
                     </div>
-                    <div class="slider-container">
-                        <input type="range" id="agent-commission" name="agent-commission" min="0" max="5" value="0"
-                               step="0.1">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Бонус менеджера, %</label>
+                            <input type="number" id="manager-bonus-value" name="manager-bonus-value" value="1.2"
+                                   placeholder="%">
+                            <span class="percent-label">%</span>
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="manager-bonus" name="manager-bonus" min="0" max="1.5" value="1.2"
+                                   step="0.1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0%</span>
+                            <span>1.5%</span>
+                        </div>
                     </div>
-                    <div class="range-labels">
-                        <span>0%</span>
-                        <span>5%</span>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Трекеры, руб.</label>
+                            <input type="text" id="tracker-display" name="tracker-display" value="43 000,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="tracker-value" name="tracker-value" value="43000">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="tracker" name="tracker" min="0" max="100000" value="43000" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Бонус менеджера, %</label>
-                        <input type="number" id="manager-bonus-value" name="manager-bonus-value" value="1.2"
-                               placeholder="%">
-                        <span class="percent-label">%</span>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Маячки, руб.</label>
+                            <input type="text" id="mayak-display" name="mayak-display" value="15 000,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="mayak-value" name="mayak-value" value="15000">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="mayak" name="mayak" min="0" max="100000" value="15000" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                    <div class="slider-container">
-                        <input type="range" id="manager-bonus" name="manager-bonus" min="0" max="1.5" value="1.2"
-                               step="0.1">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Федресурс, руб.</label>
+                            <input type="text" id="fedresurs-display" name="fedresurs-display" value="2 000,00"
+                                   placeholder="руб." maxlength="7">
+                            <input type="hidden" id="fedresurs-value" name="fedresurs-value" value="2000">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="fedresurs" name="fedresurs" min="0" max="100000" value="2000"
+                                   step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                    <div class="range-labels">
-                        <span>0%</span>
-                        <span>1.5%</span>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>ГСМ, руб.</label>
+                            <input type="text" id="gsm-display" name="gsm-display" value="950,00" placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="gsm-value" name="gsm-value" value="950">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="gsm" name="gsm" min="0" max="100000" value="950" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Трекеры, руб.</label>
-                        <input type="text" id="tracker-display" name="tracker-display" value="43 000,00"
-                               placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="tracker-value" name="tracker-value" value="43000">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Почтовые расходы, руб.</label>
+                            <input type="text" id="mail-display" name="mail-display" value="400,00" placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="mail-value" name="mail-value" value="400">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="mail" name="mail" min="0" max="100000" value="400" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                    <div class="slider-container">
-                        <input type="range" id="tracker" name="tracker" min="0" max="100000" value="43000" step="1">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Амортизация транспорта, руб.</label>
+                            <input type="text" id="depr-transport-display" name="depr-transport-display" value="450,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="depr-transport-value" name="depr-transport-value" value="450">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="depr-transport" name="depr-transport" min="0" max="100000"
+                                   value="450"
+                                   step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Командировочные расходы, руб.</label>
+                            <input type="text" id="travel-display" name="travel-display" value="200,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="travel-value" name="travel-value" value="200">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="travel" name="travel" min="0" max="100000" value="200" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Маячки, руб.</label>
-                        <input type="text" id="mayak-display" name="mayak-display" value="15 000,00" placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="mayak-value" name="mayak-value" value="15000">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Расходы на приобретение канцтоваров, руб.</label>
+                            <input type="text" id="stationery-display" name="stationery-display" value="100,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="stationery-value" name="stationery-value" value="100">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="stationery" name="stationery" min="0" max="100000" value="100"
+                                   step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                    <div class="slider-container">
-                        <input type="range" id="mayak" name="mayak" min="0" max="100000" value="15000" step="1">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Телефония и интернет, руб.</label>
+                            <input type="text" id="internet-display" name="internet-display" value="600,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="internet-value" name="internet-value" value="600">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="internet" name="internet" min="0" max="100000" value="600" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Регистрация залогов, руб.</label>
+                            <input type="text" id="pledge-display" name="pledge-display" value="1 000,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="pledge-value" name="pledge-value" value="1000">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="pledge" name="pledge" min="0" max="100000" value="1000" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Федресурс, руб.</label>
-                        <input type="text" id="fedresurs-display" name="fedresurs-display" value="2 000,00"
-                               placeholder="руб." maxlength="7">
-                        <input type="hidden" id="fedresurs-value" name="fedresurs-value" value="2000">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Регистрация залога в банках, руб.</label>
+                            <input type="text" id="bank-pledge-display" name="bank-pledge-display" value="1 000,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="bank-pledge-value" name="bank-pledge-value" value="1000">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="bank-pledge" name="bank-pledge" min="0" max="100000" value="1000"
+                                   step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                    <div class="slider-container">
-                        <input type="range" id="fedresurs" name="fedresurs" min="0" max="100000" value="2000" step="1">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Расходы на экспресс-почту, руб.</label>
+                            <input type="text" id="express-display" name="express-display" value="2 166,00"
+                                   placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="express-value" name="express-value" value="2166">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="express" name="express" min="0" max="100000" value="2166" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Пошлина за получение выписки из ЕГРН, руб.</label>
+                            <input type="text" id="egrn-display" name="egrn-display" value="400,00" placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="egrn-value" name="egrn-value" value="400">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="egrn" name="egrn" min="0" max="100000" value="400" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>ГСМ, руб.</label>
-                        <input type="text" id="gsm-display" name="gsm-display" value="950,00" placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="gsm-value" name="gsm-value" value="950">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="gsm" name="gsm" min="0" max="100000" value="950" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Почтовые расходы, руб.</label>
-                        <input type="text" id="mail-display" name="mail-display" value="400,00" placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="mail-value" name="mail-value" value="400">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="mail" name="mail" min="0" max="100000" value="400" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Амортизация транспорта, руб.</label>
-                        <input type="text" id="depr-transport-display" name="depr-transport-display" value="450,00"
-                               placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="depr-transport-value" name="depr-transport-value" value="450">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="depr-transport" name="depr-transport" min="0" max="100000" value="450"
-                               step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Командировочные расходы, руб.</label>
-                        <input type="text" id="travel-display" name="travel-display" value="200,00" placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="travel-value" name="travel-value" value="200">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="travel" name="travel" min="0" max="100000" value="200" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Расходы на приобретение канцтоваров, руб.</label>
-                        <input type="text" id="stationery-display" name="stationery-display" value="100,00"
-                               placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="stationery-value" name="stationery-value" value="100">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="stationery" name="stationery" min="0" max="100000" value="100" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Телефония и интернет, руб.</label>
-                        <input type="text" id="internet-display" name="internet-display" value="600,00"
-                               placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="internet-value" name="internet-value" value="600">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="internet" name="internet" min="0" max="100000" value="600" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Регистрация залогов, руб.</label>
-                        <input type="text" id="pledge-display" name="pledge-display" value="1 000,00" placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="pledge-value" name="pledge-value" value="1000">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="pledge" name="pledge" min="0" max="100000" value="1000" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Регистрация залога в банках, руб.</label>
-                        <input type="text" id="bank-pledge-display" name="bank-pledge-display" value="1 000,00"
-                               placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="bank-pledge-value" name="bank-pledge-value" value="1000">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="bank-pledge" name="bank-pledge" min="0" max="100000" value="1000"
-                               step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Расходы на экспресс-почту, руб.</label>
-                        <input type="text" id="express-display" name="express-display" value="2 166,00"
-                               placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="express-value" name="express-value" value="2166">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="express" name="express" min="0" max="100000" value="2166" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Пошлина за получение выписки из ЕГРН, руб.</label>
-                        <input type="text" id="egrn-display" name="egrn-display" value="400,00" placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="egrn-value" name="egrn-value" value="400">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="egrn" name="egrn" min="0" max="100000" value="400" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container">
-                        <label>Пошлина за получение сведение из ЕГРЮЛ, руб.</label>
-                        <input type="text" id="egrul-display" name="egrul-display" value="200,00" placeholder="руб."
-                               maxlength="7">
-                        <input type="hidden" id="egrul-value" name="egrul-value" value="200">
-                    </div>
-                    <div class="slider-container">
-                        <input type="range" id="egrul" name="egrul" min="0" max="100000" value="200" step="1">
-                    </div>
-                    <div class="range-labels">
-                        <span>0 руб.</span>
-                        <span>100 тыс. руб.</span>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label>Пошлина за получение сведение из ЕГРЮЛ, руб.</label>
+                            <input type="text" id="egrul-display" name="egrul-display" value="200,00" placeholder="руб."
+                                   maxlength="7">
+                            <input type="hidden" id="egrul-value" name="egrul-value" value="200">
+                        </div>
+                        <div class="slider-container">
+                            <input type="range" id="egrul" name="egrul" min="0" max="100000" value="200" step="1">
+                        </div>
+                        <div class="range-labels">
+                            <span>0 руб.</span>
+                            <span>100 тыс. руб.</span>
+                        </div>
                     </div>
                 </div>
                 <div class="line"></div>
-                <div class="form-group">
-                    <div class="input-container" id="input-period-container">
-                        <label for="input-period">Поставщик выделяет НДС</label>
-                        <div class="button-group-nds">
-                            <button id="yes-nds-btn" class="toggle-btn active" data-value="yes-nds">Да</button>
-                            <button id="no-nds-btn" class="toggle-btn" data-value="no-nds">Нет</button>
+                <div class="part-container">
+                    <div class="form-group">
+                        <div class="input-container" id="input-period-container">
+                            <label for="input-period">Поставщик выделяет НДС</label>
+                            <div class="button-group-nds">
+                                <button id="yes-nds-btn" class="toggle-btn active" data-value="yes-nds">Да</button>
+                                <button id="no-nds-btn" class="toggle-btn" data-value="no-nds">Нет</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container" id="input-period-container">
-                        <label for="input-period">Задаток</label>
-                        <div class="button-group-deposit">
-                            <button id="distribute-deposit-btn" class="toggle-btn" data-value="yes-distribute-deposit">
-                                Распределять
-                            </button>
-                            <button id="no-distribute-deposit-btn" class="toggle-btn active"
-                                    data-value="no-distribute-deposit">Не распределять
-                            </button>
+                    <div class="form-group">
+                        <div class="input-container" id="input-period-container">
+                            <label for="input-period">Задаток</label>
+                            <div class="button-group-deposit">
+                                <button id="distribute-deposit-btn" class="toggle-btn"
+                                        data-value="yes-distribute-deposit">
+                                    Распределять
+                                </button>
+                                <button id="no-distribute-deposit-btn" class="toggle-btn active"
+                                        data-value="no-distribute-deposit">Не распределять
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container" id="input-period-container">
-                        <label for="input-period">Выкупной платеж</label>
-                        <div class="button-group-redemption">
-                            <button id="distribute-redemption-btn" class="toggle-btn"
-                                    data-value="yes-distribute-redemption">Распределять
-                            </button>
-                            <button id="no-distribute-redemption-btn" class="toggle-btn active"
-                                    data-value="no-distribute-redemption">Не распределять
-                            </button>
+                    <div class="form-group">
+                        <div class="input-container" id="input-period-container">
+                            <label for="input-period">Выкупной платеж</label>
+                            <div class="button-group-redemption">
+                                <button id="distribute-redemption-btn" class="toggle-btn"
+                                        data-value="yes-distribute-redemption">Распределять
+                                </button>
+                                <button id="no-distribute-redemption-btn" class="toggle-btn active"
+                                        data-value="no-distribute-redemption">Не распределять
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-container" id="input-period-container">
-                        <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема передачи</label>
-                        <input type="date" name="input-period" id="input-period" value=""/>
+                    <div class="form-group">
+                        <div class="input-container" id="input-period-container">
+                            <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема передачи</label>
+                            <input type="date" name="input-period" id="input-period" value=""/>
+                        </div>
                     </div>
                 </div>
             </div>

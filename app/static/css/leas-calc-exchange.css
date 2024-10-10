@@ -1,19 +1,15 @@
 .exchange-rates {
     max-width: 100%; /* адаптируется под размер родительского контейнера */
     margin: auto;
-    border: 1px solid #ddd;
     border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     overflow: auto;
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .exchange-rates-title {
-    background-color: rgba(247, 247, 247, 0.13);
     padding: 15px;
     font-size: 18px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid rgba(221, 221, 221, 0.4);
 }
 
 .exchange-rates-table {
@@ -24,7 +20,7 @@
 .exchange-rates-table th, .exchange-rates-table td {
     padding: 15px;
     text-align: center;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid rgba(221, 221, 221, 0.3);
 }
 
 .exchange-rates-table tr:last-child td {

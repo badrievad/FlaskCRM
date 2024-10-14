@@ -664,3 +664,54 @@ select:hover {
 .item-container {
     margin-bottom: 10px;
 }
+
+/* Общие стили для контейнера */
+.part-container.first-part {
+    border-radius: 8px; /* Скругленные углы */
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Стили для каждого элемента */
+.input-container-item-name, .input-container-item-condition, .button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Стили для input и select */
+input[type="text"], input[type="number"], select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%; /* Ширина на всю доступную область */
+    box-sizing: border-box; /* Учитываем padding в общей ширине */
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, select:focus {
+    border-color: #327741; /* Цвет рамки при фокусе */
+    outline: none; /* Убираем стандартное выделение */
+}
+
+/* Выравнивание по вертикали */
+.first-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Настройка ширины для select и input */
+input[type="number"], select {
+    width: auto; /* Автоматическая ширина, чтобы не занимать слишком много места */
+}
+
+.select-container {
+    width: 50px;
+    padding: 3px;
+    border: 1px solid #eeeeee;
+}

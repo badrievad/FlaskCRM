@@ -182,6 +182,11 @@
             </a>
         </li>
         <li class="clickable-in">
+            <a class="nav-link" href="#others">
+                <i class="fa-regular fa-clipboard"></i>Прочие условия
+            </a>
+        </li>
+                <li class="clickable-in">
             <a class="nav-link" href="#created-proposals">
                 <i class="fa-solid fa-layer-group"></i>Созданные КП
             </a>
@@ -211,7 +216,7 @@
         <div class="content">
             <div class="input-section">
                 <div class="form-group">
-                    <div class="part-container">
+                    <div class="part-container first-part">
                         <div class="input-container-item-name item-container">
                             <label for="name">Наименование имущества</label>
                             <input type="text" id="item-name" name="item-name" maxlength="500">
@@ -225,18 +230,18 @@
                             <button id="used-btn" class="toggle-btn" data-value="used">Б/У</button>
                         </div>
                         <br>
-                        <div class="input-container">
+                        <div class="input-container first-container">
                             <label for="production-year">Год выпуска/изготовления ПЛ</label>
                         </div>
-                        <div class="input-container item-container">
+                        <div class="input-container item-container first-container">
                             <input type="number" id="production-year-value" name="production-year-value" value="">
                         </div>
                         <br>
-                        <div class="input-container">
+                        <div class="input-container first-container">
                             <label for="currency">Валюта сделки</label>
                         </div>
-                        <div class="input-container">
-                            <select id="currency" name="currency">
+                        <div class="input-container first-container">
+                            <select id="currency" name="currency" class="select-container">
                                 <option value="rub" data-symbol="₽">₽</option>
                                 <option value="usd" data-symbol="$">$</option>
                                 <option value="eur" data-symbol="€">€</option>
@@ -360,181 +365,270 @@
                             <span>0%</span>
                             <span>3%</span>
                         </div>
-                        <div class="input-container">
-                            <label>Дата первого лизингового платежа</label>
-                            <input type="date" id="payment-date-value" name="payment-date-value" value="">
+                        <br>
+                        <div class="form-group">
+                            <div class="input-container">
+                                <label for="input-period">Поставщик выделяет НДС</label>
+                                <div class="button-group-nds">
+                                    <button id="yes-nds-btn" class="toggle-btn active" data-value="yes-nds">Да</button>
+                                    <button id="no-nds-btn" class="toggle-btn" data-value="no-nds">Нет</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-container">
+                                <label for="input-period">Задаток</label>
+                                <div class="button-group-deposit">
+                                    <button id="distribute-deposit-btn" class="toggle-btn"
+                                            data-value="yes-distribute-deposit">
+                                        Распределять
+                                    </button>
+                                    <button id="no-distribute-deposit-btn" class="toggle-btn active"
+                                            data-value="no-distribute-deposit">Не распределять
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-container">
+                                <label for="input-period">Выкупной платеж</label>
+                                <div class="button-group-redemption">
+                                    <button id="distribute-redemption-btn" class="toggle-btn"
+                                            data-value="yes-distribute-redemption">Распределять
+                                    </button>
+                                    <button id="no-distribute-redemption-btn" class="toggle-btn active"
+                                            data-value="no-distribute-redemption">Не распределять
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-container">
+                                <label for="leas-day">День лизингового платежа</label>
+                                <input type="text" name="leas-day" id="leas-day" value="" placeholder="5, 10, 20 и тд."/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-container">
+                                <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема
+                                    передачи</label>
+                                <input type="date" name="input-period" id="input-period" value=""/>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="line"></div>
-                <div id="tranches-container" class="table-container">
-                    <table id="tranches-table">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th id="tranche-1"><i class="fa-solid fa-coins"></i> Транш 1</th>
-                            <th id="tranche-2"><i class="fa-solid fa-coins"></i> Транш 2</th>
-                            <th id="tranche-3"><i class="fa-solid fa-coins"></i> Транш 3</th>
-                            <th id="tranche-4"><i class="fa-solid fa-coins"></i> Транш 4</th>
-                            <th id="tranche-5"><i class="fa-solid fa-coins"></i> Транш 5</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Размер транша, %</td>
-                            <td><input type="text" name="tranche1-size" id="tranche1-size" value="20" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche2-size" id="tranche2-size" value="80" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche3-size" id="tranche3-size" value="0" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche4-size" id="tranche4-size" value="0" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche5-size" id="tranche5-size" value="0" maxlength="5"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Ставка банка, %</td>
-                            <td><input type="text" name="tranche1-rate" id="tranche1-rate" value="20" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche2-rate" id="tranche2-rate" value="20" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche3-rate" id="tranche3-rate" value="0" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche4-rate" id="tranche4-rate" value="0" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche5-rate" id="tranche5-rate" value="0" maxlength="5"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Вознаграждение лизинговой компании, %</td>
-                            <td><input type="text" name="tranche1-fee" id="tranche1-fee" value="4.85" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche2-fee" id="tranche2-fee" value="4.85" maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="tranche3-fee" id="tranche3-fee" value="0" maxlength="5"/></td>
-                            <td><input type="text" name="tranche4-fee" id="tranche4-fee" value="0" maxlength="5"/></td>
-                            <td><input type="text" name="tranche5-fee" id="tranche5-fee" value="0" maxlength="5"/></td>
-                        </tr>
-                        <tr>
-                            <td>Вознаграждение лизинговой компании, % (за счет собственных средств)</td>
-                            <td><input type="text" name="tranche1-own-fee" id="tranche1-own-fee" value="0"
-                                       maxlength="5"/></td>
-                            <td><input type="text" name="tranche2-own-fee" id="tranche2-own-fee" value="0"
-                                       maxlength="5"/></td>
-                            <td><input type="text" name="tranche3-own-fee" id="tranche3-own-fee" value="0"
-                                       maxlength="5"/></td>
-                            <td><input type="text" name="tranche4-own-fee" id="tranche4-own-fee" value="0"
-                                       maxlength="5"/></td>
-                            <td><input type="text" name="tranche5-own-fee" id="tranche5-own-fee" value="0"
-                                       maxlength="5"/></td>
-                        </tr>
-                        <tr>
-                            <td>Дата выдачи кредита</td>
-                            <td><input type="date" name="tranche1-credit-date" id="tranche1-credit-date" maxlength="5"/>
-                            </td>
-                            <td><input type="date" name="tranche2-credit-date" id="tranche2-credit-date" maxlength="5"/>
-                            </td>
-                            <td><input type="date" name="tranche3-credit-date" id="tranche3-credit-date" maxlength="5"/>
-                            </td>
-                            <td><input type="date" name="tranche4-credit-date" id="tranche4-credit-date" maxlength="5"/>
-                            </td>
-                            <td><input type="date" name="tranche5-credit-date" id="tranche5-credit-date" maxlength="5"/>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="line"></div>
-                <h5 id="insurance"><i class="fa-solid fa-car-burst" style="color: #727a88"></i> Расходы на страхование:
-                </h5>
-                <div id="insurance-container" class="table-container">
-                    <table id="insurance-table">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th id="insurance-1"><i class="fa-regular fa-calendar"></i> 1 год</th>
-                            <th id="insurance-2"><i class="fa-regular fa-calendar"></i> 2 год</th>
-                            <th id="insurance-3"><i class="fa-regular fa-calendar"></i> 3 год</th>
-                            <th id="insurance-4"><i class="fa-regular fa-calendar"></i> 4 год</th>
-                            <th id="insurance-5"><i class="fa-regular fa-calendar"></i> 5 год</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>Расходы на страхование КАСКО, %</td>
-                            <td><input type="text" name="insurance-casko1" id="insurance-casko1" value="0"
-                                       maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="insurance-casko2" id="insurance-casko2" value="0"
-                                       maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="insurance-casko3" id="insurance-casko3" value="0"
-                                       maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="insurance-casko4" id="insurance-casko4" value="0"
-                                       maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="insurance-casko5" id="insurance-casko5" value="0"
-                                       maxlength="5"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Расходы на страхование ОСАГО, %</td>
-                            <td><input type="text" name="insurance-osago1" id="insurance-osago1" value="0"
-                                       maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="insurance-osago2" id="insurance-osago2" value="0"
-                                       maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="insurance-osago3" id="insurance-osago3" value="0"
-                                       maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="insurance-osago4" id="insurance-osago4" value="0"
-                                       maxlength="5"/>
-                            </td>
-                            <td><input type="text" name="insurance-osago5" id="insurance-osago5" value="0"
-                                       maxlength="5"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Расходы на страхование ЖИЗНИ и ЗДОРОВЬЯ, руб.</td>
-                            <td><input type="text" name="health-insurance1" id="health-insurance1" value="0,00"
-                                       maxlength="12"/></td>
-                            <td><input type="text" name="health-insurance2" id="health-insurance2" value="0,00"
-                                       maxlength="12"/></td>
-                            <td><input type="text" name="health-insurance3" id="health-insurance3" value="0,00"
-                                       maxlength="12"/></td>
-                            <td><input type="text" name="health-insurance4" id="health-insurance4" value="0,00"
-                                       maxlength="12"/></td>
-                            <td><input type="text" name="health-insurance5" id="health-insurance5" value="0,00"
-                                       maxlength="12"/></td>
-                        </tr>
-                        <tr>
-                            <td>Расходы на страхование ИНОЕ, руб.</td>
-                            <td><input type="text" name="other-insurance1" id="other-insurance1" value="0,00"
-                                       maxlength="12"/></td>
-                            <td><input type="text" name="other-insurance2" id="other-insurance2" value="0,00"
-                                       maxlength="12"/></td>
-                            <td><input type="text" name="other-insurance3" id="other-insurance3" value="0,00"
-                                       maxlength="12"/></td>
-                            <td><input type="text" name="other-insurance4" id="other-insurance4" value="0,00"
-                                       maxlength="12"/></td>
-                            <td><input type="text" name="other-insurance5" id="other-insurance5" value="0,00"
-                                       maxlength="12"/></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <br>
-                <div class="line"></div>
-                <h5 id="overhead"><i class="fa-solid fa-dolly" style="color: #727a88"></i> Накладные расходы: </h5>
-                <button class="btn-hover-sm color-3" id="default-button"><i class="fa-solid fa-check"></i> По умолчанию
-                </button>
-                <button class="btn-hover-sm color-3" id="clear-button"><i class="fa-solid fa-trash"></i> Очистить
-                </button>
-                <br>
                 <div class="part-container">
+                    <div id="tranches-container" class="table-container">
+                        <table id="tranches-table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th id="tranche-1"><i class="fa-solid fa-coins"></i> Транш 1</th>
+                                <th id="tranche-2"><i class="fa-solid fa-coins"></i> Транш 2</th>
+                                <th id="tranche-3"><i class="fa-solid fa-coins"></i> Транш 3</th>
+                                <th id="tranche-4"><i class="fa-solid fa-coins"></i> Транш 4</th>
+                                <th id="tranche-5"><i class="fa-solid fa-coins"></i> Транш 5</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Размер транша, %</td>
+                                <td><input type="text" name="tranche1-size" id="tranche1-size" value="20"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="text" name="tranche2-size" id="tranche2-size" value="80"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="text" name="tranche3-size" id="tranche3-size" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="tranche4-size" id="tranche4-size" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="tranche5-size" id="tranche5-size" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ставка банка, %</td>
+                                <td><input type="text" name="tranche1-rate" id="tranche1-rate" value="20"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="text" name="tranche2-rate" id="tranche2-rate" value="20"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="text" name="tranche3-rate" id="tranche3-rate" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="tranche4-rate" id="tranche4-rate" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="tranche5-rate" id="tranche5-rate" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ставка ЛК, %</td>
+                                <td><input type="text" name="tranche1-fee" id="tranche1-fee" value="4.85"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="text" name="tranche2-fee" id="tranche2-fee" value="4.85"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="text" name="tranche3-fee" id="tranche3-fee" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="tranche4-fee" id="tranche4-fee" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="tranche5-fee" id="tranche5-fee" value="" maxlength="5"
+                                           placeholder="%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ставка ЛК, % (если без банка)</td>
+                                <td><input type="text" name="tranche1-own-fee" id="tranche1-own-fee" value=""
+                                           maxlength="5" placeholder="%"/></td>
+                                <td><input type="text" name="tranche2-own-fee" id="tranche2-own-fee" value=""
+                                           maxlength="5" placeholder="%"/></td>
+                                <td><input type="text" name="tranche3-own-fee" id="tranche3-own-fee" value=""
+                                           maxlength="5" placeholder="%"/></td>
+                                <td><input type="text" name="tranche4-own-fee" id="tranche4-own-fee" value=""
+                                           maxlength="5" placeholder="%"/></td>
+                                <td><input type="text" name="tranche5-own-fee" id="tranche5-own-fee" value=""
+                                           maxlength="5" placeholder="%"/></td>
+                            </tr>
+                            <tr>
+                                <td>Дата выдачи кредита</td>
+                                <td><input type="date" name="tranche1-credit-date" id="tranche1-credit-date"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="date" name="tranche2-credit-date" id="tranche2-credit-date"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="date" name="tranche3-credit-date" id="tranche3-credit-date"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="date" name="tranche4-credit-date" id="tranche4-credit-date"
+                                           maxlength="5"/>
+                                </td>
+                                <td><input type="date" name="tranche5-credit-date" id="tranche5-credit-date"
+                                           maxlength="5"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Отсрочка по уплате лизинговых платежей</td>
+                                <td><input type="text" name="payment-deferment1" id="payment-deferment1" value=""
+                                           placeholder="мес."
+                                           maxlength="2"/></td>
+                                <td><input type="text" name="payment-deferment2" id="payment-deferment2" value=""
+                                           placeholder="мес."
+                                           maxlength="2"/></td>
+                                <td><input type="text" name="payment-deferment3" id="payment-deferment3" value=""
+                                           placeholder="мес."
+                                           maxlength="2"/></td>
+                                <td><input type="text" name="payment-deferment4" id="payment-deferment4" value=""
+                                           placeholder="мес."
+                                           maxlength="2"/></td>
+                                <td><input type="text" name="payment-deferment5" id="payment-deferment5" value=""
+                                           placeholder="мес."
+                                           maxlength="2"/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div class="line"></div>
+                <div class="part-container">
+                    <h5 id="insurance"><i class="fa-solid fa-car-burst" style="color: #727a88"></i> Расходы на
+                        страхование:
+                    </h5>
+                    <div id="insurance-container" class="table-container">
+                        <table id="insurance-table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                <th id="insurance-1"><i class="fa-regular fa-calendar"></i> 1 год</th>
+                                <th id="insurance-2"><i class="fa-regular fa-calendar"></i> 2 год</th>
+                                <th id="insurance-3"><i class="fa-regular fa-calendar"></i> 3 год</th>
+                                <th id="insurance-4"><i class="fa-regular fa-calendar"></i> 4 год</th>
+                                <th id="insurance-5"><i class="fa-regular fa-calendar"></i> 5 год</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>КАСКО, %</td>
+                                <td><input type="text" name="insurance-casko1" id="insurance-casko1" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="insurance-casko2" id="insurance-casko2" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="insurance-casko3" id="insurance-casko3" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="insurance-casko4" id="insurance-casko4" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="insurance-casko5" id="insurance-casko5" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ОСАГО, %</td>
+                                <td><input type="text" name="insurance-osago1" id="insurance-osago1" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="insurance-osago2" id="insurance-osago2" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="insurance-osago3" id="insurance-osago3" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="insurance-osago4" id="insurance-osago4" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                                <td><input type="text" name="insurance-osago5" id="insurance-osago5" value=""
+                                           maxlength="5" placeholder="%"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>ЖИЗНИ и ЗДОРОВЬЯ, руб.</td>
+                                <td><input type="text" name="health-insurance1" id="health-insurance1" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                                <td><input type="text" name="health-insurance2" id="health-insurance2" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                                <td><input type="text" name="health-insurance3" id="health-insurance3" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                                <td><input type="text" name="health-insurance4" id="health-insurance4" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                                <td><input type="text" name="health-insurance5" id="health-insurance5" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                            </tr>
+                            <tr>
+                                <td>ИНОЕ, руб.</td>
+                                <td><input type="text" name="other-insurance1" id="other-insurance1" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                                <td><input type="text" name="other-insurance2" id="other-insurance2" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                                <td><input type="text" name="other-insurance3" id="other-insurance3" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                                <td><input type="text" name="other-insurance4" id="other-insurance4" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                                <td><input type="text" name="other-insurance5" id="other-insurance5" value=""
+                                           maxlength="12" placeholder="руб."/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br>
+                <div class="line"></div>
+                <div class="part-container">
+                    <h5 id="overhead"><i class="fa-solid fa-dolly" style="color: #727a88"></i> Накладные расходы: </h5>
+                    <br>
                     <div class="form-group">
                         <div class="input-container">
                             <label>Агентское вознаграждение, %</label>
@@ -567,6 +661,13 @@
                             <span>1.5%</span>
                         </div>
                     </div>
+                </div>
+                <br>
+                <div class="part-container">
+                    <button class="btn-hover-sm color-3" id="default-button"><i class="fa-solid fa-check"></i> По умолчанию
+                    </button>
+                    <button class="btn-hover-sm color-3" id="clear-button"><i class="fa-solid fa-trash"></i> Очистить
+                    </button>
                     <div class="form-group">
                         <div class="input-container">
                             <label>Трекеры, руб.</label>
@@ -792,50 +893,11 @@
                         </div>
                     </div>
                 </div>
+                <br>
                 <div class="line"></div>
                 <div class="part-container">
-                    <div class="form-group">
-                        <div class="input-container" id="input-period-container">
-                            <label for="input-period">Поставщик выделяет НДС</label>
-                            <div class="button-group-nds">
-                                <button id="yes-nds-btn" class="toggle-btn active" data-value="yes-nds">Да</button>
-                                <button id="no-nds-btn" class="toggle-btn" data-value="no-nds">Нет</button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container" id="input-period-container">
-                            <label for="input-period">Задаток</label>
-                            <div class="button-group-deposit">
-                                <button id="distribute-deposit-btn" class="toggle-btn"
-                                        data-value="yes-distribute-deposit">
-                                    Распределять
-                                </button>
-                                <button id="no-distribute-deposit-btn" class="toggle-btn active"
-                                        data-value="no-distribute-deposit">Не распределять
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container" id="input-period-container">
-                            <label for="input-period">Выкупной платеж</label>
-                            <div class="button-group-redemption">
-                                <button id="distribute-redemption-btn" class="toggle-btn"
-                                        data-value="yes-distribute-redemption">Распределять
-                                </button>
-                                <button id="no-distribute-redemption-btn" class="toggle-btn active"
-                                        data-value="no-distribute-redemption">Не распределять
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container" id="input-period-container">
-                            <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема передачи</label>
-                            <input type="date" name="input-period" id="input-period" value=""/>
-                        </div>
-                    </div>
+                    <h5 id="others"><i class="fa-regular fa-clipboard" style="color: #727a88"></i> Прочие условия:
+                    </h5>
                 </div>
             </div>
             <div class="results">
@@ -1027,7 +1089,6 @@
                 var creditTerm = document.getElementById('term-value').value;
                 var bankCommission = document.getElementById('commission-value').value;
                 var lkmbCommission = document.getElementById('commission-lkmb-value').value;
-                var firstPaymentDate = document.getElementById('payment-date-value').value;
 
                 var insuranceCasko1 = document.getElementById('insurance-casko1').value;
                 var insuranceCasko2 = document.getElementById('insurance-casko2').value;
@@ -1138,7 +1199,6 @@
                         creditTerm: creditTerm,
                         bankCommission: bankCommission,
                         lkmbCommission: lkmbCommission,
-                        firstPaymentDate: firstPaymentDate,
                         insurances: {
                             insurance1: {
                                 casko: insuranceCasko1,

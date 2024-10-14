@@ -934,7 +934,6 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('commission').value = calc.bank_commission;
         document.getElementById('commission-lkmb-value').value = calc.lkmb_commission;
         document.getElementById('commission-lkmb').value = calc.lkmb_commission;
-        document.getElementById('payment-date-value').value = formatDate(calc.first_payment_date);
         document.getElementById('agent-commission-value').value = calc.agent_commission;
         document.getElementById('agent-commission').value = calc.agent_commission;
         document.getElementById('manager-bonus-value').value = calc.manager_bonus;

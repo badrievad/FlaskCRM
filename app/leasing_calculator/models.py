@@ -25,7 +25,6 @@ class LeasCalculator(db.Model):
     credit_term = db.Column(db.Integer, nullable=True)
     bank_commission = db.Column(db.Float, nullable=True)
     lkmb_commission = db.Column(db.Float, nullable=True)
-    first_payment_date = db.Column(db.Date, nullable=True)
     agent_commission = db.Column(db.Float, nullable=True)
     manager_bonus = db.Column(db.Float, nullable=True)
     tracker = db.Column(db.Float, nullable=True)
@@ -121,7 +120,6 @@ class LeasCalculator(db.Model):
             "credit_term": self.credit_term,
             "bank_commission": self.bank_commission,
             "lkmb_commission": self.lkmb_commission,
-            "first_payment_date": self.first_payment_date,
             "agent_commission": self.agent_commission,
             "manager_bonus": self.manager_bonus,
             "tracker": self.tracker,

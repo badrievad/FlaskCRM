@@ -1,95 +1,73 @@
-#tranches-table, #insurance-table {
-    width: 900px;
+.table-container {
+    width: 100%;
+    max-width: 100%;
     font-size: 14px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: normal;
 }
 
-#tranches-table th, #tranches-table td, #insurance-table th, #insurance-table td {
-    border: 1px solid #eeeded;
-    padding: 8px;
-    text-align: center;
-    vertical-align: middle;
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-#tranches-table th, #insurance-table th {
+.table-container th {
     background-color: rgba(58, 162, 123, 0.8);
     color: white;
     font-size: small;
-
-}
-
-#tranches-table input[type="text"], #tranches-table input[type="date"], #insurance-table input[type="text"], #insurance-table input[type="date"] {
-    width: 90%;
-    padding: 4px;
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 10px;
     text-align: center;
 }
 
-#tranches-table input[type="date"] {
-    position: relative;
-    padding: 8px 12px;
-    line-height: 20px;
-    background-color: rgba(255, 255, 255, 0.4);
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-#tranches-table input[type="date"]::-webkit-inner-spin-button,
-#tranches-table input[type="date"]::-webkit-clear-button {
-    display: none;
-}
-
-#tranches-table input[type="date"]::-webkit-calendar-picker-indicator {
-    position: absolute;
-    right: 10px;
-    color: #555;
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-#tranches-table input[type="date"]:hover::-webkit-calendar-picker-indicator {
-    opacity: 1;
-}
-
-
-#input-period input[type="date"] {
-    width: 50%;
-    padding: 4px;
+.table-container td {
+    padding: 5px;
     box-sizing: border-box;
+    white-space: normal;
+}
+
+/* Стили для input[type="date"] */
+input[type="date"] {
+    appearance: none; /* Убираем стандартное оформление браузера */
+    -webkit-appearance: none; /* Для WebKit браузеров */
+    padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
     text-align: center;
 }
 
-#input-period input[type="date"] {
-    position: relative;
-    padding: 8px 12px;
-    line-height: 20px;
-    background-color: rgba(255, 255, 255, 0.4);
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-#input-period input[type="date"]::-webkit-inner-spin-button,
-#input-period input[type="date"]::-webkit-clear-button {
-    display: none;
-}
-
-#input-period input[type="date"]::-webkit-calendar-picker-indicator {
-    position: absolute;
-    right: 10px;
-    color: #555;
-    opacity: 0.5;
+/* Иконка календаря */
+input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
+    background-size: 15px 15px;
+    color: transparent;
+    opacity: 0.5;
+    width: 15px;
+    height: 15px;
+    position: relative;
 }
 
-#input-period input[type="date"]:hover::-webkit-calendar-picker-indicator {
+input[type="date"]:hover::-webkit-calendar-picker-indicator {
     opacity: 1;
+}
+
+/* Дополнительные стили для input на мобильных устройствах */
+@media (max-width: 600px) {
+    input[type="date"] {
+        font-size: 16px;
+        padding: 12px;
+    }
+}
+
+#tranches-table th:first-child,
+#tranches-table td:first-child {
+    text-align: left !important; /* Выравнивание текста с !important */
+    min-width: 150px;
 }

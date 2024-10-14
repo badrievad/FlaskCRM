@@ -103,10 +103,6 @@ class ValidateFields(BaseModel):
     credit_term: int = Field(alias="creditTerm", default=1)
     bank_commission: float = Field(alias="bankCommission", default=0.0)
     lkmb_commission: float = Field(alias="lkmbCommission", default=0.0)
-    first_payment_date: str = Field(
-        alias="firstPaymentDate",
-        default_factory=lambda: datetime.now().strftime("%Y-%m-%d"),
-    )
     insurances: Insurances
     agent_commission: float = Field(alias="agentCommission", default=0.0)
     manager_bonus: float = Field(alias="managerBonus", default=0.0)
@@ -165,7 +161,7 @@ class ValidateFields(BaseModel):
             return 0.0
         return value
 
-    @field_validator("input_period", "first_payment_date", mode="before")
+    @field_validator("input_period", mode="before")
     def set_default_date(cls, value):  # noqa
         if not value:
             return datetime.now().strftime("%Y-%m-%d")

@@ -136,7 +136,6 @@ def intensive_task_simulation(data: dict) -> dict:
             credit_term=data["credit_term"],
             bank_commission=data["bank_commission"],
             lkmb_commission=data["lkmb_commission"],
-            first_payment_date=data["first_payment_date"],
             agent_commission=data["agent_commission"],
             manager_bonus=data["manager_bonus"],
             tracker=data["tracker"],

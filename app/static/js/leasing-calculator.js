@@ -137,10 +137,6 @@ document.getElementById('term-value').addEventListener('input', function () {
         this.value = 100;
     }
     document.getElementById('term').value = this.value;
-    if (this.value.trim() === "") {
-        this.value = "6";
-        document.getElementById('term').value = 6;
-    }
 });
 
 document.getElementById('term-value').addEventListener('keypress', function (event) {
@@ -928,8 +924,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('credit-percent').value = calc.credit_sum_percent;
         updateInitialPaymentValue();
         updateCreditValue();
-        document.getElementById('term-value').value = calc.credit_term;
-        document.getElementById('term').value = calc.credit_term;
+        document.getElementById('term-value').value = calc.agreement_term;
+        document.getElementById('term').value = calc.agreement_term;
         document.getElementById('commission-value').value = calc.bank_commission;
         document.getElementById('commission').value = calc.bank_commission;
         document.getElementById('commission-lkmb-value').value = calc.lkmb_commission;
@@ -981,6 +977,12 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('egrul-display').value = calc.egrul_str;
         document.getElementById('egrul').value = calc.egrul;
         document.getElementById('input-period').value = formatDate(calc.input_period);
+        document.getElementById('leas-day').value = calc.leas_day;
+        document.getElementById('credit-term').value = calc.credit_term;
+        document.getElementById('reduce-percent').value = calc.reduce_percent;
+        document.getElementById('service-life').value = calc.service_life;
+        document.getElementById('amortization-group').value = calc.amortization;
+        document.getElementById('nds-size').value = calc.nds_size;
 
         // Установите правильное значение для item_type
         var itemTypeButtons = document.querySelectorAll('.tabs button');
@@ -1049,26 +1051,31 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('tranche1-fee').value = tranches.tranche_1_fee;
             document.getElementById('tranche1-own-fee').value = tranches.tranche_1_own_fee;
             document.getElementById('tranche1-credit-date').value = formatDate(tranches.tranche_1_credit_date);
+            document.getElementById('payment-deferment1').value = tranches.tranche_1_payment_deferment;
             document.getElementById('tranche2-size').value = tranches.tranche_2_size;
             document.getElementById('tranche2-rate').value = tranches.tranche_2_rate;
             document.getElementById('tranche2-fee').value = tranches.tranche_2_fee;
             document.getElementById('tranche2-own-fee').value = tranches.tranche_2_own_fee;
             document.getElementById('tranche2-credit-date').value = formatDate(tranches.tranche_2_credit_date);
+            document.getElementById('payment-deferment2').value = tranches.tranche_2_payment_deferment;
             document.getElementById('tranche3-size').value = tranches.tranche_3_size;
             document.getElementById('tranche3-rate').value = tranches.tranche_3_rate;
             document.getElementById('tranche3-fee').value = tranches.tranche_3_fee;
             document.getElementById('tranche3-own-fee').value = tranches.tranche_3_own_fee;
             document.getElementById('tranche3-credit-date').value = formatDate(tranches.tranche_3_credit_date);
+            document.getElementById('payment-deferment3').value = tranches.tranche_3_payment_deferment;
             document.getElementById('tranche4-size').value = tranches.tranche_4_size;
             document.getElementById('tranche4-rate').value = tranches.tranche_4_rate;
             document.getElementById('tranche4-fee').value = tranches.tranche_4_fee;
             document.getElementById('tranche4-own-fee').value = tranches.tranche_4_own_fee;
             document.getElementById('tranche4-credit-date').value = formatDate(tranches.tranche_4_credit_date);
+            document.getElementById('payment-deferment4').value = tranches.tranche_4_payment_deferment;
             document.getElementById('tranche5-size').value = tranches.tranche_5_size;
             document.getElementById('tranche5-rate').value = tranches.tranche_5_rate;
             document.getElementById('tranche5-fee').value = tranches.tranche_5_fee;
             document.getElementById('tranche5-own-fee').value = tranches.tranche_5_own_fee;
             document.getElementById('tranche5-credit-date').value = formatDate(tranches.tranche_5_credit_date);
+            document.getElementById('payment-deferment5').value = tranches.tranche_5_payment_deferment;
         }
         if (insurances) {
             document.getElementById('insurance-casko1').value = insurances.insurance_casko1;
@@ -1102,20 +1109,20 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         closeModal();
         const Toast = Swal.mixin({
-                toast: true,
-                position: "top-end",
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: (toast) => {
-                    toast.onmouseenter = Swal.stopTimer;
-                    toast.onmouseleave = Swal.resumeTimer;
-                }
-            });
-            Toast.fire({
-                icon: "success",
-                title: "Данные из предыдущего КП были успешно скопированы."
-            });
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            }
+        });
+        Toast.fire({
+            icon: "success",
+            title: "Данные из предыдущего КП были успешно скопированы."
+        });
     }
 
     function simpleScrollTest() {
@@ -1149,6 +1156,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     .then(data => {
                         if (data.success) {
                             populateForm(data);
+                            // Плавная прокрутка страницы наверх
+                            window.scrollTo({top: 0, behavior: 'smooth'});
                         } else {
                             // Используем SweetAlert2 для ошибки
                             Swal.fire({
@@ -1214,17 +1223,6 @@ document.querySelectorAll('.button-group-nds, .button-group-deposit, .button-gro
     });
 });
 
-function scrollToTrancheTable() {
-    const element = document.getElementById('tranches-table');
-    if (element) {
-        window.scroll({
-            top: element.offsetTop,
-            left: 0,
-            behavior: 'smooth'
-        });
-    }
-}
-
 // Функция для проверки и корректировки значения в поле ввода
 function validateInput(element) {
     let value = parseFloat(element.value);
@@ -1254,3 +1252,102 @@ function setValidationHandlers() {
 
 // Установка обработчиков при загрузке страницы
 document.addEventListener('DOMContentLoaded', setValidationHandlers);
+
+
+document.getElementById('leas-day').addEventListener('input', function () {
+    // Remove any non-digit characters
+    let value = this.value.replace(/\D/g, '');
+
+    // Limit value to 2 digits
+    value = value.substring(0, 2);
+
+    // Convert to a number
+    let num = parseInt(value, 10);
+
+    // Check if num is a valid number
+    if (!isNaN(num)) {
+        if (num > 31) {
+            num = 31;
+        } else if (num < 1) {
+            num = 1;
+        }
+    } else {
+        num = '';
+    }
+
+    // Update the input value
+    this.value = num;
+});
+
+// Select all input fields with IDs starting with 'payment-deferment'
+document.querySelectorAll('input[id^="payment-deferment"]').forEach(function (input) {
+    input.addEventListener('input', function () {
+        // Remove any non-digit characters
+        this.value = this.value.replace(/\D/g, '').substring(0, 2);
+    });
+});
+
+const termSlider = document.getElementById('term');
+const termInput = document.getElementById('term-value');
+const creditTermInput = document.getElementById('credit-term');
+
+// Функция для синхронизации срока кредита с сроком договора
+function syncCreditTerm() {
+    creditTermInput.value = termInput.value;
+}
+
+// Синхронизация при загрузке страницы
+window.addEventListener('DOMContentLoaded', function () {
+    syncCreditTerm();
+});
+
+// Обработчик изменения срока договора через слайдер
+termSlider.addEventListener('input', function () {
+    termInput.value = this.value;
+    syncCreditTerm();
+});
+
+// Обработчик изменения срока договора через числовой ввод
+termInput.addEventListener('input', function () {
+    let value = parseInt(this.value, 10);
+
+    // Проверка и корректировка значения
+    if (isNaN(value) || value < 1) {
+        value = 1;
+    } else if (value > 60) {
+        value = 60;
+    }
+    this.value = value;
+    termSlider.value = value;
+    syncCreditTerm();
+});
+
+// Обработчик изменения срока кредита
+creditTermInput.addEventListener('input', function () {
+    let contractTerm = parseInt(termInput.value, 10);
+    let creditTerm = parseInt(this.value, 10);
+
+    // Проверка и корректировка значения
+    if (isNaN(creditTerm)) {
+        creditTerm = '';
+    } else if (creditTerm > contractTerm) {
+        creditTerm = contractTerm;
+    }
+    this.value = creditTerm;
+});
+
+// Выбираем все поля с классом 'digits-only' и добавляем общий обработчик события
+document.querySelectorAll('.digits-only').forEach(function (input) {
+    input.addEventListener('input', function () {
+        // Удаляем все символы, кроме цифр
+        let value = this.value.replace(/\D/g, '').substring(0, 3);
+        let num = parseInt(value, 10);
+
+        // Проверки для конкретных полей по их ID
+        if (this.id === 'nds-size' && num > 100) {
+            num = 100; // Максимальное значение для НДС - 100%
+        }
+
+        this.value = isNaN(num) ? '' : num;
+    });
+});

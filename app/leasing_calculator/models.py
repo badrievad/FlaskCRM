@@ -23,6 +23,12 @@ class LeasCalculator(db.Model):
     credit_sum_str = db.Column(db.String(50), nullable=True)
     credit_sum_percent = db.Column(db.Float, nullable=True)
     credit_term = db.Column(db.Integer, nullable=True)
+    agreement_term = db.Column(db.Integer, nullable=True)
+    reduce_percent = db.Column(db.Integer, nullable=True)
+    leas_day = db.Column(db.Integer, nullable=True)
+    service_life = db.Column(db.Integer, nullable=True)
+    amortization = db.Column(db.String(150), nullable=True)
+    nds_size = db.Column(db.Integer, nullable=True)
     bank_commission = db.Column(db.Float, nullable=True)
     lkmb_commission = db.Column(db.Float, nullable=True)
     agent_commission = db.Column(db.Float, nullable=True)
@@ -118,6 +124,12 @@ class LeasCalculator(db.Model):
             "credit_sum_str": self.credit_sum_str,
             "credit_sum_percent": self.credit_sum_percent,
             "credit_term": self.credit_term,
+            "agreement_term": self.agreement_term,
+            "reduce_percent": self.reduce_percent,
+            "leas_day": self.leas_day,
+            "service_life": self.service_life,
+            "amortization": self.amortization,
+            "nds_size": self.nds_size,
             "bank_commission": self.bank_commission,
             "lkmb_commission": self.lkmb_commission,
             "agent_commission": self.agent_commission,
@@ -174,26 +186,31 @@ class Tranches(db.Model):
     tranche_1_fee = db.Column(db.Float, nullable=True)
     tranche_1_own_fee = db.Column(db.Float, nullable=True)
     tranche_1_credit_date = db.Column(db.Date, nullable=True)
+    tranche_1_payment_deferment = db.Column(db.Integer, nullable=True)
     tranche_2_size = db.Column(db.Float, nullable=True)
     tranche_2_rate = db.Column(db.Float, nullable=True)
     tranche_2_fee = db.Column(db.Float, nullable=True)
     tranche_2_own_fee = db.Column(db.Float, nullable=True)
     tranche_2_credit_date = db.Column(db.Date, nullable=True)
+    tranche_2_payment_deferment = db.Column(db.Integer, nullable=True)
     tranche_3_size = db.Column(db.Float, nullable=True)
     tranche_3_rate = db.Column(db.Float, nullable=True)
     tranche_3_fee = db.Column(db.Float, nullable=True)
     tranche_3_own_fee = db.Column(db.Float, nullable=True)
     tranche_3_credit_date = db.Column(db.Date, nullable=True)
+    tranche_3_payment_deferment = db.Column(db.Integer, nullable=True)
     tranche_4_size = db.Column(db.Float, nullable=True)
     tranche_4_rate = db.Column(db.Float, nullable=True)
     tranche_4_fee = db.Column(db.Float, nullable=True)
     tranche_4_own_fee = db.Column(db.Float, nullable=True)
     tranche_4_credit_date = db.Column(db.Date, nullable=True)
+    tranche_4_payment_deferment = db.Column(db.Integer, nullable=True)
     tranche_5_size = db.Column(db.Float, nullable=True)
     tranche_5_rate = db.Column(db.Float, nullable=True)
     tranche_5_fee = db.Column(db.Float, nullable=True)
     tranche_5_own_fee = db.Column(db.Float, nullable=True)
     tranche_5_credit_date = db.Column(db.Date, nullable=True)
+    tranche_5_payment_deferment = db.Column(db.Integer, nullable=True)
 
     leas_calculator = relationship(
         "LeasCalculator", back_populates="tranche", uselist=False
@@ -207,26 +224,31 @@ class Tranches(db.Model):
             "tranche_1_fee": self.tranche_1_fee,
             "tranche_1_own_fee": self.tranche_1_own_fee,
             "tranche_1_credit_date": self.tranche_1_credit_date,
+            "tranche_1_payment_deferment": self.tranche_1_payment_deferment,
             "tranche_2_size": self.tranche_2_size,
             "tranche_2_rate": self.tranche_2_rate,
             "tranche_2_fee": self.tranche_2_fee,
             "tranche_2_own_fee": self.tranche_2_own_fee,
             "tranche_2_credit_date": self.tranche_2_credit_date,
+            "tranche_2_payment_deferment": self.tranche_2_payment_deferment,
             "tranche_3_size": self.tranche_3_size,
             "tranche_3_rate": self.tranche_3_rate,
             "tranche_3_fee": self.tranche_3_fee,
             "tranche_3_own_fee": self.tranche_3_own_fee,
             "tranche_3_credit_date": self.tranche_3_credit_date,
+            "tranche_3_payment_deferment": self.tranche_3_payment_deferment,
             "tranche_4_size": self.tranche_4_size,
             "tranche_4_rate": self.tranche_4_rate,
             "tranche_4_fee": self.tranche_4_fee,
             "tranche_4_own_fee": self.tranche_4_own_fee,
             "tranche_4_credit_date": self.tranche_4_credit_date,
+            "tranche_4_payment_deferment": self.tranche_4_payment_deferment,
             "tranche_5_size": self.tranche_5_size,
             "tranche_5_rate": self.tranche_5_rate,
             "tranche_5_fee": self.tranche_5_fee,
             "tranche_5_own_fee": self.tranche_5_own_fee,
             "tranche_5_credit_date": self.tranche_5_credit_date,
+            "tranche_5_payment_deferment": self.tranche_5_payment_deferment,
         }
 
 

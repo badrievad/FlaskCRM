@@ -715,3 +715,16 @@ input[type="number"], select {
     padding: 3px;
     border: 1px solid #eeeeee;
 }
+
+.amort-container {
+    font-size: 12px;
+    width: 140px;
+}
+
+.size-btn {
+    width: 80px;
+    height: 40px;
+    font-size: 14px;
+    padding: 0;
+}
+

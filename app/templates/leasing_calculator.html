@@ -186,7 +186,7 @@
                 <i class="fa-regular fa-clipboard"></i>Прочие условия
             </a>
         </li>
-                <li class="clickable-in">
+        <li class="clickable-in">
             <a class="nav-link" href="#created-proposals">
                 <i class="fa-solid fa-layer-group"></i>Созданные КП
             </a>
@@ -218,7 +218,7 @@
                 <div class="form-group">
                     <div class="part-container first-part">
                         <div class="input-container-item-name item-container">
-                            <label for="name">Наименование имущества</label>
+                            <label for="item-name">Наименование имущества</label>
                             <input type="text" id="item-name" name="item-name" maxlength="500">
                         </div>
                         <div class="input-container-item-condition">
@@ -226,8 +226,8 @@
                             <input type="hidden" id="item-condition" name="item-condition" value="new">
                         </div>
                         <div class="button-group item-container">
-                            <button id="new-btn" class="toggle-btn active" data-value="new">Новое</button>
-                            <button id="used-btn" class="toggle-btn" data-value="used">Б/У</button>
+                            <button id="new-btn" class="toggle-btn active size-btn" data-value="new">Новое</button>
+                            <button id="used-btn" class="toggle-btn size-btn" data-value="used">Б/У</button>
                         </div>
                         <br>
                         <div class="input-container first-container">
@@ -254,7 +254,7 @@
                     <div class="part-container">
                         <div id="foreign-cost-section" class="foreign-cost-container item-container">
                             <div class="input-container">
-                                <label for="foreign-cost">Стоимость имущества в иностранной валюте</label>
+                                <label for="foreign-cost-display">Стоимость имущества в иностранной валюте</label>
                                 <input type="text" id="foreign-cost-display" name="foreign-cost-display"
                                        value="10 000">
                                 <input type="hidden" id="foreign-cost-value" name="foreign-cost-value" value="10000">
@@ -331,10 +331,10 @@
                             <input type="number" id="term-value" name="term-value" value="36" max="100">
                         </div>
                         <div class="slider-container">
-                            <input type="range" id="term" name="term" min="6" max="60" value="36">
+                            <input type="range" id="term" name="term" min="1" max="60" value="36">
                         </div>
                         <div class="range-labels">
-                            <span>6 мес.</span>
+                            <span>1 мес.</span>
                             <span>60 мес.</span>
                         </div>
                         <div class="input-container">
@@ -405,7 +405,7 @@
                         <div class="form-group">
                             <div class="input-container">
                                 <label for="leas-day">День лизингового платежа</label>
-                                <input type="text" name="leas-day" id="leas-day" value="" placeholder="5, 10, 20 и тд."/>
+                                <input type="text" name="leas-day" id="leas-day" value="20" maxlength="2"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -664,7 +664,8 @@
                 </div>
                 <br>
                 <div class="part-container">
-                    <button class="btn-hover-sm color-3" id="default-button"><i class="fa-solid fa-check"></i> По умолчанию
+                    <button class="btn-hover-sm color-3" id="default-button"><i class="fa-solid fa-check"></i> По
+                        умолчанию
                     </button>
                     <button class="btn-hover-sm color-3" id="clear-button"><i class="fa-solid fa-trash"></i> Очистить
                     </button>
@@ -896,8 +897,54 @@
                 <br>
                 <div class="line"></div>
                 <div class="part-container">
-                    <h5 id="others"><i class="fa-regular fa-clipboard" style="color: #727a88"></i> Прочие условия:
+                    <h5 id="others"><i class="fa-regular fa-clipboard" style="color: #727a88; margin-bottom: 20px"></i>
+                        Прочие условия:
                     </h5>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label for="credit-term">Срок кредита</label>
+                            <input type="text" name="credit-term" id="credit-term" value="" placeholder="мес."
+                                   maxlength="2"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label for="reduce-percent">Ежегодное снижение стоимости имущества, %</label>
+                            <input type="text" name="reduce-percent" id="reduce-percent" value="10" placeholder="%"
+                                   maxlength="3" class="digits-only"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label for="amortization-group">Амортизационная группа</label>
+                            <select name="amortization-group" id="amortization-group" class="amort-container">
+                                <option value="1-я гр. (от 12 до 24 мес.)">1-я гр. (от 12 до 24 мес.)</option>
+                                <option value="2-я гр. (от 25 до 36 мес)">2-я гр. (от 25 до 36 мес)</option>
+                                <option value="3-я гр. (от 37 до 60 мес)" selected>3-я гр. (от 37 до 60 мес)</option>
+                                <option value="4-я гр. (от 61 до 84 мес.)">4-я гр. (от 61 до 84 мес.)</option>
+                                <option value="5-я гр. (от 85 до 120 мес.)">5-я гр. (от 85 до 120 мес.)</option>
+                                <option value="6-я гр. (от 121 до 180 мес.)">6-я гр. (от 121 до 180 мес.)</option>
+                                <option value="7-я гр. (от 181 до 240 мес.)">7-я гр. (от 181 до 240 мес.)</option>
+                                <option value="8-я гр. (от 241 до 300 мес.)">8-я гр. (от 241 до 300 мес.)</option>
+                                <option value="9-я гр. (от 301 до 360 мес.)">9-я гр. (от 301 до 360 мес.)</option>
+                                <option value="10-я гр. (свыше 361 мес.)">10-я гр. (свыше 361 мес.)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label for="service-life">Срок эксплуатации</label>
+                            <input type="text" name="service-life" id="service-life" value="37" placeholder="мес."
+                                   maxlength="3" class="digits-only"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <label for="nds-size">Размер НДС, %</label>
+                            <input type="text" name="nds-size" id="nds-size" value="20" placeholder="%" maxlength="3"
+                                   class="digits-only"/>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="results">
@@ -1005,11 +1052,11 @@
 </div>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var clickableItems = document.querySelectorAll('.sidebar ul li.clickable');
+        const clickableItems = document.querySelectorAll('.sidebar ul li.clickable');
 
         clickableItems.forEach(function (item) {
             item.addEventListener('click', function () {
-                var link = item.querySelector('a.nav-link');
+                const link = item.querySelector('a.nav-link');
                 if (link) {
                     window.location.href = link.href;
                 }
@@ -1046,9 +1093,9 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 // Если пользователь подтвердил, то выполняем расчет
-                var loader = document.getElementById('loader');
-                var calculateButton = document.getElementById('calculate-button');
-                var preCalculateButton = document.getElementById('pre-calculate-button');
+                const loader = document.getElementById('loader');
+                const calculateButton = document.getElementById('calculate-button');
+                const preCalculateButton = document.getElementById('pre-calculate-button');
 
                 calculateButton.disabled = true; // Заблокировать кнопку
                 preCalculateButton.disabled = true; // Заблокировать кнопку
@@ -1057,89 +1104,97 @@
                 loader.style.display = 'flex'; // Показать круг загрузки
 
                 // Найти активную вкладку
-                var itemType = document.querySelector('.tabs button.active');
-                var activeTabText = itemType ? itemType.innerText.trim() : '';
+                const itemType = document.querySelector('.tabs button.active');
+                const activeTabText = itemType ? itemType.innerText.trim() : '';
 
                 // Найти состояние имущества
-                var itemCondition = document.querySelector('.button-group button.active')
-                var conditionText = itemCondition ? itemCondition.innerText.trim() : '';
+                const itemCondition = document.querySelector('.button-group button.active')
+                const conditionText = itemCondition ? itemCondition.innerText.trim() : '';
 
                 // Найти состояние НДС
-                var itemVAT = document.querySelector('.button-group-nds button.active')
-                var vatText = itemVAT ? itemVAT.innerText.trim() : '';
+                const itemVAT = document.querySelector('.button-group-nds button.active')
+                const vatText = itemVAT ? itemVAT.innerText.trim() : '';
 
                 // Найти состояние задатка
-                var itemDeposit = document.querySelector('.button-group-deposit button.active')
-                var depositText = itemDeposit ? itemDeposit.innerText.trim() : '';
+                const itemDeposit = document.querySelector('.button-group-deposit button.active')
+                const depositText = itemDeposit ? itemDeposit.innerText.trim() : '';
 
                 // Найти состояние выкупного
-                var itemRedemption = document.querySelector('.button-group-redemption button.active')
-                var redemptionText = itemRedemption ? itemRedemption.innerText.trim() : '';
+                const itemRedemption = document.querySelector('.button-group-redemption button.active')
+                const redemptionText = itemRedemption ? itemRedemption.innerText.trim() : '';
 
                 // Найти цену ПЛ
-                var itemPrice = document.getElementById('cost-value').value;
+                const itemPrice = document.getElementById('cost-value').value;
 
                 // Найти остальные поля
-                var itemYear = document.getElementById('production-year-value').value;
-                var itemName = document.getElementById('item-name').value;
-                var currency = document.getElementById('currency').value;
-                var foreignCost = document.getElementById('foreign-cost-value').value;
-                var initialPayment = document.getElementById('initial-payment-value').value;
-                var creditSum = document.getElementById('credit-value').value;
-                var creditTerm = document.getElementById('term-value').value;
-                var bankCommission = document.getElementById('commission-value').value;
-                var lkmbCommission = document.getElementById('commission-lkmb-value').value;
+                const itemYear = document.getElementById('production-year-value').value;
+                const itemName = document.getElementById('item-name').value;
+                const currency = document.getElementById('currency').value;
+                const foreignCost = document.getElementById('foreign-cost-value').value;
+                const initialPayment = document.getElementById('initial-payment-value').value;
+                const creditSum = document.getElementById('credit-value').value;
+                const creditTerm = document.getElementById('term-value').value;
+                const bankCommission = document.getElementById('commission-value').value;
+                const lkmbCommission = document.getElementById('commission-lkmb-value').value;
 
-                var insuranceCasko1 = document.getElementById('insurance-casko1').value;
-                var insuranceCasko2 = document.getElementById('insurance-casko2').value;
-                var insuranceCasko3 = document.getElementById('insurance-casko3').value;
-                var insuranceCasko4 = document.getElementById('insurance-casko4').value;
-                var insuranceCasko5 = document.getElementById('insurance-casko5').value;
+                const insuranceCasko1 = document.getElementById('insurance-casko1').value;
+                const insuranceCasko2 = document.getElementById('insurance-casko2').value;
+                const insuranceCasko3 = document.getElementById('insurance-casko3').value;
+                const insuranceCasko4 = document.getElementById('insurance-casko4').value;
+                const insuranceCasko5 = document.getElementById('insurance-casko5').value;
 
-                var insuranceOsago1 = document.getElementById('insurance-osago1').value;
-                var insuranceOsago2 = document.getElementById('insurance-osago2').value;
-                var insuranceOsago3 = document.getElementById('insurance-osago3').value;
-                var insuranceOsago4 = document.getElementById('insurance-osago4').value;
-                var insuranceOsago5 = document.getElementById('insurance-osago5').value;
+                const insuranceOsago1 = document.getElementById('insurance-osago1').value;
+                const insuranceOsago2 = document.getElementById('insurance-osago2').value;
+                const insuranceOsago3 = document.getElementById('insurance-osago3').value;
+                const insuranceOsago4 = document.getElementById('insurance-osago4').value;
+                const insuranceOsago5 = document.getElementById('insurance-osago5').value;
 
-                var healthInsurance1 = document.getElementById('health-insurance1').value;
-                var healthInsurance2 = document.getElementById('health-insurance2').value;
-                var healthInsurance3 = document.getElementById('health-insurance3').value;
-                var healthInsurance4 = document.getElementById('health-insurance4').value;
-                var healthInsurance5 = document.getElementById('health-insurance5').value;
+                const healthInsurance1 = document.getElementById('health-insurance1').value;
+                const healthInsurance2 = document.getElementById('health-insurance2').value;
+                const healthInsurance3 = document.getElementById('health-insurance3').value;
+                const healthInsurance4 = document.getElementById('health-insurance4').value;
+                const healthInsurance5 = document.getElementById('health-insurance5').value;
 
-                var otherInsurance1 = document.getElementById('other-insurance1').value;
-                var otherInsurance2 = document.getElementById('other-insurance2').value;
-                var otherInsurance3 = document.getElementById('other-insurance3').value;
-                var otherInsurance4 = document.getElementById('other-insurance4').value;
-                var otherInsurance5 = document.getElementById('other-insurance5').value;
+                const otherInsurance1 = document.getElementById('other-insurance1').value;
+                const otherInsurance2 = document.getElementById('other-insurance2').value;
+                const otherInsurance3 = document.getElementById('other-insurance3').value;
+                const otherInsurance4 = document.getElementById('other-insurance4').value;
+                const otherInsurance5 = document.getElementById('other-insurance5').value;
 
-                var agentCommission = document.getElementById('agent-commission-value').value;
-                var managerBonus = document.getElementById('manager-bonus-value').value;
-                var tracker = document.getElementById('tracker-value').value;
-                var mayak = document.getElementById('mayak-value').value;
-                var fedresurs = document.getElementById('fedresurs-value').value;
-                var gsm = document.getElementById('gsm-value').value;
-                var mail = document.getElementById('mail-value').value;
-                var deprTransport = document.getElementById('depr-transport-value').value;
-                var travel = document.getElementById('travel-value').value;
-                var stationery = document.getElementById('stationery-value').value;
-                var internet = document.getElementById('internet-value').value;
-                var pledge = document.getElementById('pledge-value').value;
-                var bankPledge = document.getElementById('bank-pledge-value').value;
-                var express = document.getElementById('express-value').value;
-                var egrn = document.getElementById('egrn-value').value;
-                var egrul = document.getElementById('egrul-value').value;
-                var inputPeriod = document.getElementById('input-period').value;
+                const agentCommission = document.getElementById('agent-commission-value').value;
+                const managerBonus = document.getElementById('manager-bonus-value').value;
+                const tracker = document.getElementById('tracker-value').value;
+                const mayak = document.getElementById('mayak-value').value;
+                const fedresurs = document.getElementById('fedresurs-value').value;
+                const gsm = document.getElementById('gsm-value').value;
+                const mail = document.getElementById('mail-value').value;
+                const deprTransport = document.getElementById('depr-transport-value').value;
+                const travel = document.getElementById('travel-value').value;
+                const stationery = document.getElementById('stationery-value').value;
+                const internet = document.getElementById('internet-value').value;
+                const pledge = document.getElementById('pledge-value').value;
+                const bankPledge = document.getElementById('bank-pledge-value').value;
+                const express = document.getElementById('express-value').value;
+                const egrn = document.getElementById('egrn-value').value;
+                const egrul = document.getElementById('egrul-value').value;
 
-                var tranche1Size = Math.abs(parseFloat(document.getElementById('tranche1-size').value.replace(',', '.')) || 0);
-                var tranche2Size = Math.abs(parseFloat(document.getElementById('tranche2-size').value.replace(',', '.')) || 0);
-                var tranche3Size = Math.abs(parseFloat(document.getElementById('tranche3-size').value.replace(',', '.')) || 0);
-                var tranche4Size = Math.abs(parseFloat(document.getElementById('tranche4-size').value.replace(',', '.')) || 0);
-                var tranche5Size = Math.abs(parseFloat(document.getElementById('tranche5-size').value.replace(',', '.')) || 0);
+                const leasDay = document.getElementById('leas-day').value;
+                const inputPeriod = document.getElementById('input-period').value;
+
+                const srokCredita = document.getElementById('credit-term').value;
+                const reducePercent = document.getElementById('reduce-percent').value;
+                const serviceLife = document.getElementById('service-life').value;
+                const amortization = document.getElementById('amortization-group').value;
+                const ndsSize = document.getElementById('nds-size').value;
+
+                const tranche1Size = Math.abs(parseFloat(document.getElementById('tranche1-size').value.replace(',', '.')) || 0);
+                const tranche2Size = Math.abs(parseFloat(document.getElementById('tranche2-size').value.replace(',', '.')) || 0);
+                const tranche3Size = Math.abs(parseFloat(document.getElementById('tranche3-size').value.replace(',', '.')) || 0);
+                const tranche4Size = Math.abs(parseFloat(document.getElementById('tranche4-size').value.replace(',', '.')) || 0);
+                const tranche5Size = Math.abs(parseFloat(document.getElementById('tranche5-size').value.replace(',', '.')) || 0);
 
                 // Суммирование значений
-                var totalSize = tranche1Size + tranche2Size + tranche3Size + tranche4Size + tranche5Size;
+                const totalSize = tranche1Size + tranche2Size + tranche3Size + tranche4Size + tranche5Size;
 
                 // Проверка суммы
                 if (totalSize !== 100) {
@@ -1149,33 +1204,38 @@
                     calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     preCalculateButton.disabled = false; // Разблокировать кнопку
                     preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                    scrollToTrancheTable();
                     return false;
                 }
 
-                var tranche1Rate = document.getElementById('tranche1-rate').value;
-                var tranche2Rate = document.getElementById('tranche2-rate').value;
-                var tranche3Rate = document.getElementById('tranche3-rate').value;
-                var tranche4Rate = document.getElementById('tranche4-rate').value;
-                var tranche5Rate = document.getElementById('tranche5-rate').value;
+                const tranche1Rate = document.getElementById('tranche1-rate').value;
+                const tranche2Rate = document.getElementById('tranche2-rate').value;
+                const tranche3Rate = document.getElementById('tranche3-rate').value;
+                const tranche4Rate = document.getElementById('tranche4-rate').value;
+                const tranche5Rate = document.getElementById('tranche5-rate').value;
 
-                var tranche1Fee = document.getElementById('tranche1-fee').value;
-                var tranche2Fee = document.getElementById('tranche2-fee').value;
-                var tranche3Fee = document.getElementById('tranche3-fee').value;
-                var tranche4Fee = document.getElementById('tranche4-fee').value;
-                var tranche5Fee = document.getElementById('tranche5-fee').value;
+                const tranche1Fee = document.getElementById('tranche1-fee').value;
+                const tranche2Fee = document.getElementById('tranche2-fee').value;
+                const tranche3Fee = document.getElementById('tranche3-fee').value;
+                const tranche4Fee = document.getElementById('tranche4-fee').value;
+                const tranche5Fee = document.getElementById('tranche5-fee').value;
 
-                var tranche1OwnFee = document.getElementById('tranche1-own-fee').value;
-                var tranche2OwnFee = document.getElementById('tranche2-own-fee').value;
-                var tranche3OwnFee = document.getElementById('tranche3-own-fee').value;
-                var tranche4OwnFee = document.getElementById('tranche4-own-fee').value;
-                var tranche5OwnFee = document.getElementById('tranche5-own-fee').value;
+                const tranche1OwnFee = document.getElementById('tranche1-own-fee').value;
+                const tranche2OwnFee = document.getElementById('tranche2-own-fee').value;
+                const tranche3OwnFee = document.getElementById('tranche3-own-fee').value;
+                const tranche4OwnFee = document.getElementById('tranche4-own-fee').value;
+                const tranche5OwnFee = document.getElementById('tranche5-own-fee').value;
 
-                var tranche1CreditDate = document.getElementById('tranche1-credit-date').value;
-                var tranche2CreditDate = document.getElementById('tranche2-credit-date').value;
-                var tranche3CreditDate = document.getElementById('tranche3-credit-date').value;
-                var tranche4CreditDate = document.getElementById('tranche4-credit-date').value;
-                var tranche5CreditDate = document.getElementById('tranche5-credit-date').value;
+                const tranche1CreditDate = document.getElementById('tranche1-credit-date').value;
+                const tranche2CreditDate = document.getElementById('tranche2-credit-date').value;
+                const tranche3CreditDate = document.getElementById('tranche3-credit-date').value;
+                const tranche4CreditDate = document.getElementById('tranche4-credit-date').value;
+                const tranche5CreditDate = document.getElementById('tranche5-credit-date').value;
+
+                const tranche1PaymentDeferment = document.getElementById('payment-deferment1').value; //
+                const tranche2PaymentDeferment = document.getElementById('payment-deferment2').value; //
+                const tranche3PaymentDeferment = document.getElementById('payment-deferment3').value; //
+                const tranche4PaymentDeferment = document.getElementById('payment-deferment4').value; //
+                const tranche5PaymentDeferment = document.getElementById('payment-deferment5').value; //
 
                 // Отправка задачи в Celery с активной вкладкой
                 fetch('./calculator/start-task', {
@@ -1196,7 +1256,7 @@
                         foreignCost: foreignCost,
                         initialPayment: initialPayment,
                         creditSum: creditSum,
-                        creditTerm: creditTerm,
+                        creditTerm: creditTerm,  // это не срок кредита, а срок договора
                         bankCommission: bankCommission,
                         lkmbCommission: lkmbCommission,
                         insurances: {
@@ -1248,6 +1308,12 @@
                         egrn: egrn,
                         egrul: egrul,
                         inputPeriod: inputPeriod,
+                        leasDay: leasDay,
+                        srokCredita: srokCredita,
+                        reducePercent: reducePercent,
+                        serviceLife: serviceLife,
+                        amortization: amortization,
+                        ndsSize: ndsSize,
                         tranches: {
                             tranche1: {
                                 size: tranche1Size,
@@ -1255,6 +1321,7 @@
                                 fee: tranche1Fee,
                                 ownFee: tranche1OwnFee,
                                 creditDate: tranche1CreditDate,
+                                paymentDeferment: tranche1PaymentDeferment,
                             },
                             tranche2: {
                                 size: tranche2Size,
@@ -1262,6 +1329,7 @@
                                 fee: tranche2Fee,
                                 ownFee: tranche2OwnFee,
                                 creditDate: tranche2CreditDate,
+                                paymentDeferment: tranche2PaymentDeferment,
                             },
                             tranche3: {
                                 size: tranche3Size,
@@ -1269,6 +1337,7 @@
                                 fee: tranche3Fee,
                                 ownFee: tranche3OwnFee,
                                 creditDate: tranche3CreditDate,
+                                paymentDeferment: tranche3PaymentDeferment,
                             },
                             tranche4: {
                                 size: tranche4Size,
@@ -1276,6 +1345,7 @@
                                 fee: tranche4Fee,
                                 ownFee: tranche4OwnFee,
                                 creditDate: tranche4CreditDate,
+                                paymentDeferment: tranche4PaymentDeferment,
                             },
                             tranche5: {
                                 size: tranche5Size,
@@ -1283,6 +1353,7 @@
                                 fee: tranche5Fee,
                                 ownFee: tranche5OwnFee,
                                 creditDate: tranche5CreditDate,
+                                paymentDeferment: tranche5PaymentDeferment,
                             },
                         },
                     })
@@ -1325,8 +1396,8 @@
             .then(data => {
                 if (data.state === 'SUCCESS') {
                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                    var calculateButton = document.getElementById('calculate-button');
-                    var preCalculateButton = document.getElementById('pre-calculate-button');
+                    const calculateButton = document.getElementById('calculate-button');
+                    const preCalculateButton = document.getElementById('pre-calculate-button');
                     calculateButton.disabled = false; // Разблокировать кнопку
                     calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     preCalculateButton.disabled = false; // Разблокировать кнопку
@@ -1341,8 +1412,8 @@
 
                 } else if (data.state === 'FAILURE') {
                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                    var calculateButton = document.getElementById('calculate-button');
-                    var preCalculateButton = document.getElementById('pre-calculate-button');
+                    const calculateButton = document.getElementById('calculate-button');
+                    const preCalculateButton = document.getElementById('pre-calculate-button');
                     calculateButton.disabled = false; // Разблокировать кнопку
                     calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     preCalculateButton.disabled = false; // Разблокировать кнопку
@@ -1360,8 +1431,8 @@
                 console.error('Ошибка:', error);
                 showError('Произошла ошибка при проверке состояния задачи', 'Ошибка');
                 document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                var calculateButton = document.getElementById('calculate-button');
-                var preCalculateButton = document.getElementById('pre-calculate-button');
+                const calculateButton = document.getElementById('calculate-button');
+                const preCalculateButton = document.getElementById('pre-calculate-button');
                 calculateButton.disabled = false; // Разблокировать кнопку
                 calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                 preCalculateButton.disabled = false; // Разблокировать кнопку
@@ -1370,13 +1441,13 @@
     }
 
     function addNewCalculation(calculation, activeTabText, itemPrice, initialPayment, creditTerm, itemName) {
-        var calcListBody = document.getElementById('calc-list-body');
-        var newRow = document.createElement('tr');
+        const calcListBody = document.getElementById('calc-list-body');
+        const newRow = document.createElement('tr');
 
         newRow.setAttribute('data-id', calculation.id);
         newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "ДЛ |", "${calculation.id}", "{{ user_fullname }}", "")`);
         newRow.setAttribute('data-deal-text', "");
-        var dealIcon = calculation.deal_id
+        const dealIcon = calculation.deal_id
             ? '<i class="fa-solid fa-link" id="fa-link"></i>'
             : '<i class="fa-solid fa-unlink" id="fa-unlink"></i>'; // Иконки с меньшим размером
 

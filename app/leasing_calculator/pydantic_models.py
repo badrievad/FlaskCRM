@@ -14,6 +14,7 @@ class Tranche(BaseModel):
     credit_date: str = Field(
         alias="creditDate", default_factory=lambda: datetime.now().strftime("%Y-%m-%d")
     )
+    payment_deferment: int = Field(alias="paymentDeferment", default=0)
 
     @field_validator("fee", "own_fee", mode="before")
     def parse_float_with_comma(cls, value) -> float:  # noqa
@@ -45,6 +46,12 @@ class Tranche(BaseModel):
             return 0.0
         return value
 
+    @field_validator("payment_deferment", mode="before")
+    def check_empty_payment_deferment(cls, value):  # noqa
+        if value in ("", None, float("nan"), "0", "0.0", "0.00", "0,0", "0,00"):
+            return 0
+        return value
+
     @field_validator("credit_date", mode="before")
     def set_default_date(cls, value):  # noqa
         if not value:
@@ -66,14 +73,12 @@ class Insurance(BaseModel):
     health: float = 0.0
     other: float = 0.0
 
-    @field_validator("casko", "osago", "health", "other", mode="before")
-    def check_empty(cls, value):  # noqa
+    @field_validator(
+        "casko", "osago", "health", "other", mode="before", check_fields=False
+    )
+    def parse_float_with_comma(cls, value):  # noqa
         if value in ("", None, float("nan")):
             return 0.0
-        return value
-
-    @field_validator("casko", "osago", "health", "other", mode="before")
-    def parse_float_with_comma(cls, value) -> float:  # noqa
         if isinstance(value, str):
             return float(value.replace(",", ".").replace(" ", ""))
         return value
@@ -100,7 +105,13 @@ class ValidateFields(BaseModel):
     foreign_price: float = Field(alias="foreignCost", default=0.0)
     initial_payment: float = Field(alias="initialPayment", default=0.0)
     credit_sum: float = Field(alias="creditSum", default=0.0)
-    credit_term: int = Field(alias="creditTerm", default=1)
+    credit_term: int = Field(alias="srokCredita", default=1)
+    agreement_term: int = Field(alias="creditTerm", default=1)
+    reduce_percent: int = Field(alias="reducePercent", default=10)
+    leas_day: int = Field(alias="leasDay", default=20)
+    service_life: int = Field(alias="serviceLife", default=37)
+    amortization: str = Field(alias="amortization", default="")
+    nds_size: int = Field(alias="ndsSize", default=20)
     bank_commission: float = Field(alias="bankCommission", default=0.0)
     lkmb_commission: float = Field(alias="lkmbCommission", default=0.0)
     insurances: Insurances

@@ -93,26 +93,41 @@ def intensive_task_simulation(data: dict) -> dict:
             tranche_1_fee=data["tranches"]["tranche1"]["fee"],
             tranche_1_own_fee=data["tranches"]["tranche1"]["own_fee"],
             tranche_1_credit_date=data["tranches"]["tranche1"]["credit_date"],
+            tranche_1_payment_deferment=data["tranches"]["tranche1"][
+                "payment_deferment"
+            ],
             tranche_2_size=data["tranches"]["tranche2"]["size"],
             tranche_2_rate=data["tranches"]["tranche2"]["rate"],
             tranche_2_fee=data["tranches"]["tranche2"]["fee"],
             tranche_2_own_fee=data["tranches"]["tranche2"]["own_fee"],
             tranche_2_credit_date=data["tranches"]["tranche2"]["credit_date"],
+            tranche_2_payment_deferment=data["tranches"]["tranche2"][
+                "payment_deferment"
+            ],
             tranche_3_size=data["tranches"]["tranche3"]["size"],
             tranche_3_rate=data["tranches"]["tranche3"]["rate"],
             tranche_3_fee=data["tranches"]["tranche3"]["fee"],
             tranche_3_own_fee=data["tranches"]["tranche3"]["own_fee"],
             tranche_3_credit_date=data["tranches"]["tranche3"]["credit_date"],
+            tranche_3_payment_deferment=data["tranches"]["tranche3"][
+                "payment_deferment"
+            ],
             tranche_4_size=data["tranches"]["tranche4"]["size"],
             tranche_4_rate=data["tranches"]["tranche4"]["rate"],
             tranche_4_fee=data["tranches"]["tranche4"]["fee"],
             tranche_4_own_fee=data["tranches"]["tranche4"]["own_fee"],
             tranche_4_credit_date=data["tranches"]["tranche4"]["credit_date"],
+            tranche_4_payment_deferment=data["tranches"]["tranche4"][
+                "payment_deferment"
+            ],
             tranche_5_size=data["tranches"]["tranche5"]["size"],
             tranche_5_rate=data["tranches"]["tranche5"]["rate"],
             tranche_5_fee=data["tranches"]["tranche5"]["fee"],
             tranche_5_own_fee=data["tranches"]["tranche5"]["own_fee"],
             tranche_5_credit_date=data["tranches"]["tranche5"]["credit_date"],
+            tranche_5_payment_deferment=data["tranches"]["tranche5"][
+                "payment_deferment"
+            ],
         )
         initial_percent = round((data["initial_payment"] / data["item_price"]) * 100, 2)
         credit_percent = round((data["credit_sum"] / data["item_price"]) * 100, 2)
@@ -134,6 +149,12 @@ def intensive_task_simulation(data: dict) -> dict:
             credit_sum_str=validate_item_price(str(data["credit_sum"])),
             credit_sum_percent=credit_percent,
             credit_term=data["credit_term"],
+            agreement_term=data["agreement_term"],
+            reduce_percent=data["reduce_percent"],
+            leas_day=data["leas_day"],
+            service_life=data["service_life"],
+            amortization=data["amortization"],
+            nds_size=data["nds_size"],
             bank_commission=data["bank_commission"],
             lkmb_commission=data["lkmb_commission"],
             agent_commission=data["agent_commission"],

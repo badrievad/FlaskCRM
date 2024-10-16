@@ -728,3 +728,10 @@ input[type="number"], select {
     padding: 0;
 }
 
+input[readonly] {
+    background-color: #f0f0f0; /* Светло-серый фон */
+    color: #555; /* Цвет текста */
+    cursor: not-allowed; /* Курсор при наведении */
+}
+
+

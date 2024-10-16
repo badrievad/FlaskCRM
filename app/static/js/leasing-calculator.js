@@ -1351,3 +1351,13 @@ document.querySelectorAll('.digits-only').forEach(function (input) {
         this.value = isNaN(num) ? '' : num;
     });
 });
+
+document.getElementById('payment-deferment1').addEventListener('input', function () {
+    const value = this.value;
+
+    // Обновляем другие поля
+    const fields = ['payment-deferment2', 'payment-deferment3', 'payment-deferment4', 'payment-deferment5'];
+    fields.forEach(function (id) {
+        document.getElementById(id).value = value;
+    });
+});

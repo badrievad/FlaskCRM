@@ -1,13 +1,15 @@
-from typing import Any
+import requests
 
+from typing import Any
 from pydantic import BaseModel, ValidationError, field_validator, Field
 from datetime import date
+from flask import jsonify
+from logger import logging
 
 from .models import CalculateResultSchedule
 from .other_utils import validate_item_price
 from .. import db
-from flask import jsonify
-from logger import logging
+from ..config import URL_XLSX_API
 
 
 class ScheduleItem(BaseModel):
@@ -80,3 +82,12 @@ def upload_schedule(data: Any):
             jsonify({"error": "An unexpected error occurred.", "details": str(e)}),
             500,
         )
+
+
+def post_request_leas_calc(data, calc_id) -> dict:
+    url = f"{URL_XLSX_API}/api/start-full"
+    headers = {"Content-Type": "application/json"}
+    json_data = data | {"calc_id": calc_id}
+
+    response: dict = requests.post(url, headers=headers, json=json_data).json()
+    return response

@@ -6,6 +6,7 @@ from datetime import date
 from logger import logging
 from celery import shared_task
 
+from .api_for_leas_culc import post_request_leas_calc, upload_schedule
 from .api_pdf_generate import PDFGeneratorClient
 from ..config import CALCULATION_TEMPLATE_PATH, LEAS_CALC_TEMPLATE_PATH
 from .models import LeasCalculator, Tranches, Insurances
@@ -25,14 +26,6 @@ def intensive_task_simulation(data: dict) -> dict:
 
     # Имитация заполнения шаблона
     wb = openpyxl.load_workbook(LEAS_CALC_TEMPLATE_PATH / "ШАБЛОН РАСЧЕТА.xlsx")
-    ws = wb.active
-
-    num_rows = 50000
-    for _ in range(num_rows):
-        row = ["".join(random.choice(string.ascii_letters) for _ in range(10))]
-        ws.append(row)
-
-    # КОНЕЦ
     # Записываем в базу данных
     try:
         new_insurance = Insurances(
@@ -209,6 +202,9 @@ def intensive_task_simulation(data: dict) -> dict:
         CALCULATION_TEMPLATE_PATH.mkdir(parents=True, exist_ok=True)
 
         wb.save(path_to_xlsx)
+
+        schedules = post_request_leas_calc(data, new_deal_id).get("annuity")
+        upload_schedule(schedules)
 
         folder_api = CompanyFolderAPI()
         user_info = {

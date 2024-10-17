@@ -341,14 +341,6 @@ def get_overheads() -> jsonify:
         return jsonify({"error": str(e)}), 500
 
 
-@leas_calc_bp.route("/crm/calculator/api/upload_schedule", methods=["POST"])
-def upload_schedules():
-    data = request.get_json()  # принимаем JSON с графиками
-    upload_schedule(data)
-
-    return jsonify({"message": "Schedules successfully uploaded"}), 201
-
-
 @leas_calc_bp.route("/crm/calculator/update-seller", methods=["POST"])
 def update_seller():
     data = request.get_json()

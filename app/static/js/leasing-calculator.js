@@ -1361,3 +1361,13 @@ document.getElementById('payment-deferment1').addEventListener('input', function
         document.getElementById(id).value = value;
     });
 });
+
+document.getElementById('tranche1-credit-date').addEventListener('input', function () {
+    const value = this.value;
+
+    // Обновляем другие поля
+    const fields = ['tranche2-credit-date', 'tranche3-credit-date', 'tranche4-credit-date', 'tranche5-credit-date'];
+    fields.forEach(function (id) {
+        document.getElementById(id).value = value;
+    });
+})

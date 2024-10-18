@@ -65,6 +65,7 @@ class LeasCalculator(db.Model):
     allocate_vat = db.Column(db.String(50), nullable=True)
     allocate_deposit = db.Column(db.String(50), nullable=True)
     allocate_redemption = db.Column(db.String(50), nullable=True)
+    schedule_type = db.Column(db.String(50), nullable=True)
 
     insurance_id = db.Column(db.Integer, db.ForeignKey("insurances.id"), nullable=True)
     trance_id = db.Column(db.Integer, db.ForeignKey("tranches.id"), nullable=True)
@@ -111,6 +112,24 @@ class LeasCalculator(db.Model):
 
     payment_schedules_differentiated = relationship(
         "ScheduleDifferentiated",
+        back_populates="leas_calculator",
+        cascade="all, delete-orphan",
+    )
+
+    main_annuity = relationship(
+        "MainAnnuity",
+        back_populates="leas_calculator",
+        cascade="all, delete-orphan",
+    )
+
+    main_regression = relationship(
+        "MainRegression",
+        back_populates="leas_calculator",
+        cascade="all, delete-orphan",
+    )
+
+    main_differentiated = relationship(
+        "MainDifferentiated",
         back_populates="leas_calculator",
         cascade="all, delete-orphan",
     )
@@ -186,6 +205,7 @@ class LeasCalculator(db.Model):
             "allocate_vat": self.allocate_vat,
             "allocate_deposit": self.allocate_deposit,
             "allocate_redemption": self.allocate_redemption,
+            "schedule_type": self.schedule_type,
         }
 
 
@@ -402,6 +422,68 @@ class ScheduleRegression(db.Model):
     leas_calculator = relationship(
         "LeasCalculator", back_populates="payment_schedules_regression"
     )
+
+
+class MainAnnuity(db.Model):
+    """Модель для хранения данных расчета (аннуитетный)"""
+
+    __tablename__ = "main_annuity"
+
+    id = db.Column(db.Integer, primary_key=True)
+    calc_id = db.Column(db.Integer, db.ForeignKey("leas_calculator.id"), nullable=False)
+    lease_agreement_amount = db.Column(db.Float, nullable=False)
+    lease_agreement_amount_str = db.Column(db.String(255), nullable=False)
+    vat_refund = db.Column(db.Float, nullable=False)
+    vat_refund_str = db.Column(db.String(255), nullable=False)
+    save_income_tax = db.Column(db.Float, nullable=False)
+    save_income_tax_str = db.Column(db.String(255), nullable=False)
+    total_cost = db.Column(db.Float, nullable=False)
+    total_cost_str = db.Column(db.String(255), nullable=False)
+
+    # Обратное отношение к LeasCalculator
+    leas_calculator = relationship("LeasCalculator", back_populates="main_annuity")
+
+
+class MainDifferentiated(db.Model):
+    """Модель для хранения данных расчета (дифференцированный)"""
+
+    __tablename__ = "main_differentiated"
+
+    id = db.Column(db.Integer, primary_key=True)
+    calc_id = db.Column(db.Integer, db.ForeignKey("leas_calculator.id"), nullable=False)
+    lease_agreement_amount = db.Column(db.Float, nullable=False)
+    lease_agreement_amount_str = db.Column(db.String(255), nullable=False)
+    vat_refund = db.Column(db.Float, nullable=False)
+    vat_refund_str = db.Column(db.String(255), nullable=False)
+    save_income_tax = db.Column(db.Float, nullable=False)
+    save_income_tax_str = db.Column(db.String(255), nullable=False)
+    total_cost = db.Column(db.Float, nullable=False)
+    total_cost_str = db.Column(db.String(255), nullable=False)
+
+    # Обратное отношение к LeasCalculator
+    leas_calculator = relationship(
+        "LeasCalculator", back_populates="main_differentiated"
+    )
+
+
+class MainRegression(db.Model):
+    """Модель для хранения данных расчета (регрессивный)"""
+
+    __tablename__ = "main_regression"
+
+    id = db.Column(db.Integer, primary_key=True)
+    calc_id = db.Column(db.Integer, db.ForeignKey("leas_calculator.id"), nullable=False)
+    lease_agreement_amount = db.Column(db.Float, nullable=False)
+    lease_agreement_amount_str = db.Column(db.String(255), nullable=False)
+    vat_refund = db.Column(db.Float, nullable=False)
+    vat_refund_str = db.Column(db.String(255), nullable=False)
+    save_income_tax = db.Column(db.Float, nullable=False)
+    save_income_tax_str = db.Column(db.String(255), nullable=False)
+    total_cost = db.Column(db.Float, nullable=False)
+    total_cost_str = db.Column(db.String(255), nullable=False)
+
+    # Обратное отношение к LeasCalculator
+    leas_calculator = relationship("LeasCalculator", back_populates="main_regression")
 
 
 class Seller(db.Model):

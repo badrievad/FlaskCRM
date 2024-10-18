@@ -7,7 +7,7 @@ from datetime import date
 from logger import logging
 from celery import shared_task
 
-from .api_for_leas_culc import post_request_leas_calc, upload_schedule
+from .api_for_leas_culc import post_request_leas_calc, upload_schedule, upload_main_info
 from .api_pdf_generate import PDFGeneratorClient
 from ..config import CALCULATION_TEMPLATE_PATH, LEAS_CALC_TEMPLATE_PATH
 from .models import LeasCalculator, Tranches, Insurances
@@ -17,13 +17,7 @@ from ..deal.work_with_folders import CompanyFolderAPI
 
 
 def intensive_task_simulation(data: dict) -> dict:
-    import random
-    import string
-
     user_login = data["user_login"]  # текущий пользователь
-
-    # Заполняем файл случайными данными
-    #  TODO: вот тут нужно все делать
 
     # Имитация заполнения шаблона
     wb = openpyxl.load_workbook(LEAS_CALC_TEMPLATE_PATH / "ШАБЛОН РАСЧЕТА.xlsx")
@@ -204,29 +198,34 @@ def intensive_task_simulation(data: dict) -> dict:
 
         wb.save(path_to_xlsx)
 
-        schedules = post_request_leas_calc(data, new_deal_id)
-        upload_schedule(schedules)
+        calculation_results = post_request_leas_calc(data, new_deal_id)
 
-        folder_api = CompanyFolderAPI()
-        user_info = {
-            "user_login": user_login,
-            "user_name": data["user_name"],
-            "user_email": data["user_email"],
-            "user_phone": data["user_phone"],
-        }
-        pdf_api = PDFGeneratorClient(new_deal_id, user_info)
-        try:
-            new_calc.path_to_pdf = pdf_api.generate_pdf()
-            new_title_pdf = f"Коммерческое предложение (id_{new_deal_id}).pdf"
-            new_calc.title = new_title_pdf
-        except Exception as e:
-            new_calc.path_to_pdf = None
-            logging.error(f"Error generating PDF: {e}")
-            logging.info("PDF не создался. Сервис недоступен.")
-        new_calc.path_to_xlsx = folder_api.create_commercial_offer(
-            path_to_xlsx, user_login
-        )
-        db.session.commit()
+        with open("schedules.json", "w") as f:
+            json.dump(calculation_results, f, ensure_ascii=False, indent=4)
+
+        upload_schedule(calculation_results)
+        upload_main_info(calculation_results)
+
+        # folder_api = CompanyFolderAPI()
+        # user_info = {
+        #     "user_login": user_login,
+        #     "user_name": data["user_name"],
+        #     "user_email": data["user_email"],
+        #     "user_phone": data["user_phone"],
+        # }
+        # pdf_api = PDFGeneratorClient(new_deal_id, user_info)
+        # try:
+        #     new_calc.path_to_pdf = pdf_api.generate_pdf()
+        #     new_title_pdf = f"Коммерческое предложение (id_{new_deal_id}).pdf"
+        #     new_calc.title = new_title_pdf
+        # except Exception as e:
+        #     new_calc.path_to_pdf = None
+        #     logging.error(f"Error generating PDF: {e}")
+        #     logging.info("PDF не создался. Сервис недоступен.")
+        # new_calc.path_to_xlsx = folder_api.create_commercial_offer(
+        #     path_to_xlsx, user_login
+        # )
+        # db.session.commit()
     except Exception as e:
         db.session.rollback()
         raise e

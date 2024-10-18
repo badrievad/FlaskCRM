@@ -3,12 +3,29 @@ import requests
 from pydantic import BaseModel, ValidationError, field_validator, Field
 from datetime import date
 from flask import jsonify
+from sqlalchemy.exc import SQLAlchemyError
+
 from logger import logging
 
-from .models import ScheduleAnnuity, ScheduleDifferentiated, ScheduleRegression
+from .models import (
+    ScheduleAnnuity,
+    ScheduleDifferentiated,
+    ScheduleRegression,
+    MainAnnuity,
+    MainDifferentiated,
+    MainRegression,
+)
 from .other_utils import validate_item_price
 from .. import db
 from ..config import URL_XLSX_API
+
+
+class MainInfoItem(BaseModel):
+    calc_id: int
+    lease_agreement_amount: float
+    vat_refund: float
+    save_income_tax: float
+    total_cost: float
 
 
 class ScheduleItem(BaseModel):
@@ -118,3 +135,80 @@ def post_request_leas_calc(data, calc_id) -> dict:
 
     response: dict = requests.post(url, headers=headers, json=json_data).json()
     return response
+
+
+def upload_main_info(data: dict):
+    """
+    Uploads main calculation data to the database.
+    """
+    logging.info("Received data for main info upload.")
+
+    main_info_models = {
+        "annuity_data": MainAnnuity,
+        "differentiated_data": MainDifferentiated,
+        "regression_data": MainRegression,
+    }
+
+    overall_errors = {}
+
+    for main_info_name, model_class in main_info_models.items():
+        main_info_data = data.get(main_info_name)
+        if not main_info_data:
+            logging.warning(f"No data provided for '{main_info_name}'. Skipping.")
+            continue
+
+        try:
+            # Validate data using Pydantic
+            validated_data = MainInfoItem(**main_info_data)
+            logging.info(f"Validated data for '{main_info_name}': {validated_data}")
+
+            # Create model instance
+            new_main_info = model_class(
+                calc_id=validated_data.calc_id,
+                lease_agreement_amount=validated_data.lease_agreement_amount,
+                lease_agreement_amount_str=validate_item_price(
+                    str(validated_data.lease_agreement_amount)
+                ),
+                vat_refund=validated_data.vat_refund,
+                vat_refund_str=validate_item_price(str(validated_data.vat_refund)),
+                save_income_tax=validated_data.save_income_tax,
+                save_income_tax_str=validate_item_price(
+                    str(validated_data.save_income_tax)
+                ),
+                total_cost=validated_data.total_cost,
+                total_cost_str=validate_item_price(str(validated_data.total_cost)),
+            )
+
+            db.session.add(new_main_info)
+            db.session.commit()
+            logging.info(f"Data for '{main_info_name}' successfully uploaded.")
+
+        except ValidationError as ve:
+            logging.error(f"Validation error for '{main_info_name}': {ve}")
+            overall_errors[main_info_name] = ve.errors()
+            db.session.rollback()
+
+        except SQLAlchemyError as sae:
+            logging.error(f"Database error for '{main_info_name}': {sae}")
+            overall_errors[main_info_name] = "Database error occurred."
+            db.session.rollback()
+
+        except Exception as e:
+            logging.exception(
+                f"An unexpected error occurred for '{main_info_name}'. Description: {e}"
+            )
+            overall_errors[main_info_name] = "An unexpected error occurred."
+            db.session.rollback()
+
+    if overall_errors:
+        return (
+            jsonify(
+                {
+                    "message": "Some main info data were not uploaded.",
+                    "errors": overall_errors,
+                }
+            ),
+            207,
+        )  # 207 Multi-Status
+
+    return jsonify({"message": "All main info data successfully uploaded."}), 201

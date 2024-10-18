@@ -1,4 +1,5 @@
 import datetime
+import json
 import time
 import openpyxl
 
@@ -203,7 +204,7 @@ def intensive_task_simulation(data: dict) -> dict:
 
         wb.save(path_to_xlsx)
 
-        schedules = post_request_leas_calc(data, new_deal_id).get("annuity")
+        schedules = post_request_leas_calc(data, new_deal_id)
         upload_schedule(schedules)
 
         folder_api = CompanyFolderAPI()

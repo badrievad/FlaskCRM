@@ -1,12 +1,11 @@
 import requests
 
-from typing import Any
 from pydantic import BaseModel, ValidationError, field_validator, Field
 from datetime import date
 from flask import jsonify
 from logger import logging
 
-from .models import CalculateResultSchedule
+from .models import ScheduleAnnuity, ScheduleDifferentiated, ScheduleRegression
 from .other_utils import validate_item_price
 from .. import db
 from ..config import URL_XLSX_API
@@ -29,59 +28,87 @@ class ScheduleItem(BaseModel):
         return value
 
 
-def upload_schedule(data: Any):
+def upload_schedule(data: dict):
     """
-    Записывает в БД графики из расчетов Димы
+    Записывает в БД графики из расчетов Димы.
     """
     logging.info("Received data for schedule upload.")
+    schedule_models = {
+        "annuity": ScheduleAnnuity,
+        "differentiated": ScheduleDifferentiated,
+        "regression": ScheduleRegression,
+    }
 
-    if not data or not isinstance(data, list):
-        logging.error("Invalid data format received. Expected a list of schedules.")
-        return (
-            jsonify({"error": "Invalid data format. Expected a list of schedules."}),
-            400,
-        )
+    overall_errors = {}
 
-    try:
+    for schedule_name, model_name in schedule_models.items():
+        if not data.get(schedule_name) or not isinstance(data.get(schedule_name), list):
+            logging.warning(f"No valid data for schedule '{schedule_name}'. Skipping.")
+            continue
+
+        validation_errors = []
         validated_items = []
-        for idx, item in enumerate(data):
+
+        for idx, item in enumerate(data.get(schedule_name)):
             try:
                 validated_item = ScheduleItem(**item)
                 validated_items.append(validated_item)
-                logging.info(f"Validated item {idx + 1}: {validated_item}")
+                logging.info(
+                    f"Validated item {idx + 1} in '{schedule_name}': {validated_item}"
+                )
             except ValidationError as e:
-                logging.error(f"Validation error in item {idx + 1}: {e}")
-                return jsonify({"error": e.errors(), "item_index": idx + 1}), 400
+                logging.error(
+                    f"Validation error in item {idx + 1} of '{schedule_name}': {e}"
+                )
+                validation_errors.append({"item_index": idx + 1, "errors": e.errors()})
 
-        for item in validated_items:
-            new_schedule = CalculateResultSchedule(
-                calc_id=item.calc_id,
-                payment_date=item.payment_date,
-                leas_payment_amount=item.leas_payment_amount,
-                leas_payment_amount_str=validate_item_price(
-                    str(item.leas_payment_amount)
-                ),
-                early_repayment_amount=item.early_repayment_amount,
-                early_repayment_amount_str=validate_item_price(
-                    str(item.early_repayment_amount)
-                ),
+        if validation_errors:
+            overall_errors[schedule_name] = validation_errors
+            continue  # Пропускаем сохранение этого графика
+
+        try:
+            for item in validated_items:
+                new_schedule = model_name(
+                    calc_id=item.calc_id,
+                    payment_date=item.payment_date,
+                    leas_payment_amount=item.leas_payment_amount,
+                    leas_payment_amount_str=validate_item_price(
+                        str(item.leas_payment_amount)
+                    ),
+                    early_repayment_amount=item.early_repayment_amount,
+                    early_repayment_amount_str=validate_item_price(
+                        str(item.early_repayment_amount)
+                    ),
+                )
+                db.session.add(new_schedule)
+
+            db.session.commit()
+            logging.info(
+                f"Schedule '{schedule_name}' successfully uploaded and committed to the database."
             )
-            db.session.add(new_schedule)
 
-        db.session.commit()
-        logging.info(
-            "All schedules successfully uploaded and committed to the database."
-        )
-        return jsonify({"message": "Schedules successfully uploaded"}), 201
+        except Exception as e:
+            db.session.rollback()
+            logging.exception(
+                f"An error occurred while uploading schedule '{schedule_name}'."
+            )
+            overall_errors[schedule_name] = {
+                "error": f"Database error. Description: {e}"
+            }
+            continue  # Или вернуть ошибку сразу
 
-    except Exception as e:
-        db.session.rollback()
-        logging.error("An unexpected error occurred while uploading schedules.")
-        logging.error(e)
+    if overall_errors:
         return (
-            jsonify({"error": "An unexpected error occurred.", "details": str(e)}),
-            500,
+            jsonify(
+                {
+                    "message": "Some schedules were not uploaded",
+                    "errors": overall_errors,
+                }
+            ),
+            207,
         )
+
+    return jsonify({"message": "All schedules successfully uploaded"}), 201
 
 
 def post_request_leas_calc(data, calc_id) -> dict:

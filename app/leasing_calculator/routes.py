@@ -17,7 +17,6 @@ from sqlalchemy.orm import joinedload
 from logger import logging
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
-from .api_for_leas_culc import upload_schedule
 from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
 from .other_utils import validate_item_price
 from .pydantic_models import ValidateFields
@@ -32,7 +31,7 @@ from ..leasing_calculator.models import (
     LeasingItem,
     Tranches,
     Insurances,
-    CalculateResultSchedule,
+    ScheduleAnnuity,
 )
 from ..leasing_calculator.services import update_calculation_service
 
@@ -308,7 +307,7 @@ def show_commercial_offer(calc_id) -> render_template:
     initial_payment_percent = validate_item_price(
         str(leas_calc.initial_payment_percent)
     )
-    schedules = CalculateResultSchedule.query.filter_by(calc_id=leas_calc.id).all()
+    schedules = ScheduleAnnuity.query.filter_by(calc_id=leas_calc.id).all()
     logging.info(schedules)
     return render_template(
         "commercial-offer.html",

@@ -993,6 +993,27 @@
                     Сформировать КП
                 </button>
                 <div class="loader" id="loader"></div>
+                <div>
+                    <h4><i class="fa-solid fa-calculator"
+                           style="color: #727a88; margin-top: 50px; margin-bottom: 10px"></i> Загруженные
+                        расчеты</h4>
+                    <table class="custom-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">№</th>
+                            <th scope="col">Наименование ПЛ</th>
+                        </tr>
+                        </thead>
+                        <tbody id="calc-list-main">
+                        {% for calc in calc_list %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td class="date-ru">{{ calc.item_name }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
         <div class="scroll-to-top" onclick="simpleScrollTest()">

@@ -1035,25 +1035,33 @@
                     <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Поиск...">
                 </th>
                 <th scope="col">Цена ПЛ</th>
+                <th scope="col">Сумма по ДЛ</th>
                 <th scope="col">Тип ПЛ</th>
                 <th scope="col">Дата</th>
-                <th scope="col">Менеджер</th>
+                <th scope="col"></th>
                 <th scope="col"></th>
             </tr>
             </thead>
             <tbody id="calc-list-body">
-            {% for calc in calc_list %}
-                <tr data-id="{{ calc.id }}"
-                    data-deal-text="ДЛ {{ calc.deal.dl_number }} | {{ calc.deal.title }}"
-                    onclick="openModal('{{ calc.item_name }}', '{{ calc.date_ru }}', '{{ calc.item_price_str }}', '{{ calc.item_type }}', 'ДЛ {{ calc.deal.dl_number }} | {{ calc.deal.title }}', '{{ calc.id }}', '{{ user_fullname }}', '{{ calc.deal_id }}')">
+            {% for offer in com_offers_list %}
+                <tr data-id="{{ offer.leas_calculator.id }}"
+                    data-deal-text="ДЛ {{ offer.deal.dl_number }} | {{ offer.deal.title }}"
+                    onclick="openModal('{{ offer.leas_calculator.item_name }}',
+                            '{{ offer.leas_calculator.date_ru }}',
+                            '{{ offer.leas_calculator.item_price_str }}',
+                            '{{ offer.leas_calculator.item_type }}',
+                            'ДЛ {{ offer.deal.dl_number }} | {{ offer.deal.title }}',
+                            '{{ offer.leas_calculator.id }}',
+                            '{{ user_fullname }}',
+                            '{{ offer.leas_calculator.deal_id }}')">
                     <td>{{ loop.index }}</td>
-                    <td class="item-name">{{ calc.item_name }}</td>
-                    <td class="item-price">{{ calc.item_price_str }}</td>
-                    <td class="item-type">{{ calc.item_type }}</td>
-                    <td class="date-ru">{{ calc.date_ru }}</td>
-                    <td>{{ calc.manager_login }}</td>
+                    <td class="item-name">{{ offer.leas_calculator.item_name }}</td>
+                    <td class="item-price">{{ offer.leas_calculator.item_price_str }}</td>
+                    <td class="item-dl-amount">{{ offer.main_data.lease_agreement_amount_str }}</td>
+                    <td class="item-type">{{ offer.leas_calculator.item_type }}</td>
+                    <td class="date-ru">{{ offer.leas_calculator.date_ru }}</td>
                     <td>
-                        {% if calc.deal_id %}
+                        {% if offer.leas_calculator.deal_id %}
                             <i class="fa-solid fa-link" id="fa-link"></i>
                             <!-- Иконка цепочки для привязанных КП -->
                         {% else %}
@@ -1062,13 +1070,14 @@
                         {% endif %}
                     </td>
                     <td>
-                        <i class="fa-regular fa-trash-can" data-id="{{ calc.id }}"
-                           onclick="deleteCalculation(event, '{{ calc.id }}')"></i>
-                        <i class="fa-regular fa-file-pdf" data-id="{{ calc.id }}"
-                           onclick="downloadCalculation(event, '{{ calc.id }}')"></i>
+                        <i class="fa-regular fa-trash-can" data-id="{{ offer.offer.id }}"
+                           onclick="deleteCalculation(event, '{{ offer.offer.id }}')"></i>
+                        <i class="fa-regular fa-file-pdf" data-id="{{ offer.offer.id }}"
+                           onclick="downloadCalculation(event, '{{ offer.offer.id }}')"></i>
                     </td>
                 </tr>
             {% endfor %}
+
             </tbody>
         </table>
         <div id="pagination-container"></div>

@@ -18,6 +18,7 @@ from sqlalchemy.orm import joinedload
 from logger import logging
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
+from .api_pdf_generate import PDFGeneratorClient
 from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
 from .other_utils import validate_item_price
 from .pydantic_models import ValidateFields
@@ -29,6 +30,7 @@ from .. import db, cache
 from ..celery_utils import is_celery_alive
 from ..config import FORM_OFFERS_PATH
 from ..deal.deals_validate import DealsValidate
+from ..deal.work_with_folders import CompanyFolderAPI
 from ..leasing_calculator.celery_tasks import long_task
 from ..leasing_calculator.models import (
     LeasCalculator,
@@ -36,6 +38,12 @@ from ..leasing_calculator.models import (
     Tranches,
     Insurances,
     ScheduleAnnuity,
+    CommercialOffer,
+    MainAnnuity,
+    ScheduleDifferentiated,
+    MainDifferentiated,
+    ScheduleRegression,
+    MainRegression,
 )
 from ..leasing_calculator.services import update_calculation_service
 
@@ -47,25 +55,80 @@ def get_leasing_calculator() -> render_template:
     user_fon_filename = current_user.fon_url
     user_fon_url = url_for("crm.static", filename=user_fon_filename)
 
-    # список расчетов
+    # список расчетов пользователя
     user_login = current_user.login
     user_fullname = current_user.fullname
 
     calc_list = (
         LeasCalculator.query.options(
-            joinedload(LeasCalculator.deal)
-        )  # Предварительная загрузка связи deal
+            joinedload(LeasCalculator.deal)  # Предварительная загрузка связи deal
+        )
         .filter_by(manager_login=user_login)
         .order_by(desc(LeasCalculator.id))
         .all()
     )
 
+    # Получаем список коммерческих предложений и присоединяем связанные таблицы
+    commercial_offers = (
+        db.session.query(CommercialOffer)
+        .join(LeasCalculator)
+        .options(
+            joinedload(CommercialOffer.leas_calculator).joinedload(LeasCalculator.deal)
+        )
+        .filter(LeasCalculator.manager_login == user_login)
+        .all()
+    )
+
+    # Создаем пустой список для вывода коммерческих предложений с расчетами
+    com_offers_list = []
+
+    # Обрабатываем каждое коммерческое предложение
+    for offer in commercial_offers:
+        # В зависимости от type_of_schedule подгружаем нужные данные
+        if offer.type_of_schedule == "annuity":
+            schedule_data = ScheduleAnnuity.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).all()
+            main_data = MainAnnuity.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).first()
+        elif offer.type_of_schedule == "differentiated":
+            schedule_data = ScheduleDifferentiated.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).all()
+            main_data = MainDifferentiated.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).first()
+        elif offer.type_of_schedule == "regressive":
+            schedule_data = ScheduleRegression.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).all()
+            main_data = MainRegression.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).first()
+        else:
+            schedule_data = None
+            main_data = None
+
+        # Добавляем информацию в итоговый список
+        com_offers_list.append(
+            {
+                "offer": offer,
+                "leas_calculator": offer.leas_calculator,
+                "schedule_data": schedule_data,
+                "main_data": main_data,
+                "deal": offer.leas_calculator.deal,  # Добавляем информацию о сделке
+            }
+        )
+
+    # Рендерим шаблон с переданными данными
     return render_template(
         "leasing_calculator.html",
         user_fon=user_fon_url,
         calc_list=calc_list,
         login=user_login,
         user_fullname=user_fullname,
+        com_offers_list=com_offers_list,
     )
 
 
@@ -88,13 +151,46 @@ def create_commercial_offer(leas_calculator_id):
     type_of_schedule = request.form.get("type_of_schedule")
 
     # Вызываем функцию, которая создаст коммерческое предложение в базе данных
-    success = create_commercial_offer_in_db(leas_calculator_id, type_of_schedule)
+    success, offer_id = create_commercial_offer_in_db(
+        leas_calculator_id, type_of_schedule
+    )
 
     # Проверяем результат выполнения функции
     if success:
         logging.info(
-            f"Коммерческое предложение успешно создано для графика: {type_of_schedule}"
+            f"Коммерческое предложение успешно создано для графика: {type_of_schedule}. id_{offer_id}"
         )
+        folder_api = CompanyFolderAPI()
+        user_info = {
+            "user_login": current_user.login,
+            "user_name": current_user.fullname,
+            "user_email": current_user.email,
+            "user_phone": current_user.phone,
+        }
+        pdf_api = PDFGeneratorClient(offer_id, user_info)
+
+        offer = (
+            CommercialOffer.query.options(
+                joinedload(
+                    CommercialOffer.leas_calculator
+                )  # Предварительная загрузка связи leas_calc
+            )
+            .filter_by(id=leas_calculator_id)
+            .first()
+        )
+
+        # try:
+        #     offer.leas_calculator.path_to_pdf = pdf_api.generate_pdf()
+        #     new_title_pdf = f"Коммерческое предложение (id_{leas_calculator_id}).pdf"
+        #     offer.leas_calculator.title = new_title_pdf
+        # except Exception as e:
+        #     offer.leas_calculator.path_to_pdf = None
+        #     logging.error(f"Error generating PDF: {e}")
+        #     logging.info("PDF не создался. Сервис недоступен.")
+        # offer.leas_calculator.path_to_xlsx = folder_api.create_commercial_offer(
+        #     path_to_xlsx, current_user.login
+        # )
+        db.session.commit()
     else:
         logging.info("Произошла ошибка при создании коммерческого предложения")
 
@@ -172,24 +268,23 @@ def get_status(task_id) -> jsonify:
 @leas_calc_bp.route("/crm/calculator/delete/<int:calc_id>", methods=["POST"])
 def delete_calculation(calc_id) -> jsonify:
     try:
-        calc = LeasCalculator.query.filter_by(id=calc_id).first()
-        if calc is None:
+        offer = (
+            CommercialOffer.query.options(
+                joinedload(
+                    CommercialOffer.leas_calculator
+                )  # Предварительная загрузка связи leas_calc
+            )
+            .filter_by(id=calc_id)
+            .first()
+        )
+
+        if offer is None:
             return jsonify({"success": False, "message": "Calculation not found"}), 404
 
-        # Найти связанный tranche, если он существует
-        tranche = calc.tranche  # Получить связанную запись из Tranches
-        insurance = calc.insurance  # Получить связанную запись из Insurances
-
-        if tranche:
-            db.session.delete(tranche)  # Удалить запись из Tranches
-
-        if insurance:
-            db.session.delete(insurance)  # Удалить запись из Insurances
-
         # Удалить файл из S3
-        yandex_delete_file_s3(calc.title)
+        yandex_delete_file_s3(offer.leas_calculator.title)
 
-        db.session.delete(calc)  # Удалить запись из LeasCalculator
+        db.session.delete(offer)  # Удалить запись из LeasCalculator
         db.session.commit()  # Подтвердить транзакцию
 
         return jsonify(
@@ -217,11 +312,19 @@ def delete_calculation(calc_id) -> jsonify:
 def download_calculation(calc_id):
     logging.info(f"Запрос на скачивание КП (id_{calc_id})")
     try:
-        calc: LeasCalculator = LeasCalculator.query.filter_by(id=calc_id).first()
-        if calc is None:
+        offer = (
+            CommercialOffer.query.options(
+                joinedload(
+                    CommercialOffer.leas_calculator
+                )  # Предварительная загрузка связи leas_calc
+            )
+            .filter_by(id=calc_id)
+            .first()
+        )
+        if offer is None:
             return jsonify({"success": False, "message": "Calculation not found"}), 404
 
-        file_name = f"Коммерческое предложение (id_{calc_id}).pdf"
+        file_name = f"Коммерческое предложение (id_{offer.id}).pdf"
         commercial_offer = yandex_download_file_s3(file_name)
 
         return send_file(commercial_offer, as_attachment=True)

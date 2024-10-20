@@ -175,7 +175,10 @@ def create_commercial_offer_in_db(leas_calculator_id, type_of_schedule):
         db.session.commit()
 
         # Если всё прошло успешно, возвращаем True
-        return True
+        return (
+            True,
+            new_offer.id,
+        )
 
     except Exception as e:
         # Если произошла ошибка, откатываем изменения

@@ -17,8 +17,6 @@ from ..deal.work_with_folders import CompanyFolderAPI
 
 
 def intensive_task_simulation(data: dict) -> dict:
-    user_login = data["user_login"]  # текущий пользователь
-
     # Записываем в базу данных
     try:
         new_insurance = Insurances(
@@ -186,21 +184,20 @@ def intensive_task_simulation(data: dict) -> dict:
         db.session.add(new_calc)
         db.session.commit()
 
-        new_deal_id = new_calc.id
-
         # new_title_xlsx = f"Лизинговый калькулятор (id_{new_deal_id}).xlsx"
         # path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title_xlsx
         #
         # # Создание директории, если она не существует
         # CALCULATION_TEMPLATE_PATH.mkdir(parents=True, exist_ok=True)
 
-        calculation_results = post_request_leas_calc(data, new_deal_id)
-
-        with open("schedules.json", "w") as f:
-            json.dump(calculation_results, f, ensure_ascii=False, indent=4)
+        calculation_results = post_request_leas_calc(data, new_calc.id)
 
         upload_schedule(calculation_results)
         upload_main_info(calculation_results)
+        com_off_name = f"Лизинговый калькулятор version 1.8_{new_calc.id}.xlsm"
+
+        new_calc.path_to_xlsx = com_off_name
+        db.session.commit()
 
         # folder_api = CompanyFolderAPI()
         # user_info = {

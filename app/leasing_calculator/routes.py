@@ -9,6 +9,7 @@ from flask import (
     url_for,
     current_app,
     send_file,
+    redirect,
 )
 from flask_login import current_user, login_required
 from sqlalchemy import desc
@@ -20,7 +21,10 @@ from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
 from .other_utils import validate_item_price
 from .pydantic_models import ValidateFields
-from .sql_queries import create_or_update_seller_and_link_to_leas_calc
+from .sql_queries import (
+    create_or_update_seller_and_link_to_leas_calc,
+    create_commercial_offer_in_db,
+)
 from .. import db, cache
 from ..celery_utils import is_celery_alive
 from ..config import FORM_OFFERS_PATH
@@ -63,6 +67,39 @@ def get_leasing_calculator() -> render_template:
         login=user_login,
         user_fullname=user_fullname,
     )
+
+
+@leas_calc_bp.route("/crm/calculator/<int:calc_id>", methods=["GET"])
+@login_required
+def get_leasing_calculator_by_id(calc_id: int) -> render_template:
+    logging.info(f"Запрос на отображение расчета (id_{calc_id})")
+    calc = LeasCalculator.query.get(calc_id)
+    return render_template(
+        "leasing_calculator_by_id.html", calc=calc, leas_calculator_id=calc_id
+    )
+
+
+@leas_calc_bp.route(
+    "/crm/calculator/<int:leas_calculator_id>/create-commercial-offer", methods=["POST"]
+)
+@login_required
+def create_commercial_offer(leas_calculator_id):
+    # Получаем данные из формы
+    type_of_schedule = request.form.get("type_of_schedule")
+
+    # Вызываем функцию, которая создаст коммерческое предложение в базе данных
+    success = create_commercial_offer_in_db(leas_calculator_id, type_of_schedule)
+
+    # Проверяем результат выполнения функции
+    if success:
+        logging.info(
+            f"Коммерческое предложение успешно создано для графика: {type_of_schedule}"
+        )
+    else:
+        logging.info("Произошла ошибка при создании коммерческого предложения")
+
+    # Возвращаем пользователя на предыдущую страницу
+    return redirect(url_for("leas_calc.get_leasing_calculator"))
 
 
 # Эндпоинт для запуска фоновой задачи

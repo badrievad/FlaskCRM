@@ -19,8 +19,6 @@ from ..deal.work_with_folders import CompanyFolderAPI
 def intensive_task_simulation(data: dict) -> dict:
     user_login = data["user_login"]  # текущий пользователь
 
-    # Имитация заполнения шаблона
-    wb = openpyxl.load_workbook(LEAS_CALC_TEMPLATE_PATH / "ШАБЛОН РАСЧЕТА.xlsx")
     # Записываем в базу данных
     try:
         new_insurance = Insurances(
@@ -190,13 +188,11 @@ def intensive_task_simulation(data: dict) -> dict:
 
         new_deal_id = new_calc.id
 
-        new_title_xlsx = f"Лизинговый калькулятор (id_{new_deal_id}).xlsx"
-        path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title_xlsx
-
-        # Создание директории, если она не существует
-        CALCULATION_TEMPLATE_PATH.mkdir(parents=True, exist_ok=True)
-
-        wb.save(path_to_xlsx)
+        # new_title_xlsx = f"Лизинговый калькулятор (id_{new_deal_id}).xlsx"
+        # path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title_xlsx
+        #
+        # # Создание директории, если она не существует
+        # CALCULATION_TEMPLATE_PATH.mkdir(parents=True, exist_ok=True)
 
         calculation_results = post_request_leas_calc(data, new_deal_id)
 

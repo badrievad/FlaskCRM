@@ -135,6 +135,9 @@ class LeasCalculator(db.Model):
     )
 
     seller = relationship("Seller", back_populates="leas_calculators")
+    commercial_offers = relationship(
+        "CommercialOffer", back_populates="leas_calculator"
+    )
 
     def to_dict(self):
         return {
@@ -508,3 +511,15 @@ class Seller(db.Model):
 
     leas_calculators = relationship("LeasCalculator", back_populates="seller")
     bank = relationship("Bank", back_populates="sellers")
+
+
+class CommercialOffer(db.Model):
+    """Модель для хранения коммерческого предложения"""
+
+    __tablename__ = "commercial_offers"
+
+    id = db.Column(db.Integer, primary_key=True)
+    leas_calculator_id = db.Column(db.Integer, db.ForeignKey("leas_calculator.id"))
+    type_of_schedule = db.Column(db.String(100), nullable=False)
+
+    leas_calculator = relationship("LeasCalculator", back_populates="commercial_offers")

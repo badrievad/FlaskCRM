@@ -187,6 +187,11 @@
             </a>
         </li>
         <li class="clickable-in">
+            <a class="nav-link" href="#created-calculations">
+                <i class="fa-solid fa-calculator"></i>Созданные расчеты
+            </a>
+        </li>
+        <li class="clickable-in">
             <a class="nav-link" href="#created-proposals">
                 <i class="fa-solid fa-layer-group"></i>Созданные КП
             </a>
@@ -987,15 +992,13 @@
                     </div>
                 </div>
                 <button class="btn-hover color-4" id="pre-calculate-button"><i class="fa-regular fa-eye"></i>
-                    Предварительный расчет
+                    Сформировать расчет
                 </button>
-                <button class="btn-hover color-5" id="calculate-button"><i class="fa-regular fa-floppy-disk"></i>
-                    Сформировать КП
-                </button>
+
                 <div class="loader" id="loader"></div>
-                <div>
+                <div id="created-calculations">
                     <h4><i class="fa-solid fa-calculator"
-                           style="color: #727a88; margin-top: 50px; margin-bottom: 10px"></i> Загруженные
+                           style="color: #727a88; margin-top: 50px; margin-bottom: 10px"></i> Созданные
                         расчеты</h4>
                     <table class="custom-table">
                         <thead>
@@ -1006,7 +1009,7 @@
                         </thead>
                         <tbody id="calc-list-main">
                         {% for calc in calc_list %}
-                            <tr>
+                            <tr onclick="window.location.href='{{ url_for('leas_calc.get_leasing_calculator_by_id', calc_id=calc.id) }}'">
                                 <td>{{ loop.index }}</td>
                                 <td class="date-ru">{{ calc.item_name }}</td>
                             </tr>
@@ -1101,7 +1104,7 @@
     });
 </script>
 <script>
-    document.getElementById('calculate-button').addEventListener('click', function () {
+    document.getElementById('pre-calculate-button').addEventListener('click', function () {
         // Модальное окно подтверждения с SweetAlert2
         Swal.fire({
             text: 'Вы точно хотите запустить расчет с текущими данными?',
@@ -1115,12 +1118,9 @@
             if (result.isConfirmed) {
                 // Если пользователь подтвердил, то выполняем расчет
                 const loader = document.getElementById('loader');
-                const calculateButton = document.getElementById('calculate-button');
                 const preCalculateButton = document.getElementById('pre-calculate-button');
 
-                calculateButton.disabled = true; // Заблокировать кнопку
                 preCalculateButton.disabled = true; // Заблокировать кнопку
-                calculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
                 preCalculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
                 loader.style.display = 'flex'; // Показать круг загрузки
 
@@ -1221,8 +1221,6 @@
                 if (totalSize !== 100) {
                     showError('Сумма всех траншей должна быть равна 100%. Текущая сумма: ' + totalSize + '%', 'Ошибка валидации');
                     loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                    calculateButton.disabled = false; // Разблокировать кнопку
-                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     preCalculateButton.disabled = false; // Разблокировать кнопку
                     preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     return false;
@@ -1388,8 +1386,6 @@
                         } else {
                             showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
                             loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                            calculateButton.disabled = false; // Разблокировать кнопку
-                            calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                             preCalculateButton.disabled = false; // Разблокировать кнопку
                             preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                         }
@@ -1398,8 +1394,6 @@
                         console.error('Ошибка:', error);
                         showError('Произошла ошибка при отправке задачи', 'Ошибка');
                         loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                        calculateButton.disabled = false; // Разблокировать кнопку
-                        calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                         preCalculateButton.disabled = false; // Разблокировать кнопку
                         preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     });
@@ -1417,26 +1411,19 @@
             .then(data => {
                 if (data.state === 'SUCCESS') {
                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                    const calculateButton = document.getElementById('calculate-button');
                     const preCalculateButton = document.getElementById('pre-calculate-button');
-                    calculateButton.disabled = false; // Разблокировать кнопку
-                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     preCalculateButton.disabled = false; // Разблокировать кнопку
                     preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     showSuccess('Расчет по лизингу создан');
-                    scrollToOffers();
+                    scrollToCalculations();
 
                     // Добавление нового расчета в начало списка
-                    console.log(data.result);
                     addNewCalculation(data.result, activeTabText, itemPrice, initialPayment,
                         creditTerm, itemName);
 
                 } else if (data.state === 'FAILURE') {
                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                    const calculateButton = document.getElementById('calculate-button');
                     const preCalculateButton = document.getElementById('pre-calculate-button');
-                    calculateButton.disabled = false; // Разблокировать кнопку
-                    calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     preCalculateButton.disabled = false; // Разблокировать кнопку
                     preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     showError('Ошибка при выполнении расчета. Попробуйте запустить расчет еще раз', 'Ошибка');
@@ -1452,42 +1439,37 @@
                 console.error('Ошибка:', error);
                 showError('Произошла ошибка при проверке состояния задачи', 'Ошибка');
                 document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                const calculateButton = document.getElementById('calculate-button');
                 const preCalculateButton = document.getElementById('pre-calculate-button');
-                calculateButton.disabled = false; // Разблокировать кнопку
-                calculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                 preCalculateButton.disabled = false; // Разблокировать кнопку
                 preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
             });
     }
 
     function addNewCalculation(calculation, activeTabText, itemPrice, initialPayment, creditTerm, itemName) {
-        const calcListBody = document.getElementById('calc-list-body');
+        const calcListBody = document.getElementById('calc-list-main');
         const newRow = document.createElement('tr');
 
-        newRow.setAttribute('data-id', calculation.id);
-        newRow.setAttribute('onclick', `openModal("${calculation.item_name}", "${calculation.date_ru}", "${calculation.item_price_str}", "${calculation.item_type}", "ДЛ |", "${calculation.id}", "{{ user_fullname }}", "")`);
-        newRow.setAttribute('data-deal-text', "");
-        const dealIcon = calculation.deal_id
-            ? '<i class="fa-solid fa-link" id="fa-link"></i>'
-            : '<i class="fa-solid fa-unlink" id="fa-unlink"></i>'; // Иконки с меньшим размером
-
         newRow.innerHTML = `
-                        <td>${calcListBody.rows.length + 1}</td>
-                        <td class="item-name">${calculation.item_name}</td>
-                        <td class="item-price">${calculation.item_price_str}</td>
-                        <td class="item-type">${activeTabText}</td>
-                        <td class="date-ru">${calculation.date_ru}</td>
-                        <td>${calculation.manager_login}</td>
-                        <td>${dealIcon}</td>
-                        <td>
-                            <i class="fa-regular fa-trash-can" data-id="${calculation.id}" onclick="deleteCalculation(event, '${calculation.id}')"></i>
-                            <i class="fa-regular fa-file-pdf" data-id="${calculation.id}" onclick="downloadCalculation(event, '${calculation.id}')"></i>
-                        </td>
-                    `;
+        <td>${calcListBody.rows.length + 1}</td>
+        <td class="item-name">${calculation.item_name}</td>
+    `;
+
+        // Проверяем наличие calculation.id
+        if (calculation.id) {
+            // Или напрямую строим URL
+            const calcUrl = '/crm/calculator/' + calculation.id;
+
+            newRow.onclick = function () {
+                window.location.href = calcUrl;
+            };
+            newRow.style.cursor = 'pointer';
+        } else {
+            console.error('calculation.id is missing');
+        }
 
         calcListBody.insertBefore(newRow, calcListBody.firstChild);
     }
+
 
     function showSuccess(message) {
         const Toast = Swal.mixin({

@@ -1212,6 +1212,17 @@ function scrollToOffers() {
     }
 }
 
+function scrollToCalculations() {
+    const element = document.getElementById('created-calculations');
+    if (element) {
+        window.scroll({
+            top: element.offsetTop,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+}
+
 document.querySelectorAll('.button-group-nds, .button-group-deposit, .button-group-redemption').forEach(group => {
     group.addEventListener('click', function (e) {
         if (e.target.classList.contains('toggle-btn')) {

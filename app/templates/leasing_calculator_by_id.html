@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Созданные расчёты</title>
+
+    <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
+
+    <!-- Подключаем ваши стили -->
+    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-id.css') }}">
+    <!-- Подключаем Font Awesome для иконок, если ещё не подключено -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <!-- Колонка Аннуитет -->
+    <div class="column">
+        <h2>Аннуитет</h2>
+        <button class="btn-hover color-5" id="calculate-button-annuity"
+                onclick="createCommercialOffer('annuity', {{ leas_calculator_id }})">
+            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП (аннуитет)
+        </button>
+        <div class="content">
+            <!-- Разместите здесь ваши строки и график для Аннуитета -->
+        </div>
+    </div>
+    <!-- Колонка Дифференцированный -->
+    <div class="column">
+        <h2>Дифференцированный</h2>
+        <button class="btn-hover color-5" id="calculate-button-differentiated"
+                onclick="createCommercialOffer('differentiated', {{ leas_calculator_id }})">
+            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП (дифференцированный)
+        </button>
+        <div class="content">
+            <!-- Разместите здесь ваши строки и график для Дифференцированного -->
+        </div>
+    </div>
+    <!-- Колонка Регрессивный -->
+    <div class="column">
+        <h2>Регрессивный</h2>
+        <button class="btn-hover color-5" id="calculate-button-regression"
+                onclick="createCommercialOffer('regressive', {{ leas_calculator_id }})">
+            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП (регрессивный)
+        </button>
+        <div class="content">
+            <!-- Разместите здесь ваши строки и график для Регрессивного -->
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('crm.static', filename='js/leas-calc-id.js') }}"></script>
+
+</body>
+</html>

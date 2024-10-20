@@ -1,6 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 
-from .models import Seller, LeasCalculator
+from .models import Seller, LeasCalculator, CommercialOffer
 from .other_utils import dadata_info_company, dadata_result
 from .. import db
 from logger import logging
@@ -161,3 +161,28 @@ def process_bank_info(seller: Seller, new_bank: dict) -> bool:
         raise ValueError("Bank BIC is required.")
 
     return bank_updated
+
+
+def create_commercial_offer_in_db(leas_calculator_id, type_of_schedule):
+    try:
+        # Создаем запись коммерческого предложения
+        new_offer = CommercialOffer(
+            leas_calculator_id=leas_calculator_id, type_of_schedule=type_of_schedule
+        )
+
+        # Добавляем новую запись в сессию базы данных
+        db.session.add(new_offer)
+        db.session.commit()
+
+        # Если всё прошло успешно, возвращаем True
+        return True
+
+    except Exception as e:
+        # Если произошла ошибка, откатываем изменения
+        db.session.rollback()
+
+        # Логируем ошибку для дальнейшего анализа
+        logging.error(f"Ошибка при создании коммерческого предложения: {str(e)}")
+
+        # Возвращаем False в случае ошибки
+        return False

@@ -179,6 +179,7 @@ def start_task() -> jsonify:
             "user_name": current_user.fullname,
             "user_email": current_user.email,
             "user_phone": current_user.mobilenumber,
+            "user_telegram": current_user.telegram,
         }
         logging.info(user_info)
         task = long_task.delay({**user_info, **validate_data})

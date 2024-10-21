@@ -18,6 +18,7 @@ class User(db.Model, UserMixin):
     worknumber = db.Column(db.String())
     mobilenumber = db.Column(db.String())
     fon_url = db.Column(db.String(), default="images/background/default.jpg")
+    telegram = db.Column(db.String(length=50))
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

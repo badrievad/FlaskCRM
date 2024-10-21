@@ -26,6 +26,10 @@ class MainInfoItem(BaseModel):
     vat_refund: float
     save_income_tax: float
     total_cost: float
+    redemption_value: float
+    transaction_processing_fee: float
+    company_margin: float
+    effective_rate: float
 
 
 class ScheduleItem(BaseModel):
@@ -177,6 +181,22 @@ def upload_main_info(data: dict):
                 ),
                 total_cost=validated_data.total_cost,
                 total_cost_str=validate_item_price(str(validated_data.total_cost)),
+                redemption_value=validated_data.redemption_value,
+                redemption_value_str=validate_item_price(
+                    str(validated_data.redemption_value)
+                ),
+                transaction_processing_fee=validated_data.transaction_processing_fee,
+                transaction_processing_fee_str=validate_item_price(
+                    str(validated_data.transaction_processing_fee)
+                ),
+                company_margin=validated_data.company_margin,
+                company_margin_str=validate_item_price(
+                    str(validated_data.company_margin)
+                ),
+                effective_rate=validated_data.effective_rate,
+                effective_rate_str=validate_item_price(
+                    str(validated_data.effective_rate)
+                ),
             )
 
             db.session.add(new_main_info)

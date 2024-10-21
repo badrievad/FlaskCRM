@@ -105,10 +105,10 @@
 
         .fa-trash-can:hover {
             background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
-            transform: scale(1.5); /* Увеличение размера при наведении */
+            transform: scale(1.2); /* Увеличение размера при наведении */
         }
 
-        .fa-file-pdf {
+        .fa-file-pdf, .fa-file-excel {
             background-color: rgba(0, 0, 0, 0.6);
             color: white;
             border-radius: 50%;
@@ -124,9 +124,14 @@
             text-align: center;
         }
 
-        .fa-file-pdf:hover {
+        .fa-file-pdf:hover, .fa-file-excel:hover {
             background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
-            transform: scale(1.5); /* Увеличение размера при наведении */
+            transform: scale(1.2); /* Увеличение размера при наведении */
+        }
+
+        .fa-file-excel:hover {
+            background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
+            transform: scale(1.1); /* Увеличение размера при наведении */
         }
 
         /* Переопределение шрифта для SweetAlert2 */
@@ -1000,11 +1005,12 @@
                     <h4><i class="fa-solid fa-calculator"
                            style="color: #727a88; margin-top: 50px; margin-bottom: 10px"></i> Созданные
                         расчеты</h4>
-                    <table class="custom-table">
+                    <table class="custom-table calc-list-table">
                         <thead>
                         <tr>
                             <th scope="col">№</th>
                             <th scope="col">Наименование ПЛ</th>
+                            <th scope="col"></th>
                         </tr>
                         </thead>
                         <tbody id="calc-list-main">
@@ -1012,6 +1018,10 @@
                             <tr onclick="window.location.href='{{ url_for('leas_calc.get_leasing_calculator_by_id', calc_id=calc.id) }}'">
                                 <td>{{ loop.index }}</td>
                                 <td class="date-ru">{{ calc.item_name }}</td>
+                                <td>
+                                    <i class="fa-regular fa-file-excel" data-id="{{ calc.id }}"
+                                       onclick="downloadLeaseCalculation(event, '{{ calc.id }}')"></i>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -1070,14 +1080,13 @@
                         {% endif %}
                     </td>
                     <td>
-                        <i class="fa-regular fa-trash-can" data-id="{{ offer.offer.id }}"
-                           onclick="deleteCalculation(event, '{{ offer.offer.id }}')"></i>
                         <i class="fa-regular fa-file-pdf" data-id="{{ offer.offer.id }}"
                            onclick="downloadCalculation(event, '{{ offer.offer.id }}')"></i>
+                        <i class="fa-regular fa-trash-can" data-id="{{ offer.offer.id }}"
+                           onclick="deleteCalculation(event, '{{ offer.offer.id }}')"></i>
                     </td>
                 </tr>
             {% endfor %}
-
             </tbody>
         </table>
         <div id="pagination-container"></div>
@@ -1461,6 +1470,10 @@
         newRow.innerHTML = `
         <td>${calcListBody.rows.length + 1}</td>
         <td class="item-name">${calculation.item_name}</td>
+        <td>
+            <i class="fa-regular fa-file-excel" data-id="${calculation.id}"
+               onclick="downloadLeaseCalculation(event, '${calculation.id}')"></i>
+        </td>
     `;
 
         // Проверяем наличие calculation.id

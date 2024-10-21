@@ -87,6 +87,26 @@ function downloadCalculation(event, calcId) {
     });
 }
 
+function downloadLeaseCalculation(event, calcId) {
+    event.stopPropagation(); // Остановить всплытие события, чтобы не вызывать openModal
+
+    // Используем SweetAlert2 для подтверждения
+    Swal.fire({
+        text: 'Вы уверены, что хотите скачать этот расчет?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#5789b9',
+        cancelButtonColor: '#ad6c72',
+        confirmButtonText: 'Да, скачать',
+        cancelButtonText: 'Отменить'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Если пользователь подтвердил действие
+            window.location.href = `./calculator/leas-calc-download/${calcId}`;
+        }
+    });
+}
+
 
 function filterTable() {
     var input, filter, table, tr, td, i, txtValue;

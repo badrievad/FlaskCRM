@@ -52,3 +52,8 @@ html {
     max-width: 400px; /* Максимальная ширина */
     word-wrap: break-word; /* Перенос слов */
 }
+
+.calc-list-table td {
+    padding: 3px;
+    font-size: 13px;
+}

@@ -442,6 +442,14 @@ class MainAnnuity(db.Model):
     save_income_tax_str = db.Column(db.String(255), nullable=False)
     total_cost = db.Column(db.Float, nullable=False)
     total_cost_str = db.Column(db.String(255), nullable=False)
+    redemption_value = db.Column(db.Float, nullable=False)
+    redemption_value_str = db.Column(db.String(255), nullable=False)
+    transaction_processing_fee = db.Column(db.Float, nullable=False)
+    transaction_processing_fee_str = db.Column(db.String(255), nullable=False)
+    company_margin = db.Column(db.Float, nullable=False)
+    company_margin_str = db.Column(db.String(255), nullable=False)
+    effective_rate = db.Column(db.Float, nullable=False)
+    effective_rate_str = db.Column(db.String(255), nullable=False)
 
     # Обратное отношение к LeasCalculator
     leas_calculator = relationship("LeasCalculator", back_populates="main_annuity")
@@ -462,6 +470,14 @@ class MainDifferentiated(db.Model):
     save_income_tax_str = db.Column(db.String(255), nullable=False)
     total_cost = db.Column(db.Float, nullable=False)
     total_cost_str = db.Column(db.String(255), nullable=False)
+    redemption_value = db.Column(db.Float, nullable=False)
+    redemption_value_str = db.Column(db.String(255), nullable=False)
+    transaction_processing_fee = db.Column(db.Float, nullable=False)
+    transaction_processing_fee_str = db.Column(db.String(255), nullable=False)
+    company_margin = db.Column(db.Float, nullable=False)
+    company_margin_str = db.Column(db.String(255), nullable=False)
+    effective_rate = db.Column(db.Float, nullable=False)
+    effective_rate_str = db.Column(db.String(255), nullable=False)
 
     # Обратное отношение к LeasCalculator
     leas_calculator = relationship(
@@ -484,6 +500,14 @@ class MainRegression(db.Model):
     save_income_tax_str = db.Column(db.String(255), nullable=False)
     total_cost = db.Column(db.Float, nullable=False)
     total_cost_str = db.Column(db.String(255), nullable=False)
+    redemption_value = db.Column(db.Float, nullable=False)
+    redemption_value_str = db.Column(db.String(255), nullable=False)
+    transaction_processing_fee = db.Column(db.Float, nullable=False)
+    transaction_processing_fee_str = db.Column(db.String(255), nullable=False)
+    company_margin = db.Column(db.Float, nullable=False)
+    company_margin_str = db.Column(db.String(255), nullable=False)
+    effective_rate = db.Column(db.Float, nullable=False)
+    effective_rate_str = db.Column(db.String(255), nullable=False)
 
     # Обратное отношение к LeasCalculator
     leas_calculator = relationship("LeasCalculator", back_populates="main_regression")

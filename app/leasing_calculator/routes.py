@@ -25,6 +25,7 @@ from .pydantic_models import ValidateFields
 from .sql_queries import (
     create_or_update_seller_and_link_to_leas_calc,
     create_commercial_offer_in_db,
+    get_list_of_commercial_offers,
 )
 from .. import db, cache
 from ..celery_utils import is_celery_alive
@@ -69,57 +70,7 @@ def get_leasing_calculator() -> render_template:
     )
 
     # Получаем список коммерческих предложений и присоединяем связанные таблицы
-    commercial_offers = (
-        db.session.query(CommercialOffer)
-        .join(LeasCalculator)
-        .options(
-            joinedload(CommercialOffer.leas_calculator).joinedload(LeasCalculator.deal)
-        )
-        .filter(LeasCalculator.manager_login == user_login)
-        .all()
-    )
-
-    # Создаем пустой список для вывода коммерческих предложений с расчетами
-    com_offers_list = []
-
-    # Обрабатываем каждое коммерческое предложение
-    for offer in commercial_offers:
-        # В зависимости от type_of_schedule подгружаем нужные данные
-        if offer.type_of_schedule == "annuity":
-            schedule_data = ScheduleAnnuity.query.filter_by(
-                calc_id=offer.leas_calculator_id
-            ).all()
-            main_data = MainAnnuity.query.filter_by(
-                calc_id=offer.leas_calculator_id
-            ).first()
-        elif offer.type_of_schedule == "differentiated":
-            schedule_data = ScheduleDifferentiated.query.filter_by(
-                calc_id=offer.leas_calculator_id
-            ).all()
-            main_data = MainDifferentiated.query.filter_by(
-                calc_id=offer.leas_calculator_id
-            ).first()
-        elif offer.type_of_schedule == "regressive":
-            schedule_data = ScheduleRegression.query.filter_by(
-                calc_id=offer.leas_calculator_id
-            ).all()
-            main_data = MainRegression.query.filter_by(
-                calc_id=offer.leas_calculator_id
-            ).first()
-        else:
-            schedule_data = None
-            main_data = None
-
-        # Добавляем информацию в итоговый список
-        com_offers_list.append(
-            {
-                "offer": offer,
-                "leas_calculator": offer.leas_calculator,
-                "schedule_data": schedule_data,
-                "main_data": main_data,
-                "deal": offer.leas_calculator.deal,  # Добавляем информацию о сделке
-            }
-        )
+    com_offers_list = get_list_of_commercial_offers(user_login)
 
     # Рендерим шаблон с переданными данными
     return render_template(
@@ -157,15 +108,12 @@ def create_commercial_offer(leas_calculator_id):
 
     # Проверяем результат выполнения функции
     if success:
-        logging.info(
-            f"Коммерческое предложение успешно создано для графика: {type_of_schedule}. id_{offer_id}"
-        )
         folder_api = CompanyFolderAPI()
         user_info = {
             "user_login": current_user.login,
             "user_name": current_user.fullname,
             "user_email": current_user.email,
-            "user_phone": current_user.phone,
+            "user_phone": current_user.mobilenumber,
         }
         pdf_api = PDFGeneratorClient(offer_id, user_info)
 
@@ -175,22 +123,24 @@ def create_commercial_offer(leas_calculator_id):
                     CommercialOffer.leas_calculator
                 )  # Предварительная загрузка связи leas_calc
             )
-            .filter_by(id=leas_calculator_id)
+            .filter_by(leas_calculator_id=leas_calculator_id)
             .first()
         )
 
-        # try:
-        #     offer.leas_calculator.path_to_pdf = pdf_api.generate_pdf()
-        #     new_title_pdf = f"Коммерческое предложение (id_{leas_calculator_id}).pdf"
-        #     offer.leas_calculator.title = new_title_pdf
-        # except Exception as e:
-        #     offer.leas_calculator.path_to_pdf = None
-        #     logging.error(f"Error generating PDF: {e}")
-        #     logging.info("PDF не создался. Сервис недоступен.")
-        # offer.leas_calculator.path_to_xlsx = folder_api.create_commercial_offer(
-        #     path_to_xlsx, current_user.login
-        # )
-        db.session.commit()
+        try:
+            pdf_api.generate_pdf()
+            new_title_pdf = f"Коммерческое предложение (id_{offer_id}).pdf"
+            logging.info(f"Создание коммерческого предложения: {new_title_pdf}")
+            offer.leas_calculator.title = new_title_pdf
+            db.session.commit()
+        except Exception as e:
+            db.session.rollback()
+            logging.error(f"Error generating PDF: {e}")
+            logging.info("PDF не создался. Сервис недоступен.")
+
+        logging.info(
+            f"Коммерческое предложение успешно создано для графика: {type_of_schedule}. id_{offer_id}"
+        )
     else:
         logging.info("Произошла ошибка при создании коммерческого предложения")
 
@@ -309,7 +259,7 @@ def delete_calculation(calc_id) -> jsonify:
 
 
 @leas_calc_bp.route("/crm/calculator/download/<int:calc_id>", methods=["GET"])
-def download_calculation(calc_id):
+def download_offers(calc_id):
     logging.info(f"Запрос на скачивание КП (id_{calc_id})")
     try:
         offer = (
@@ -328,6 +278,29 @@ def download_calculation(calc_id):
         commercial_offer = yandex_download_file_s3(file_name)
 
         return send_file(commercial_offer, as_attachment=True)
+
+    except Exception as e:
+        logging.info(f"Ошибка при скачивании КП: {e}")
+        return (
+            jsonify(
+                {
+                    "success": False,
+                    "message": "An error occurred while downloading the commercial offer",
+                    "error": str(e),
+                }
+            ),
+            500,
+        )
+
+
+@leas_calc_bp.route("/crm/calculator/leas-calc-download/<int:calc_id>", methods=["GET"])
+def download_calc(calc_id):
+    logging.info(f"Запрос на скачивание расчета (id_{calc_id})")
+    try:
+        file_name = f"Лизинговый калькулятор version 1.8_{calc_id}.xlsm"
+        leas_calculate = yandex_download_file_s3(file_name)
+
+        return send_file(leas_calculate, as_attachment=True)
 
     except Exception as e:
         logging.info(f"Ошибка при скачивании КП: {e}")
@@ -426,8 +399,8 @@ def get_commercial_offer(calc_id: int) -> jsonify:
         return jsonify({"success": False, "message": str(e)}), 500
 
 
-@leas_calc_bp.route("/crm/commercial-offer/<int:calc_id>", methods=["GET"])
-def show_commercial_offer(calc_id) -> render_template:
+@leas_calc_bp.route("/crm/commercial-offer/<int:offer_id>", methods=["GET"])
+def show_commercial_offer(offer_id) -> render_template:
     today = date.today().strftime("%d.%m.%Y")
     user_info = {
         "login": request.args.get("user_login"),
@@ -436,28 +409,28 @@ def show_commercial_offer(calc_id) -> render_template:
         "phone": request.args.get("phone"),
     }
 
-    leas_calc = (
-        LeasCalculator.query.options(joinedload(LeasCalculator.deal))
-        .filter_by(id=calc_id)
-        .first()
+    com_offers_list = get_list_of_commercial_offers(
+        user_info["login"], offer_id=offer_id
     )
+    logging.info(com_offers_list)
+    item_price = com_offers_list[0]["leas_calculator"].item_price
+    initial_payment_percent = com_offers_list[0][
+        "leas_calculator"
+    ].initial_payment_percent
+
     vat = validate_item_price(
-        str(float(leas_calc.item_price) - float(leas_calc.item_price) / 1.2)
+        str(float(item_price) - float(item_price) / 1.2)
     )  # выделяем НДС 20%
-    initial_payment_percent = validate_item_price(
-        str(leas_calc.initial_payment_percent)
-    )
-    schedules = ScheduleAnnuity.query.filter_by(calc_id=leas_calc.id).all()
-    logging.info(schedules)
+    initial_payment_percent = validate_item_price(str(initial_payment_percent))
+
     return render_template(
         "commercial-offer.html",
         today=today,
         user=current_user,
-        leas_calc=leas_calc,
+        com_offer=com_offers_list[0],
         vat=vat,
         initial_payment_percent=initial_payment_percent,
         user_info=user_info,
-        schedules=schedules,
     )
 
 

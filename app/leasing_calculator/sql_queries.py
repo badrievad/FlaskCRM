@@ -1,6 +1,17 @@
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import joinedload
 
-from .models import Seller, LeasCalculator, CommercialOffer
+from .models import (
+    Seller,
+    LeasCalculator,
+    CommercialOffer,
+    ScheduleAnnuity,
+    MainAnnuity,
+    ScheduleDifferentiated,
+    MainDifferentiated,
+    ScheduleRegression,
+    MainRegression,
+)
 from .other_utils import dadata_info_company, dadata_result
 from .. import db
 from logger import logging
@@ -189,3 +200,77 @@ def create_commercial_offer_in_db(leas_calculator_id, type_of_schedule):
 
         # Возвращаем False в случае ошибки
         return False
+
+
+def get_list_of_commercial_offers(user_login, offer_id=None) -> list:
+    logging.info(f"Оффер ID: {offer_id}")
+    # Запрос для получения коммерческих предложений
+    if offer_id:
+        query = (
+            db.session.query(CommercialOffer)
+            .join(LeasCalculator)
+            .options(
+                joinedload(CommercialOffer.leas_calculator).joinedload(
+                    LeasCalculator.deal
+                )
+            )
+            .filter(CommercialOffer.id == offer_id)
+        )
+    else:
+        query = (
+            db.session.query(CommercialOffer)
+            .join(LeasCalculator)
+            .options(
+                joinedload(CommercialOffer.leas_calculator).joinedload(
+                    LeasCalculator.deal
+                )
+            )
+            .filter(LeasCalculator.manager_login == user_login)
+        )
+
+    # Выполняем запрос
+    commercial_offers = query.all()
+
+    # Создаем пустой список для вывода коммерческих предложений с расчетами
+    com_offers_list = []
+
+    # Обрабатываем каждое коммерческое предложение
+    for offer in commercial_offers:
+        # В зависимости от type_of_schedule подгружаем нужные данные
+        if offer.type_of_schedule == "annuity":
+            schedule_data = ScheduleAnnuity.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).all()
+            main_data = MainAnnuity.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).first()
+        elif offer.type_of_schedule == "differentiated":
+            schedule_data = ScheduleDifferentiated.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).all()
+            main_data = MainDifferentiated.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).first()
+        elif offer.type_of_schedule == "regressive":
+            schedule_data = ScheduleRegression.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).all()
+            main_data = MainRegression.query.filter_by(
+                calc_id=offer.leas_calculator_id
+            ).first()
+        else:
+            schedule_data = None
+            main_data = None
+
+        # Добавляем информацию в итоговый список
+        com_offers_list.append(
+            {
+                "offer": offer,
+                "leas_calculator": offer.leas_calculator,
+                "schedule_data": schedule_data,
+                "main_data": main_data,
+                "deal": offer.leas_calculator.deal,  # Добавляем информацию о сделке
+            }
+        )
+
+    return com_offers_list

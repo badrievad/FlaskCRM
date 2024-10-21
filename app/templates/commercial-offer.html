@@ -202,7 +202,7 @@
         }
 
         .financial-total-cost {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
         }
     </style>
@@ -387,7 +387,7 @@
     </div>
 </div>
 
-<p class="greeting">№ {{ leas_calc.id }} от {{ today }}</p>
+<p class="greeting">№ {{ com_offer.offer.id }} от {{ today }}</p>
 <h1 class="proposal-title"></h1>
 
 <div class="details">
@@ -396,7 +396,8 @@
             <i class="fa fa-briefcase"></i>
             <div class="info">
                 <p><strong>ПРЕДМЕТ ЛИЗИНГА</strong></p>
-                <p>{{ leas_calc.item_name }}, {{ leas_calc.item_year }} г. в. ({{ leas_calc.item_condition }})</p>
+                <p>{{ com_offer.leas_calculator.item_name }}, {{ com_offer.leas_calculator.item_year }} г. в.
+                    ({{ com_offer.leas_calculator.item_condition }})</p>
             </div>
         </div>
         <br>
@@ -404,7 +405,7 @@
             <i class="fa-solid fa-coins"></i>
             <div class="info">
                 <p><strong>СТОИМОСТЬ</strong> <em style="font-size: 12px">(в т.ч. НДС)</em></p>
-                <p>{{ leas_calc.item_price_str }} ₽</p>
+                <p>{{ com_offer.leas_calculator.item_price_str }} ₽</p>
                 <p><em style="font-size: 12px">({{ vat }} ₽)</em></p>
             </div>
         </div>
@@ -427,7 +428,7 @@
                 <div class="separator"></div>
                 <div class="text-content">
                     <p>СРОК</p>
-                    <p class="big-text">{{ leas_calc.credit_term }} мес.</p>
+                    <p class="big-text">{{ com_offer.leas_calculator.credit_term }} мес.</p>
                 </div>
             </div>
         </div>
@@ -438,7 +439,7 @@
                 <div class="text-content">
                     <p>ВЫКУПНОЙ</p>
                     <p>ПЛАТЕЖ</p>
-                    <p class="big-text">1 000 ₽</p>
+                    <p class="big-text">{{ com_offer.leas_calculator.redemption_value_str }} ₽</p>
                 </div>
             </div>
         </div>
@@ -449,23 +450,23 @@
     <div class="financial-left-section">
         <div class="financial-row">
             <p><strong>Сумма договора лизинга </strong><em style="font-size: 14px">(в т. ч. НДС)</em></p>
-            <p>219 288 872 ₽</p>
+            <p>{{ com_offer.main_data.lease_agreement_amount_str }} ₽</p>
         </div>
         <div class="financial-row financial-benefit">
             <p><strong>ВЫГОДА ПО НАЛОГАМ</strong></p>
         </div>
         <div class="financial-row">
             <p>Возмещение НДС</p>
-            <p>- 1 548 145 ₽</p>
+            <p>- {{ com_offer.main_data.vat_refund_str }} ₽</p>
         </div>
         <div class="financial-row">
             <p>Экономия по налогу на прибыль</p>
-            <p>- 1 548 145 ₽</p>
+            <p>- {{ com_offer.main_data.save_income_tax_str }} ₽</p>
         </div>
     </div>
     <div class="financial-right-section">
         <p>Итого затраты на приобретение</p>
-        <p class="financial-total-cost">126 192 581 ₽</p>
+        <p class="financial-total-cost">{{ com_offer.main_data.total_cost_str }} ₽</p>
     </div>
 </div>
 
@@ -512,18 +513,19 @@
 
 <div class="payment-schedule">
     <h2></h2>
-    <h2><i class="fa-regular fa-calendar-days"></i> ГРАФИК ЛИЗИНГОВЫХ ПЛАТЕЖЕЙ <em style="font-size: 12px">&nbsp;(в т.ч. НДС)</em></h2>
+    <h2><i class="fa-regular fa-calendar-days"></i> ГРАФИК ЛИЗИНГОВЫХ ПЛАТЕЖЕЙ <em style="font-size: 12px">&nbsp;(в т.ч.
+        НДС)</em></h2>
     <div class="schedule-grid">
-        {% for schedule in schedules %}
-        {% if loop.index0 % 10 == 0 %}
-        <div class="payment-column">
-        {% endif %}
-            <div class="payment-row">
-                <span>{{ loop.index }}</span>
-                <span class="amount">{{ schedule.leas_payment_amount_str }}</span>
-            </div>
-        {% if loop.index0 % 10 == 9 or loop.last %}
+        {% for schedule in com_offer.schedule_data %}
+            {% if loop.index0 % 10 == 0 %}
+                <div class="payment-column">
+            {% endif %}
+        <div class="payment-row">
+            <span>{{ loop.index }}</span>
+            <span class="amount">{{ schedule.leas_payment_amount_str }}</span>
         </div>
+        {% if loop.index0 % 10 == 9 or loop.last %}
+            </div>
         {% endif %}
         {% endfor %}
     </div>
@@ -534,24 +536,23 @@
         т.ч.
         НДС)</em></h2>
     <div class="schedule-grid">
-        {% for schedule in schedules %}
-        {% if loop.index0 % 10 == 0 %}
-        <div class="payment-column">
-        {% endif %}
-            <div class="payment-row">
-                <span>{{ loop.index }}</span>
-                    <span class="amount">
+        {% for schedule in com_offer.schedule_data %}
+            {% if loop.index0 % 10 == 0 %}
+                <div class="payment-column">
+            {% endif %}
+        <div class="payment-row">
+            <span>{{ loop.index }}</span>
+            <span class="amount">
                         {{ '-' if schedule.early_repayment_amount_str == '0,00' else schedule.early_repayment_amount_str }}
                     </span>
-            </div>
-        {% if loop.index0 % 10 == 9 or loop.last %}
         </div>
+        {% if loop.index0 % 10 == 9 or loop.last %}
+            </div>
         {% endif %}
         {% endfor %}
     </div>
 </div>
-<br>
-<p class="disclaimer">
+<p class="disclaimer" style="margin-top: 150px">
     Расчеты являются предварительными и ни при каких обстоятельствах не могут рассматриваться в качестве обязательств
     ООО "Лизинговая компания малого бизнеса Республики Татарстан" по участию в сделке на указанных условиях.
 </p>

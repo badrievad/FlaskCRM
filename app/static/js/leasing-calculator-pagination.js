@@ -1,33 +1,33 @@
-function paginateTable(rowsPerPage) {
-    var table, tr, pageCount, paginationContainer, i, j;
-    table = document.querySelector(".custom-table");
+function paginateTable(tableClass, paginationContainerId, rowsPerPage) {
+    let table, tr, pageCount, paginationContainer, i;
+    table = document.querySelector(tableClass);
     tr = table.getElementsByTagName("tr");
-    paginationContainer = document.getElementById("pagination-container");
+    paginationContainer = document.getElementById(paginationContainerId);
     paginationContainer.innerHTML = ""; // Очищаем контейнер пагинации
 
     // Считаем количество страниц
-    pageCount = Math.ceil((tr.length - 1) / rowsPerPage);
+    pageCount = Math.ceil((tr.length - 1) / rowsPerPage); // Предполагаем, что первая строка — заголовок
 
     // Создаем кнопки пагинации
     for (i = 1; i <= pageCount; i++) {
-        var btn = document.createElement("button");
+        let btn = document.createElement("button");
         btn.textContent = i;
         btn.setAttribute("data-page", i);
-        btn.className = "pagination-button";
+        btn.className = `pagination-button-${paginationContainerId}`;  // Уникальный класс для каждой таблицы
         btn.onclick = function () {
-            var page = parseInt(this.getAttribute("data-page"));
-            showPage(page, rowsPerPage);
+            let page = parseInt(this.getAttribute("data-page"));
+            showPage(page, rowsPerPage, tableClass, paginationContainerId);
         };
         paginationContainer.appendChild(btn);
     }
 
     // Показываем первую страницу и выделяем первую кнопку
-    showPage(1, rowsPerPage);
+    showPage(1, rowsPerPage, tableClass, paginationContainerId);
 }
 
-function showPage(page, rowsPerPage) {
-    var table, tr, start, end, i, paginationContainer, buttons;
-    table = document.querySelector(".custom-table");
+function showPage(page, rowsPerPage, tableClass, paginationContainerId) {
+    let table, tr, start, end, i, paginationContainer, buttons;
+    table = document.querySelector(tableClass);
     tr = table.getElementsByTagName("tr");
 
     start = (page - 1) * rowsPerPage + 1; // Начальный индекс строки
@@ -43,12 +43,26 @@ function showPage(page, rowsPerPage) {
     }
 
     // Обновляем выделение активной кнопки
-    paginationContainer = document.getElementById("pagination-container");
-    buttons = paginationContainer.getElementsByClassName("pagination-button");
+    paginationContainer = document.getElementById(paginationContainerId);
+    buttons = paginationContainer.getElementsByClassName(`pagination-button-${paginationContainerId}`);
 
+    // Убираем выделение с предыдущих кнопок
     for (i = 0; i < buttons.length; i++) {
         buttons[i].classList.remove("active");
     }
 
-    buttons[page - 1].classList.add("active");
+    // Проверяем, что кнопка существует, прежде чем добавлять класс active
+    if (buttons[page - 1]) {
+        buttons[page - 1].classList.add("active");
+    }
 }
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Для первой таблицы
+    paginateTable(".custom-table", "pagination-container", 10);
+
+// Для второй таблицы
+    paginateTable(".calc-list-table", "pagination-container-calc", 10);
+});
+

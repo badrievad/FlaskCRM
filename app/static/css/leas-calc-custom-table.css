@@ -2,7 +2,7 @@ html {
     scroll-behavior: smooth;
 }
 
-.custom-table {
+.custom-table, .calc-list-table {
     width: 100%;
     border-collapse: collapse;
     background-color: rgba(248, 249, 250, 0.4); /* Фон всей таблицы */
@@ -10,26 +10,28 @@ html {
 }
 
 .custom-table th,
-.custom-table td {
+.custom-table td,
+.calc-list-table th,
+.calc-list-table td {
     padding: 12px;
     border: 1px solid rgba(49, 98, 78, 0.04); /* Границы ячеек */
     text-align: center;
 }
 
-.custom-table tbody tr {
+.custom-table tbody tr, .calc-list-table tbody tr {
     background-color: rgba(233, 236, 239, 0.1); /* Фон четных строк */
     cursor: pointer; /* Курсор на строках */
 }
 
-.custom-table tbody tr:hover {
+.custom-table tbody tr:hover, .calc-list-table tbody tr:hover {
     background-color: rgb(100, 140, 105, 0.1); /* Фон при наведении */
 }
 
-.custom-table tbody tr {
+.custom-table tbody tr, .calc-list-table tbody tr {
     transition: background-color 0.3s; /* Плавный переход цвета фона */
 }
 
-.custom-table td i {
+.custom-table td i, .calc-list-table td i {
     margin-right: 5px; /* Отступ между иконками */
     cursor: pointer; /* Чтобы курсор менялся на указатель при наведении */
 }

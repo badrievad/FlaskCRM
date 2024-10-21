@@ -1,7 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-    paginateTable(10); // Начальное количество строк на странице
-});
-
 function deleteCalculation(event, calcId) {
     event.stopPropagation(); // Остановить всплытие события, чтобы не вызывать openModal
 

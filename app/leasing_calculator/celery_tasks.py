@@ -1,19 +1,14 @@
 import datetime
-import json
 import time
-import openpyxl
 
 from datetime import date
 from logger import logging
 from celery import shared_task
 
 from .api_for_leas_culc import post_request_leas_calc, upload_schedule, upload_main_info
-from .api_pdf_generate import PDFGeneratorClient
-from ..config import CALCULATION_TEMPLATE_PATH, LEAS_CALC_TEMPLATE_PATH
 from .models import LeasCalculator, Tranches, Insurances
 from .other_utils import validate_item_price
 from .. import db
-from ..deal.work_with_folders import CompanyFolderAPI
 
 
 def intensive_task_simulation(data: dict) -> dict:

@@ -1,5 +1,5 @@
 import json
-from datetime import date
+from datetime import date, datetime
 from pathlib import Path
 
 from flask import (
@@ -31,20 +31,13 @@ from .. import db, cache
 from ..celery_utils import is_celery_alive
 from ..config import FORM_OFFERS_PATH
 from ..deal.deals_validate import DealsValidate
-from ..deal.work_with_folders import CompanyFolderAPI
 from ..leasing_calculator.celery_tasks import long_task
 from ..leasing_calculator.models import (
     LeasCalculator,
     LeasingItem,
     Tranches,
     Insurances,
-    ScheduleAnnuity,
     CommercialOffer,
-    MainAnnuity,
-    ScheduleDifferentiated,
-    MainDifferentiated,
-    ScheduleRegression,
-    MainRegression,
 )
 from ..leasing_calculator.services import update_calculation_service
 
@@ -83,6 +76,44 @@ def get_leasing_calculator() -> render_template:
     )
 
 
+@leas_calc_bp.route("/crm/calculator/update-table", methods=["GET"])
+@login_required
+def update_table() -> str:
+    # Получаем даты начала и конца периода из параметров запроса
+    start_date_str = request.args.get("start_date")
+    end_date_str = request.args.get("end_date")
+
+    # Преобразуем строки дат в объекты datetime
+    if start_date_str:
+        start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+    else:
+        start_date = datetime(1900, 1, 1)  # Начальная дата по умолчанию
+
+    if end_date_str:
+        end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+    else:
+        end_date = datetime.now()  # Текущая дата по умолчанию
+
+    # список расчетов пользователя в выбранный период
+    user_login = current_user.login
+
+    calc_list = (
+        LeasCalculator.query.options(
+            joinedload(LeasCalculator.deal)  # Предварительная загрузка связи deal
+        )
+        .filter(LeasCalculator.manager_login == user_login)
+        .filter(LeasCalculator.date.between(start_date, end_date))
+        .order_by(desc(LeasCalculator.id))
+        .all()
+    )
+
+    # Рендерим только таблицу (в виде HTML)
+    return render_template(
+        "partials/_leasing_calculator_table.html",  # Создадим отдельный шаблон для таблицы
+        calc_list=calc_list,
+    )
+
+
 @leas_calc_bp.route("/crm/calculator/<int:calc_id>", methods=["GET"])
 @login_required
 def get_leasing_calculator_by_id(calc_id: int) -> render_template:
@@ -108,7 +139,6 @@ def create_commercial_offer(leas_calculator_id):
 
     # Проверяем результат выполнения функции
     if success:
-        folder_api = CompanyFolderAPI()
         user_info = {
             "user_login": current_user.login,
             "user_name": current_user.fullname,

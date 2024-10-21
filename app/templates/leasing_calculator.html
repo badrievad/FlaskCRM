@@ -1005,6 +1005,22 @@
                     <h4><i class="fa-solid fa-calculator"
                            style="color: #727a88; margin-top: 50px; margin-bottom: 10px"></i> Созданные
                         расчеты</h4>
+                    <!-- Форма фильтрации по датам -->
+                    <form method="GET" action="#" class="leasing-calculator-date-filter-form">
+                        <div class="leasing-calculator-form-group">
+                            <label for="start_date">Дата начала:</label>
+                            <input type="date" id="start_date" name="start_date" class="leasing-calculator-date-input">
+                        </div>
+
+                        <div class="leasing-calculator-form-group">
+                            <label for="end_date">Дата конца:</label>
+                            <input type="date" id="end_date" name="end_date" class="leasing-calculator-date-input">
+                        </div>
+
+                        <div class="leasing-calculator-filter-btn">
+                            <button type="submit" class="leasing-calculator-filter-button">Показать</button>
+                        </div>
+                    </form>
                     <table class="calc-list-table">
                         <thead>
                         <tr>
@@ -1577,5 +1593,7 @@
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-new.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-overheads.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-pagination.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/leasing-calculator-filter-calcs.js') }}"></script>
+
 </body>
 </html>

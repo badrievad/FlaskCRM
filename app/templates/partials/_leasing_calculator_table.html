@@ -1,0 +1,12 @@
+<tbody id="calc-list-main">
+    {% for calc in calc_list %}
+    <tr onclick="window.location.href='{{ url_for('leas_calc.get_leasing_calculator_by_id', calc_id=calc.id) }}'">
+        <td>{{ loop.index }}</td>
+        <td class="date-ru">{{ calc.item_name }}</td>
+        <td>
+            <i class="fa-regular fa-file-excel" data-id="{{ calc.id }}"
+               onclick="downloadLeaseCalculation(event, '{{ calc.id }}')"></i>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>

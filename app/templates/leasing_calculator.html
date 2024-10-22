@@ -228,11 +228,11 @@
                 <div class="form-group">
                     <div class="part-container first-part">
                         <div class="input-container-item-name item-container">
-                            <label for="item-name">Наименование имущества</label>
-                            <input type="text" id="item-name" name="item-name" maxlength="500">
+                            <input type="text" id="item-name" name="item-name" maxlength="500"
+                                   placeholder="Наименование имущества" style="margin-top: 25px">
                         </div>
                         <div class="input-container-item-condition">
-                            <label>Состояние имущества:</label>
+                            <label for="item-condition" style="margin-top: 20px">Состояние имущества:</label>
                             <input type="hidden" id="item-condition" name="item-condition" value="new">
                         </div>
                         <div class="button-group item-container">
@@ -1009,48 +1009,51 @@
                 </button>
 
                 <div class="loader" id="loader"></div>
-                <div id="created-calculations">
-                    <h4><i class="fa-solid fa-calculator"
-                           style="color: #727a88; margin-top: 50px; margin-bottom: 10px"></i> Созданные
-                        расчеты</h4>
-                    <!-- Форма фильтрации по датам -->
-                    <form method="GET" action="#" class="leasing-calculator-date-filter-form">
-                        <div class="leasing-calculator-form-group start">
-                            <label for="start_date">Дата начала:</label>
-                            <input type="date" id="start_date" name="start_date" class="leasing-calculator-date-input">
-                        </div>
+                <div class="part-container" style="margin-top: 50px">
+                    <div id="created-calculations">
+                        <h4><i class="fa-solid fa-calculator"
+                               style="color: #727a88; margin-bottom: 20px"></i> Созданные
+                            расчеты</h4>
+                        <!-- Форма фильтрации по датам -->
+                        <form method="GET" action="#" class="leasing-calculator-date-filter-form">
+                            <div class="leasing-calculator-form-group start">
+                                <label for="start_date">Дата начала:</label>
+                                <input type="date" id="start_date" name="start_date"
+                                       class="leasing-calculator-date-input">
+                            </div>
 
-                        <div class="leasing-calculator-form-group end">
-                            <label for="end_date">Дата конца:</label>
-                            <input type="date" id="end_date" name="end_date" class="leasing-calculator-date-input">
-                        </div>
+                            <div class="leasing-calculator-form-group end">
+                                <label for="end_date">Дата конца:</label>
+                                <input type="date" id="end_date" name="end_date" class="leasing-calculator-date-input">
+                            </div>
 
-                        <div class="leasing-calculator-filter-btn">
-                            <button type="submit" class="leasing-calculator-filter-button">Показать</button>
-                        </div>
-                    </form>
-                    <table class="calc-list-table">
-                        <thead>
-                        <tr>
-                            <th scope="col">№</th>
-                            <th scope="col">Наименование ПЛ</th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody id="calc-list-main">
-                        {% for calc in calc_list %}
-                            <tr onclick="window.location.href='{{ url_for('leas_calc.get_leasing_calculator_by_id', calc_id=calc.id) }}'">
-                                <td>{{ loop.index }}</td>
-                                <td class="date-ru">{{ calc.item_name }}</td>
-                                <td>
-                                    <i class="fa-regular fa-file-excel" data-id="{{ calc.id }}"
-                                       onclick="downloadLeaseCalculation(event, '{{ calc.id }}')"></i>
-                                </td>
+                            <div class="leasing-calculator-filter-btn">
+                                <button type="submit" class="leasing-calculator-filter-button">Показать</button>
+                            </div>
+                        </form>
+                        <table class="calc-list-table">
+                            <thead>
+                            <tr>
+                                <th scope="col">№</th>
+                                <th scope="col">Наименование ПЛ</th>
+                                <th scope="col"></th>
                             </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    <div id="pagination-container-calc"></div>
+                            </thead>
+                            <tbody id="calc-list-main">
+                            {% for calc in calc_list %}
+                                <tr onclick="window.location.href='{{ url_for('leas_calc.get_leasing_calculator_by_id', calc_id=calc.id) }}'">
+                                    <td>{{ loop.index }}</td>
+                                    <td class="date-ru">{{ calc.item_name }}</td>
+                                    <td>
+                                        <i class="fa-regular fa-file-excel" data-id="{{ calc.id }}"
+                                           onclick="downloadLeaseCalculation(event, '{{ calc.id }}')"></i>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <div id="pagination-container-calc"></div>
+                    </div>
                 </div>
             </div>
         </div>

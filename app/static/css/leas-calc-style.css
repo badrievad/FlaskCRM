@@ -777,3 +777,26 @@ input[readonly] {
     background-color: rgba(72, 104, 121, 0.6);
 }
 
+#calculated-payment-date {
+    color: #1e6034;
+}
+
+#date-warning-icon {
+    cursor: pointer;
+    display: inline-block; /* Убедитесь, что это inline-block, чтобы анимация применялась */
+    animation: bounce 2s ease-in-out infinite; /* Анимация прыжка */
+}
+
+/* Анимация "подскока" */
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0); /* Исходная позиция */
+    }
+    40% {
+        transform: translateY(-20px); /* Высота прыжка */
+    }
+    60% {
+        transform: translateY(-10px); /* Небольшой отскок */
+    }
+}
+

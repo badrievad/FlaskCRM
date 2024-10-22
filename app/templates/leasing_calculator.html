@@ -549,6 +549,14 @@
                         </table>
                     </div>
                 </div>
+                <div class="part-container">
+                    <p id="first-payment-date">
+                        Дата первого платежа по лизингу:
+                        <span id="calculated-payment-date"></span>
+                        <i id="date-warning-icon" class="fa-solid fa-circle-exclamation"
+                           style="display:none; color:#5e2626;"></i>
+                    </p>
+                </div>
                 <br>
                 <div class="line"></div>
                 <div class="part-container">
@@ -1594,6 +1602,7 @@
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-overheads.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-pagination.js') }}"></script>
 <script src="{{ url_for('crm.static', filename='js/leasing-calculator-filter-calcs.js') }}"></script>
+<script src="{{ url_for('crm.static', filename='js/leasing-calculator-first-leas-day.js') }}"></script>
 
 </body>
 </html>

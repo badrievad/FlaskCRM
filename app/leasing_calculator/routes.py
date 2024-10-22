@@ -53,11 +53,16 @@ def get_leasing_calculator() -> render_template:
     user_login = current_user.login
     user_fullname = current_user.fullname
 
+    # Получаем текущую дату
+    today = datetime.today().date()
+
+    # Фильтруем расчеты по дате, чтобы выводить только сегодняшние
     calc_list = (
         LeasCalculator.query.options(
             joinedload(LeasCalculator.deal)  # Предварительная загрузка связи deal
         )
         .filter_by(manager_login=user_login)
+        .filter(LeasCalculator.date == today)  # Фильтр по текущей дате
         .order_by(desc(LeasCalculator.id))
         .all()
     )

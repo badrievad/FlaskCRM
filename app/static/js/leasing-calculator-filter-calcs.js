@@ -23,7 +23,13 @@ document.querySelector('.leasing-calculator-date-filter-form').addEventListener(
 
 document.addEventListener('DOMContentLoaded', function () {
     // Получаем элемент для даты конца
+    const startDateInput = document.getElementById('start_date');
     const endDateInput = document.getElementById('end_date');
+    const creditDate1 = document.getElementById('tranche1-credit-date');
+    const creditDate2 = document.getElementById('tranche2-credit-date');
+    const creditDate3 = document.getElementById('tranche3-credit-date');
+    const creditDate4 = document.getElementById('tranche4-credit-date');
+    const creditDate5 = document.getElementById('tranche5-credit-date');
 
     // Получаем текущую дату
     const today = new Date();
@@ -35,5 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const currentDate = `${yyyy}-${mm}-${dd}`;
 
     // Устанавливаем значение по умолчанию для поля end_date
+    startDateInput.value = currentDate;
     endDateInput.value = currentDate;
+    creditDate1.value = currentDate;
+    creditDate2.value = currentDate;
+    creditDate3.value = currentDate;
+    creditDate4.value = currentDate;
+    creditDate5.value = currentDate;
 });

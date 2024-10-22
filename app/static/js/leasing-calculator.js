@@ -1382,3 +1382,17 @@ document.getElementById('tranche1-credit-date').addEventListener('input', functi
         document.getElementById(id).value = value;
     });
 })
+
+// Получаем элемент и добавляем событие при наведении
+document.getElementById('date-warning-icon').addEventListener('mouseover', function () {
+    // Изменяем цвет текста для обоих целевых элементов
+    document.querySelector('.date-of-credit').style.color = 'red';
+    document.querySelector('.deferment-title').style.color = 'red';
+});
+
+// Возвращаем исходные стили при убирании курсора
+document.getElementById('date-warning-icon').addEventListener('mouseout', function () {
+    document.querySelector('.date-of-credit').style.color = ''; // Возвращаем к исходному цвету
+    document.querySelector('.deferment-title').style.color = ''; // Возвращаем к исходному цвету
+});
+

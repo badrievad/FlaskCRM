@@ -78,7 +78,7 @@ body {
 /* Минималистичная кнопка */
 .btn-hover {
     display: block;
-    width: 50%;
+    width: 35%;
     font-size: 14px;
     font-weight: 600;
     color: #fff;
@@ -86,15 +86,15 @@ body {
     height: 45px;
     text-align: center;
     border: none;
-    margin: 0 auto;
+    margin: 0 auto 45px;
     border-radius: 8px; /* Сделаем границу более аккуратной */
-    background: rgba(29, 161, 242, 0.6);
+    background: rgba(100, 155, 182, 0.7);
     font-family: 'Roboto', sans-serif;
 }
 
 /* Эффект при наведении */
 .btn-hover:hover {
-    background: rgba(29, 161, 242, 0.7);
+    background: rgba(100, 155, 182, 0.8);
 }
 
 

@@ -1426,28 +1426,21 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.task_id) {
-                            // Периодическая проверка состояния задачи
-                            checkTaskStatus(data.task_id, activeTabText, itemPrice, initialPayment,
-                                creditTerm, itemName);
+                            localStorage.setItem('active_task_id', data.task_id); // Сохраняем task_id
+                            checkTaskStatus(data.task_id); // Начинаем проверку статуса задачи
                         } else {
-                            showError('Ошибка при отправке задачи. Попробуйте запустить расчет еще раз. Если ошибка повторяется, обратитесь в службу поддержки', 'Ошибка');
-                            loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                            preCalculateButton.disabled = false; // Разблокировать кнопку
-                            preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                            showError('Ошибка при отправке задачи.');
                         }
                     })
                     .catch(error => {
                         console.error('Ошибка:', error);
-                        showError('Произошла ошибка при отправке задачи', 'Ошибка');
-                        loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                        preCalculateButton.disabled = false; // Разблокировать кнопку
-                        preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+                        showError('Ошибка при отправке задачи.');
                     });
             }
         });
     });
 
-
+    // Функция проверки статуса задачи
     function checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
                              creditTerm, itemName) {
         fetch(`./calculator/status/${taskId}`, {
@@ -1456,6 +1449,9 @@
             .then(response => response.json())
             .then(data => {
                 if (data.state === 'SUCCESS') {
+                    // Убираем task_id из localStorage, если задача завершена
+                    localStorage.removeItem('active_task_id');
+
                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
                     const preCalculateButton = document.getElementById('pre-calculate-button');
                     preCalculateButton.disabled = false; // Разблокировать кнопку
@@ -1468,33 +1464,51 @@
                         creditTerm, itemName);
 
                 } else if (data.state === 'FAILURE') {
+                    localStorage.removeItem('active_task_id'); // Убираем task_id при ошибке
+
                     document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
                     const preCalculateButton = document.getElementById('pre-calculate-button');
                     preCalculateButton.disabled = false; // Разблокировать кнопку
                     preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
                     showError('Ошибка при выполнении расчета. Попробуйте запустить расчет еще раз', 'Ошибка');
                 } else {
-                    // Если задача еще не завершена, проверка снова через некоторое время
+                    // Если задача еще не завершена, продолжаем проверку
                     setTimeout(function () {
-                        checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
-                            creditTerm, itemName);
+                        checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment, creditTerm, itemName);
                     }, 2000); // Повторная проверка через 2 секунды
                 }
             })
             .catch(error => {
-                console.error('Ошибка:', error);
+                console.error('Ошибка при проверке состояния задачи:', error);
                 showError('Произошла ошибка при проверке состояния задачи', 'Ошибка');
-                document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+                document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
                 const preCalculateButton = document.getElementById('pre-calculate-button');
                 preCalculateButton.disabled = false; // Разблокировать кнопку
                 preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
             });
     }
 
+    // Функция для добавления новой строки в таблицу
     function addNewCalculation(calculation, activeTabText, itemPrice, initialPayment, creditTerm, itemName) {
         const calcListBody = document.getElementById('calc-list-main');
-        const newRow = document.createElement('tr');
 
+        // Проверяем статус расчета
+        if (calculation.status !== 'completed') {
+            console.log(`Расчет с ID ${calculation.id} имеет статус ${calculation.status} и не будет добавлен.`);
+            return; // Не добавляем строку, если расчет не завершен
+        }
+
+        // Проверяем, был ли расчет уже добавлен
+        const addedCalculations = JSON.parse(localStorage.getItem('added_calculations')) || [];
+
+        // Если расчет уже добавлен, выходим
+        if (addedCalculations.includes(calculation.id)) {
+            return;
+        }
+
+        // Добавляем новую строку в таблицу
+        const newRow = document.createElement('tr');
+        newRow.id = `row-${calculation.id}`; // Присваиваем строке ID, чтобы можно было удалить ее
         newRow.innerHTML = `
         <td>${calcListBody.rows.length + 1}</td>
         <td class="item-name">${calculation.item_name}</td>
@@ -1504,21 +1518,43 @@
         </td>
     `;
 
-        // Проверяем наличие calculation.id
+        // Добавляем событие для перехода на страницу расчета
         if (calculation.id) {
-            // Или напрямую строим URL
             const calcUrl = '/crm/calculator/' + calculation.id;
-
             newRow.onclick = function () {
                 window.location.href = calcUrl;
             };
             newRow.style.cursor = 'pointer';
-        } else {
-            console.error('calculation.id is missing');
         }
 
+        // Вставляем новую строку в начало таблицы
         calcListBody.insertBefore(newRow, calcListBody.firstChild);
+
+        // Сохраняем ID расчета в localStorage
+        addedCalculations.push(calculation.id);
+        localStorage.setItem('added_calculations', JSON.stringify(addedCalculations));
     }
+
+
+    // Проверка состояния задачи при загрузке страницы
+    document.addEventListener('DOMContentLoaded', function () {
+        const activeTaskId = localStorage.getItem('active_task_id');
+        console.log('Active task ID:', activeTaskId);
+
+        if (activeTaskId) {
+            // Если есть активная задача, продолжаем проверку состояния
+            document.getElementById('pre-calculate-button').disabled = true;
+            document.getElementById('pre-calculate-button').classList.add('button-disabled');
+            document.getElementById('loader').style.display = 'flex';
+            checkTaskStatus(activeTaskId);
+        }
+
+        // Восстанавливаем добавленные расчеты из localStorage
+        const addedCalculations = JSON.parse(localStorage.getItem('added_calculations')) || [];
+        addedCalculations.forEach(function (calculationId) {
+            // Здесь можно добавить логику для восстановления строки в таблице, если нужно
+        });
+    });
 
 
     function showSuccess(message) {

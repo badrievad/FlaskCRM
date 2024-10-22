@@ -179,12 +179,6 @@ def intensive_task_simulation(data: dict) -> dict:
         db.session.add(new_calc)
         db.session.commit()
 
-        # new_title_xlsx = f"Лизинговый калькулятор (id_{new_deal_id}).xlsx"
-        # path_to_xlsx = CALCULATION_TEMPLATE_PATH / new_title_xlsx
-        #
-        # # Создание директории, если она не существует
-        # CALCULATION_TEMPLATE_PATH.mkdir(parents=True, exist_ok=True)
-
         calculation_results = post_request_leas_calc(data, new_calc.id)
 
         upload_schedule(calculation_results)
@@ -193,32 +187,11 @@ def intensive_task_simulation(data: dict) -> dict:
 
         new_calc.path_to_xlsx = com_off_name
         db.session.commit()
-
-        # folder_api = CompanyFolderAPI()
-        # user_info = {
-        #     "user_login": user_login,
-        #     "user_name": data["user_name"],
-        #     "user_email": data["user_email"],
-        #     "user_phone": data["user_phone"],
-        # }
-        # pdf_api = PDFGeneratorClient(new_deal_id, user_info)
-        # try:
-        #     new_calc.path_to_pdf = pdf_api.generate_pdf()
-        #     new_title_pdf = f"Коммерческое предложение (id_{new_deal_id}).pdf"
-        #     new_calc.title = new_title_pdf
-        # except Exception as e:
-        #     new_calc.path_to_pdf = None
-        #     logging.error(f"Error generating PDF: {e}")
-        #     logging.info("PDF не создался. Сервис недоступен.")
-        # new_calc.path_to_xlsx = folder_api.create_commercial_offer(
-        #     path_to_xlsx, user_login
-        # )
-        # db.session.commit()
     except Exception as e:
         db.session.rollback()
         raise e
 
-    result = new_calc.to_dict()
+    result: dict = {**new_calc.to_dict(), "calc_id": new_calc.id}
 
     return result
 

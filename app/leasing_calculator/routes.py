@@ -62,7 +62,7 @@ def get_leasing_calculator() -> render_template:
         LeasCalculator.query.options(
             joinedload(LeasCalculator.deal)  # Предварительная загрузка связи deal
         )
-        .filter_by(manager_login=user_login)
+        .filter_by(manager_login=user_login, status="completed")
         .filter(LeasCalculator.date == today)  # Фильтр по текущей дате
         .order_by(desc(LeasCalculator.id))
         .all()
@@ -231,28 +231,55 @@ def start_task() -> jsonify:
 def get_status(task_id) -> jsonify:
     try:
         task = long_task.AsyncResult(task_id)
+
+        # Инициализируем response
+        response = {"state": task.state, "status": None, "result": None}
+
         if task.state == "PENDING":
-            response = {"state": task.state, "status": "Pending..."}
+            response["status"] = "Pending..."
+
         elif task.state != "FAILURE":
-            response = {"state": task.state, "status": task.info}
+            response["status"] = task.info
+
             if task.state == "SUCCESS" and task.result:
-                response["result"] = {
-                    "id": task.result.get("id"),
-                    "title": task.result.get("title"),
-                    "date_ru": task.result.get("date_ru"),
-                    "manager_login": task.result.get("manager_login"),
-                    "item_type": task.result.get("item_type"),
-                    "item_name": task.result.get("item_name"),
-                    "item_price": task.result.get("item_price"),
-                    "item_price_str": task.result.get("item_price_str"),
-                }
+                calc_id = task.result.get("calc_id")
+
+                if calc_id is not None:
+                    logging.info(
+                        f"Task {task_id} completed successfully. Calc_id: {calc_id}"
+                    )
+
+                    # Обновляем статус в базе данных
+                    calculator = LeasCalculator.query.get(calc_id)
+                    if calculator:
+                        calculator.status = "completed"
+                        db.session.commit()
+
+                        response["result"] = {
+                            "id": task.result.get("id"),
+                            "title": task.result.get("title"),
+                            "date_ru": task.result.get("date_ru"),
+                            "manager_login": task.result.get("manager_login"),
+                            "item_type": task.result.get("item_type"),
+                            "item_name": task.result.get("item_name"),
+                            "item_price": task.result.get("item_price"),
+                            "item_price_str": task.result.get("item_price_str"),
+                            "status": calculator.status,
+                        }
+                    else:
+                        logging.warning(f"Calculator with Calc_id {calc_id} not found.")
+                else:
+                    logging.warning(f"Task {task_id} completed but no calc_id found.")
         else:
-            response = {"state": task.state, "status": str(task.info)}
+            response["status"] = str(task.info)
+            current_app.logger.error(f"Task {task_id} failed with error: {task.info}")
+
         current_app.logger.info(f"Task {task_id} status: {response}")
         return jsonify(response)
+
     except Exception as e:
         current_app.logger.error(f"Error fetching status for task {task_id}: {e}")
-        return jsonify({"error": str(e)}), 500
+        return jsonify({"error": str(e), "task_id": None}), 500
 
 
 @leas_calc_bp.route("/crm/calculator/delete/<int:calc_id>", methods=["POST"])

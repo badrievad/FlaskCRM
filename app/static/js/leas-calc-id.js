@@ -11,6 +11,14 @@ function createCommercialOffer(scheduleType, leasCalculatorId) {
         button.style.cursor = 'not-allowed'; // Изменяем курсор на "запрещено"
     });
 
+    // Блокируем ссылку "Назад"
+    const backButton = document.querySelector('.btn-back');
+    if (backButton) {
+        backButton.style.opacity = '0.6'; // Добавляем полупрозрачность
+        backButton.style.pointerEvents = 'none'; // Отключаем возможность клика
+        backButton.style.cursor = 'not-allowed'; // Изменяем курсор на "запрещено"
+    }
+
     // Создаем форму для отправки POST-запроса
     const form = document.createElement('form');
     form.method = 'POST';

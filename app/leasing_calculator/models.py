@@ -80,6 +80,7 @@ class LeasCalculator(db.Model):
         db.String(200), nullable=True
     )  # Название xlsx файла (для скачивания)
     deal_id = db.Column(db.Integer, db.ForeignKey("deals.id"), nullable=True)
+    status = db.Column(db.String(50), default="pending")
 
     tranche = relationship(
         "Tranches",
@@ -209,6 +210,7 @@ class LeasCalculator(db.Model):
             "allocate_deposit": self.allocate_deposit,
             "allocate_redemption": self.allocate_redemption,
             "schedule_type": self.schedule_type,
+            "status": self.status,
         }
 
 

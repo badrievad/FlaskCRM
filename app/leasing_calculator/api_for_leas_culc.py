@@ -92,6 +92,7 @@ def upload_schedule(data: dict):
                 new_schedule = model_name(
                     calc_id=item.calc_id,
                     payment_date=item.payment_date,
+                    payment_date_ru=item.payment_date.strftime("%d.%m.%Y"),
                     leas_payment_amount=item.leas_payment_amount,
                     leas_payment_amount_str=validate_item_price(
                         str(item.leas_payment_amount)

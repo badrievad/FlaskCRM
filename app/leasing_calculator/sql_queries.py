@@ -274,3 +274,52 @@ def get_list_of_commercial_offers(user_login, offer_id=None) -> list:
         )
 
     return com_offers_list
+
+
+def get_list_of_leas_calculators(user_login, calc_id=None) -> list:
+    logging.info(f"LeasCalculator ID: {calc_id}")
+
+    # Запрос для получения лизинговых калькуляторов
+    if calc_id:
+        query = db.session.query(LeasCalculator).filter(LeasCalculator.id == calc_id)
+    else:
+        query = db.session.query(LeasCalculator).filter(
+            LeasCalculator.manager_login == user_login
+        )
+
+    # Выполняем запрос
+    leas_calculators = query.all()
+
+    # Создаем пустой список для вывода лизинговых калькуляций с расчетами
+    leas_calc_list = []
+
+    # Обрабатываем каждый лизинговый калькулятор
+    for calc in leas_calculators:
+        # Подгружаем данные для всех типов графиков платежей
+        schedule_annuity = ScheduleAnnuity.query.filter_by(calc_id=calc.id).all()
+        schedule_differentiated = ScheduleDifferentiated.query.filter_by(
+            calc_id=calc.id
+        ).all()
+        schedule_regression = ScheduleRegression.query.filter_by(calc_id=calc.id).all()
+
+        # Подгружаем основные данные для всех типов
+        main_annuity = MainAnnuity.query.filter_by(calc_id=calc.id).first()
+        main_differentiated = MainDifferentiated.query.filter_by(
+            calc_id=calc.id
+        ).first()
+        main_regression = MainRegression.query.filter_by(calc_id=calc.id).first()
+
+        # Добавляем информацию в итоговый список
+        leas_calc_list.append(
+            {
+                "leas_calculator": calc,
+                "schedule_annuity": schedule_annuity,
+                "schedule_differentiated": schedule_differentiated,
+                "schedule_regression": schedule_regression,
+                "main_annuity": main_annuity,
+                "main_differentiated": main_differentiated,
+                "main_regression": main_regression,
+            }
+        )
+
+    return leas_calc_list

@@ -1,4 +1,16 @@
 function createCommercialOffer(scheduleType, leasCalculatorId) {
+    // Блокируем все кнопки
+    document.getElementById('calculate-button-annuity').disabled = true;
+    document.getElementById('calculate-button-differentiated').disabled = true;
+    document.getElementById('calculate-button-regression').disabled = true;
+
+    // Изменяем стиль для заблокированных кнопок
+    const buttons = document.querySelectorAll('.btn-hover');
+    buttons.forEach(button => {
+        button.style.opacity = '0.6'; // Добавляем полупрозрачность
+        button.style.cursor = 'not-allowed'; // Изменяем курсор на "запрещено"
+    });
+
     // Создаем форму для отправки POST-запроса
     const form = document.createElement('form');
     form.method = 'POST';

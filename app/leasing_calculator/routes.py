@@ -26,6 +26,7 @@ from .sql_queries import (
     create_or_update_seller_and_link_to_leas_calc,
     create_commercial_offer_in_db,
     get_list_of_commercial_offers,
+    get_list_of_leas_calculators,
 )
 from .. import db, cache
 from ..celery_utils import is_celery_alive
@@ -123,9 +124,11 @@ def update_table() -> str:
 @login_required
 def get_leasing_calculator_by_id(calc_id: int) -> render_template:
     logging.info(f"Запрос на отображение расчета (id_{calc_id})")
-    calc = LeasCalculator.query.get(calc_id)
+    calc_list = get_list_of_leas_calculators(current_user.login, calc_id)
     return render_template(
-        "leasing_calculator_by_id.html", calc=calc, leas_calculator_id=calc_id
+        "leasing_calculator_by_id.html",
+        calc_list=calc_list[0],
+        leas_calculator_id=calc_id,
     )
 
 
@@ -149,6 +152,7 @@ def create_commercial_offer(leas_calculator_id):
             "user_name": current_user.fullname,
             "user_email": current_user.email,
             "user_phone": current_user.mobilenumber,
+            "user_telegram": current_user.telegram,
         }
         pdf_api = PDFGeneratorClient(offer_id, user_info)
 
@@ -180,7 +184,7 @@ def create_commercial_offer(leas_calculator_id):
         logging.info("Произошла ошибка при создании коммерческого предложения")
 
     # Возвращаем пользователя на предыдущую страницу
-    return redirect(url_for("leas_calc.get_leasing_calculator"))
+    return redirect(url_for("leas_calc.get_leasing_calculator") + "#created-proposals")
 
 
 # Эндпоинт для запуска фоновой задачи
@@ -443,6 +447,7 @@ def show_commercial_offer(offer_id) -> render_template:
         "name": request.args.get("name"),
         "email": request.args.get("email"),
         "phone": request.args.get("phone"),
+        "telegram": request.args.get("telegram"),
     }
 
     com_offers_list = get_list_of_commercial_offers(

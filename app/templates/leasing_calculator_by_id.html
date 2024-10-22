@@ -13,16 +13,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet">
 </head>
 <body>
+<!-- Кнопка "Назад", которая ведет на маршрут get_leasing_calculator -->
+<div style="margin: 20px;">
+    <a href="{{ url_for('leas_calc.get_leasing_calculator') }}" class="btn-back">← Назад</a>
+</div>
 <div class="container">
     <!-- Колонка Аннуитет -->
     <div class="column">
         <h2>Аннуитет</h2>
         <button class="btn-hover color-5" id="calculate-button-annuity"
                 onclick="createCommercialOffer('annuity', {{ leas_calculator_id }})">
-            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП (аннуитет)
+            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП
         </button>
         <div class="content">
             <!-- Разместите здесь ваши строки и график для Аннуитета -->
+            <p>Дата формирования расчета: </p><span>{{ calc_list.leas_calculator.date_ru }}</span>
+            <p>Наименование имущества: </p><span>{{ calc_list.leas_calculator.item_name }}</span>
+            <p>Стоимость по ДКП: </p><span>{{ calc_list.leas_calculator.item_price_str }} руб.</span>
+            <p>Стоимость по ДЛ: </p><span>{{ calc_list.main_annuity.lease_agreement_amount_str }} руб.</span>
+            <p>Маржа компании: </p><span>{{ calc_list.main_annuity.company_margin_str }} руб.</span>
+            <p>Эффективная ставка: </p><span>{{ calc_list.main_annuity.effective_rate_str }} %</span>
+        </div>
+        <div class="payment-schedule">
+            <h2><i class="fa-regular fa-calendar-days"></i> ГРАФИК ЛИЗИНГОВЫХ ПЛАТЕЖЕЙ</h2>
+            <div class="schedule-grid">
+                {% for schedule in calc_list.schedule_annuity %}
+                    {% if loop.index0 % 10 == 0 %}
+                        <div class="payment-column">
+                    {% endif %}
+                <div class="payment-row">
+                    <span>{{ loop.index }}</span>
+                    <span class="payment-date">{{ schedule.payment_date_ru }}</span>
+                    <span class="payment-amount">{{ schedule.leas_payment_amount_str }}</span>
+                </div>
+                {% if loop.index0 % 10 == 9 or loop.last %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
     <!-- Колонка Дифференцированный -->
@@ -30,10 +58,34 @@
         <h2>Дифференцированный</h2>
         <button class="btn-hover color-5" id="calculate-button-differentiated"
                 onclick="createCommercialOffer('differentiated', {{ leas_calculator_id }})">
-            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП (дифференцированный)
+            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП
         </button>
         <div class="content">
             <!-- Разместите здесь ваши строки и график для Дифференцированного -->
+            <p>Дата формирования расчета: </p><span>{{ calc_list.leas_calculator.date_ru }}</span>
+            <p>Наименование имущества: </p><span>{{ calc_list.leas_calculator.item_name }}</span>
+            <p>Стоимость по ДКП: </p><span>{{ calc_list.leas_calculator.item_price_str }} руб.</span>
+            <p>Стоимость по ДЛ: </p><span>{{ calc_list.main_differentiated.lease_agreement_amount_str }} руб.</span>
+            <p>Маржа компании: </p><span>{{ calc_list.main_differentiated.company_margin_str }} руб.</span>
+            <p>Эффективная ставка: </p><span>{{ calc_list.main_differentiated.effective_rate_str }} %</span>
+        </div>
+        <div class="payment-schedule">
+            <h2><i class="fa-regular fa-calendar-days"></i> ГРАФИК ЛИЗИНГОВЫХ ПЛАТЕЖЕЙ</h2>
+            <div class="schedule-grid">
+                {% for schedule in calc_list.schedule_differentiated %}
+                    {% if loop.index0 % 10 == 0 %}
+                        <div class="payment-column">
+                    {% endif %}
+                <div class="payment-row">
+                    <span>{{ loop.index }}</span>
+                    <span class="payment-date">{{ schedule.payment_date_ru }}</span>
+                    <span class="payment-amount">{{ schedule.leas_payment_amount_str }}</span>
+                </div>
+                {% if loop.index0 % 10 == 9 or loop.last %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
     <!-- Колонка Регрессивный -->
@@ -41,10 +93,34 @@
         <h2>Регрессивный</h2>
         <button class="btn-hover color-5" id="calculate-button-regression"
                 onclick="createCommercialOffer('regressive', {{ leas_calculator_id }})">
-            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП (регрессивный)
+            <i class="fa-regular fa-floppy-disk"></i> Сформировать КП
         </button>
         <div class="content">
             <!-- Разместите здесь ваши строки и график для Регрессивного -->
+            <p>Дата формирования расчета: </p><span>{{ calc_list.leas_calculator.date_ru }}</span>
+            <p>Наименование имущества: </p><span>{{ calc_list.leas_calculator.item_name }}</span>
+            <p>Стоимость по ДКП: </p><span>{{ calc_list.leas_calculator.item_price_str }} руб.</span>
+            <p>Стоимость по ДЛ: </p><span>{{ calc_list.main_regression.lease_agreement_amount_str }} руб.</span>
+            <p>Маржа компании: </p><span>{{ calc_list.main_regression.company_margin_str }} руб.</span>
+            <p>Эффективная ставка: </p><span>{{ calc_list.main_regression.effective_rate_str }} %</span>
+        </div>
+        <div class="payment-schedule">
+            <h2><i class="fa-regular fa-calendar-days"></i> ГРАФИК ЛИЗИНГОВЫХ ПЛАТЕЖЕЙ</h2>
+            <div class="schedule-grid">
+                {% for schedule in calc_list.schedule_regression %}
+                    {% if loop.index0 % 10 == 0 %}
+                        <div class="payment-column">
+                    {% endif %}
+                <div class="payment-row">
+                    <span>{{ loop.index }}</span>
+                    <span class="payment-date">{{ schedule.payment_date_ru }}</span>
+                    <span class="payment-amount">{{ schedule.leas_payment_amount_str }}</span>
+                </div>
+                {% if loop.index0 % 10 == 9 or loop.last %}
+                    </div>
+                {% endif %}
+                {% endfor %}
+            </div>
         </div>
     </div>
 </div>

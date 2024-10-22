@@ -21,20 +21,35 @@ def process_login():
     if form.validate_on_submit():
         user = User.query.filter_by(login=form.username.data).first()
         if user and user.check_password(form.password.data):
+            # Проверяем, есть ли у пользователя активная сессия
+            if user.active_session_id:
+                flash("Пользователь с этим логином уже авторизован на сайте.", "info")
+                return redirect(url_for("user.login"))
+
+            # Авторизуем пользователя
             login_user(user, remember=form.remember_me.data)
-            logging.info(f"{current_user} зашел на сайт.")
-            session["username"] = current_user.login  # Устанавливаем username в сессию
-            if current_user.is_manager:
+            logging.info(f"{user.login} зашел на сайт.")
+
+            # Сохраняем новый идентификатор сессии
+            user.set_active_session()
+
+            session["username"] = user.login
+
+            # Перенаправляем в зависимости от роли
+            if user.is_manager:
                 return redirect(url_for("leas_calc.get_leasing_calculator"))
             return redirect(url_for("deal.index_crm"))
         else:
-            logging.info("Неправильный логин или пароль")
             flash("Неправильный логин или пароль", "error")
     return redirect(url_for("user.login"))
 
 
 @user_bp.route("/crm/user/logout")
 def exit_user():
+    if current_user.is_authenticated:
+        # Очищаем активную сессию
+        current_user.clear_active_session()
+
     logout_user()
     session.pop("username", None)
     return redirect(url_for("user.login"))

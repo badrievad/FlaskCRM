@@ -2,6 +2,7 @@ from .. import db
 
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from uuid import uuid4
 
 
 class User(db.Model, UserMixin):
@@ -19,6 +20,19 @@ class User(db.Model, UserMixin):
     mobilenumber = db.Column(db.String())
     fon_url = db.Column(db.String(), default="images/background/default.jpg")
     telegram = db.Column(db.String(length=50))
+
+    # Поле для хранения идентификатора активной сессии
+    active_session_id = db.Column(db.String(36), nullable=True)
+
+    def set_active_session(self):
+        """Устанавливаем новый идентификатор активной сессии."""
+        self.active_session_id = str(uuid4())
+        db.session.commit()
+
+    def clear_active_session(self):
+        """Очищаем идентификатор активной сессии при выходе."""
+        self.active_session_id = None
+        db.session.commit()
 
     def set_password(self, password):
         self.password = generate_password_hash(password)

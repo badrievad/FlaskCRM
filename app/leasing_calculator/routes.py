@@ -19,7 +19,11 @@ from logger import logging
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
 from .api_pdf_generate import PDFGeneratorClient
-from .api_yandex_cloud import yandex_download_file_s3, yandex_delete_file_s3
+from .api_yandex_cloud import (
+    yandex_download_file_s3,
+    yandex_delete_file_s3,
+    yandex_upload_file_s3,
+)
 from .other_utils import validate_item_price
 from .pydantic_models import ValidateFields
 from .sql_queries import (
@@ -559,3 +563,26 @@ def update_seller():
     )
 
     return jsonify(response_data), status_code
+
+
+@leas_calc_bp.route("/crm/calculator/upload-file", methods=["POST"])
+def upload_file():
+    logging.info("Запрос на загрузку файла в Yandex Object Storage")
+    # Получаем файл из запроса
+    file = request.files.get("file")
+
+    if not file:
+        return jsonify({"error": "Файл не загружен"}), 400
+
+    try:
+        # Получаем имя файла
+        filename = file.filename
+        logging.info(f"Имя файла: {filename}")
+
+        # Загружаем файл на облако через функцию
+        yandex_upload_file_s3(file, filename)
+
+        return jsonify({"message": "Файл успешно загружен", "file_name": filename}), 200
+
+    except Exception as e:
+        return jsonify({"error": f"Ошибка при загрузке файла: {str(e)}"}), 500

@@ -86,3 +86,31 @@ def yandex_delete_file_s3(file_name: str) -> None:
         logging.error(f"An error occurred in Boto3: {e}")
     except Exception as e:
         logging.error(f"An unexpected error occurred: {e}")
+
+
+def yandex_upload_file_s3(file_obj, file_name) -> None:
+    try:
+        # Создаем сессию и клиент для работы с Yandex Object Storage
+        session = boto3.session.Session()
+        s3 = session.client(
+            service_name="s3", endpoint_url="https://storage.yandexcloud.net"
+        )
+
+        # Загрузка файла из объекта FileStorage
+        s3.upload_fileobj(file_obj, BUCKET_NAME, file_name)
+        logging.info(f"File '{file_name}' successfully uploaded to Yandex Cloud.")
+
+    except NoCredentialsError:
+        logging.error(
+            "No credentials provided. Please check your AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY."
+        )
+    except PartialCredentialsError:
+        logging.error(
+            "Incomplete credentials provided. Please ensure both AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are set."
+        )
+    except ClientError as e:
+        logging.error(f"Client error occurred: {e}")
+    except BotoCoreError as e:
+        logging.error(f"An error occurred in Boto3: {e}")
+    except Exception as e:
+        logging.error(f"An unexpected error occurred: {e}")

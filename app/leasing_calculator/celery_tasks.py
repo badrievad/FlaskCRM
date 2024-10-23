@@ -181,6 +181,10 @@ def intensive_task_simulation(data: dict) -> dict:
 
         calculation_results = post_request_leas_calc(data, new_calc.id)
 
+        if calculation_results.get("error"):
+            logging.error(calculation_results.get("error"))
+            raise Exception
+
         upload_schedule(calculation_results)
         upload_main_info(calculation_results)
         com_off_name = f"Лизинговый калькулятор version 1.8_{new_calc.id}.xlsm"

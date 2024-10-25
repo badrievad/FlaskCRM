@@ -1,6 +1,7 @@
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload
 
+from .api_for_leas_culc import upload_schedule, upload_main_info
 from .models import (
     Seller,
     LeasCalculator,
@@ -11,11 +12,14 @@ from .models import (
     MainDifferentiated,
     ScheduleRegression,
     MainRegression,
+    Tranches,
+    Insurances,
 )
-from .other_utils import dadata_info_company, dadata_result
+from .other_utils import dadata_info_company, dadata_result, validate_item_price
 from .. import db
 from logger import logging
 from ..deal.models import Bank
+from datetime import datetime, date
 
 
 def create_or_update_seller_and_link_to_leas_calc(
@@ -323,3 +327,199 @@ def get_list_of_leas_calculators(user_login, calc_id=None) -> list:
         )
 
     return leas_calc_list
+
+
+def create_new_leas_calc(user_login) -> int | None:
+    try:
+        new_calc = LeasCalculator(
+            manager_login=user_login,
+            date=datetime.now(),
+            date_ru=date.today().strftime("%d.%m.%Y"),
+        )
+        db.session.add(new_calc)
+        db.session.commit()
+        return new_calc.id
+    except SQLAlchemyError as e:
+        logging.error(f"Error creating new LeasCalculator. Error: {str(e)}")
+        return None
+    except Exception as e:
+        logging.error(str(e))
+        return None
+
+
+def write_information_to_leas_calc(data: dict, calc_id, file_name: str) -> None:
+    try:
+        new_insurance = Insurances(
+            insurance_casko1=data["insurances"]["insurance1"]["casko"],
+            insurance_casko2=data["insurances"]["insurance2"]["casko"],
+            insurance_casko3=data["insurances"]["insurance3"]["casko"],
+            insurance_casko4=data["insurances"]["insurance4"]["casko"],
+            insurance_casko5=data["insurances"]["insurance5"]["casko"],
+            insurance_osago1=data["insurances"]["insurance1"]["osago"],
+            insurance_osago2=data["insurances"]["insurance2"]["osago"],
+            insurance_osago3=data["insurances"]["insurance3"]["osago"],
+            insurance_osago4=data["insurances"]["insurance4"]["osago"],
+            insurance_osago5=data["insurances"]["insurance5"]["osago"],
+            health_insurance1=data["insurances"]["insurance1"]["health"],
+            health_insurance1_str=validate_item_price(
+                str(data["insurances"]["insurance1"]["health"])
+            ),
+            health_insurance2=data["insurances"]["insurance2"]["health"],
+            health_insurance2_str=validate_item_price(
+                str(data["insurances"]["insurance2"]["health"])
+            ),
+            health_insurance3=data["insurances"]["insurance3"]["health"],
+            health_insurance3_str=validate_item_price(
+                str(data["insurances"]["insurance3"]["health"])
+            ),
+            health_insurance4=data["insurances"]["insurance4"]["health"],
+            health_insurance4_str=validate_item_price(
+                str(data["insurances"]["insurance4"]["health"])
+            ),
+            health_insurance5=data["insurances"]["insurance5"]["health"],
+            health_insurance5_str=validate_item_price(
+                str(data["insurances"]["insurance5"]["health"])
+            ),
+            other_insurance1=data["insurances"]["insurance1"]["other"],
+            other_insurance1_str=validate_item_price(
+                str(data["insurances"]["insurance1"]["other"])
+            ),
+            other_insurance2=data["insurances"]["insurance2"]["other"],
+            other_insurance2_str=validate_item_price(
+                str(data["insurances"]["insurance2"]["other"])
+            ),
+            other_insurance3=data["insurances"]["insurance3"]["other"],
+            other_insurance3_str=validate_item_price(
+                str(data["insurances"]["insurance3"]["other"])
+            ),
+            other_insurance4=data["insurances"]["insurance4"]["other"],
+            other_insurance4_str=validate_item_price(
+                str(data["insurances"]["insurance4"]["other"])
+            ),
+            other_insurance5=data["insurances"]["insurance5"]["other"],
+            other_insurance5_str=validate_item_price(
+                str(data["insurances"]["insurance5"]["other"])
+            ),
+        )
+        new_tranche = Tranches(
+            tranche_1_size=data["tranches"]["tranche1"]["size"],
+            tranche_1_rate=data["tranches"]["tranche1"]["rate"],
+            tranche_1_fee=data["tranches"]["tranche1"]["fee"],
+            tranche_1_own_fee=data["tranches"]["tranche1"]["own_fee"],
+            tranche_1_credit_date=data["tranches"]["tranche1"]["credit_date"],
+            tranche_1_payment_deferment=data["tranches"]["tranche1"][
+                "payment_deferment"
+            ],
+            tranche_2_size=data["tranches"]["tranche2"]["size"],
+            tranche_2_rate=data["tranches"]["tranche2"]["rate"],
+            tranche_2_fee=data["tranches"]["tranche2"]["fee"],
+            tranche_2_own_fee=data["tranches"]["tranche2"]["own_fee"],
+            tranche_2_credit_date=data["tranches"]["tranche2"]["credit_date"],
+            tranche_2_payment_deferment=data["tranches"]["tranche2"][
+                "payment_deferment"
+            ],
+            tranche_3_size=data["tranches"]["tranche3"]["size"],
+            tranche_3_rate=data["tranches"]["tranche3"]["rate"],
+            tranche_3_fee=data["tranches"]["tranche3"]["fee"],
+            tranche_3_own_fee=data["tranches"]["tranche3"]["own_fee"],
+            tranche_3_credit_date=data["tranches"]["tranche3"]["credit_date"],
+            tranche_3_payment_deferment=data["tranches"]["tranche3"][
+                "payment_deferment"
+            ],
+            tranche_4_size=data["tranches"]["tranche4"]["size"],
+            tranche_4_rate=data["tranches"]["tranche4"]["rate"],
+            tranche_4_fee=data["tranches"]["tranche4"]["fee"],
+            tranche_4_own_fee=data["tranches"]["tranche4"]["own_fee"],
+            tranche_4_credit_date=data["tranches"]["tranche4"]["credit_date"],
+            tranche_4_payment_deferment=data["tranches"]["tranche4"][
+                "payment_deferment"
+            ],
+            tranche_5_size=data["tranches"]["tranche5"]["size"],
+            tranche_5_rate=data["tranches"]["tranche5"]["rate"],
+            tranche_5_fee=data["tranches"]["tranche5"]["fee"],
+            tranche_5_own_fee=data["tranches"]["tranche5"]["own_fee"],
+            tranche_5_credit_date=data["tranches"]["tranche5"]["credit_date"],
+            tranche_5_payment_deferment=data["tranches"]["tranche5"][
+                "payment_deferment"
+            ],
+        )
+        initial_percent = round((data["initial_payment"] / data["item_price"]) * 100, 2)
+        credit_percent = round((data["credit_sum"] / data["item_price"]) * 100, 2)
+
+        calculator = LeasCalculator.query.get(calc_id)
+        calculator.item_type = data["item_type"]
+        calculator.item_year = data["item_year"]
+        calculator.item_condition = data["item_condition"]
+        calculator.item_price = data["item_price"]
+        calculator.item_price_str = validate_item_price(str(data["item_price"]))
+        calculator.item_name = data["item_name"]
+        calculator.currency = data["currency"]
+        calculator.foreign_price = data["foreign_price"]
+        calculator.foreign_price_str = validate_item_price(str(data["foreign_price"]))
+        calculator.initial_payment = data["initial_payment"]
+        calculator.initial_payment_str = validate_item_price(
+            str(data["initial_payment"])
+        )
+        calculator.initial_payment_percent = initial_percent
+        calculator.credit_sum = data["credit_sum"]
+        calculator.credit_sum_str = validate_item_price(str(data["credit_sum"]))
+        calculator.credit_sum_percent = credit_percent
+        calculator.credit_term = data["credit_term"]
+        calculator.agreement_term = data["agreement_term"]
+        calculator.reduce_percent = data["reduce_percent"]
+        calculator.leas_day = data["leas_day"]
+        calculator.service_life = data["service_life"]
+        calculator.amortization = data["amortization"]
+        calculator.nds_size = data["nds_size"]
+        calculator.bank_commission = data["bank_commission"]
+        calculator.lkmb_commission = data["lkmb_commission"]
+        calculator.agent_commission = data["agent_commission"]
+        calculator.manager_bonus = data["manager_bonus"]
+        calculator.tracker = data["tracker"]
+        calculator.tracker_str = validate_item_price(str(data["tracker"]))
+        calculator.mayak = data["mayak"]
+        calculator.mayak_str = validate_item_price(str(data["mayak"]))
+        calculator.fedresurs = data["fedresurs"]
+        calculator.fedresurs_str = validate_item_price(str(data["fedresurs"]))
+        calculator.gsm = data["gsm"]
+        calculator.gsm_str = validate_item_price(str(data["gsm"]))
+        calculator.mail = data["mail"]
+        calculator.mail_str = validate_item_price(str(data["mail"]))
+        calculator.depr_transport = data["depr_transport"]
+        calculator.depr_transport_str = validate_item_price(str(data["depr_transport"]))
+        calculator.travel = data["travel"]
+        calculator.travel_str = validate_item_price(str(data["travel"]))
+        calculator.stationery = data["stationery"]
+        calculator.stationery_str = validate_item_price(str(data["stationery"]))
+        calculator.internet = data["internet"]
+        calculator.internet_str = validate_item_price(str(data["internet"]))
+        calculator.pledge = data["pledge"]
+        calculator.pledge_str = validate_item_price(str(data["pledge"]))
+        calculator.bank_pledge = data["bank_pledge"]
+        calculator.bank_pledge_str = validate_item_price(str(data["bank_pledge"]))
+        calculator.express = data["express"]
+        calculator.express_str = validate_item_price(str(data["express"]))
+        calculator.egrn = data["egrn"]
+        calculator.egrn_str = validate_item_price(str(data["egrn"]))
+        calculator.egrul = data["egrul"]
+        calculator.egrul_str = validate_item_price(str(data["egrul"]))
+        calculator.input_period = data["input_period"]
+        calculator.insurance = new_insurance
+        calculator.tranche = new_tranche
+        calculator.allocate_vat = data["allocate_vat"]
+        calculator.allocate_deposit = data["allocate_deposit"]
+        calculator.allocate_redemption = data["allocate_redemption"]
+
+        db.session.commit()
+
+        upload_schedule(data)
+        upload_main_info(data)
+
+        calculator.status = "completed"
+        calculator.path_to_xlsx = file_name
+
+        db.session.commit()
+
+    except Exception as e:
+        db.session.rollback()
+        raise e

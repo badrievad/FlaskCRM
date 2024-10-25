@@ -18,6 +18,7 @@ from sqlalchemy.orm import joinedload
 from logger import logging
 from . import leas_calc_bp
 from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
+from .api_for_leas_culc import post_request_upload_file_site
 from .api_pdf_generate import PDFGeneratorClient
 from .api_yandex_cloud import (
     yandex_download_file_s3,
@@ -31,6 +32,8 @@ from .sql_queries import (
     create_commercial_offer_in_db,
     get_list_of_commercial_offers,
     get_list_of_leas_calculators,
+    create_new_leas_calc,
+    write_information_to_leas_calc,
 )
 from .. import db, cache
 from ..celery_utils import is_celery_alive
@@ -568,21 +571,45 @@ def update_seller():
 @leas_calc_bp.route("/crm/calculator/upload-file", methods=["POST"])
 def upload_file():
     logging.info("Запрос на загрузку файла в Yandex Object Storage")
-    # Получаем файл из запроса
     file = request.files.get("file")
 
     if not file:
         return jsonify({"error": "Файл не загружен"}), 400
 
     try:
-        # Получаем имя файла
+        calc_id = create_new_leas_calc(current_user.login)
+        file.filename = f"Лизинговый калькулятор version 1.8_{calc_id}.xlsm"
+
         filename = file.filename
         logging.info(f"Имя файла: {filename}")
-
-        # Загружаем файл на облако через функцию
         yandex_upload_file_s3(file, filename)
 
-        return jsonify({"message": "Файл успешно загружен", "file_name": filename}), 200
+        if calc_id:
+            logging.info(f"Новый ID расчета: {calc_id}")
+            response_data: dict = post_request_upload_file_site(filename, calc_id)
+
+            if response_data.get("error"):
+                calc = LeasCalculator.query.filter_by(id=calc_id).first()
+                if calc:
+                    db.session.delete(calc)
+                    db.session.commit()  # Коммитим удаление, чтобы изменения сохранились
+                raise Exception("Не удалось создать расчет")
+
+            write_information_to_leas_calc(response_data, calc_id, filename)
+
+        else:
+            raise Exception("Не удалось создать расчет")
+
+        return (
+            jsonify(
+                {
+                    "message": "Расчет успешно создан. Данные сохранены в БД.",
+                    "file_name": filename,
+                }
+            ),
+            200,
+        )
 
     except Exception as e:
+        logging.error(f"Ошибка при загрузке файла: {str(e)}")
         return jsonify({"error": f"Ошибка при загрузке файла: {str(e)}"}), 500

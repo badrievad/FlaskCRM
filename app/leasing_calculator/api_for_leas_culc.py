@@ -233,3 +233,16 @@ def upload_main_info(data: dict):
         )  # 207 Multi-Status
 
     return jsonify({"message": "All main info data successfully uploaded."}), 201
+
+
+def post_request_upload_file_site(file_name: str, calc_id: int | str) -> dict:
+    url = f"{URL_XLSX_API}/api/upload-file-site"
+    headers = {"Content-Type": "application/json"}
+    json_data = {"file_name": file_name, "calc_id": calc_id}
+    try:
+        logging.info(f"Отправляем POST запрос на {url} с данными: {json_data}")
+        response: dict = requests.post(url, headers=headers, json=json_data).json()
+    except Exception as e:
+        logging.error(f"An error occurred while uploading the file: {e}")
+        response = {"error": "An error occurred while uploading the file."}
+    return response

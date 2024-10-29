@@ -48,10 +48,12 @@ from ..leasing_calculator.models import (
     CommercialOffer,
 )
 from ..leasing_calculator.services import update_calculation_service
+from ..user.auth_utils import validate_active_session
 
 
 @leas_calc_bp.route("/crm/calculator", methods=["GET"])
 @login_required
+@validate_active_session
 def get_leasing_calculator() -> render_template:
     # установка фона для пользователя
     user_fon_filename = current_user.fon_url
@@ -143,6 +145,7 @@ def get_leasing_calculator_by_id(calc_id: int) -> render_template:
     "/crm/calculator/<int:leas_calculator_id>/create-commercial-offer", methods=["POST"]
 )
 @login_required
+@validate_active_session
 def create_commercial_offer(leas_calculator_id):
     # Получаем данные из формы
     type_of_schedule = request.form.get("type_of_schedule")
@@ -333,6 +336,7 @@ def delete_calculation(calc_id) -> jsonify:
 
 
 @leas_calc_bp.route("/crm/calculator/download/<int:calc_id>", methods=["GET"])
+@validate_active_session
 def download_offers(calc_id):
     logging.info(f"Запрос на скачивание КП (id_{calc_id})")
     try:
@@ -368,6 +372,7 @@ def download_offers(calc_id):
 
 
 @leas_calc_bp.route("/crm/calculator/leas-calc-download/<int:calc_id>", methods=["GET"])
+@validate_active_session
 def download_calc(calc_id):
     logging.info(f"Запрос на скачивание расчета (id_{calc_id})")
     try:

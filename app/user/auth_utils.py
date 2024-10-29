@@ -1,7 +1,9 @@
 from functools import wraps
 
-from flask import current_app, flash, request, redirect, url_for
-from flask_login import config, current_user
+from flask import current_app, flash, request, redirect, url_for, session
+from flask_login import config, current_user, logout_user
+
+from app.user.models import User
 
 
 def admin_required(func):
@@ -42,3 +44,21 @@ def _tester_required(func):
         return func(*args, **kwargs)
 
     return decorated_view
+
+
+def validate_active_session(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if current_user.is_authenticated:
+            # Retrieve session ID from DB and match with the active session
+            user = User.query.get(current_user.id)
+            if user.active_session_id != session.get("session_id"):
+                flash(
+                    "Ваша сессия больше не действительна. Пожалуйста, войдите снова.",
+                    "info",
+                )
+                logout_user()  # Logout invalid session
+                return redirect(url_for("user.login"))
+        return f(*args, **kwargs)
+
+    return decorated_function

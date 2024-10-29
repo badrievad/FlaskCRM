@@ -14,7 +14,7 @@ from .work_with_folders import CompanyFolderAPI
 
 from ..deal.models import Deal
 from ..leasing_calculator.models import LeasCalculator
-from ..user.auth_utils import _tester_required
+from ..user.auth_utils import _tester_required, validate_active_session
 from ..user.models import User
 from ..config import suggestions_token
 
@@ -45,6 +45,7 @@ def send_notification(socket_path: str, error_message: str) -> jsonify:
 
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
+@validate_active_session
 def create_deal() -> jsonify:
     api_folder = CompanyFolderAPI()
     deal_data = request.get_json()
@@ -99,6 +100,7 @@ def create_deal() -> jsonify:
 
 
 @deal_bp.route("/crm/deal/delete_deal/<int:deal_id>", methods=["POST"])
+@validate_active_session
 def delete_deal(deal_id) -> jsonify:
     deal: Deal = Deal.query.get(deal_id)
     api_folder: CompanyFolderAPI = CompanyFolderAPI()
@@ -147,6 +149,7 @@ def delete_deal(deal_id) -> jsonify:
 
 
 @deal_bp.route("/crm/deal/deal_to_archive/<int:deal_id>", methods=["POST"])
+@validate_active_session
 def deal_to_archive(deal_id) -> jsonify:
     deal: Deal = Deal.query.get(deal_id)
     api_folder: CompanyFolderAPI = CompanyFolderAPI()
@@ -233,6 +236,7 @@ def deal_to_archive(deal_id) -> jsonify:
 
 
 @deal_bp.route("/crm/deal/deal_to_active/<int:deal_id>", methods=["POST"])
+@validate_active_session
 def deal_to_active(deal_id) -> jsonify:
     """Изменить статус сделки на активную"""
 
@@ -294,6 +298,7 @@ def deal_to_active(deal_id) -> jsonify:
 
 @deal_bp.route("/crm", methods=["GET"])
 @_tester_required
+@validate_active_session
 def index_crm() -> render_template:
     session["username"] = current_user.login  # Устанавливаем username в сессию
     logging.info(f"Socket connected: {session}")

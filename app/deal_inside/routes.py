@@ -20,9 +20,11 @@ from ..config import suggestions_token
 from ..deal.models import Deal, Client
 from .. import socketio
 from ..leasing_calculator.models import Seller, LeasCalculator
+from ..user.auth_utils import validate_active_session
 
 
 @deal_inside_bp.route("/<deal_id>", methods=["GET"])
+@validate_active_session
 def enter_into_deal(deal_id: int):
     # Загрузка сделки, лизинговых калькуляторов, продавца, банка продавца, клиента и банка клиента
     deal: Deal = Deal.query.options(

@@ -1,9 +1,8 @@
-from flask import render_template, redirect, url_for, session, flash
+from flask import render_template, redirect, url_for, session, request
 from flask_login import login_user, logout_user, current_user
 
 from app.user.forms import LoginForm
 from app.user.models import User
-from logger import logging
 
 from . import user_bp
 from .. import login_manager
@@ -21,27 +20,27 @@ def process_login():
     if form.validate_on_submit():
         user = User.query.filter_by(login=form.username.data).first()
         if user and user.check_password(form.password.data):
-            # Проверяем, есть ли у пользователя активная сессия
-            if user.active_session_id:
-                flash("Пользователь с этим логином уже авторизован на сайте.", "info")
-                return redirect(url_for("user.login"))
+            # Проверка на наличие активной сессии
+            if user.active_session_id and not request.args.get("force"):
+                # Отправляем информацию для показа модального окна
+                return {"status": "active_session"}
 
-            # Авторизуем пользователя
+            # Если force=True, завершаем старую сессию и входим с новой
             login_user(user, remember=form.remember_me.data)
-            logging.info(f"{user.login} зашел на сайт.")
-
-            # Сохраняем новый идентификатор сессии
-            user.set_active_session()
-
+            user.set_active_session()  # Установка новой активной сессии
             session["username"] = user.login
+            session["session_id"] = user.active_session_id
 
-            # Перенаправляем в зависимости от роли
-            if user.is_manager:
-                return redirect(url_for("leas_calc.get_leasing_calculator"))
-            return redirect(url_for("deal.index_crm"))
+            redirect_url = (
+                url_for("leas_calc.get_leasing_calculator")
+                if user.is_manager
+                else url_for("deal.index_crm")
+            )
+            return {"status": "success", "redirect_url": redirect_url}
+
         else:
-            flash("Неправильный логин или пароль", "error")
-    return redirect(url_for("user.login"))
+            return {"status": "error", "message": "Неправильный логин или пароль"}
+    return {"status": "error", "message": "Форма не прошла валидацию"}
 
 
 @user_bp.route("/crm/user/logout")

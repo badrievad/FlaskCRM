@@ -1,0 +1,150 @@
+/*//////////////////////////////////////////////////////////////////
+[ FONT ]*/
+
+@font-face {
+    font-family: Poppins-Regular;
+    src: url('../fonts/poppins/Poppins-Regular.ttf');
+}
+
+@font-face {
+    font-family: Poppins-Medium;
+    src: url('../fonts/poppins/Poppins-Medium.ttf');
+}
+
+@font-face {
+    font-family: Poppins-Bold;
+    src: url('../fonts/poppins/Poppins-Bold.ttf');
+}
+
+@font-face {
+    font-family: Poppins-SemiBold;
+    src: url('../fonts/poppins/Poppins-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: Montserrat-Bold;
+    src: url('../fonts/montserrat/Montserrat-Bold.ttf');
+}
+
+@font-face {
+    font-family: Montserrat-SemiBold;
+    src: url('../fonts/montserrat/Montserrat-SemiBold.ttf');
+}
+
+@font-face {
+    font-family: Montserrat-Regular;
+    src: url('../fonts/montserrat/Montserrat-Regular.ttf');
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+[ RESTYLE TAG ]*/
+
+.custom-modal-content {
+    font-family: Poppins-Regular, sans-serif;
+    background-color: #222;
+    color: #f5f5f5;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    animation: slideDown 0.4s ease-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative; /* Для позиционирования крестика */
+}
+
+/* Стили для крестика */
+.modal-header .close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    color: #ccc;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    transition: color 0.3s;
+}
+
+.modal-header .close:hover {
+    color: #fff;
+}
+
+.modal-header h5 {
+    font-family: Poppins-Regular, sans-serif;
+    color: #ffc107;
+    font-weight: 600;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.modal-body {
+    font-family: Poppins-Regular, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 100%; /* Полная ширина для текста */
+    margin-bottom: 20px; /* Отступ между текстом и кнопками */
+}
+
+.modal-footer {
+    font-family: Poppins-Regular, sans-serif;
+    display: flex;
+    justify-content: center; /* Центрирование кнопок */
+    gap: 10px; /* Отступ между кнопками */
+    width: 100%;
+    border-top: none;
+}
+
+/* Основной текст */
+.modal-body p {
+    font-family: Poppins-Regular, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #dcdcdc; /* Более мягкий оттенок */
+}
+
+/* Кнопки */
+.modal-footer .btn-outline-light {
+    border: 1px solid #f5f5f5;
+    color: #f5f5f5;
+    border-radius: 5px;
+    padding: 8px 18px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modal-footer .btn-outline-light:hover {
+    background-color: #3d3d3d;
+    color: #f5f5f5;
+}
+
+.modal-footer .btn-light {
+    background-color: #ffc107;
+    color: #222;
+    border-radius: 5px;
+    padding: 8px 18px;
+    border: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modal-footer .btn-light:hover {
+    background-color: #e0a800;
+    color: #fff;
+}
+
+/* Анимация появления */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

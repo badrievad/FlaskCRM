@@ -231,6 +231,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+
 # pytype static type analyzer
 .pytype/
 
@@ -244,5 +245,9 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+.ruff_cache
+
 /app/config.py
 /app/config.py
+/app/static/temporary/offers-json
+/app/templates/data_test.html

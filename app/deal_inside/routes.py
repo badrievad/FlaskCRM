@@ -1,26 +1,27 @@
 import json
 
-from sqlalchemy.orm import joinedload
-
-from . import deal_inside_bp
 from flask import (
     jsonify,
-    request,
     render_template,
+    request,
 )
+from sqlalchemy.orm import joinedload
+
 from logger import logging
-from .sql_queries import (
-    get_users_with_roles,
-    update_deal_created_by,
-    delete_seller_by_calc_id,
-    delete_calculator_section,
-    update_client_in_db,
-)
-from ..config import suggestions_token
-from ..deal.models import Deal, Client
+
 from .. import socketio
-from ..leasing_calculator.models import Seller, LeasCalculator
+from ..config import suggestions_token
+from ..deal.models import Client, Deal
+from ..leasing_calculator.models import LeasCalculator, Seller
 from ..user.auth_utils import validate_active_session
+from . import deal_inside_bp
+from .sql_queries import (
+    delete_calculator_section,
+    delete_seller_by_calc_id,
+    get_users_with_roles,
+    update_client_in_db,
+    update_deal_created_by,
+)
 
 
 @deal_inside_bp.route("/<deal_id>", methods=["GET"])

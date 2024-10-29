@@ -1,32 +1,30 @@
 import datetime
 from collections import defaultdict
 
-from sqlalchemy import desc
-from sqlalchemy.exc import SQLAlchemyError
-
-from . import deal_bp
-from .sql_queries import merge_deals_in_db
-from .. import socketio, db
-
-from .deals_db import write_deal_to_db, write_deal_path_to_db, get_or_create_client
-from .deals_validate import DealsValidate
-from .work_with_folders import CompanyFolderAPI
-
-from ..deal.models import Deal
-from ..leasing_calculator.models import LeasCalculator
-from ..user.auth_utils import _tester_required, validate_active_session
-from ..user.models import User
-from ..config import suggestions_token
-
 from flask import (
-    request,
     jsonify,
     render_template,
+    request,
     session,
     url_for,
 )
 from flask_login import current_user
+from sqlalchemy import desc
+from sqlalchemy.exc import SQLAlchemyError
+
 from logger import logging
+
+from .. import db, socketio
+from ..config import suggestions_token
+from ..deal.models import Deal
+from ..leasing_calculator.models import LeasCalculator
+from ..user.auth_utils import _tester_required, validate_active_session
+from ..user.models import User
+from . import deal_bp
+from .deals_db import get_or_create_client, write_deal_path_to_db, write_deal_to_db
+from .deals_validate import DealsValidate
+from .sql_queries import merge_deals_in_db
+from .work_with_folders import CompanyFolderAPI
 
 
 def send_notification(socket_path: str, error_message: str) -> jsonify:

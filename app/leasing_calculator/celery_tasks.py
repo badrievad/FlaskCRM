@@ -135,7 +135,9 @@ def intensive_task_simulation(data: dict) -> dict:
             service_life=data["service_life"],
             amortization=data["amortization"],
             nds_size=data["nds_size"],
-            differential_payment_increase_factor=data["differential_payment_increase_factor"],
+            differential_payment_increase_factor=data[
+                "differential_payment_increase_factor"
+            ],
             months_regressive_payments=data["months_regressive_payments"],
             bank_commission=data["bank_commission"],
             lkmb_commission=data["lkmb_commission"],

@@ -1,13 +1,14 @@
 import boto3
-
-from ..config import CALCULATION_TEMPLATE_PATH, BUCKET_NAME
 from botocore.exceptions import (
+    BotoCoreError,
+    ClientError,
     NoCredentialsError,
     PartialCredentialsError,
-    ClientError,
-    BotoCoreError,
 )
+
 from logger import logging
+
+from ..config import BUCKET_NAME, CALCULATION_TEMPLATE_PATH
 
 
 def yandex_download_file_s3(file_name: str) -> str | None:

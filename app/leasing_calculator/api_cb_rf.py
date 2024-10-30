@@ -1,7 +1,8 @@
 import datetime
-import requests
 
+import requests
 from bs4 import BeautifulSoup
+
 from logger import logging
 
 

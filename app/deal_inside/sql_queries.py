@@ -1,10 +1,11 @@
 from sqlalchemy.exc import SQLAlchemyError
 
+from logger import logging
+
 from .. import db
-from ..deal.models import Deal, Client, Bank
+from ..deal.models import Bank, Client, Deal
 from ..leasing_calculator.models import LeasCalculator
 from ..user.models import User
-from logger import logging
 
 
 def get_users_with_roles(roles, current_user_id):

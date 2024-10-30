@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from pydantic import (
     BaseModel,
     Field,
@@ -112,6 +113,10 @@ class ValidateFields(BaseModel):
     service_life: int = Field(alias="serviceLife", default=37)
     amortization: str = Field(alias="amortization", default="")
     nds_size: int = Field(alias="ndsSize", default=20)
+    differential_payment_increase_factor: int = Field(
+        alias="differentialPaymentIncreaseFactor", default=2
+    )
+    months_regressive_payments: int = Field(alias="monthsRegressivePayments", default=2)
     bank_commission: float = Field(alias="bankCommission", default=0.0)
     lkmb_commission: float = Field(alias="lkmbCommission", default=0.0)
     insurances: Insurances

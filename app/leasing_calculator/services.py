@@ -1,9 +1,11 @@
+from sqlalchemy.orm import joinedload
+
+from logger import logging
+
 from .. import db
 from ..deal.models import Deal
 from ..deal.work_with_folders import CompanyFolderAPI
 from ..leasing_calculator.models import LeasCalculator
-from sqlalchemy.orm import joinedload
-from logger import logging
 
 
 def update_calculation_service(calc_id, data):

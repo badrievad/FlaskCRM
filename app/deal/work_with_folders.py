@@ -1,7 +1,8 @@
 import requests
 
-from app.config import URL_FOLDER_API
 from logger import logging
+
+from ..config import URL_FOLDER_API
 
 
 class CompanyFolderAPI:

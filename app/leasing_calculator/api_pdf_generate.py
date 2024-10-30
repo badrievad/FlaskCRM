@@ -1,7 +1,8 @@
 import requests
 
-from ..config import URL_PDF_API
 from logger import logging
+
+from ..config import URL_PDF_API
 
 
 class PDFGeneratorClient:

@@ -3,52 +3,53 @@ from datetime import date, datetime
 from pathlib import Path
 
 from flask import (
-    request,
-    jsonify,
-    render_template,
-    url_for,
     current_app,
-    send_file,
+    jsonify,
     redirect,
+    render_template,
+    request,
+    send_file,
+    url_for,
 )
 from flask_login import current_user, login_required
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 
 from logger import logging
-from . import leas_calc_bp
-from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
-from .api_for_leas_culc import post_request_upload_file_site
-from .api_pdf_generate import PDFGeneratorClient
-from .api_yandex_cloud import (
-    yandex_download_file_s3,
-    yandex_delete_file_s3,
-    yandex_upload_file_s3,
-)
-from .other_utils import validate_item_price
-from .pydantic_models import ValidateFields
-from .sql_queries import (
-    create_or_update_seller_and_link_to_leas_calc,
-    create_commercial_offer_in_db,
-    get_list_of_commercial_offers,
-    get_list_of_leas_calculators,
-    create_new_leas_calc,
-    write_information_to_leas_calc,
-)
-from .. import db, cache
+
+from .. import cache, db
 from ..celery_utils import is_celery_alive
 from ..config import FORM_OFFERS_PATH
 from ..deal.deals_validate import DealsValidate
 from ..leasing_calculator.celery_tasks import long_task
 from ..leasing_calculator.models import (
+    CommercialOffer,
+    Insurances,
     LeasCalculator,
     LeasingItem,
     Tranches,
-    Insurances,
-    CommercialOffer,
 )
 from ..leasing_calculator.services import update_calculation_service
 from ..user.auth_utils import validate_active_session
+from . import leas_calc_bp
+from .api_cb_rf import CentralBankExchangeRates, CentralBankKeyRate
+from .api_for_leas_calc import post_request_upload_file_site
+from .api_pdf_generate import PDFGeneratorClient
+from .api_yandex_cloud import (
+    yandex_delete_file_s3,
+    yandex_download_file_s3,
+    yandex_upload_file_s3,
+)
+from .other_utils import validate_item_price
+from .pydantic_models import ValidateFields
+from .sql_queries import (
+    create_commercial_offer_in_db,
+    create_new_leas_calc,
+    create_or_update_seller_and_link_to_leas_calc,
+    get_list_of_commercial_offers,
+    get_list_of_leas_calculators,
+    write_information_to_leas_calc,
+)
 
 
 @leas_calc_bp.route("/crm/calculator", methods=["GET"])

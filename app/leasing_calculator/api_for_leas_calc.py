@@ -1,23 +1,23 @@
-import requests
-
-from pydantic import BaseModel, ValidationError, field_validator, Field
 from datetime import date
+
+import requests
 from flask import jsonify
+from pydantic import BaseModel, Field, ValidationError, field_validator
 from sqlalchemy.exc import SQLAlchemyError
 
 from logger import logging
 
+from .. import db
+from ..config import URL_XLSX_API
 from .models import (
-    ScheduleAnnuity,
-    ScheduleDifferentiated,
-    ScheduleRegression,
     MainAnnuity,
     MainDifferentiated,
     MainRegression,
+    ScheduleAnnuity,
+    ScheduleDifferentiated,
+    ScheduleRegression,
 )
 from .other_utils import validate_item_price
-from .. import db
-from ..config import URL_XLSX_API
 
 
 class MainInfoItem(BaseModel):

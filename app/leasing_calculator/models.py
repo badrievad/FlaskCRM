@@ -66,6 +66,8 @@ class LeasCalculator(db.Model):
     allocate_deposit = db.Column(db.String(50), nullable=True)
     allocate_redemption = db.Column(db.String(50), nullable=True)
     schedule_type = db.Column(db.String(50), nullable=True)
+    differential_payment_increase_factor = db.Column(db.Integer, nullable=True)
+    months_regressive_payments = db.Column(db.Integer, nullable=True)
 
     insurance_id = db.Column(db.Integer, db.ForeignKey("insurances.id"), nullable=True)
     trance_id = db.Column(db.Integer, db.ForeignKey("tranches.id"), nullable=True)
@@ -210,6 +212,8 @@ class LeasCalculator(db.Model):
             "allocate_deposit": self.allocate_deposit,
             "allocate_redemption": self.allocate_redemption,
             "schedule_type": self.schedule_type,
+            "differential_payment_increase_factor": self.differential_payment_increase_factor,
+            "months_regressive_payments": self.months_regressive_payments,
             "status": self.status,
         }
 

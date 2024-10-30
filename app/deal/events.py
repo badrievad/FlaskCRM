@@ -1,10 +1,10 @@
-from .. import socketio
-
-from flask_socketio import join_room
 from flask import session
-from logger import logging
 from flask_login import current_user
+from flask_socketio import join_room
 
+from logger import logging
+
+from .. import socketio
 
 # Словарь для хранения сопоставления username и socket.id
 user_sessions = {}

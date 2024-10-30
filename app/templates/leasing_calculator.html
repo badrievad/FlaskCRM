@@ -1,1671 +1,2783 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Лизинговый калькулятор</title>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Лизинговый калькулятор</title>
 
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-sidebar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-autocomplete.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-modal.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-loader.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-custom-table.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-exchange.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-key-rate.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-tranche-table.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-pagination.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-upload.css') }}">
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-style.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-sidebar.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-autocomplete.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-modal.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-loader.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-custom-table.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-exchange.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-key-rate.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-tranche-table.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-pagination.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-upload.css') }}"
+		/>
 
-    <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
+		<link
+			rel="icon"
+			href="{{ url_for('crm.static', filename='/images/gpt.png') }}"
+			type="image/png"
+		/>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet">
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		/>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+			crossorigin="anonymous"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap"
+			rel="stylesheet"
+		/>
 
-    <!-- toastr -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-toast-style.css') }}">
+		<!-- toastr -->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-toast-style.css') }}"
+		/>
 
-    <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<!-- jQuery -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-            crossorigin="anonymous"></script>
+		<!-- Bootstrap JS -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+			crossorigin="anonymous"
+		></script>
 
-    <!-- jQuery UI -->
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+		<!-- jQuery UI -->
+		<link
+			rel="stylesheet"
+			href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+		/>
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 
-    <!-- DADATA -->
-    <link href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet"/>
-    <script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
+		<!-- DADATA -->
+		<link
+			href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css"
+			rel="stylesheet"
+		/>
+		<script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
 
-    <!-- Custom Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-    <script src="https://unpkg.com/htmx.org@2.0.1"></script>
-    <script src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js" defer></script>
+		<!-- Custom Scripts -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+		<script src="https://unpkg.com/htmx.org@2.0.1"></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js"
+			defer
+		></script>
 
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<!-- SweetAlert2 -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- Tippy.js -->
-    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css"/>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
-    <script src="https://unpkg.com/tippy.js@6"></script>
+		<!-- Tippy.js -->
+		<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
+		<script src="https://unpkg.com/@popperjs/core@2"></script>
+		<script src="https://unpkg.com/tippy.js@6"></script>
 
-    <style>
-        .hidden {
-            display: none;
-        }
+		<style>
+			.hidden {
+				display: none;
+			}
 
-        button.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
+			button.disabled {
+				opacity: 0.6;
+				cursor: not-allowed;
+			}
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: rgba(245, 245, 245, 0.53);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            overflow: auto;
-            background-image: url({{ user_fon }}); /* Укажите путь к вашему изображению */
-            background-position: center; /* Изображение будет центрировано */
-            background-repeat: no-repeat; /* Изображение не будет повторяться */
-            background-attachment: fixed; /* изменено со scroll на fixed */
-            background-size: cover;
-        }
+			body {
+				font-family: 'Roboto', sans-serif;
+				background-color: rgba(245, 245, 245, 0.53);
+				margin: 0;
+				padding: 0;
+				display: flex;
+				height: 100vh;
+				overflow: auto;
+				background-image: url({{ user_fon }}); /* Укажите путь к вашему изображению */
+				background-position: center; /* Изображение будет центрировано */
+				background-repeat: no-repeat; /* Изображение не будет повторяться */
+				background-attachment: fixed; /* изменено со scroll на fixed */
+				background-size: cover;
+			}
 
-        .button-disabled {
-            background-color: #ccc; /* Серый цвет фона */
-            color: #666; /* Более темный серый цвет текста */
-            cursor: not-allowed; /* Указатель мыши */
-        }
+			.button-disabled {
+				background-color: #ccc; /* Серый цвет фона */
+				color: #666; /* Более темный серый цвет текста */
+				cursor: not-allowed; /* Указатель мыши */
+			}
 
-        .fa-trash-can {
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-            font-size: 14px; /* Размер иконки */
-            text-align: center;
-        }
+			.fa-trash-can {
+				background-color: rgba(0, 0, 0, 0.6);
+				color: white;
+				border-radius: 50%;
+				width: 30px;
+				height: 30px;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+				cursor: pointer;
+				transition: background-color 0.3s, transform 0.3s;
+				font-size: 14px; /* Размер иконки */
+				text-align: center;
+			}
 
-        .fa-trash-can:hover {
-            background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
-            transform: scale(1.2); /* Увеличение размера при наведении */
-        }
+			.fa-trash-can:hover {
+				background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
+				transform: scale(1.2); /* Увеличение размера при наведении */
+			}
 
-        .fa-file-pdf, .fa-file-excel {
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-            font-size: 14px; /* Размер иконки */
-            text-align: center;
-        }
+			.fa-file-pdf,
+			.fa-file-excel {
+				background-color: rgba(0, 0, 0, 0.6);
+				color: white;
+				border-radius: 50%;
+				width: 30px;
+				height: 30px;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+				cursor: pointer;
+				transition: background-color 0.3s, transform 0.3s;
+				font-size: 14px; /* Размер иконки */
+				text-align: center;
+			}
 
-        .fa-file-pdf:hover, .fa-file-excel:hover {
-            background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
-            transform: scale(1.2); /* Увеличение размера при наведении */
-        }
+			.fa-file-pdf:hover,
+			.fa-file-excel:hover {
+				background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
+				transform: scale(1.2); /* Увеличение размера при наведении */
+			}
 
-        .fa-file-excel:hover {
-            background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
-            transform: scale(1.1); /* Увеличение размера при наведении */
-        }
+			.fa-file-excel:hover {
+				background-color: rgba(0, 0, 0, 0.8); /* Изменение фона при наведении */
+				transform: scale(1.1); /* Увеличение размера при наведении */
+			}
 
-        /* Переопределение шрифта для SweetAlert2 */
-        .swal2-popup {
-            font-family: 'Roboto', sans-serif;
-        }
+			/* Переопределение шрифта для SweetAlert2 */
+			.swal2-popup {
+				font-family: 'Roboto', sans-serif;
+			}
 
-        /* Дополнительно, можно поменять стили для кнопок */
-        .swal2-confirm, .swal2-cancel {
-            font-family: 'Roboto', sans-serif;
-        }
-    </style>
-</head>
-<body>
+			/* Дополнительно, можно поменять стили для кнопок */
+			.swal2-confirm,
+			.swal2-cancel {
+				font-family: 'Roboto', sans-serif;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Modal -->
+		<div id="modal" class="modal">
+			<div class="modal-content">
+				<h4 class="modal-header">Основные параметры</h4>
+				<div class="modal-body"></div>
+				<div class="modal-footer">
+					<button class="copy-btn">
+						<i class="fa-regular fa-copy"></i> Копия КП
+					</button>
+					<button class="save-btn" onclick="saveChanges('{{ user_fullname }}')">
+						<i class="fa-regular fa-floppy-disk"></i> Сохранить изменения
+					</button>
+					<button class="close-btn" onclick="closeModal()">
+						<i class="fa-regular fa-circle-xmark"></i> Закрыть
+					</button>
+				</div>
+			</div>
+		</div>
 
-<!-- Modal -->
-<div id="modal" class="modal">
-    <div class="modal-content">
-        <h4 class="modal-header">Основные параметры</h4>
-        <div class="modal-body">
-        </div>
-        <div class="modal-footer">
-            <button class="copy-btn"><i class="fa-regular fa-copy"></i> Копия КП</button>
-            <button class="save-btn" onclick="saveChanges('{{ user_fullname }}')"><i
-                    class="fa-regular fa-floppy-disk"></i> Сохранить
-                изменения
-            </button>
-            <button class="close-btn" onclick="closeModal()"><i class="fa-regular fa-circle-xmark"></i> Закрыть</button>
-        </div>
-    </div>
-</div>
+		<!-- Sidebar -->
+		<div class="sidebar" id="sidebar">
+			<ul>
+				<li class="clickable">
+					<a class="nav-link" href="{{ url_for('deal.index_crm') }}"
+						><i class="fa-solid fa-chevron-left"></i> Вернуться на главную</a
+					>
+				</li>
+				<li class="clickable-in">
+					<a class="nav-link" href="#main"> Основные параметры </a>
+				</li>
+				<li class="clickable-in">
+					<a class="nav-link" href="#insurance"> Расходы на страхование </a>
+				</li>
+				<li class="clickable-in">
+					<a class="nav-link" href="#overhead"> Накладные расходы </a>
+				</li>
+				<li class="clickable-in">
+					<a class="nav-link" href="#others"> Прочие условия </a>
+				</li>
+				<li class="clickable-in">
+					<a class="nav-link" href="#created-calculations">
+						Созданные расчеты
+					</a>
+				</li>
+				<li class="clickable-in">
+					<a class="nav-link" href="#created-proposals"> Созданные КП </a>
+				</li>
+			</ul>
+			<h6>{{ current_user }}</h6>
+			<h6 style="margin-left: 35px">
+				<a class="nav-link exit-link" href="{{ url_for('user.exit_user') }}">
+					<i class="fa-solid fa-right-from-bracket"></i> Выйти из аккаунта
+				</a>
+			</h6>
+		</div>
 
-<!-- Sidebar -->
-<div class="sidebar" id="sidebar">
-    <ul>
-        <li class="clickable">
-            <a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
-                Вернуться на главную</a>
-        </li>
-        <li class="clickable-in">
-            <a class="nav-link" href="#main">
-                Основные параметры
-            </a>
-        </li>
-        <li class="clickable-in">
-            <a class="nav-link" href="#insurance">
-                Расходы на страхование
-            </a>
-        </li>
-        <li class="clickable-in">
-            <a class="nav-link" href="#overhead">
-                Накладные расходы
-            </a>
-        </li>
-        <li class="clickable-in">
-            <a class="nav-link" href="#others">
-                Прочие условия
-            </a>
-        </li>
-        <li class="clickable-in">
-            <a class="nav-link" href="#created-calculations">
-                Созданные расчеты
-            </a>
-        </li>
-        <li class="clickable-in">
-            <a class="nav-link" href="#created-proposals">
-                Созданные КП
-            </a>
-        </li>
-    </ul>
-    <h6>{{ current_user }}</h6>
-    <h6 style="margin-left: 35px">
-        <a class="nav-link exit-link" href="{{ url_for('user.exit_user') }}">
-            <i class="fa-solid fa-right-from-bracket"></i> Выйти из аккаунта
-        </a>
-    </h6>
-</div>
+		<div class="main-content" id="main-content">
+			<div class="container">
+				<div class="header">
+					<h1 id="main">Укажите основные параметры сделки</h1>
+				</div>
+				<div class="tabs">
+					<button class="active"><i class="fas fa-car"></i>Легковые</button>
+					<button><i class="fas fa-truck"></i>Грузовые и прицепы</button>
+					<button><i class="fas fa-microchip"></i>Оборудование</button>
+					<button><i class="fas fa-snowplow"></i>Спецтехника</button>
+					<button><i class="fas fa-bus"></i>Автобусы</button>
+					<button><i class="fas fa-house"></i>Недвижимость</button>
+				</div>
+				<div class="content">
+					<div class="input-section">
+						<div class="form-group">
+							<div class="part-container first-part">
+								<div class="input-container-item-name item-container">
+									<input
+										type="text"
+										id="item-name"
+										name="item-name"
+										maxlength="500"
+										placeholder="Наименование имущества"
+										style="margin-top: 25px"
+									/>
+								</div>
+								<div class="input-container-item-condition">
+									<label for="item-condition" style="margin-top: 20px"
+										>Состояние имущества:</label
+									>
+									<input
+										type="hidden"
+										id="item-condition"
+										name="item-condition"
+										value="new"
+									/>
+								</div>
+								<div class="button-group item-container">
+									<button
+										id="new-btn"
+										class="toggle-btn active size-btn"
+										data-value="new"
+									>
+										Новое
+									</button>
+									<button
+										id="used-btn"
+										class="toggle-btn size-btn"
+										data-value="used"
+									>
+										Б/У
+									</button>
+								</div>
+								<br />
+								<div class="input-container first-container">
+									<label for="production-year"
+										>Год выпуска/изготовления ПЛ</label
+									>
+								</div>
+								<div class="input-container item-container first-container">
+									<input
+										type="number"
+										id="production-year-value"
+										name="production-year-value"
+										value=""
+									/>
+								</div>
+								<br />
+								<div class="input-container first-container">
+									<label for="currency">Валюта сделки</label>
+								</div>
+								<div class="input-container first-container">
+									<select
+										id="currency"
+										name="currency"
+										class="select-container"
+									>
+										<option value="rub" data-symbol="₽">₽</option>
+										<option value="usd" data-symbol="$">$</option>
+										<option value="eur" data-symbol="€">€</option>
+										<option value="cny" data-symbol="¥">¥</option>
+									</select>
+								</div>
+							</div>
+							<br />
+							<div class="line"></div>
+							<div class="part-container">
+								<div
+									id="foreign-cost-section"
+									class="foreign-cost-container item-container"
+								>
+									<div class="input-container">
+										<label for="foreign-cost-display"
+											>Стоимость имущества в иностранной валюте</label
+										>
+										<input
+											type="text"
+											id="foreign-cost-display"
+											name="foreign-cost-display"
+											value="10 000"
+										/>
+										<input
+											type="hidden"
+											id="foreign-cost-value"
+											name="foreign-cost-value"
+											value="10000"
+										/>
+									</div>
+									<div class="slider-container">
+										<input
+											type="range"
+											id="foreign-cost"
+											name="foreign-cost"
+											min="10000"
+											max="10000000"
+											value="10000"
+											step="1000"
+										/>
+									</div>
+									<div class="range-labels">
+										<span id="foreign-min-label">10 тыс.</span>
+										<span id="foreign-max-label">10 млн.</span>
+									</div>
+									<br />
+								</div>
+								<div class="input-container item-container">
+									<label for="cost">Стоимость имущества в рублях</label>
+									<input
+										type="text"
+										id="cost-display"
+										name="cost-display"
+										value="1 000 000,00"
+										maxlength="15"
+									/>
+									<input
+										type="hidden"
+										id="cost-value"
+										name="cost-value"
+										value="1000000"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="cost"
+										name="cost"
+										min="100000"
+										max="100000000"
+										value="1000000"
+										step="100000"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>100 тыс. ₽</span>
+									<span>100 млн ₽</span>
+								</div>
+								<div class="input-container">
+									<label for="initial-payment">Первоначальный взнос</label>
+									<div class="input-group">
+										<input
+											type="text"
+											id="initial-payment-value-display"
+											name="initial-payment-value-display"
+											value="100 000,00"
+											placeholder="₽"
+										/>
+										<input
+											type="hidden"
+											id="initial-payment-value"
+											name="initial-payment-value"
+											value="100000"
+											placeholder="₽"
+										/>
+										<input
+											type="number"
+											id="initial-payment-percent"
+											name="initial-payment-percent"
+											value="10.00"
+											placeholder="%"
+											max="49.99"
+										/>
+										<span class="percent-label">%</span>
+									</div>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="initial-payment"
+										name="initial-payment"
+										min="0"
+										max="49"
+										value="10"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0%</span>
+									<span>49.99%</span>
+								</div>
+								<div class="input-container">
+									<label for="credit-value">Размер кредита</label>
+									<div class="input-group">
+										<input
+											type="text"
+											id="credit-value-display"
+											name="credit-value-display"
+											value="800 000,00"
+											placeholder="₽"
+										/>
+										<input
+											type="hidden"
+											id="credit-value"
+											name="credit-value"
+											value="800000"
+											placeholder="₽"
+										/>
+										<input
+											type="number"
+											id="credit-percent"
+											name="credit-percent"
+											value="80.00"
+											placeholder="%"
+											max="90"
+										/>
+										<span class="percent-label">%</span>
+									</div>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="credit"
+										name="credit"
+										min="0"
+										max="90"
+										value="80"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0%</span>
+									<span>90%</span>
+								</div>
+								<div class="input-container">
+									<label for="term">Срок договора</label>
+									<input
+										type="number"
+										id="term-value"
+										name="term-value"
+										value="36"
+										max="100"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="term"
+										name="term"
+										min="1"
+										max="60"
+										value="36"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>1 мес.</span>
+									<span>60 мес.</span>
+								</div>
+								<div class="input-container">
+									<label>Комиссия банка</label>
+									<input
+										type="number"
+										id="commission-value"
+										name="commission-value"
+										value="0"
+										placeholder="%"
+										max="3"
+									/>
+									<span class="percent-label">%</span>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="commission"
+										name="commission"
+										min="0"
+										max="3"
+										value="0"
+										step="0.1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0%</span>
+									<span>3%</span>
+								</div>
+								<div class="input-container">
+									<label>Комиссия ООО "ЛКМБ-РТ"</label>
+									<input
+										type="number"
+										id="commission-lkmb-value"
+										name="commission-lkmb-value"
+										value="1.8"
+										placeholder="%"
+										max="3"
+									/>
+									<span class="percent-label">%</span>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="commission-lkmb"
+										name="commission-lkmb"
+										min="0"
+										max="3"
+										value="1.8"
+										step="0.1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0%</span>
+									<span>3%</span>
+								</div>
+								<br />
+								<div class="form-group">
+									<div class="input-container">
+										<label for="input-period">Поставщик выделяет НДС</label>
+										<div class="button-group-nds">
+											<button
+												id="yes-nds-btn"
+												class="toggle-btn active"
+												data-value="yes-nds"
+											>
+												Да
+											</button>
+											<button
+												id="no-nds-btn"
+												class="toggle-btn"
+												data-value="no-nds"
+											>
+												Нет
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-container">
+										<label for="input-period">Задаток</label>
+										<div class="button-group-deposit">
+											<button
+												id="distribute-deposit-btn"
+												class="toggle-btn"
+												data-value="yes-distribute-deposit"
+											>
+												Распределять
+											</button>
+											<button
+												id="no-distribute-deposit-btn"
+												class="toggle-btn active"
+												data-value="no-distribute-deposit"
+											>
+												Не распределять
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-container">
+										<label for="input-period">Выкупной платеж</label>
+										<div class="button-group-redemption">
+											<button
+												id="distribute-redemption-btn"
+												class="toggle-btn"
+												data-value="yes-distribute-redemption"
+											>
+												Распределять
+											</button>
+											<button
+												id="no-distribute-redemption-btn"
+												class="toggle-btn active"
+												data-value="no-distribute-redemption"
+											>
+												Не распределять
+											</button>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-container">
+										<label for="leas-day">День лизингового платежа</label>
+										<input
+											type="text"
+											name="leas-day"
+											id="leas-day"
+											value="20"
+											maxlength="2"
+										/>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-container">
+										<label for="input-period"
+											>Срок ввода в эксплуатацию/подписания акта-приема
+											передачи</label
+										>
+										<input
+											type="date"
+											name="input-period"
+											id="input-period"
+											value=""
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="line"></div>
+						<div class="part-container">
+							<div id="tranches-container" class="table-container">
+								<table id="tranches-table">
+									<thead>
+										<tr>
+											<th></th>
+											<th id="tranche-1">
+												<i class="fa-solid fa-coins"></i> Транш 1
+											</th>
+											<th id="tranche-2">
+												<i class="fa-solid fa-coins"></i> Транш 2
+											</th>
+											<th id="tranche-3">
+												<i class="fa-solid fa-coins"></i> Транш 3
+											</th>
+											<th id="tranche-4">
+												<i class="fa-solid fa-coins"></i> Транш 4
+											</th>
+											<th id="tranche-5">
+												<i class="fa-solid fa-coins"></i> Транш 5
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>Размер транша, %</td>
+											<td>
+												<input
+													type="text"
+													name="tranche1-size"
+													id="tranche1-size"
+													value="20"
+													maxlength="5"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche2-size"
+													id="tranche2-size"
+													value="80"
+													maxlength="5"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche3-size"
+													id="tranche3-size"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche4-size"
+													id="tranche4-size"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche5-size"
+													id="tranche5-size"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+										</tr>
+										<tr>
+											<td>Ставка банка, %</td>
+											<td>
+												<input
+													type="text"
+													name="tranche1-rate"
+													id="tranche1-rate"
+													value="20"
+													maxlength="5"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche2-rate"
+													id="tranche2-rate"
+													value="20"
+													maxlength="5"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche3-rate"
+													id="tranche3-rate"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche4-rate"
+													id="tranche4-rate"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche5-rate"
+													id="tranche5-rate"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+										</tr>
+										<tr>
+											<td>Ставка ЛК, %</td>
+											<td>
+												<input
+													type="text"
+													name="tranche1-fee"
+													id="tranche1-fee"
+													value="4.85"
+													maxlength="5"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche2-fee"
+													id="tranche2-fee"
+													value="4.85"
+													maxlength="5"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche3-fee"
+													id="tranche3-fee"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche4-fee"
+													id="tranche4-fee"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche5-fee"
+													id="tranche5-fee"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+										</tr>
+										<tr>
+											<td>Ставка ЛК, % (если без банка)</td>
+											<td>
+												<input
+													type="text"
+													name="tranche1-own-fee"
+													id="tranche1-own-fee"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche2-own-fee"
+													id="tranche2-own-fee"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche3-own-fee"
+													id="tranche3-own-fee"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche4-own-fee"
+													id="tranche4-own-fee"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="tranche5-own-fee"
+													id="tranche5-own-fee"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+										</tr>
+										<tr>
+											<td class="date-of-credit">Дата выдачи кредита</td>
+											<td>
+												<input
+													type="date"
+													name="tranche1-credit-date"
+													id="tranche1-credit-date"
+													maxlength="5"
+												/>
+											</td>
+											<td>
+												<input
+													type="date"
+													name="tranche2-credit-date"
+													id="tranche2-credit-date"
+													maxlength="5"
+													readonly
+												/>
+											</td>
+											<td>
+												<input
+													type="date"
+													name="tranche3-credit-date"
+													id="tranche3-credit-date"
+													maxlength="5"
+													readonly
+												/>
+											</td>
+											<td>
+												<input
+													type="date"
+													name="tranche4-credit-date"
+													id="tranche4-credit-date"
+													maxlength="5"
+													readonly
+												/>
+											</td>
+											<td>
+												<input
+													type="date"
+													name="tranche5-credit-date"
+													id="tranche5-credit-date"
+													maxlength="5"
+													readonly
+												/>
+											</td>
+										</tr>
+										<tr>
+											<td class="deferment-title">
+												Отсрочка по уплате лизинговых платежей
+											</td>
+											<td>
+												<input
+													type="text"
+													name="payment-deferment1"
+													id="payment-deferment1"
+													value=""
+													placeholder="мес."
+													maxlength="2"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="payment-deferment2"
+													id="payment-deferment2"
+													value=""
+													placeholder="мес."
+													maxlength="2"
+													readonly
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="payment-deferment3"
+													id="payment-deferment3"
+													value=""
+													placeholder="мес."
+													maxlength="2"
+													readonly
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="payment-deferment4"
+													id="payment-deferment4"
+													value=""
+													placeholder="мес."
+													maxlength="2"
+													readonly
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="payment-deferment5"
+													id="payment-deferment5"
+													value=""
+													placeholder="мес."
+													maxlength="2"
+													readonly
+												/>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="part-container">
+							<p id="first-payment-date" style="font-weight: bold">
+								Дата первого платежа по лизингу:
+								<span id="calculated-payment-date"></span>
+								<i
+									id="date-warning-icon"
+									class="fa-solid fa-circle-exclamation"
+									style="display: none; color: #5e2626"
+								></i>
+							</p>
+						</div>
+						<br />
+						<div class="line"></div>
+						<div class="part-container">
+							<h5 id="insurance">
+								<i class="fa-solid fa-car-burst" style="color: #727a88"></i>
+								Расходы на страхование:
+							</h5>
+							<div id="insurance-container" class="table-container">
+								<table id="insurance-table">
+									<thead>
+										<tr>
+											<th></th>
+											<th id="insurance-1">
+												<i class="fa-regular fa-calendar"></i> 1 год
+											</th>
+											<th id="insurance-2">
+												<i class="fa-regular fa-calendar"></i> 2 год
+											</th>
+											<th id="insurance-3">
+												<i class="fa-regular fa-calendar"></i> 3 год
+											</th>
+											<th id="insurance-4">
+												<i class="fa-regular fa-calendar"></i> 4 год
+											</th>
+											<th id="insurance-5">
+												<i class="fa-regular fa-calendar"></i> 5 год
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td>КАСКО, %</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-casko1"
+													id="insurance-casko1"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-casko2"
+													id="insurance-casko2"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-casko3"
+													id="insurance-casko3"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-casko4"
+													id="insurance-casko4"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-casko5"
+													id="insurance-casko5"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+										</tr>
+										<tr>
+											<td>ОСАГО, %</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-osago1"
+													id="insurance-osago1"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-osago2"
+													id="insurance-osago2"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-osago3"
+													id="insurance-osago3"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-osago4"
+													id="insurance-osago4"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="insurance-osago5"
+													id="insurance-osago5"
+													value=""
+													maxlength="5"
+													placeholder="%"
+												/>
+											</td>
+										</tr>
+										<tr>
+											<td>ЖИЗНИ и ЗДОРОВЬЯ, руб.</td>
+											<td>
+												<input
+													type="text"
+													name="health-insurance1"
+													id="health-insurance1"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="health-insurance2"
+													id="health-insurance2"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="health-insurance3"
+													id="health-insurance3"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="health-insurance4"
+													id="health-insurance4"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="health-insurance5"
+													id="health-insurance5"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+										</tr>
+										<tr>
+											<td>ИНОЕ, руб.</td>
+											<td>
+												<input
+													type="text"
+													name="other-insurance1"
+													id="other-insurance1"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="other-insurance2"
+													id="other-insurance2"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="other-insurance3"
+													id="other-insurance3"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="other-insurance4"
+													id="other-insurance4"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+											<td>
+												<input
+													type="text"
+													name="other-insurance5"
+													id="other-insurance5"
+													value=""
+													maxlength="12"
+													placeholder="руб."
+												/>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<br />
+						<div class="line"></div>
+						<div class="part-container">
+							<h5 id="overhead">
+								<i class="fa-solid fa-dolly" style="color: #727a88"></i>
+								Накладные расходы:
+							</h5>
+							<br />
+							<div class="form-group">
+								<div class="input-container">
+									<label>Агентское вознаграждение, %</label>
+									<input
+										type="number"
+										id="agent-commission-value"
+										name="agent-commission-value"
+										value="0"
+										placeholder="%"
+										maxlength="3"
+									/>
+									<span class="percent-label">%</span>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="agent-commission"
+										name="agent-commission"
+										min="0"
+										max="5"
+										value="0"
+										step="0.1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0%</span>
+									<span>5%</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Бонус менеджера, %</label>
+									<input
+										type="number"
+										id="manager-bonus-value"
+										name="manager-bonus-value"
+										value="1.2"
+										placeholder="%"
+									/>
+									<span class="percent-label">%</span>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="manager-bonus"
+										name="manager-bonus"
+										min="0"
+										max="1.5"
+										value="1.2"
+										step="0.1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0%</span>
+									<span>1.5%</span>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="part-container">
+							<button class="btn-hover-sm color-3" id="default-button">
+								<i class="fa-solid fa-check"></i> По умолчанию
+							</button>
+							<button class="btn-hover-sm color-3" id="clear-button">
+								<i class="fa-solid fa-trash"></i> Очистить
+							</button>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Трекеры, руб.</label>
+									<input
+										type="text"
+										id="tracker-display"
+										name="tracker-display"
+										value="43 000,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="tracker-value"
+										name="tracker-value"
+										value="43000"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="tracker"
+										name="tracker"
+										min="0"
+										max="100000"
+										value="43000"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Маячки, руб.</label>
+									<input
+										type="text"
+										id="mayak-display"
+										name="mayak-display"
+										value="15 000,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="mayak-value"
+										name="mayak-value"
+										value="15000"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="mayak"
+										name="mayak"
+										min="0"
+										max="100000"
+										value="15000"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Федресурс, руб.</label>
+									<input
+										type="text"
+										id="fedresurs-display"
+										name="fedresurs-display"
+										value="2 000,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="fedresurs-value"
+										name="fedresurs-value"
+										value="2000"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="fedresurs"
+										name="fedresurs"
+										min="0"
+										max="100000"
+										value="2000"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>ГСМ, руб.</label>
+									<input
+										type="text"
+										id="gsm-display"
+										name="gsm-display"
+										value="950,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="gsm-value"
+										name="gsm-value"
+										value="950"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="gsm"
+										name="gsm"
+										min="0"
+										max="100000"
+										value="950"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Почтовые расходы, руб.</label>
+									<input
+										type="text"
+										id="mail-display"
+										name="mail-display"
+										value="400,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="mail-value"
+										name="mail-value"
+										value="400"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="mail"
+										name="mail"
+										min="0"
+										max="100000"
+										value="400"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Амортизация транспорта, руб.</label>
+									<input
+										type="text"
+										id="depr-transport-display"
+										name="depr-transport-display"
+										value="450,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="depr-transport-value"
+										name="depr-transport-value"
+										value="450"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="depr-transport"
+										name="depr-transport"
+										min="0"
+										max="100000"
+										value="450"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Командировочные расходы, руб.</label>
+									<input
+										type="text"
+										id="travel-display"
+										name="travel-display"
+										value="200,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="travel-value"
+										name="travel-value"
+										value="200"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="travel"
+										name="travel"
+										min="0"
+										max="100000"
+										value="200"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Расходы на приобретение канцтоваров, руб.</label>
+									<input
+										type="text"
+										id="stationery-display"
+										name="stationery-display"
+										value="100,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="stationery-value"
+										name="stationery-value"
+										value="100"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="stationery"
+										name="stationery"
+										min="0"
+										max="100000"
+										value="100"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Телефония и интернет, руб.</label>
+									<input
+										type="text"
+										id="internet-display"
+										name="internet-display"
+										value="600,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="internet-value"
+										name="internet-value"
+										value="600"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="internet"
+										name="internet"
+										min="0"
+										max="100000"
+										value="600"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Регистрация залогов, руб.</label>
+									<input
+										type="text"
+										id="pledge-display"
+										name="pledge-display"
+										value="1 000,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="pledge-value"
+										name="pledge-value"
+										value="1000"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="pledge"
+										name="pledge"
+										min="0"
+										max="100000"
+										value="1000"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Регистрация залога в банках, руб.</label>
+									<input
+										type="text"
+										id="bank-pledge-display"
+										name="bank-pledge-display"
+										value="1 000,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="bank-pledge-value"
+										name="bank-pledge-value"
+										value="1000"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="bank-pledge"
+										name="bank-pledge"
+										min="0"
+										max="100000"
+										value="1000"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Расходы на экспресс-почту, руб.</label>
+									<input
+										type="text"
+										id="express-display"
+										name="express-display"
+										value="2 166,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="express-value"
+										name="express-value"
+										value="2166"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="express"
+										name="express"
+										min="0"
+										max="100000"
+										value="2166"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Пошлина за получение выписки из ЕГРН, руб.</label>
+									<input
+										type="text"
+										id="egrn-display"
+										name="egrn-display"
+										value="400,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="egrn-value"
+										name="egrn-value"
+										value="400"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="egrn"
+										name="egrn"
+										min="0"
+										max="100000"
+										value="400"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label>Пошлина за получение сведение из ЕГРЮЛ, руб.</label>
+									<input
+										type="text"
+										id="egrul-display"
+										name="egrul-display"
+										value="200,00"
+										placeholder="руб."
+										maxlength="7"
+									/>
+									<input
+										type="hidden"
+										id="egrul-value"
+										name="egrul-value"
+										value="200"
+									/>
+								</div>
+								<div class="slider-container">
+									<input
+										type="range"
+										id="egrul"
+										name="egrul"
+										min="0"
+										max="100000"
+										value="200"
+										step="1"
+									/>
+								</div>
+								<div class="range-labels">
+									<span>0 руб.</span>
+									<span>100 тыс. руб.</span>
+								</div>
+							</div>
+						</div>
+						<br />
+						<div class="line"></div>
+						<div class="part-container">
+							<h5 id="others">
+								<i
+									class="fa-regular fa-clipboard"
+									style="color: #727a88; margin-bottom: 20px"
+								></i>
+								Прочие условия:
+							</h5>
+							<div class="form-group">
+								<div class="input-container">
+									<label for="credit-term">Срок кредита</label>
+									<input
+										type="text"
+										name="credit-term"
+										id="credit-term"
+										value=""
+										placeholder="мес."
+										maxlength="2"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label for="reduce-percent"
+										>Ежегодное снижение стоимости имущества, %</label
+									>
+									<input
+										type="text"
+										name="reduce-percent"
+										id="reduce-percent"
+										value="10"
+										placeholder="%"
+										maxlength="3"
+										class="digits-only"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label for="amortization-group">Амортизационная группа</label>
+									<select
+										name="amortization-group"
+										id="amortization-group"
+										class="amort-container"
+									>
+										<option value="1-я гр. (от 12 до 24 мес.)">
+											1-я гр. (от 12 до 24 мес.)
+										</option>
+										<option value="2-я гр. (от 25 до 36 мес)">
+											2-я гр. (от 25 до 36 мес)
+										</option>
+										<option value="3-я гр. (от 37 до 60 мес)" selected>
+											3-я гр. (от 37 до 60 мес)
+										</option>
+										<option value="4-я гр. (от 61 до 84 мес.)">
+											4-я гр. (от 61 до 84 мес.)
+										</option>
+										<option value="5-я гр. (от 85 до 120 мес.)">
+											5-я гр. (от 85 до 120 мес.)
+										</option>
+										<option value="6-я гр. (от 121 до 180 мес.)">
+											6-я гр. (от 121 до 180 мес.)
+										</option>
+										<option value="7-я гр. (от 181 до 240 мес.)">
+											7-я гр. (от 181 до 240 мес.)
+										</option>
+										<option value="8-я гр. (от 241 до 300 мес.)">
+											8-я гр. (от 241 до 300 мес.)
+										</option>
+										<option value="9-я гр. (от 301 до 360 мес.)">
+											9-я гр. (от 301 до 360 мес.)
+										</option>
+										<option value="10-я гр. (свыше 361 мес.)">
+											10-я гр. (свыше 361 мес.)
+										</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label for="service-life">Срок эксплуатации</label>
+									<input
+										type="text"
+										name="service-life"
+										id="service-life"
+										value="37"
+										placeholder="мес."
+										maxlength="3"
+										class="digits-only"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label for="nds-size">Размер НДС, %</label>
+									<input
+										type="text"
+										name="nds-size"
+										id="nds-size"
+										value="20"
+										placeholder="%"
+										maxlength="3"
+										class="digits-only"
+									/>
+								</div>
+							</div>
+							<br />
+							<div class="form-group">
+								<div class="input-container">
+									<label for="differential-payment-increase-factor"
+										>Коэф. увеличения дифференциального платежа (для
+										регресса)</label
+									>
+									<input
+										type="text"
+										name="differential-payment-increase-factor"
+										id="differential-payment-increase-factor"
+										value="2"
+										placeholder=""
+										maxlength="2"
+										class="digits-only"
+									/>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-container">
+									<label for="months-regressive-payments"
+										>Количество месяцев регрессивных платежей (для
+										регресса)</label
+									>
+									<input
+										type="text"
+										name="months-regressive-payments"
+										id="months-regressive-payments"
+										value="2"
+										placeholder="мес."
+										maxlength="2"
+										class="digits-only"
+									/>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="results">
+						<div class="exchange-rates">
+							<table class="exchange-rates-table" id="exchange-rates-table">
+								<tr>
+									<th>Валюта</th>
+									<th id="previous-date">-</th>
+									<th id="today-date">-</th>
+								</tr>
+								<tr>
+									<td>
+										<img
+											src="https://img.icons8.com/color/48/000000/china-circular.png"
+											alt="CNY"
+											class="currency-icon"
+										/>
+										CNY, 1¥
+									</td>
+									<td id="previous-cny">₽</td>
+									<td id="today-cny">₽</td>
+								</tr>
+								<tr>
+									<td>
+										<img
+											src="https://img.icons8.com/color/48/000000/usa-circular.png"
+											alt="USD"
+											class="currency-icon"
+										/>
+										USD, 1$
+									</td>
+									<td id="previous-usd">₽</td>
+									<td id="today-usd">₽</td>
+								</tr>
+								<tr>
+									<td>
+										<img
+											src="https://img.icons8.com/?size=100&id=Y76SzpmxslW4&format=png&color=000000"
+											alt="EUR"
+											class="currency-icon"
+										/>
+										EUR, 1€
+									</td>
+									<td id="previous-eur">₽</td>
+									<td id="today-eur">₽</td>
+								</tr>
+							</table>
+						</div>
+						<br />
+						<div class="key-rate-container">
+							<div class="label">Ключевая ставка</div>
+							<div class="date-rate-container">
+								<div class="date"></div>
+								<div class="rate"></div>
+							</div>
+						</div>
+						<button class="btn-hover color-4" id="pre-calculate-button">
+							<i class="fa-regular fa-eye"></i>
+							Сформировать расчет
+						</button>
 
-<div class="main-content" id="main-content">
-    <div class="container">
-        <div class="header">
-            <h1 id="main">Укажите основные параметры сделки</h1>
-        </div>
-        <div class="tabs">
-            <button class="active"><i class="fas fa-car"></i>Легковые</button>
-            <button><i class="fas fa-truck"></i>Грузовые и прицепы</button>
-            <button><i class="fas fa-microchip"></i>Оборудование</button>
-            <button><i class="fas fa-snowplow"></i>Спецтехника</button>
-            <button><i class="fas fa-bus"></i>Автобусы</button>
-            <button><i class="fas fa-house"></i>Недвижимость</button>
-        </div>
-        <div class="content">
-            <div class="input-section">
-                <div class="form-group">
-                    <div class="part-container first-part">
-                        <div class="input-container-item-name item-container">
-                            <input type="text" id="item-name" name="item-name" maxlength="500"
-                                   placeholder="Наименование имущества" style="margin-top: 25px">
-                        </div>
-                        <div class="input-container-item-condition">
-                            <label for="item-condition" style="margin-top: 20px">Состояние имущества:</label>
-                            <input type="hidden" id="item-condition" name="item-condition" value="new">
-                        </div>
-                        <div class="button-group item-container">
-                            <button id="new-btn" class="toggle-btn active size-btn" data-value="new">Новое</button>
-                            <button id="used-btn" class="toggle-btn size-btn" data-value="used">Б/У</button>
-                        </div>
-                        <br>
-                        <div class="input-container first-container">
-                            <label for="production-year">Год выпуска/изготовления ПЛ</label>
-                        </div>
-                        <div class="input-container item-container first-container">
-                            <input type="number" id="production-year-value" name="production-year-value" value="">
-                        </div>
-                        <br>
-                        <div class="input-container first-container">
-                            <label for="currency">Валюта сделки</label>
-                        </div>
-                        <div class="input-container first-container">
-                            <select id="currency" name="currency" class="select-container">
-                                <option value="rub" data-symbol="₽">₽</option>
-                                <option value="usd" data-symbol="$">$</option>
-                                <option value="eur" data-symbol="€">€</option>
-                                <option value="cny" data-symbol="¥">¥</option>
-                            </select>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="line"></div>
-                    <div class="part-container">
-                        <div id="foreign-cost-section" class="foreign-cost-container item-container">
-                            <div class="input-container">
-                                <label for="foreign-cost-display">Стоимость имущества в иностранной валюте</label>
-                                <input type="text" id="foreign-cost-display" name="foreign-cost-display"
-                                       value="10 000">
-                                <input type="hidden" id="foreign-cost-value" name="foreign-cost-value" value="10000">
-                            </div>
-                            <div class="slider-container">
-                                <input type="range" id="foreign-cost" name="foreign-cost" min="10000" max="10000000"
-                                       value="10000" step="1000">
-                            </div>
-                            <div class="range-labels">
-                                <span id="foreign-min-label">10 тыс.</span>
-                                <span id="foreign-max-label">10 млн.</span>
-                            </div>
-                            <br>
-                        </div>
-                        <div class="input-container item-container">
-                            <label for="cost">Стоимость имущества в рублях</label>
-                            <input type="text" id="cost-display" name="cost-display" value="1 000 000,00"
-                                   maxlength="15">
-                            <input type="hidden" id="cost-value" name="cost-value" value="1000000">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="cost" name="cost" min="100000" max="100000000" value="1000000"
-                                   step="100000">
-                        </div>
-                        <div class="range-labels">
-                            <span>100 тыс. ₽</span>
-                            <span>100 млн ₽</span>
-                        </div>
-                        <div class="input-container">
-                            <label for="initial-payment">Первоначальный взнос</label>
-                            <div class="input-group">
-                                <input type="text" id="initial-payment-value-display"
-                                       name="initial-payment-value-display"
-                                       value="100 000,00" placeholder="₽">
-                                <input type="hidden" id="initial-payment-value" name="initial-payment-value"
-                                       value="100000"
-                                       placeholder="₽">
-                                <input type="number" id="initial-payment-percent" name="initial-payment-percent"
-                                       value="10.00"
-                                       placeholder="%" max="49.99">
-                                <span class="percent-label">%</span>
-                            </div>
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="initial-payment" name="initial-payment" min="0" max="49" value="10"
-                                   step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0%</span>
-                            <span>49.99%</span>
-                        </div>
-                        <div class="input-container">
-                            <label for="credit-value">Размер кредита</label>
-                            <div class="input-group">
-                                <input type="text" id="credit-value-display" name="credit-value-display"
-                                       value="800 000,00" placeholder="₽">
-                                <input type="hidden" id="credit-value" name="credit-value" value="800000"
-                                       placeholder="₽">
-                                <input type="number" id="credit-percent" name="credit-percent" value="80.00"
-                                       placeholder="%" max="90">
-                                <span class="percent-label">%</span>
-                            </div>
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="credit" name="credit" min="0" max="90" value="80"
-                                   step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0%</span>
-                            <span>90%</span>
-                        </div>
-                        <div class="input-container">
-                            <label for="term">Срок договора</label>
-                            <input type="number" id="term-value" name="term-value" value="36" max="100">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="term" name="term" min="1" max="60" value="36">
-                        </div>
-                        <div class="range-labels">
-                            <span>1 мес.</span>
-                            <span>60 мес.</span>
-                        </div>
-                        <div class="input-container">
-                            <label>Комиссия банка</label>
-                            <input type="number" id="commission-value" name="commission-value" value="0" placeholder="%"
-                                   max="3">
-                            <span class="percent-label">%</span>
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="commission" name="commission" min="0" max="3" value="0" step="0.1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0%</span>
-                            <span>3%</span>
-                        </div>
-                        <div class="input-container">
-                            <label>Комиссия ООО "ЛКМБ-РТ"</label>
-                            <input type="number" id="commission-lkmb-value" name="commission-lkmb-value" value="1.8"
-                                   placeholder="%"
-                                   max="3">
-                            <span class="percent-label">%</span>
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="commission-lkmb" name="commission-lkmb" min="0" max="3" value="1.8"
-                                   step="0.1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0%</span>
-                            <span>3%</span>
-                        </div>
-                        <br>
-                        <div class="form-group">
-                            <div class="input-container">
-                                <label for="input-period">Поставщик выделяет НДС</label>
-                                <div class="button-group-nds">
-                                    <button id="yes-nds-btn" class="toggle-btn active" data-value="yes-nds">Да</button>
-                                    <button id="no-nds-btn" class="toggle-btn" data-value="no-nds">Нет</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-container">
-                                <label for="input-period">Задаток</label>
-                                <div class="button-group-deposit">
-                                    <button id="distribute-deposit-btn" class="toggle-btn"
-                                            data-value="yes-distribute-deposit">
-                                        Распределять
-                                    </button>
-                                    <button id="no-distribute-deposit-btn" class="toggle-btn active"
-                                            data-value="no-distribute-deposit">Не распределять
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-container">
-                                <label for="input-period">Выкупной платеж</label>
-                                <div class="button-group-redemption">
-                                    <button id="distribute-redemption-btn" class="toggle-btn"
-                                            data-value="yes-distribute-redemption">Распределять
-                                    </button>
-                                    <button id="no-distribute-redemption-btn" class="toggle-btn active"
-                                            data-value="no-distribute-redemption">Не распределять
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-container">
-                                <label for="leas-day">День лизингового платежа</label>
-                                <input type="text" name="leas-day" id="leas-day" value="20" maxlength="2"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-container">
-                                <label for="input-period">Срок ввода в эксплуатацию/подписания акта-приема
-                                    передачи</label>
-                                <input type="date" name="input-period" id="input-period" value=""/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="line"></div>
-                <div class="part-container">
-                    <div id="tranches-container" class="table-container">
-                        <table id="tranches-table">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th id="tranche-1"><i class="fa-solid fa-coins"></i> Транш 1</th>
-                                <th id="tranche-2"><i class="fa-solid fa-coins"></i> Транш 2</th>
-                                <th id="tranche-3"><i class="fa-solid fa-coins"></i> Транш 3</th>
-                                <th id="tranche-4"><i class="fa-solid fa-coins"></i> Транш 4</th>
-                                <th id="tranche-5"><i class="fa-solid fa-coins"></i> Транш 5</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>Размер транша, %</td>
-                                <td><input type="text" name="tranche1-size" id="tranche1-size" value="20"
-                                           maxlength="5"/>
-                                </td>
-                                <td><input type="text" name="tranche2-size" id="tranche2-size" value="80"
-                                           maxlength="5"/>
-                                </td>
-                                <td><input type="text" name="tranche3-size" id="tranche3-size" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="tranche4-size" id="tranche4-size" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="tranche5-size" id="tranche5-size" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Ставка банка, %</td>
-                                <td><input type="text" name="tranche1-rate" id="tranche1-rate" value="20"
-                                           maxlength="5"/>
-                                </td>
-                                <td><input type="text" name="tranche2-rate" id="tranche2-rate" value="20"
-                                           maxlength="5"/>
-                                </td>
-                                <td><input type="text" name="tranche3-rate" id="tranche3-rate" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="tranche4-rate" id="tranche4-rate" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="tranche5-rate" id="tranche5-rate" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Ставка ЛК, %</td>
-                                <td><input type="text" name="tranche1-fee" id="tranche1-fee" value="4.85"
-                                           maxlength="5"/>
-                                </td>
-                                <td><input type="text" name="tranche2-fee" id="tranche2-fee" value="4.85"
-                                           maxlength="5"/>
-                                </td>
-                                <td><input type="text" name="tranche3-fee" id="tranche3-fee" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="tranche4-fee" id="tranche4-fee" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="tranche5-fee" id="tranche5-fee" value="" maxlength="5"
-                                           placeholder="%"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Ставка ЛК, % (если без банка)</td>
-                                <td><input type="text" name="tranche1-own-fee" id="tranche1-own-fee" value=""
-                                           maxlength="5" placeholder="%"/></td>
-                                <td><input type="text" name="tranche2-own-fee" id="tranche2-own-fee" value=""
-                                           maxlength="5" placeholder="%"/></td>
-                                <td><input type="text" name="tranche3-own-fee" id="tranche3-own-fee" value=""
-                                           maxlength="5" placeholder="%"/></td>
-                                <td><input type="text" name="tranche4-own-fee" id="tranche4-own-fee" value=""
-                                           maxlength="5" placeholder="%"/></td>
-                                <td><input type="text" name="tranche5-own-fee" id="tranche5-own-fee" value=""
-                                           maxlength="5" placeholder="%"/></td>
-                            </tr>
-                            <tr>
-                                <td class="date-of-credit">Дата выдачи кредита</td>
-                                <td><input type="date" name="tranche1-credit-date" id="tranche1-credit-date"
-                                           maxlength="5"/>
-                                </td>
-                                <td><input type="date" name="tranche2-credit-date" id="tranche2-credit-date"
-                                           maxlength="5" readonly/>
-                                </td>
-                                <td><input type="date" name="tranche3-credit-date" id="tranche3-credit-date"
-                                           maxlength="5" readonly/>
-                                </td>
-                                <td><input type="date" name="tranche4-credit-date" id="tranche4-credit-date"
-                                           maxlength="5" readonly/>
-                                </td>
-                                <td><input type="date" name="tranche5-credit-date" id="tranche5-credit-date"
-                                           maxlength="5" readonly/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="deferment-title">Отсрочка по уплате лизинговых платежей</td>
-                                <td><input type="text" name="payment-deferment1" id="payment-deferment1" value=""
-                                           placeholder="мес."
-                                           maxlength="2"/></td>
-                                <td><input type="text" name="payment-deferment2" id="payment-deferment2" value=""
-                                           placeholder="мес."
-                                           maxlength="2" readonly/></td>
-                                <td><input type="text" name="payment-deferment3" id="payment-deferment3" value=""
-                                           placeholder="мес."
-                                           maxlength="2" readonly/></td>
-                                <td><input type="text" name="payment-deferment4" id="payment-deferment4" value=""
-                                           placeholder="мес."
-                                           maxlength="2" readonly/></td>
-                                <td><input type="text" name="payment-deferment5" id="payment-deferment5" value=""
-                                           placeholder="мес."
-                                           maxlength="2" readonly/></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="part-container">
-                    <p id="first-payment-date" style="font-weight: bold">
-                        Дата первого платежа по лизингу:
-                        <span id="calculated-payment-date"></span>
-                        <i id="date-warning-icon" class="fa-solid fa-circle-exclamation"
-                           style="display:none; color:#5e2626;"></i>
-                    </p>
-                </div>
-                <br>
-                <div class="line"></div>
-                <div class="part-container">
-                    <h5 id="insurance"><i class="fa-solid fa-car-burst" style="color: #727a88"></i> Расходы на
-                        страхование:
-                    </h5>
-                    <div id="insurance-container" class="table-container">
-                        <table id="insurance-table">
-                            <thead>
-                            <tr>
-                                <th></th>
-                                <th id="insurance-1"><i class="fa-regular fa-calendar"></i> 1 год</th>
-                                <th id="insurance-2"><i class="fa-regular fa-calendar"></i> 2 год</th>
-                                <th id="insurance-3"><i class="fa-regular fa-calendar"></i> 3 год</th>
-                                <th id="insurance-4"><i class="fa-regular fa-calendar"></i> 4 год</th>
-                                <th id="insurance-5"><i class="fa-regular fa-calendar"></i> 5 год</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>КАСКО, %</td>
-                                <td><input type="text" name="insurance-casko1" id="insurance-casko1" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="insurance-casko2" id="insurance-casko2" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="insurance-casko3" id="insurance-casko3" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="insurance-casko4" id="insurance-casko4" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="insurance-casko5" id="insurance-casko5" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ОСАГО, %</td>
-                                <td><input type="text" name="insurance-osago1" id="insurance-osago1" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="insurance-osago2" id="insurance-osago2" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="insurance-osago3" id="insurance-osago3" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="insurance-osago4" id="insurance-osago4" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                                <td><input type="text" name="insurance-osago5" id="insurance-osago5" value=""
-                                           maxlength="5" placeholder="%"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>ЖИЗНИ и ЗДОРОВЬЯ, руб.</td>
-                                <td><input type="text" name="health-insurance1" id="health-insurance1" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                                <td><input type="text" name="health-insurance2" id="health-insurance2" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                                <td><input type="text" name="health-insurance3" id="health-insurance3" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                                <td><input type="text" name="health-insurance4" id="health-insurance4" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                                <td><input type="text" name="health-insurance5" id="health-insurance5" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                            </tr>
-                            <tr>
-                                <td>ИНОЕ, руб.</td>
-                                <td><input type="text" name="other-insurance1" id="other-insurance1" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                                <td><input type="text" name="other-insurance2" id="other-insurance2" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                                <td><input type="text" name="other-insurance3" id="other-insurance3" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                                <td><input type="text" name="other-insurance4" id="other-insurance4" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                                <td><input type="text" name="other-insurance5" id="other-insurance5" value=""
-                                           maxlength="12" placeholder="руб."/></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <br>
-                <div class="line"></div>
-                <div class="part-container">
-                    <h5 id="overhead"><i class="fa-solid fa-dolly" style="color: #727a88"></i> Накладные расходы: </h5>
-                    <br>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Агентское вознаграждение, %</label>
-                            <input type="number" id="agent-commission-value" name="agent-commission-value" value="0"
-                                   placeholder="%" maxlength="3">
-                            <span class="percent-label">%</span>
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="agent-commission" name="agent-commission" min="0" max="5" value="0"
-                                   step="0.1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0%</span>
-                            <span>5%</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Бонус менеджера, %</label>
-                            <input type="number" id="manager-bonus-value" name="manager-bonus-value" value="1.2"
-                                   placeholder="%">
-                            <span class="percent-label">%</span>
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="manager-bonus" name="manager-bonus" min="0" max="1.5" value="1.2"
-                                   step="0.1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0%</span>
-                            <span>1.5%</span>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="part-container">
-                    <button class="btn-hover-sm color-3" id="default-button"><i class="fa-solid fa-check"></i> По
-                        умолчанию
-                    </button>
-                    <button class="btn-hover-sm color-3" id="clear-button"><i class="fa-solid fa-trash"></i> Очистить
-                    </button>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Трекеры, руб.</label>
-                            <input type="text" id="tracker-display" name="tracker-display" value="43 000,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="tracker-value" name="tracker-value" value="43000">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="tracker" name="tracker" min="0" max="100000" value="43000" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Маячки, руб.</label>
-                            <input type="text" id="mayak-display" name="mayak-display" value="15 000,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="mayak-value" name="mayak-value" value="15000">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="mayak" name="mayak" min="0" max="100000" value="15000" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Федресурс, руб.</label>
-                            <input type="text" id="fedresurs-display" name="fedresurs-display" value="2 000,00"
-                                   placeholder="руб." maxlength="7">
-                            <input type="hidden" id="fedresurs-value" name="fedresurs-value" value="2000">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="fedresurs" name="fedresurs" min="0" max="100000" value="2000"
-                                   step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>ГСМ, руб.</label>
-                            <input type="text" id="gsm-display" name="gsm-display" value="950,00" placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="gsm-value" name="gsm-value" value="950">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="gsm" name="gsm" min="0" max="100000" value="950" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Почтовые расходы, руб.</label>
-                            <input type="text" id="mail-display" name="mail-display" value="400,00" placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="mail-value" name="mail-value" value="400">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="mail" name="mail" min="0" max="100000" value="400" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Амортизация транспорта, руб.</label>
-                            <input type="text" id="depr-transport-display" name="depr-transport-display" value="450,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="depr-transport-value" name="depr-transport-value" value="450">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="depr-transport" name="depr-transport" min="0" max="100000"
-                                   value="450"
-                                   step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Командировочные расходы, руб.</label>
-                            <input type="text" id="travel-display" name="travel-display" value="200,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="travel-value" name="travel-value" value="200">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="travel" name="travel" min="0" max="100000" value="200" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Расходы на приобретение канцтоваров, руб.</label>
-                            <input type="text" id="stationery-display" name="stationery-display" value="100,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="stationery-value" name="stationery-value" value="100">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="stationery" name="stationery" min="0" max="100000" value="100"
-                                   step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Телефония и интернет, руб.</label>
-                            <input type="text" id="internet-display" name="internet-display" value="600,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="internet-value" name="internet-value" value="600">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="internet" name="internet" min="0" max="100000" value="600" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Регистрация залогов, руб.</label>
-                            <input type="text" id="pledge-display" name="pledge-display" value="1 000,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="pledge-value" name="pledge-value" value="1000">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="pledge" name="pledge" min="0" max="100000" value="1000" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Регистрация залога в банках, руб.</label>
-                            <input type="text" id="bank-pledge-display" name="bank-pledge-display" value="1 000,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="bank-pledge-value" name="bank-pledge-value" value="1000">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="bank-pledge" name="bank-pledge" min="0" max="100000" value="1000"
-                                   step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Расходы на экспресс-почту, руб.</label>
-                            <input type="text" id="express-display" name="express-display" value="2 166,00"
-                                   placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="express-value" name="express-value" value="2166">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="express" name="express" min="0" max="100000" value="2166" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Пошлина за получение выписки из ЕГРН, руб.</label>
-                            <input type="text" id="egrn-display" name="egrn-display" value="400,00" placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="egrn-value" name="egrn-value" value="400">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="egrn" name="egrn" min="0" max="100000" value="400" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label>Пошлина за получение сведение из ЕГРЮЛ, руб.</label>
-                            <input type="text" id="egrul-display" name="egrul-display" value="200,00" placeholder="руб."
-                                   maxlength="7">
-                            <input type="hidden" id="egrul-value" name="egrul-value" value="200">
-                        </div>
-                        <div class="slider-container">
-                            <input type="range" id="egrul" name="egrul" min="0" max="100000" value="200" step="1">
-                        </div>
-                        <div class="range-labels">
-                            <span>0 руб.</span>
-                            <span>100 тыс. руб.</span>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="line"></div>
-                <div class="part-container">
-                    <h5 id="others"><i class="fa-regular fa-clipboard" style="color: #727a88; margin-bottom: 20px"></i>
-                        Прочие условия:
-                    </h5>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label for="credit-term">Срок кредита</label>
-                            <input type="text" name="credit-term" id="credit-term" value="" placeholder="мес."
-                                   maxlength="2"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label for="reduce-percent">Ежегодное снижение стоимости имущества, %</label>
-                            <input type="text" name="reduce-percent" id="reduce-percent" value="10" placeholder="%"
-                                   maxlength="3" class="digits-only"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label for="amortization-group">Амортизационная группа</label>
-                            <select name="amortization-group" id="amortization-group" class="amort-container">
-                                <option value="1-я гр. (от 12 до 24 мес.)">1-я гр. (от 12 до 24 мес.)</option>
-                                <option value="2-я гр. (от 25 до 36 мес)">2-я гр. (от 25 до 36 мес)</option>
-                                <option value="3-я гр. (от 37 до 60 мес)" selected>3-я гр. (от 37 до 60 мес)</option>
-                                <option value="4-я гр. (от 61 до 84 мес.)">4-я гр. (от 61 до 84 мес.)</option>
-                                <option value="5-я гр. (от 85 до 120 мес.)">5-я гр. (от 85 до 120 мес.)</option>
-                                <option value="6-я гр. (от 121 до 180 мес.)">6-я гр. (от 121 до 180 мес.)</option>
-                                <option value="7-я гр. (от 181 до 240 мес.)">7-я гр. (от 181 до 240 мес.)</option>
-                                <option value="8-я гр. (от 241 до 300 мес.)">8-я гр. (от 241 до 300 мес.)</option>
-                                <option value="9-я гр. (от 301 до 360 мес.)">9-я гр. (от 301 до 360 мес.)</option>
-                                <option value="10-я гр. (свыше 361 мес.)">10-я гр. (свыше 361 мес.)</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label for="service-life">Срок эксплуатации</label>
-                            <input type="text" name="service-life" id="service-life" value="37" placeholder="мес."
-                                   maxlength="3" class="digits-only"/>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-container">
-                            <label for="nds-size">Размер НДС, %</label>
-                            <input type="text" name="nds-size" id="nds-size" value="20" placeholder="%" maxlength="3"
-                                   class="digits-only"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="results">
-                <div class="exchange-rates">
-                    <table class="exchange-rates-table" id="exchange-rates-table">
-                        <tr>
-                            <th>Валюта</th>
-                            <th id="previous-date">-</th>
-                            <th id="today-date">-</th>
-                        </tr>
-                        <tr>
-                            <td><img src="https://img.icons8.com/color/48/000000/china-circular.png" alt="CNY"
-                                     class="currency-icon"> CNY, 1¥
-                            </td>
-                            <td id="previous-cny"> ₽</td>
-                            <td id="today-cny"> ₽</td>
-                        </tr>
-                        <tr>
-                            <td><img src="https://img.icons8.com/color/48/000000/usa-circular.png" alt="USD"
-                                     class="currency-icon"> USD, 1$
-                            </td>
-                            <td id="previous-usd"> ₽</td>
-                            <td id="today-usd"> ₽</td>
-                        </tr>
-                        <tr>
-                            <td><img src="https://img.icons8.com/?size=100&id=Y76SzpmxslW4&format=png&color=000000"
-                                     alt="EUR" class="currency-icon"> EUR, 1€
-                            </td>
-                            <td id="previous-eur"> ₽</td>
-                            <td id="today-eur"> ₽</td>
-                        </tr>
-                    </table>
-                </div>
-                <br>
-                <div class="key-rate-container">
-                    <div class="label">Ключевая ставка</div>
-                    <div class="date-rate-container">
-                        <div class="date"></div>
-                        <div class="rate"></div>
-                    </div>
-                </div>
-                <button class="btn-hover color-4" id="pre-calculate-button"><i class="fa-regular fa-eye"></i>
-                    Сформировать расчет
-                </button>
+						<div class="loader" id="loader"></div>
+						<div class="part-container" style="margin-top: 100px">
+							<h4>
+								<img
+									width="35"
+									height="35"
+									src="https://img.icons8.com/bubbles/100/microsoft-excel-2019.png"
+									alt="microsoft-excel-2019"
+								/>
+								Загрузить расчет
+							</h4>
+							<!-- Кастомный загрузчик файлов -->
+							<div class="file-upload-container" id="file-upload-container">
+								<div class="file-upload-content">
+									<h4 style="font-size: 16px">Перетащите файл сюда</h4>
+									<p>или</p>
+									<label for="file-upload-input" class="file-upload-label"
+										>Выберите файл</label
+									>
+									<input
+										id="file-upload-input"
+										class="file-upload-input"
+										type="file"
+										accept=".xlsm"
+									/>
+									<p class="file-name" id="file-name">Файл не выбран</p>
+									<p class="error-message" id="error-message">
+										Неправильный формат файла. Разрешен только формат .xlsm
+									</p>
+								</div>
+							</div>
+							<button class="upload-button" id="upload-button">
+								Загрузить
+							</button>
+						</div>
 
-                <div class="loader" id="loader"></div>
-                <div class="part-container" style="margin-top: 100px">
-                    <h4><img width="35" height="35" src="https://img.icons8.com/bubbles/100/microsoft-excel-2019.png"
-                             alt="microsoft-excel-2019"/> Загрузить расчет</h4>
-                    <!-- Кастомный загрузчик файлов -->
-                    <div class="file-upload-container" id="file-upload-container">
-                        <div class="file-upload-content">
-                            <h4 style="font-size: 16px">Перетащите файл сюда</h4>
-                            <p>или</p>
-                            <label for="file-upload-input" class="file-upload-label">Выберите файл</label>
-                            <input id="file-upload-input" class="file-upload-input" type="file"
-                                   accept=".xlsm"/>
-                            <p class="file-name" id="file-name">Файл не выбран</p>
-                            <p class="error-message" id="error-message">Неправильный формат файла. Разрешен только
-                                формат .xlsm</p>
-                        </div>
-                    </div>
-                    <button class="upload-button" id="upload-button">Загрузить</button>
-                </div>
+						<div class="part-container" style="margin-top: 100px">
+							<div id="created-calculations">
+								<h4 style="margin-bottom: 20px">
+									<img
+										width="35"
+										height="35"
+										src="https://img.icons8.com/bubbles/100/microsoft-excel-2019.png"
+										alt="microsoft-excel-2019"
+									/>
+									Созданные расчеты
+								</h4>
+								<!-- Форма фильтрации по датам -->
+								<form
+									method="GET"
+									action="#"
+									class="leasing-calculator-date-filter-form"
+								>
+									<div class="leasing-calculator-form-group start">
+										<label for="start_date">Дата начала:</label>
+										<input
+											type="date"
+											id="start_date"
+											name="start_date"
+											class="leasing-calculator-date-input"
+										/>
+									</div>
 
-                <div class="part-container" style="margin-top: 100px">
-                    <div id="created-calculations">
-                        <h4 style="margin-bottom: 20px"><img width="35" height="35"
-                                                             src="https://img.icons8.com/bubbles/100/microsoft-excel-2019.png"
-                                                             alt="microsoft-excel-2019"/> Созданные
-                            расчеты</h4>
-                        <!-- Форма фильтрации по датам -->
-                        <form method="GET" action="#" class="leasing-calculator-date-filter-form">
-                            <div class="leasing-calculator-form-group start">
-                                <label for="start_date">Дата начала:</label>
-                                <input type="date" id="start_date" name="start_date"
-                                       class="leasing-calculator-date-input">
-                            </div>
+									<div class="leasing-calculator-form-group end">
+										<label for="end_date">Дата конца:</label>
+										<input
+											type="date"
+											id="end_date"
+											name="end_date"
+											class="leasing-calculator-date-input"
+										/>
+									</div>
 
-                            <div class="leasing-calculator-form-group end">
-                                <label for="end_date">Дата конца:</label>
-                                <input type="date" id="end_date" name="end_date" class="leasing-calculator-date-input">
-                            </div>
-
-                            <div class="leasing-calculator-filter-btn">
-                                <button type="submit" class="leasing-calculator-filter-button">Показать</button>
-                            </div>
-                        </form>
-                        <table class="calc-list-table">
-                            <thead>
-                            <tr>
-                                <th scope="col">№</th>
-                                <th scope="col">Наименование ПЛ</th>
-                                <th scope="col"></th>
-                            </tr>
-                            </thead>
-                            <tbody id="calc-list-main">
-                            {% for calc in calc_list %}
-                                <tr onclick="window.location.href='{{ url_for('leas_calc.get_leasing_calculator_by_id', calc_id=calc.id) }}'">
-                                    <td>{{ loop.index }}</td>
-                                    <td class="date-ru">{{ calc.item_name }}</td>
-                                    <td>
-                                        <i class="fa-regular fa-file-excel" data-id="{{ calc.id }}"
-                                           onclick="downloadLeaseCalculation(event, '{{ calc.id }}')"></i>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                        <div id="pagination-container-calc"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-to-top" onclick="simpleScrollTest()">
-            <i class="fa-solid fa-arrow-up"></i>
-        </div>
-    </div>
-    <br>
-    <div class="container" id="created-proposals">
-        <h4><img width="40" height="40" src="https://img.icons8.com/bubbles/40/pdf-2.png" alt="pdf-2"/> Созданные
-            коммерческие предложения</h4>
-        <table class="custom-table">
-            <thead>
-            <tr>
-                <th scope="col">№</th>
-                <th scope="col">
-                    Наименование ПЛ
-                    <input type="text" id="filterInput" onkeyup="filterTable()" placeholder="Поиск...">
-                </th>
-                <th scope="col">Цена ПЛ</th>
-                <th scope="col">Сумма по ДЛ</th>
-                <th scope="col">Тип ПЛ</th>
-                <th scope="col">Дата</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody id="calc-list-body">
-            {% for offer in com_offers_list %}
-                <tr data-id="{{ offer.leas_calculator.id }}"
-                    data-deal-text="ДЛ {{ offer.deal.dl_number }} | {{ offer.deal.title }}"
-                    onclick="openModal('{{ offer.leas_calculator.item_name }}',
+									<div class="leasing-calculator-filter-btn">
+										<button
+											type="submit"
+											class="leasing-calculator-filter-button"
+										>
+											Показать
+										</button>
+									</div>
+								</form>
+								<table class="calc-list-table">
+									<thead>
+										<tr>
+											<th scope="col">№</th>
+											<th scope="col">Наименование ПЛ</th>
+											<th scope="col"></th>
+										</tr>
+									</thead>
+									<tbody id="calc-list-main">
+										{% for calc in calc_list %}
+										<tr
+											onclick="window.location.href='{{ url_for('leas_calc.get_leasing_calculator_by_id', calc_id=calc.id) }}'"
+										>
+											<td>{{ loop.index }}</td>
+											<td class="date-ru">{{ calc.item_name }}</td>
+											<td>
+												<i
+													class="fa-regular fa-file-excel"
+													data-id="{{ calc.id }}"
+													onclick="downloadLeaseCalculation(event, '{{ calc.id }}')"
+												></i>
+											</td>
+										</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+								<div id="pagination-container-calc"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="scroll-to-top" onclick="simpleScrollTest()">
+					<i class="fa-solid fa-arrow-up"></i>
+				</div>
+			</div>
+			<br />
+			<div class="container" id="created-proposals">
+				<h4>
+					<img
+						width="40"
+						height="40"
+						src="https://img.icons8.com/bubbles/40/pdf-2.png"
+						alt="pdf-2"
+					/>
+					Созданные коммерческие предложения
+				</h4>
+				<table class="custom-table">
+					<thead>
+						<tr>
+							<th scope="col">№</th>
+							<th scope="col">
+								Наименование ПЛ
+								<input
+									type="text"
+									id="filterInput"
+									onkeyup="filterTable()"
+									placeholder="Поиск..."
+								/>
+							</th>
+							<th scope="col">Цена ПЛ</th>
+							<th scope="col">Сумма по ДЛ</th>
+							<th scope="col">Тип ПЛ</th>
+							<th scope="col">Дата</th>
+							<th scope="col"></th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody id="calc-list-body">
+						{% for offer in com_offers_list %}
+						<tr
+							data-id="{{ offer.leas_calculator.id }}"
+							data-deal-text="ДЛ {{ offer.deal.dl_number }} | {{ offer.deal.title }}"
+							onclick="openModal('{{ offer.leas_calculator.item_name }}',
                             '{{ offer.leas_calculator.date_ru }}',
                             '{{ offer.leas_calculator.item_price_str }}',
                             '{{ offer.leas_calculator.item_type }}',
                             'ДЛ {{ offer.deal.dl_number }} | {{ offer.deal.title }}',
                             '{{ offer.leas_calculator.id }}',
                             '{{ user_fullname }}',
-                            '{{ offer.leas_calculator.deal_id }}')">
-                    <td>{{ loop.index }}</td>
-                    <td class="item-name">{{ offer.leas_calculator.item_name }}</td>
-                    <td class="item-price">{{ offer.leas_calculator.item_price_str }}</td>
-                    <td class="item-dl-amount">{{ offer.main_data.lease_agreement_amount_str }}</td>
-                    <td class="item-type">{{ offer.leas_calculator.item_type }}</td>
-                    <td class="date-ru">{{ offer.leas_calculator.date_ru }}</td>
-                    <td>
-                        {% if offer.leas_calculator.deal_id %}
-                            <i class="fa-solid fa-link" id="fa-link"></i>
-                            <!-- Иконка цепочки для привязанных КП -->
-                        {% else %}
-                            <i class="fa-solid fa-unlink" id="fa-unlink"></i>
-                            <!-- Иконка разорванной цепочки для непривязанных КП -->
-                        {% endif %}
-                    </td>
-                    <td>
-                        <i class="fa-regular fa-file-pdf" data-id="{{ offer.offer.id }}"
-                           onclick="downloadCalculation(event, '{{ offer.offer.id }}')"></i>
-                        <i class="fa-regular fa-trash-can" data-id="{{ offer.offer.id }}"
-                           onclick="deleteCalculation(event, '{{ offer.offer.id }}')"></i>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        <div id="pagination-container"></div>
-    </div>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const clickableItems = document.querySelectorAll('.sidebar ul li.clickable');
+                            '{{ offer.leas_calculator.deal_id }}')"
+						>
+							<td>{{ loop.index }}</td>
+							<td class="item-name">{{ offer.leas_calculator.item_name }}</td>
+							<td class="item-price">
+								{{ offer.leas_calculator.item_price_str }}
+							</td>
+							<td class="item-dl-amount">
+								{{ offer.main_data.lease_agreement_amount_str }}
+							</td>
+							<td class="item-type">{{ offer.leas_calculator.item_type }}</td>
+							<td class="date-ru">{{ offer.leas_calculator.date_ru }}</td>
+							<td>
+								{% if offer.leas_calculator.deal_id %}
+								<i class="fa-solid fa-link" id="fa-link"></i>
+								<!-- Иконка цепочки для привязанных КП -->
+								{% else %}
+								<i class="fa-solid fa-unlink" id="fa-unlink"></i>
+								<!-- Иконка разорванной цепочки для непривязанных КП -->
+								{% endif %}
+							</td>
+							<td>
+								<i
+									class="fa-regular fa-file-pdf"
+									data-id="{{ offer.offer.id }}"
+									onclick="downloadCalculation(event, '{{ offer.offer.id }}')"
+								></i>
+								<i
+									class="fa-regular fa-trash-can"
+									data-id="{{ offer.offer.id }}"
+									onclick="deleteCalculation(event, '{{ offer.offer.id }}')"
+								></i>
+							</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<div id="pagination-container"></div>
+			</div>
+		</div>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const clickableItems = document.querySelectorAll(
+					'.sidebar ul li.clickable'
+				)
 
-        clickableItems.forEach(function (item) {
-            item.addEventListener('click', function () {
-                const link = item.querySelector('a.nav-link');
-                if (link) {
-                    window.location.href = link.href;
-                }
-            });
-        });
-    });
-    document.getElementById('currency').addEventListener('change', function () {
-        const selectedCurrency = this.value;
-        const selectedSymbol = this.options[this.selectedIndex].getAttribute('data-symbol');
-        const foreignCostSection = document.getElementById('foreign-cost-section');
+				clickableItems.forEach(function (item) {
+					item.addEventListener('click', function () {
+						const link = item.querySelector('a.nav-link')
+						if (link) {
+							window.location.href = link.href
+						}
+					})
+				})
+			})
+			document
+				.getElementById('currency')
+				.addEventListener('change', function () {
+					const selectedCurrency = this.value
+					const selectedSymbol =
+						this.options[this.selectedIndex].getAttribute('data-symbol')
+					const foreignCostSection = document.getElementById(
+						'foreign-cost-section'
+					)
 
-        if (selectedCurrency === 'rub') {
-            foreignCostSection.classList.remove('show');
-        } else {
-            foreignCostSection.classList.add('show');
-        }
+					if (selectedCurrency === 'rub') {
+						foreignCostSection.classList.remove('show')
+					} else {
+						foreignCostSection.classList.add('show')
+					}
 
-        // Обновление лейблов валюты
-        document.getElementById('foreign-min-label').textContent = `10 тыс. ${selectedSymbol}`;
-        document.getElementById('foreign-max-label').textContent = `10 млн. ${selectedSymbol}`;
-    });
-</script>
-<script>
-    document.getElementById('pre-calculate-button').addEventListener('click', function () {
-        // Модальное окно подтверждения с SweetAlert2
-        Swal.fire({
-            text: 'Вы точно хотите запустить расчет с текущими данными?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#5789b9',
-            cancelButtonColor: '#ad6c72',
-            confirmButtonText: 'Да, запустить',
-            cancelButtonText: 'Отменить'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Если пользователь подтвердил, то выполняем расчет
-                const loader = document.getElementById('loader');
-                const preCalculateButton = document.getElementById('pre-calculate-button');
+					// Обновление лейблов валюты
+					document.getElementById(
+						'foreign-min-label'
+					).textContent = `10 тыс. ${selectedSymbol}`
+					document.getElementById(
+						'foreign-max-label'
+					).textContent = `10 млн. ${selectedSymbol}`
+				})
+		</script>
+		<script>
+			document.getElementById('pre-calculate-button').addEventListener('click', function () {
+			    // Модальное окно подтверждения с SweetAlert2
+			    Swal.fire({
+			        text: 'Вы точно хотите запустить расчет с текущими данными?',
+			        icon: 'warning',
+			        showCancelButton: true,
+			        confirmButtonColor: '#5789b9',
+			        cancelButtonColor: '#ad6c72',
+			        confirmButtonText: 'Да, запустить',
+			        cancelButtonText: 'Отменить'
+			    }).then((result) => {
+			        if (result.isConfirmed) {
+			            // Если пользователь подтвердил, то выполняем расчет
+			            const loader = document.getElementById('loader');
+			            const preCalculateButton = document.getElementById('pre-calculate-button');
 
-                preCalculateButton.disabled = true; // Заблокировать кнопку
-                preCalculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
-                loader.style.display = 'flex'; // Показать круг загрузки
+			            preCalculateButton.disabled = true; // Заблокировать кнопку
+			            preCalculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
+			            loader.style.display = 'flex'; // Показать круг загрузки
 
-                // Найти активную вкладку
-                const itemType = document.querySelector('.tabs button.active');
-                const activeTabText = itemType ? itemType.innerText.trim() : '';
+			            // Найти активную вкладку
+			            const itemType = document.querySelector('.tabs button.active');
+			            const activeTabText = itemType ? itemType.innerText.trim() : '';
 
-                // Найти состояние имущества
-                const itemCondition = document.querySelector('.button-group button.active')
-                const conditionText = itemCondition ? itemCondition.innerText.trim() : '';
+			            // Найти состояние имущества
+			            const itemCondition = document.querySelector('.button-group button.active')
+			            const conditionText = itemCondition ? itemCondition.innerText.trim() : '';
 
-                // Найти состояние НДС
-                const itemVAT = document.querySelector('.button-group-nds button.active')
-                const vatText = itemVAT ? itemVAT.innerText.trim() : '';
+			            // Найти состояние НДС
+			            const itemVAT = document.querySelector('.button-group-nds button.active')
+			            const vatText = itemVAT ? itemVAT.innerText.trim() : '';
 
-                // Найти состояние задатка
-                const itemDeposit = document.querySelector('.button-group-deposit button.active')
-                const depositText = itemDeposit ? itemDeposit.innerText.trim() : '';
+			            // Найти состояние задатка
+			            const itemDeposit = document.querySelector('.button-group-deposit button.active')
+			            const depositText = itemDeposit ? itemDeposit.innerText.trim() : '';
 
-                // Найти состояние выкупного
-                const itemRedemption = document.querySelector('.button-group-redemption button.active')
-                const redemptionText = itemRedemption ? itemRedemption.innerText.trim() : '';
+			            // Найти состояние выкупного
+			            const itemRedemption = document.querySelector('.button-group-redemption button.active')
+			            const redemptionText = itemRedemption ? itemRedemption.innerText.trim() : '';
 
-                // Найти цену ПЛ
-                const itemPrice = document.getElementById('cost-value').value;
+			            // Найти цену ПЛ
+			            const itemPrice = document.getElementById('cost-value').value;
 
-                // Найти остальные поля
-                const itemYear = document.getElementById('production-year-value').value;
-                const itemName = document.getElementById('item-name').value;
-                const currency = document.getElementById('currency').value;
-                const foreignCost = document.getElementById('foreign-cost-value').value;
-                const initialPayment = document.getElementById('initial-payment-value').value;
-                const creditSum = document.getElementById('credit-value').value;
-                const creditTerm = document.getElementById('term-value').value;
-                const bankCommission = document.getElementById('commission-value').value;
-                const lkmbCommission = document.getElementById('commission-lkmb-value').value;
+			            // Найти остальные поля
+			            const itemYear = document.getElementById('production-year-value').value;
+			            const itemName = document.getElementById('item-name').value;
+			            const currency = document.getElementById('currency').value;
+			            const foreignCost = document.getElementById('foreign-cost-value').value;
+			            const initialPayment = document.getElementById('initial-payment-value').value;
+			            const creditSum = document.getElementById('credit-value').value;
+			            const creditTerm = document.getElementById('term-value').value;
+			            const bankCommission = document.getElementById('commission-value').value;
+			            const lkmbCommission = document.getElementById('commission-lkmb-value').value;
 
-                const insuranceCasko1 = document.getElementById('insurance-casko1').value;
-                const insuranceCasko2 = document.getElementById('insurance-casko2').value;
-                const insuranceCasko3 = document.getElementById('insurance-casko3').value;
-                const insuranceCasko4 = document.getElementById('insurance-casko4').value;
-                const insuranceCasko5 = document.getElementById('insurance-casko5').value;
+			            const insuranceCasko1 = document.getElementById('insurance-casko1').value;
+			            const insuranceCasko2 = document.getElementById('insurance-casko2').value;
+			            const insuranceCasko3 = document.getElementById('insurance-casko3').value;
+			            const insuranceCasko4 = document.getElementById('insurance-casko4').value;
+			            const insuranceCasko5 = document.getElementById('insurance-casko5').value;
 
-                const insuranceOsago1 = document.getElementById('insurance-osago1').value;
-                const insuranceOsago2 = document.getElementById('insurance-osago2').value;
-                const insuranceOsago3 = document.getElementById('insurance-osago3').value;
-                const insuranceOsago4 = document.getElementById('insurance-osago4').value;
-                const insuranceOsago5 = document.getElementById('insurance-osago5').value;
+			            const insuranceOsago1 = document.getElementById('insurance-osago1').value;
+			            const insuranceOsago2 = document.getElementById('insurance-osago2').value;
+			            const insuranceOsago3 = document.getElementById('insurance-osago3').value;
+			            const insuranceOsago4 = document.getElementById('insurance-osago4').value;
+			            const insuranceOsago5 = document.getElementById('insurance-osago5').value;
 
-                const healthInsurance1 = document.getElementById('health-insurance1').value;
-                const healthInsurance2 = document.getElementById('health-insurance2').value;
-                const healthInsurance3 = document.getElementById('health-insurance3').value;
-                const healthInsurance4 = document.getElementById('health-insurance4').value;
-                const healthInsurance5 = document.getElementById('health-insurance5').value;
+			            const healthInsurance1 = document.getElementById('health-insurance1').value;
+			            const healthInsurance2 = document.getElementById('health-insurance2').value;
+			            const healthInsurance3 = document.getElementById('health-insurance3').value;
+			            const healthInsurance4 = document.getElementById('health-insurance4').value;
+			            const healthInsurance5 = document.getElementById('health-insurance5').value;
 
-                const otherInsurance1 = document.getElementById('other-insurance1').value;
-                const otherInsurance2 = document.getElementById('other-insurance2').value;
-                const otherInsurance3 = document.getElementById('other-insurance3').value;
-                const otherInsurance4 = document.getElementById('other-insurance4').value;
-                const otherInsurance5 = document.getElementById('other-insurance5').value;
+			            const otherInsurance1 = document.getElementById('other-insurance1').value;
+			            const otherInsurance2 = document.getElementById('other-insurance2').value;
+			            const otherInsurance3 = document.getElementById('other-insurance3').value;
+			            const otherInsurance4 = document.getElementById('other-insurance4').value;
+			            const otherInsurance5 = document.getElementById('other-insurance5').value;
 
-                const agentCommission = document.getElementById('agent-commission-value').value;
-                const managerBonus = document.getElementById('manager-bonus-value').value;
-                const tracker = document.getElementById('tracker-value').value;
-                const mayak = document.getElementById('mayak-value').value;
-                const fedresurs = document.getElementById('fedresurs-value').value;
-                const gsm = document.getElementById('gsm-value').value;
-                const mail = document.getElementById('mail-value').value;
-                const deprTransport = document.getElementById('depr-transport-value').value;
-                const travel = document.getElementById('travel-value').value;
-                const stationery = document.getElementById('stationery-value').value;
-                const internet = document.getElementById('internet-value').value;
-                const pledge = document.getElementById('pledge-value').value;
-                const bankPledge = document.getElementById('bank-pledge-value').value;
-                const express = document.getElementById('express-value').value;
-                const egrn = document.getElementById('egrn-value').value;
-                const egrul = document.getElementById('egrul-value').value;
+			            const agentCommission = document.getElementById('agent-commission-value').value;
+			            const managerBonus = document.getElementById('manager-bonus-value').value;
+			            const tracker = document.getElementById('tracker-value').value;
+			            const mayak = document.getElementById('mayak-value').value;
+			            const fedresurs = document.getElementById('fedresurs-value').value;
+			            const gsm = document.getElementById('gsm-value').value;
+			            const mail = document.getElementById('mail-value').value;
+			            const deprTransport = document.getElementById('depr-transport-value').value;
+			            const travel = document.getElementById('travel-value').value;
+			            const stationery = document.getElementById('stationery-value').value;
+			            const internet = document.getElementById('internet-value').value;
+			            const pledge = document.getElementById('pledge-value').value;
+			            const bankPledge = document.getElementById('bank-pledge-value').value;
+			            const express = document.getElementById('express-value').value;
+			            const egrn = document.getElementById('egrn-value').value;
+			            const egrul = document.getElementById('egrul-value').value;
 
-                const leasDay = document.getElementById('leas-day').value;
-                const inputPeriod = document.getElementById('input-period').value;
+			            const leasDay = document.getElementById('leas-day').value;
+			            const inputPeriod = document.getElementById('input-period').value;
 
-                const srokCredita = document.getElementById('credit-term').value;
-                const reducePercent = document.getElementById('reduce-percent').value;
-                const serviceLife = document.getElementById('service-life').value;
-                const amortization = document.getElementById('amortization-group').value;
-                const ndsSize = document.getElementById('nds-size').value;
+			            const srokCredita = document.getElementById('credit-term').value;
+			            const reducePercent = document.getElementById('reduce-percent').value;
+			            const serviceLife = document.getElementById('service-life').value;
+			            const amortization = document.getElementById('amortization-group').value;
+			            const ndsSize = document.getElementById('nds-size').value;
+			            const differentialPaymentIncreaseFactor = document.getElementById('differential-payment-increase-factor').value;
+			            const monthsRegressivePayments = document.getElementById('months-regressive-payments').value;
+			            const tranche1Size = Math.abs(parseFloat(document.getElementById('tranche1-size').value.replace(',', '.')) || 0);
+			            const tranche2Size = Math.abs(parseFloat(document.getElementById('tranche2-size').value.replace(',', '.')) || 0);
+			            const tranche3Size = Math.abs(parseFloat(document.getElementById('tranche3-size').value.replace(',', '.')) || 0);
+			            const tranche4Size = Math.abs(parseFloat(document.getElementById('tranche4-size').value.replace(',', '.')) || 0);
+			            const tranche5Size = Math.abs(parseFloat(document.getElementById('tranche5-size').value.replace(',', '.')) || 0);
 
-                const tranche1Size = Math.abs(parseFloat(document.getElementById('tranche1-size').value.replace(',', '.')) || 0);
-                const tranche2Size = Math.abs(parseFloat(document.getElementById('tranche2-size').value.replace(',', '.')) || 0);
-                const tranche3Size = Math.abs(parseFloat(document.getElementById('tranche3-size').value.replace(',', '.')) || 0);
-                const tranche4Size = Math.abs(parseFloat(document.getElementById('tranche4-size').value.replace(',', '.')) || 0);
-                const tranche5Size = Math.abs(parseFloat(document.getElementById('tranche5-size').value.replace(',', '.')) || 0);
+			            // Суммирование значений
+			            const totalSize = tranche1Size + tranche2Size + tranche3Size + tranche4Size + tranche5Size;
 
-                // Суммирование значений
-                const totalSize = tranche1Size + tranche2Size + tranche3Size + tranche4Size + tranche5Size;
+			            // Проверка суммы
+			            if (totalSize !== 100) {
+			                showError('Сумма всех траншей должна быть равна 100%. Текущая сумма: ' + totalSize + '%', 'Ошибка валидации');
+			                loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
+			                preCalculateButton.disabled = false; // Разблокировать кнопку
+			                preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+			                return false;
+			            }
 
-                // Проверка суммы
-                if (totalSize !== 100) {
-                    showError('Сумма всех траншей должна быть равна 100%. Текущая сумма: ' + totalSize + '%', 'Ошибка валидации');
-                    loader.style.display = 'none'; // Скрыть круг загрузки в случае ошибки
-                    preCalculateButton.disabled = false; // Разблокировать кнопку
-                    preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                    return false;
-                }
+			            const tranche1Rate = document.getElementById('tranche1-rate').value;
+			            const tranche2Rate = document.getElementById('tranche2-rate').value;
+			            const tranche3Rate = document.getElementById('tranche3-rate').value;
+			            const tranche4Rate = document.getElementById('tranche4-rate').value;
+			            const tranche5Rate = document.getElementById('tranche5-rate').value;
 
-                const tranche1Rate = document.getElementById('tranche1-rate').value;
-                const tranche2Rate = document.getElementById('tranche2-rate').value;
-                const tranche3Rate = document.getElementById('tranche3-rate').value;
-                const tranche4Rate = document.getElementById('tranche4-rate').value;
-                const tranche5Rate = document.getElementById('tranche5-rate').value;
+			            const tranche1Fee = document.getElementById('tranche1-fee').value;
+			            const tranche2Fee = document.getElementById('tranche2-fee').value;
+			            const tranche3Fee = document.getElementById('tranche3-fee').value;
+			            const tranche4Fee = document.getElementById('tranche4-fee').value;
+			            const tranche5Fee = document.getElementById('tranche5-fee').value;
 
-                const tranche1Fee = document.getElementById('tranche1-fee').value;
-                const tranche2Fee = document.getElementById('tranche2-fee').value;
-                const tranche3Fee = document.getElementById('tranche3-fee').value;
-                const tranche4Fee = document.getElementById('tranche4-fee').value;
-                const tranche5Fee = document.getElementById('tranche5-fee').value;
+			            const tranche1OwnFee = document.getElementById('tranche1-own-fee').value;
+			            const tranche2OwnFee = document.getElementById('tranche2-own-fee').value;
+			            const tranche3OwnFee = document.getElementById('tranche3-own-fee').value;
+			            const tranche4OwnFee = document.getElementById('tranche4-own-fee').value;
+			            const tranche5OwnFee = document.getElementById('tranche5-own-fee').value;
 
-                const tranche1OwnFee = document.getElementById('tranche1-own-fee').value;
-                const tranche2OwnFee = document.getElementById('tranche2-own-fee').value;
-                const tranche3OwnFee = document.getElementById('tranche3-own-fee').value;
-                const tranche4OwnFee = document.getElementById('tranche4-own-fee').value;
-                const tranche5OwnFee = document.getElementById('tranche5-own-fee').value;
+			            const tranche1CreditDate = document.getElementById('tranche1-credit-date').value;
+			            const tranche2CreditDate = document.getElementById('tranche2-credit-date').value;
+			            const tranche3CreditDate = document.getElementById('tranche3-credit-date').value;
+			            const tranche4CreditDate = document.getElementById('tranche4-credit-date').value;
+			            const tranche5CreditDate = document.getElementById('tranche5-credit-date').value;
 
-                const tranche1CreditDate = document.getElementById('tranche1-credit-date').value;
-                const tranche2CreditDate = document.getElementById('tranche2-credit-date').value;
-                const tranche3CreditDate = document.getElementById('tranche3-credit-date').value;
-                const tranche4CreditDate = document.getElementById('tranche4-credit-date').value;
-                const tranche5CreditDate = document.getElementById('tranche5-credit-date').value;
+			            const tranche1PaymentDeferment = document.getElementById('payment-deferment1').value; //
+			            const tranche2PaymentDeferment = document.getElementById('payment-deferment2').value; //
+			            const tranche3PaymentDeferment = document.getElementById('payment-deferment3').value; //
+			            const tranche4PaymentDeferment = document.getElementById('payment-deferment4').value; //
+			            const tranche5PaymentDeferment = document.getElementById('payment-deferment5').value; //
 
-                const tranche1PaymentDeferment = document.getElementById('payment-deferment1').value; //
-                const tranche2PaymentDeferment = document.getElementById('payment-deferment2').value; //
-                const tranche3PaymentDeferment = document.getElementById('payment-deferment3').value; //
-                const tranche4PaymentDeferment = document.getElementById('payment-deferment4').value; //
-                const tranche5PaymentDeferment = document.getElementById('payment-deferment5').value; //
+			            // Отправка задачи в Celery с активной вкладкой
+			            fetch('./calculator/start-task', {
+			                method: 'POST',
+			                headers: {
+			                    'Content-Type': 'application/json',
+			                },
+			                body: JSON.stringify({
+			                    itemType: activeTabText,
+			                    itemCondition: conditionText,
+			                    vat: vatText,  // Поставщик выделяет НДС или нет
+			                    deposit: depositText,  // Поставщик распределяет задаток или нет
+			                    redemption: redemptionText,  // Поставщик распределяет выкупной или нет
+			                    itemYear: itemYear,
+			                    itemPrice: itemPrice,
+			                    itemName: itemName,
+			                    currency: currency,
+			                    foreignCost: foreignCost,
+			                    initialPayment: initialPayment,
+			                    creditSum: creditSum,
+			                    creditTerm: creditTerm,  // это не срок кредита, а срок договора
+			                    bankCommission: bankCommission,
+			                    lkmbCommission: lkmbCommission,
+			                    insurances: {
+			                        insurance1: {
+			                            casko: insuranceCasko1,
+			                            osago: insuranceOsago1,
+			                            health: healthInsurance1,
+			                            other: otherInsurance1,
+			                        },
+			                        insurance2: {
+			                            casko: insuranceCasko2,
+			                            osago: insuranceOsago2,
+			                            health: healthInsurance2,
+			                            other: otherInsurance2,
+			                        },
+			                        insurance3: {
+			                            casko: insuranceCasko3,
+			                            osago: insuranceOsago3,
+			                            health: healthInsurance3,
+			                            other: otherInsurance3,
+			                        },
+			                        insurance4: {
+			                            casko: insuranceCasko4,
+			                            osago: insuranceOsago4,
+			                            health: healthInsurance4,
+			                            other: otherInsurance4,
+			                        },
+			                        insurance5: {
+			                            casko: insuranceCasko5,
+			                            osago: insuranceOsago5,
+			                            health: healthInsurance5,
+			                            other: otherInsurance5,
+			                        },
+			                    },
+			                    agentCommission: agentCommission,
+			                    managerBonus: managerBonus,
+			                    tracker: tracker,
+			                    mayak: mayak,
+			                    fedresurs: fedresurs,
+			                    gsm: gsm,
+			                    mail: mail,
+			                    deprTransport: deprTransport,
+			                    travel: travel,
+			                    stationery: stationery,
+			                    internet: internet,
+			                    pledge: pledge,
+			                    bankPledge: bankPledge,
+			                    express: express,
+			                    egrn: egrn,
+			                    egrul: egrul,
+			                    inputPeriod: inputPeriod,
+			                    leasDay: leasDay,
+			                    srokCredita: srokCredita,
+			                    reducePercent: reducePercent,
+			                    serviceLife: serviceLife,
+			                    amortization: amortization,
+			                    ndsSize: ndsSize,
+                                differentialPaymentIncreaseFactor: differentialPaymentIncreaseFactor,
+                                monthsRegressivePayments: monthsRegressivePayments,
+			                    tranches: {
+			                        tranche1: {
+			                            size: tranche1Size,
+			                            interestRate: tranche1Rate,
+			                            fee: tranche1Fee,
+			                            ownFee: tranche1OwnFee,
+			                            creditDate: tranche1CreditDate,
+			                            paymentDeferment: tranche1PaymentDeferment,
+			                        },
+			                        tranche2: {
+			                            size: tranche2Size,
+			                            interestRate: tranche2Rate,
+			                            fee: tranche2Fee,
+			                            ownFee: tranche2OwnFee,
+			                            creditDate: tranche2CreditDate,
+			                            paymentDeferment: tranche2PaymentDeferment,
+			                        },
+			                        tranche3: {
+			                            size: tranche3Size,
+			                            interestRate: tranche3Rate,
+			                            fee: tranche3Fee,
+			                            ownFee: tranche3OwnFee,
+			                            creditDate: tranche3CreditDate,
+			                            paymentDeferment: tranche3PaymentDeferment,
+			                        },
+			                        tranche4: {
+			                            size: tranche4Size,
+			                            interestRate: tranche4Rate,
+			                            fee: tranche4Fee,
+			                            ownFee: tranche4OwnFee,
+			                            creditDate: tranche4CreditDate,
+			                            paymentDeferment: tranche4PaymentDeferment,
+			                        },
+			                        tranche5: {
+			                            size: tranche5Size,
+			                            interestRate: tranche5Rate,
+			                            fee: tranche5Fee,
+			                            ownFee: tranche5OwnFee,
+			                            creditDate: tranche5CreditDate,
+			                            paymentDeferment: tranche5PaymentDeferment,
+			                        },
+			                    },
+			                })
+			            })
+			                .then(response => response.json())
+			                .then(data => {
+			                    if (data.task_id) {
+			                        localStorage.setItem('active_task_id', data.task_id); // Сохраняем task_id
+			                        checkTaskStatus(data.task_id); // Начинаем проверку статуса задачи
+			                    } else {
+			                        showError('Ошибка при отправке задачи.');
+			                    }
+			                })
+			                .catch(error => {
+			                    console.error('Ошибка:', error);
+			                    showError('Ошибка при отправке задачи.');
+			                });
+			        }
+			    });
+			});
 
-                // Отправка задачи в Celery с активной вкладкой
-                fetch('./calculator/start-task', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        itemType: activeTabText,
-                        itemCondition: conditionText,
-                        vat: vatText,  // Поставщик выделяет НДС или нет
-                        deposit: depositText,  // Поставщик распределяет задаток или нет
-                        redemption: redemptionText,  // Поставщик распределяет выкупной или нет
-                        itemYear: itemYear,
-                        itemPrice: itemPrice,
-                        itemName: itemName,
-                        currency: currency,
-                        foreignCost: foreignCost,
-                        initialPayment: initialPayment,
-                        creditSum: creditSum,
-                        creditTerm: creditTerm,  // это не срок кредита, а срок договора
-                        bankCommission: bankCommission,
-                        lkmbCommission: lkmbCommission,
-                        insurances: {
-                            insurance1: {
-                                casko: insuranceCasko1,
-                                osago: insuranceOsago1,
-                                health: healthInsurance1,
-                                other: otherInsurance1,
-                            },
-                            insurance2: {
-                                casko: insuranceCasko2,
-                                osago: insuranceOsago2,
-                                health: healthInsurance2,
-                                other: otherInsurance2,
-                            },
-                            insurance3: {
-                                casko: insuranceCasko3,
-                                osago: insuranceOsago3,
-                                health: healthInsurance3,
-                                other: otherInsurance3,
-                            },
-                            insurance4: {
-                                casko: insuranceCasko4,
-                                osago: insuranceOsago4,
-                                health: healthInsurance4,
-                                other: otherInsurance4,
-                            },
-                            insurance5: {
-                                casko: insuranceCasko5,
-                                osago: insuranceOsago5,
-                                health: healthInsurance5,
-                                other: otherInsurance5,
-                            },
-                        },
-                        agentCommission: agentCommission,
-                        managerBonus: managerBonus,
-                        tracker: tracker,
-                        mayak: mayak,
-                        fedresurs: fedresurs,
-                        gsm: gsm,
-                        mail: mail,
-                        deprTransport: deprTransport,
-                        travel: travel,
-                        stationery: stationery,
-                        internet: internet,
-                        pledge: pledge,
-                        bankPledge: bankPledge,
-                        express: express,
-                        egrn: egrn,
-                        egrul: egrul,
-                        inputPeriod: inputPeriod,
-                        leasDay: leasDay,
-                        srokCredita: srokCredita,
-                        reducePercent: reducePercent,
-                        serviceLife: serviceLife,
-                        amortization: amortization,
-                        ndsSize: ndsSize,
-                        tranches: {
-                            tranche1: {
-                                size: tranche1Size,
-                                interestRate: tranche1Rate,
-                                fee: tranche1Fee,
-                                ownFee: tranche1OwnFee,
-                                creditDate: tranche1CreditDate,
-                                paymentDeferment: tranche1PaymentDeferment,
-                            },
-                            tranche2: {
-                                size: tranche2Size,
-                                interestRate: tranche2Rate,
-                                fee: tranche2Fee,
-                                ownFee: tranche2OwnFee,
-                                creditDate: tranche2CreditDate,
-                                paymentDeferment: tranche2PaymentDeferment,
-                            },
-                            tranche3: {
-                                size: tranche3Size,
-                                interestRate: tranche3Rate,
-                                fee: tranche3Fee,
-                                ownFee: tranche3OwnFee,
-                                creditDate: tranche3CreditDate,
-                                paymentDeferment: tranche3PaymentDeferment,
-                            },
-                            tranche4: {
-                                size: tranche4Size,
-                                interestRate: tranche4Rate,
-                                fee: tranche4Fee,
-                                ownFee: tranche4OwnFee,
-                                creditDate: tranche4CreditDate,
-                                paymentDeferment: tranche4PaymentDeferment,
-                            },
-                            tranche5: {
-                                size: tranche5Size,
-                                interestRate: tranche5Rate,
-                                fee: tranche5Fee,
-                                ownFee: tranche5OwnFee,
-                                creditDate: tranche5CreditDate,
-                                paymentDeferment: tranche5PaymentDeferment,
-                            },
-                        },
-                    })
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.task_id) {
-                            localStorage.setItem('active_task_id', data.task_id); // Сохраняем task_id
-                            checkTaskStatus(data.task_id); // Начинаем проверку статуса задачи
-                        } else {
-                            showError('Ошибка при отправке задачи.');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Ошибка:', error);
-                        showError('Ошибка при отправке задачи.');
-                    });
-            }
-        });
-    });
+			// Функция проверки статуса задачи
+			function checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
+			                         creditTerm, itemName) {
+			    fetch(`./calculator/status/${taskId}`, {
+			        method: 'GET',
+			    })
+			        .then(response => response.json())
+			        .then(data => {
+			            if (data.state === 'SUCCESS') {
+			                // Убираем task_id из localStorage, если задача завершена
+			                localStorage.removeItem('active_task_id');
 
-    // Функция проверки статуса задачи
-    function checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment,
-                             creditTerm, itemName) {
-        fetch(`./calculator/status/${taskId}`, {
-            method: 'GET',
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.state === 'SUCCESS') {
-                    // Убираем task_id из localStorage, если задача завершена
-                    localStorage.removeItem('active_task_id');
+			                document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
+			                const preCalculateButton = document.getElementById('pre-calculate-button');
+			                preCalculateButton.disabled = false; // Разблокировать кнопку
+			                preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+			                showSuccess('Расчет по лизингу создан');
+			                scrollToCalculations();
 
-                    document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                    const preCalculateButton = document.getElementById('pre-calculate-button');
-                    preCalculateButton.disabled = false; // Разблокировать кнопку
-                    preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                    showSuccess('Расчет по лизингу создан');
-                    scrollToCalculations();
+			                // Добавление нового расчета в начало списка
+			                addNewCalculation(data.result, activeTabText, itemPrice, initialPayment,
+			                    creditTerm, itemName);
 
-                    // Добавление нового расчета в начало списка
-                    addNewCalculation(data.result, activeTabText, itemPrice, initialPayment,
-                        creditTerm, itemName);
+			            } else if (data.state === 'FAILURE') {
+			                localStorage.removeItem('active_task_id'); // Убираем task_id при ошибке
 
-                } else if (data.state === 'FAILURE') {
-                    localStorage.removeItem('active_task_id'); // Убираем task_id при ошибке
+			                document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
+			                const preCalculateButton = document.getElementById('pre-calculate-button');
+			                preCalculateButton.disabled = false; // Разблокировать кнопку
+			                preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+			                showError('Ошибка при выполнении расчета. Попробуйте запустить расчет еще раз', 'Ошибка');
+			            } else {
+			                // Если задача еще не завершена, продолжаем проверку
+			                setTimeout(function () {
+			                    checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment, creditTerm, itemName);
+			                }, 2000); // Повторная проверка через 2 секунды
+			            }
+			        })
+			        .catch(error => {
+			            console.error('Ошибка при проверке состояния задачи:', error);
+			            showError('Произошла ошибка при проверке состояния задачи', 'Ошибка');
+			            document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
+			            const preCalculateButton = document.getElementById('pre-calculate-button');
+			            preCalculateButton.disabled = false; // Разблокировать кнопку
+			            preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
+			        });
+			}
 
-                    document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                    const preCalculateButton = document.getElementById('pre-calculate-button');
-                    preCalculateButton.disabled = false; // Разблокировать кнопку
-                    preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-                    showError('Ошибка при выполнении расчета. Попробуйте запустить расчет еще раз', 'Ошибка');
-                } else {
-                    // Если задача еще не завершена, продолжаем проверку
-                    setTimeout(function () {
-                        checkTaskStatus(taskId, activeTabText, itemPrice, initialPayment, creditTerm, itemName);
-                    }, 2000); // Повторная проверка через 2 секунды
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка при проверке состояния задачи:', error);
-                showError('Произошла ошибка при проверке состояния задачи', 'Ошибка');
-                document.getElementById('loader').style.display = 'none'; // Скрыть круг загрузки
-                const preCalculateButton = document.getElementById('pre-calculate-button');
-                preCalculateButton.disabled = false; // Разблокировать кнопку
-                preCalculateButton.classList.remove('button-disabled'); // Убрать класс для изменения цвета
-            });
-    }
+			// Функция для добавления новой строки в таблицу
+			function addNewCalculation(calculation, activeTabText, itemPrice, initialPayment, creditTerm, itemName) {
+			    const calcListBody = document.getElementById('calc-list-main');
 
-    // Функция для добавления новой строки в таблицу
-    function addNewCalculation(calculation, activeTabText, itemPrice, initialPayment, creditTerm, itemName) {
-        const calcListBody = document.getElementById('calc-list-main');
+			    // Проверяем статус расчета
+			    if (calculation.status !== 'completed') {
+			        console.log(`Расчет с ID ${calculation.id} имеет статус ${calculation.status} и не будет добавлен.`);
+			        return; // Не добавляем строку, если расчет не завершен
+			    }
 
-        // Проверяем статус расчета
-        if (calculation.status !== 'completed') {
-            console.log(`Расчет с ID ${calculation.id} имеет статус ${calculation.status} и не будет добавлен.`);
-            return; // Не добавляем строку, если расчет не завершен
-        }
+			    // Проверяем, был ли расчет уже добавлен
+			    const addedCalculations = JSON.parse(localStorage.getItem('added_calculations')) || [];
 
-        // Проверяем, был ли расчет уже добавлен
-        const addedCalculations = JSON.parse(localStorage.getItem('added_calculations')) || [];
+			    // Если расчет уже добавлен, выходим
+			    if (addedCalculations.includes(calculation.id)) {
+			        return;
+			    }
 
-        // Если расчет уже добавлен, выходим
-        if (addedCalculations.includes(calculation.id)) {
-            return;
-        }
+			    // Добавляем новую строку в таблицу
+			    const newRow = document.createElement('tr');
+			    newRow.id = `row-${calculation.id}`; // Присваиваем строке ID, чтобы можно было удалить ее
+			    newRow.innerHTML = `
+			    <td>${calcListBody.rows.length + 1}</td>
+			    <td class="item-name">${calculation.item_name}</td>
+			    <td>
+			        <i class="fa-regular fa-file-excel" data-id="${calculation.id}"
+			           onclick="downloadLeaseCalculation(event, '${calculation.id}')"></i>
+			    </td>
+			`;
 
-        // Добавляем новую строку в таблицу
-        const newRow = document.createElement('tr');
-        newRow.id = `row-${calculation.id}`; // Присваиваем строке ID, чтобы можно было удалить ее
-        newRow.innerHTML = `
-        <td>${calcListBody.rows.length + 1}</td>
-        <td class="item-name">${calculation.item_name}</td>
-        <td>
-            <i class="fa-regular fa-file-excel" data-id="${calculation.id}"
-               onclick="downloadLeaseCalculation(event, '${calculation.id}')"></i>
-        </td>
-    `;
+			    // Добавляем событие для перехода на страницу расчета
+			    if (calculation.id) {
+			        const calcUrl = '/crm/calculator/' + calculation.id;
+			        newRow.onclick = function () {
+			            window.location.href = calcUrl;
+			        };
+			        newRow.style.cursor = 'pointer';
+			    }
 
-        // Добавляем событие для перехода на страницу расчета
-        if (calculation.id) {
-            const calcUrl = '/crm/calculator/' + calculation.id;
-            newRow.onclick = function () {
-                window.location.href = calcUrl;
-            };
-            newRow.style.cursor = 'pointer';
-        }
+			    // Вставляем новую строку в начало таблицы
+			    calcListBody.insertBefore(newRow, calcListBody.firstChild);
 
-        // Вставляем новую строку в начало таблицы
-        calcListBody.insertBefore(newRow, calcListBody.firstChild);
-
-        // Сохраняем ID расчета в localStorage
-        addedCalculations.push(calculation.id);
-        localStorage.setItem('added_calculations', JSON.stringify(addedCalculations));
-    }
-
-
-    // Проверка состояния задачи при загрузке страницы
-    document.addEventListener('DOMContentLoaded', function () {
-        const activeTaskId = localStorage.getItem('active_task_id');
-        console.log('Active task ID:', activeTaskId);
-
-        if (activeTaskId) {
-            // Если есть активная задача, продолжаем проверку состояния
-            document.getElementById('pre-calculate-button').disabled = true;
-            document.getElementById('pre-calculate-button').classList.add('button-disabled');
-            document.getElementById('loader').style.display = 'flex';
-            checkTaskStatus(activeTaskId);
-        }
-
-        // Восстанавливаем добавленные расчеты из localStorage
-        const addedCalculations = JSON.parse(localStorage.getItem('added_calculations')) || [];
-        addedCalculations.forEach(function (calculationId) {
-            // Здесь можно добавить логику для восстановления строки в таблице, если нужно
-        });
-    });
+			    // Сохраняем ID расчета в localStorage
+			    addedCalculations.push(calculation.id);
+			    localStorage.setItem('added_calculations', JSON.stringify(addedCalculations));
+			}
 
 
-    function showSuccess(message) {
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "top-end",
-            showConfirmButton: false,
-            timer: 2000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "success",
-            title: message,
-        });
-    }
+			// Проверка состояния задачи при загрузке страницы
+			document.addEventListener('DOMContentLoaded', function () {
+			    const activeTaskId = localStorage.getItem('active_task_id');
+			    console.log('Active task ID:', activeTaskId);
 
-    function showError(message, title) {
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "6000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-        toastr.error(message, title);
-    }
+			    if (activeTaskId) {
+			        // Если есть активная задача, продолжаем проверку состояния
+			        document.getElementById('pre-calculate-button').disabled = true;
+			        document.getElementById('pre-calculate-button').classList.add('button-disabled');
+			        document.getElementById('loader').style.display = 'flex';
+			        checkTaskStatus(activeTaskId);
+			    }
 
-    function showInfo(message, title) {
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "4000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
-        toastr.info(message, title);
-    }
+			    // Восстанавливаем добавленные расчеты из localStorage
+			    const addedCalculations = JSON.parse(localStorage.getItem('added_calculations')) || [];
+			    addedCalculations.forEach(function (calculationId) {
+			        // Здесь можно добавить логику для восстановления строки в таблице, если нужно
+			    });
+			});
 
-    $(document).ready(function () {
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    {% if category == 'info' %}
-                        showInfo("{{ message }}", "Информация");
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
-    });
-</script>
-<!-- Autocomplete Script -->
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-autocomplete.js') }}"></script>
 
-<!-- Scripts -->
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-sidebar.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-exchange-rates.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-modal.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-new.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-overheads.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-pagination.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-filter-calcs.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-first-leas-day.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/leasing-calculator-upload.js') }}"></script>
+			function showSuccess(message) {
+			    const Toast = Swal.mixin({
+			        toast: true,
+			        position: "top-end",
+			        showConfirmButton: false,
+			        timer: 2000,
+			        timerProgressBar: true,
+			        didOpen: (toast) => {
+			            toast.onmouseenter = Swal.stopTimer;
+			            toast.onmouseleave = Swal.resumeTimer;
+			        }
+			    });
+			    Toast.fire({
+			        icon: "success",
+			        title: message,
+			    });
+			}
 
-</body>
+			function showError(message, title) {
+			    toastr.options = {
+			        closeButton: true,
+			        debug: false,
+			        newestOnTop: false,
+			        progressBar: true,
+			        positionClass: "toast-bottom-right",
+			        preventDuplicates: false,
+			        onclick: null,
+			        showDuration: "300",
+			        hideDuration: "1000",
+			        timeOut: "6000",
+			        extendedTimeOut: "1000",
+			        showEasing: "swing",
+			        hideEasing: "linear",
+			        showMethod: "fadeIn",
+			        hideMethod: "fadeOut"
+			    };
+			    toastr.error(message, title);
+			}
+
+			function showInfo(message, title) {
+			    toastr.options = {
+			        closeButton: true,
+			        debug: false,
+			        newestOnTop: false,
+			        progressBar: true,
+			        positionClass: "toast-bottom-right",
+			        preventDuplicates: false,
+			        onclick: null,
+			        showDuration: "300",
+			        hideDuration: "1000",
+			        timeOut: "4000",
+			        extendedTimeOut: "1000",
+			        showEasing: "swing",
+			        hideEasing: "linear",
+			        showMethod: "fadeIn",
+			        hideMethod: "fadeOut"
+			    };
+			    toastr.info(message, title);
+			}
+
+			$(document).ready(function () {
+			    {% with messages = get_flashed_messages(with_categories=true) %}
+			        {% if messages %}
+			            {% for category, message in messages %}
+			                {% if category == 'info' %}
+			                    showInfo("{{ message }}", "Информация");
+			                {% endif %}
+			            {% endfor %}
+			        {% endif %}
+			    {% endwith %}
+			});
+		</script>
+		<!-- Autocomplete Script -->
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-autocomplete.js') }}"></script>
+
+		<!-- Scripts -->
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-sidebar.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-exchange-rates.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-modal.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-new.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-overheads.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-pagination.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-filter-calcs.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-first-leas-day.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-upload.js') }}"></script>
+	</body>
 </html>

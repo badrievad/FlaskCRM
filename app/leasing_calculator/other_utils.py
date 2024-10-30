@@ -1,9 +1,11 @@
 import re
 from datetime import datetime
 
-from ..config import suggestions_token
 from dadata import Dadata
+
 from logger import logging
+
+from ..config import suggestions_token
 
 
 def validate_item_price(price: str) -> str:

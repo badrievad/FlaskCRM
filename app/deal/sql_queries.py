@@ -1,7 +1,7 @@
 import uuid
 
-from .models import Deal
 from .. import db
+from .models import Deal
 
 
 def merge_deals_in_db(deal_ids):

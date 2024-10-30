@@ -1,14 +1,15 @@
 import datetime
 import time
-
 from datetime import date
-from logger import logging
+
 from celery import shared_task
 
-from .api_for_leas_culc import post_request_leas_calc, upload_schedule, upload_main_info
-from .models import LeasCalculator, Tranches, Insurances
-from .other_utils import validate_item_price
+from logger import logging
+
 from .. import db
+from .api_for_leas_calc import post_request_leas_calc, upload_main_info, upload_schedule
+from .models import Insurances, LeasCalculator, Tranches
+from .other_utils import validate_item_price
 
 
 def intensive_task_simulation(data: dict) -> dict:
@@ -134,6 +135,8 @@ def intensive_task_simulation(data: dict) -> dict:
             service_life=data["service_life"],
             amortization=data["amortization"],
             nds_size=data["nds_size"],
+            differential_payment_increase_factor=data["differential_payment_increase_factor"],
+            months_regressive_payments=data["months_regressive_payments"],
             bank_commission=data["bank_commission"],
             lkmb_commission=data["lkmb_commission"],
             agent_commission=data["agent_commission"],

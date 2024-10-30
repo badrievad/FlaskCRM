@@ -1,25 +1,27 @@
+from datetime import date, datetime
+
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload
 
-from .api_for_leas_culc import upload_schedule, upload_main_info
+from logger import logging
+
+from .. import db
+from ..deal.models import Bank
+from .api_for_leas_calc import upload_main_info, upload_schedule
 from .models import (
-    Seller,
-    LeasCalculator,
     CommercialOffer,
-    ScheduleAnnuity,
-    MainAnnuity,
-    ScheduleDifferentiated,
-    MainDifferentiated,
-    ScheduleRegression,
-    MainRegression,
-    Tranches,
     Insurances,
+    LeasCalculator,
+    MainAnnuity,
+    MainDifferentiated,
+    MainRegression,
+    ScheduleAnnuity,
+    ScheduleDifferentiated,
+    ScheduleRegression,
+    Seller,
+    Tranches,
 )
 from .other_utils import dadata_info_company, dadata_result, validate_item_price
-from .. import db
-from logger import logging
-from ..deal.models import Bank
-from datetime import datetime, date
 
 
 def create_or_update_seller_and_link_to_leas_calc(

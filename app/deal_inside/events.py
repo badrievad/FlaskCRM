@@ -1,11 +1,12 @@
-from .. import socketio, db
-
 from datetime import datetime
-from flask_socketio import emit, join_room, leave_room
+
 from flask import session
+from flask_socketio import emit, join_room, leave_room
+
 from app.deal_inside.models import DealSteps
 from logger import logging
 
+from .. import db, socketio
 
 # Словарь для хранения сопоставления username и socket.id
 user_sessions = {}

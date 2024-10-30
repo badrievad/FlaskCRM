@@ -1,7 +1,8 @@
-from .deals_validate import DealsValidate
-from .models import Deal, Client
-from .. import db
 from logger import logging
+
+from .. import db
+from .deals_validate import DealsValidate
+from .models import Client, Deal
 
 
 def write_deal_to_db(

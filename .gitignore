@@ -251,3 +251,4 @@ cython_debug/
 /app/config.py
 /app/static/temporary/offers-json
 /app/templates/data_test.html
+.vscode/settings.json

@@ -340,7 +340,9 @@
                                 <td class="deal-dl">${deal.dl_number}</td>
                                 <td class="deal-title">${deal.title}</td>
                                 <td class="deal-product">${deal.product}</td>
-                                <td class="deal-manager">${deal.created_by}</td>
+                                <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">
+                                    <img src="${deal.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${deal.created_by}
+                                </td>
                                 <td class="deal-created">${new Date(deal.created_at).toLocaleString()}</td>
                                 <td class="deal-archived">${new Date(deal.archived_at).toLocaleString()}</td>
                                 ${(deal.created_by === userName || userRole === 'admin') ? `
@@ -477,7 +479,9 @@
                                 <td class="deal-dl" onclick="enterIntoDeal(${data.id})">${data.dl_number}</td>
                                 <td class="deal-title" onclick="enterIntoDeal(${data.id})">${data.title}</td>
                                 <td class="deal-product" onclick="enterIntoDeal(${data.id})">${data.product}</td>
-                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">${data.created_by}</td>
+                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">
+                                    <img src="${data.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${data.created_by}
+                                </td>
                                 <td class="deal-created" onclick="enterIntoDeal(${data.id})">${data.created_at}</td>
                                 <td>
                                     ${(data.created_by === userName || userRole === 'admin') ? `
@@ -521,7 +525,9 @@
                                 <td class="deal-dl">${data.dl_number}</td>
                                 <td class="deal-title">${data.title}</td>
                                 <td class="deal-product">${data.product}</td>
-                                <td class="deal-manager">${data.created_by}</td>
+                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">
+                                    <img src="${data.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${data.created_by}
+                                </td>
                                 <td class="deal-created">${data.created_at}</td>
                                 <td class="deal-archived">${data.archived_at}</td>
                                 ${(data.created_by === userName || userRole === 'admin') ? `
@@ -566,7 +572,9 @@
                                 <td class="deal-dl" onclick="enterIntoDeal(${data.id})">${data.dl_number}</td>
                                 <td class="deal-title" onclick="enterIntoDeal(${data.id})">${data.title}</td>
                                 <td class="deal-product" onclick="enterIntoDeal(${data.id})">${data.product}</td>
-                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">${data.created_by}</td>
+                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">
+                                    <img src="${data.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${data.created_by}
+                                </td>
                                 <td class="deal-created" onclick="enterIntoDeal(${data.id})">${data.created_at}</td>
                                 <td>
                                     ${(data.created_by === userName || userRole === 'admin') ? `

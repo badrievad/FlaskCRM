@@ -20,6 +20,13 @@ def get_users_with_roles(roles, current_user_id):
 def update_deal_created_by(deal_id, new_created_by):
     # Найдем основную сделку по её id
     deal = Deal.query.get(deal_id)
+    user = User.query.filter_by(abbreviation_name=new_created_by).first()
+
+    if not user:
+        return None, "User not found"
+
+    user_id = user.id
+
     if not deal:
         return None, "Deal not found"
 
@@ -34,6 +41,7 @@ def update_deal_created_by(deal_id, new_created_by):
         # Обновляем ответственного для всех сделок в группе
         for related_deal in related_deals:
             related_deal.created_by = new_created_by
+            related_deal.user_id = user_id
 
         try:
             # Сохраняем изменения в базе данных
@@ -45,6 +53,7 @@ def update_deal_created_by(deal_id, new_created_by):
     else:
         # Если group_id нет, обновляем только текущую сделку
         deal.created_by = new_created_by
+        deal.user_id = user_id
 
         try:
             # Сохраняем изменения в базе данных

@@ -66,6 +66,7 @@ def create_deal() -> jsonify:
             name_without_special_symbols=name_without_special_symbols,
             company_inn=company_inn,
             created_by=current_user.abbreviation_name,
+            user_id=current_user.id,
             created_at=datetime.datetime.now(),
             client_id=client_id,
         )
@@ -150,6 +151,7 @@ def delete_deal(deal_id) -> jsonify:
 @validate_active_session
 def deal_to_archive(deal_id) -> jsonify:
     deal: Deal = Deal.query.get(deal_id)
+    deal_with_user = deal.user.url_photo
     api_folder: CompanyFolderAPI = CompanyFolderAPI()
     if deal:
         try:
@@ -198,7 +200,10 @@ def deal_to_archive(deal_id) -> jsonify:
                 write_deal_path_to_db(path_to_folder, related_deal.id)
 
                 # Отправляем уведомление по SocketIO
-                socketio.emit("deal_to_archive", related_deal.to_json())
+                socketio.emit(
+                    "deal_to_archive",
+                    related_deal.to_json() | {"created_by_icon": deal_with_user},
+                )
 
             return jsonify({"result": "success"}), 200
         except PermissionError as e:
@@ -239,6 +244,7 @@ def deal_to_active(deal_id) -> jsonify:
     """Изменить статус сделки на активную"""
 
     deal: Deal = Deal.query.get(deal_id)
+    deal_with_user = deal.user.url_photo
     api_folder: CompanyFolderAPI = CompanyFolderAPI()
     if deal:
         try:
@@ -258,7 +264,9 @@ def deal_to_active(deal_id) -> jsonify:
             logging.info(f"Deal ID: {deal_id}")
             write_deal_path_to_db(path_to_folder, deal_id)
 
-            socketio.emit("deal_to_active", deal.to_json())
+            socketio.emit(
+                "deal_to_active", deal.to_json() | {"created_by_icon": deal_with_user}
+            )
             return jsonify({"result": "success"}), 200
         except PermissionError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
@@ -364,6 +372,7 @@ def get_deals_active() -> jsonify:
                 "title": first_deal.title,
                 "company_inn": first_deal.company_inn,
                 "created_by": first_deal.created_by,
+                "created_by_icon": first_deal.user.url_photo,
                 "created_at": first_deal.created_at.strftime("%Y-%m-%d %H:%M:%S.%f"),
             }
         )

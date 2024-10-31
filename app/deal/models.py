@@ -14,6 +14,7 @@ class Deal(db.Model):
     name_without_special_symbols = db.Column(db.String(200), nullable=False)
     company_inn = db.Column(db.String(20), nullable=False)
     created_by = db.Column(db.String(50), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False)
     status = db.Column(db.String(20), nullable=False)
     archived_at = db.Column(db.DateTime, nullable=True)
@@ -36,6 +37,7 @@ class Deal(db.Model):
 
     leas_calculators = relationship("LeasCalculator", back_populates="deal")
     client = relationship("Client", back_populates="deals")
+    user = relationship("User", back_populates="deals")  # Связь с моделью User
 
     @classmethod
     def generate_dl_number(cls):

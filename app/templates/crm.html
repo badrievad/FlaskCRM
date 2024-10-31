@@ -106,10 +106,10 @@
                 <th></th>
                 <th>№</th>
                 <th>№ ДЛ</th>
-                <th id="filter-header"><i class="fa-solid fa-user-tie fa-sm"></i> Лизингополучатель</th>
-                <th id="filter-header-product"><i class="fa-solid fa-business-time fa-sm"></i> Продукт</th>
-                <th id="filter-header-manager"><i class="fa-regular fa-user fa-sm"></i> Менеджер</th>
-                <th id="filter-header-create"><i class="fa-regular fa-calendar fa-sm"></i> Дата создания сделки</th>
+                <th id="filter-header">Лизингополучатель</th>
+                <th id="filter-header-product">Продукт</th>
+                <th id="filter-header-manager">Менеджер</th>
+                <th id="filter-header-create">Дата создания сделки</th>
                 <th></th>
             </tr>
             </thead>
@@ -142,11 +142,11 @@
             <tr>
                 <th>№</th>
                 <th>№ ДЛ</th>
-                <th id="filter-header-archived"><i class="fa-solid fa-user-tie fa-sm"></i> Лизингополучатель</th>
-                <th id="filter-header-product-archived"><i class="fa-solid fa-business-time fa-sm"></i>Продукт</th>
-                <th id="filter-header-manager-archived"><i class="fa-regular fa-user fa-sm"></i> Менеджер</th>
-                <th id="filter-header-created-archived"><i class="fa-regular fa-calendar"></i> Дата создания сделки</th>
-                <th id="filter-header-to-archive-archived"><i class="fa-regular fa-calendar"></i> Дата добавления в
+                <th id="filter-header-archived">Лизингополучатель</th>
+                <th id="filter-header-product-archived">Продукт</th>
+                <th id="filter-header-manager-archived">Менеджер</th>
+                <th id="filter-header-created-archived">Дата создания сделки</th>
+                <th id="filter-header-to-archive-archived">Дата добавления в
                     архив
                 </th>
                 <th></th>
@@ -261,6 +261,7 @@
                 } else {
                     checkboxCell = `<td></td>`;
                 }
+                const dealUserIcon = `${deal.created_by_icon}`;
                 const dealItem = `
                 <tr id="deal-${deal.id}">
                     ${checkboxCell}
@@ -268,7 +269,9 @@
                     <td class="deal-dl" onclick="enterIntoDeal(${deal.id})">${deal.dl_number}</td>
                     <td class="deal-title" onclick="enterIntoDeal(${deal.id})">${deal.title}</td>
                     <td class="deal-product" onclick="enterIntoDeal(${deal.id})">${deal.product}</td>
-                    <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">${deal.created_by}</td>
+                    <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">
+                        <img src="${dealUserIcon}" alt="User Photo" class="profile-image-deal"> ${deal.created_by}
+                    </td>
                     <td class="deal-created" onclick="enterIntoDeal(${deal.id})">${new Date(deal.created_at).toLocaleString()}</td>
                     <td>
                         ${(deal.created_by === userName || userRole === 'admin') ? `

@@ -65,7 +65,7 @@ def create_deal() -> jsonify:
             title=company_name,
             name_without_special_symbols=name_without_special_symbols,
             company_inn=company_inn,
-            created_by=current_user.fullname,
+            created_by=current_user.abbreviation_name,
             created_at=datetime.datetime.now(),
             client_id=client_id,
         )
@@ -83,7 +83,7 @@ def create_deal() -> jsonify:
 
         # Логирование и уведомление
         logging.info(
-            f"{current_user.fullname} создал новую сделку. Название сделки: {company_name}. "
+            f"{current_user.abbreviation_name} создал новую сделку. Название сделки: {company_name}. "
             f"ID сделки: {deal_id}. Дата создания: {deal_record['created_at']}."
         )
         socketio.emit("new_deal", deal_record)  # Send to all connected clients
@@ -311,7 +311,7 @@ def index_crm() -> render_template:
         "crm.html",
         deals=deals,
         users=users,
-        user_name=current_user.fullname,
+        user_name=current_user.abbreviation_name,
         user_email=current_user.email,
         user_role=current_user.role,
         user_login=current_user.login,

@@ -14,6 +14,7 @@ class User(db.Model, UserMixin):
     blocked = db.Column(db.Boolean())
     role = db.Column(db.String(length=50))
     fullname = db.Column(db.String())
+    abbreviation_name = db.Column(db.String())
     email = db.Column(db.String(length=50))
     url_photo = db.Column(db.String())
     worknumber = db.Column(db.String())

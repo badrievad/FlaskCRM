@@ -11,10 +11,10 @@ from ..user.models import User
 def get_users_with_roles(roles, current_user_id):
     result = (
         User.query.filter(User.role.in_(roles))
-        .filter(User.fullname != current_user_id)
+        .filter(User.abbreviation_name != current_user_id)
         .all()
     )
-    return [{"name": user.fullname, "role": user.role} for user in result]
+    return [{"name": user.abbreviation_name, "role": user.role} for user in result]
 
 
 def update_deal_created_by(deal_id, new_created_by):

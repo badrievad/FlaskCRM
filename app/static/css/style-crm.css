@@ -288,9 +288,14 @@ th, td {
     border-bottom: 1px solid rgba(221, 221, 221, 0.01); /* Нижняя граница для заголовков */
 }
 
+#deal-rows td {
+    padding: 7px;
+}
+
 .deal-table tbody tr {
     background-color: rgba(255, 255, 255, 0.01); /* Фон для строк таблицы */
     transition: background-color 0.3s ease; /* Плавный переход для ховера */
+    border-bottom: 1px solid rgba(221, 221, 221, 0.1); /* Нижняя граница для строк */
 }
 
 .deal-table tbody tr:hover {
@@ -480,4 +485,17 @@ input[type="checkbox"]:checked::before {
 
 .load-more-button:focus {
     outline: none;
+}
+
+.profile-image-deal {
+    margin-right: 5px;
+    width: 25px; /* Задайте фиксированную ширину для изображения */
+    height: 25px; /* Задайте фиксированную высоту, чтобы изображение не растягивалось */
+    border-radius: 50%; /* Делает изображение круглым */
+    object-fit: cover; /* Масштабирует изображение по размеру, сохраняя центр */
+    vertical-align: middle; /* Центрирует изображение по вертикали */
+}
+
+.deal-manager {
+    height: 100%; /* Высота строки таблицы */
 }

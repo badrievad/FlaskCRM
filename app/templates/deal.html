@@ -82,7 +82,7 @@
                     <h3>Ответственный</h3>
                     <p>
                         <span id="current-created-by" data-user-id="{{ deal.created_by }}">{{ deal.created_by }}</span>
-                        {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                        {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
                             <i class="fa-solid fa-pen fa-xs" id="user-icon"></i>
                         {% endif %}
                     </p>
@@ -99,7 +99,7 @@
                 <div class="section">
                     <h3 class="client-header">
                         Клиент
-                        {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                        {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
                             <i class="fa-solid fa-pen fa-xs edit-client-icon" id="edit-client-icon"
                                style="font-size: 14px"></i>
                         {% endif %}
@@ -187,7 +187,7 @@
             <div class="deal-info" data-id="{{ item.leas_calc.id if item.leas_calc else '' }}"
                  id="deal-section-{{ loop.index }}">
                 <div class="icon-container">
-                    {% if (current_user.role in ['admin'] or current_user.fullname == deal.created_by) and item.dl_number != deal.dl_number %}
+                    {% if (current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by) and item.dl_number != deal.dl_number %}
                         <i class="fa-solid fa-circle-xmark remove-section-icon"
                            id="remove-section-icon-{{ loop.index }}"
                            data-index="{{ loop.index }}" data-id="{{ item.leas_calc.id }}" style="font-size: 25px"
@@ -222,7 +222,7 @@
                             <p><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #cc8985;"></i> К
                                 этому договору еще не привязан КП.</p>
                             <!-- Кнопка для привязки КП -->
-                            {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                            {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
                                 <button class="attach-kp-button"
                                         onclick="location.href='http://dev-lkmb/crm/calculator'">
                                     <i class="fa-solid fa-paperclip"></i> Привязать КП
@@ -236,12 +236,12 @@
                         <div class="section">
                             <h3 class="supplier-header">
                                 Поставщик
-                                {% if current_user.role in ['admin'] or current_user.fullname == deal.created_by %}
+                                {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
                                     <i class="fa-solid fa-pen fa-xs edit-name-icon" id="edit-name-icon-{{ loop.index }}"
                                        data-index="{{ loop.index }}" style="font-size: 14px"
                                        data-leas-calc-id="{{ item.leas_calc.id }}"></i>
                                 {% endif %}
-                                {% if (current_user.role in ['admin'] or current_user.fullname == deal.created_by) and item.leas_calc.seller_id %}
+                                {% if (current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by) and item.leas_calc.seller_id %}
                                     <i class="fa-solid fa-xmark edit-delete-icon" id="edit-delete-icon-{{ loop.index }}"
                                        data-index="{{ loop.index }}"
                                        data-leas-calc-id="{{ item.leas_calc.id }}"></i>
@@ -523,7 +523,7 @@
     // Подключаемся к комнате при загрузке страницы
     const dealId = '{{ deal_id }}';  // Должно содержать только ID сделки
     const room = dealId;  // Проверяем, что room устанавливается только как deal_id
-    const username = '{{ current_user.fullname }}';
+    const username = '{{ current_user.abbreviation_name }}';
 
     socket.emit('join', {username: username, room: room});
     console.log('Joined room: ' + room);

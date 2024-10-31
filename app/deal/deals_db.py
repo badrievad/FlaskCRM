@@ -6,7 +6,7 @@ from .models import Client, Deal
 
 
 def write_deal_to_db(
-    title, name_without_special_symbols, company_inn, created_by, created_at, client_id
+    title, name_without_special_symbols, company_inn, created_by ,created_at, client_id
 ) -> dict:
     """Запись сделки в базу данных"""
     sequence_number, year, dl_number, dl_number_windows = Deal.generate_dl_number()

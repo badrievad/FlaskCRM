@@ -1,586 +1,774 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-    <title>ЛКМБ-РТ</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: #f7faff;
-        }
-
-        @font-face {
-            font-family: 'Roboto';
-            src: url('/crm/static/fonts/Roboto-Light.ttf') format('truetype');
-            font-weight: 300;
-        }
-
-        @page {
-            size: 210mm 297mm; /* Устанавливаем размер страницы */
-            margin: 0; /* Отступы */
-        }
-
-
-        .header {
-            position: relative;
-            height: 220px;
-            color: white;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            font-size: 14px;
-        }
-
-        .header img.background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-        }
-
-        .header-left {
-            padding: 20px;
-            z-index: 1;
-        }
-
-        .header-left img {
-            height: 50px;
-        }
-
-        .contact-info {
-            padding: 10px;
-            color: white;
-        }
-
-        .contact-info p {
-            margin: 5px 0;
-            color: #f5f4f4;
-        }
-
-        .details {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-            color: #505050;
-            border-radius: 1px;
-            margin: 10px;
-        }
-
-        .details .item {
-            display: flex;
-            align-items: center;
-            font-size: 18px;
-            padding: 10px;
-        }
-
-        .details .item i {
-            margin-right: 10px;
-            font-size: 24px;
-        }
-
-        .details .info {
-            padding-left: 20px;
-            border-left: 2px solid #d5d5d5;
-        }
-
-        .details .info p {
-            margin: 0;
-        }
-
-        .details .highlight {
-            background-color: rgba(91, 109, 110, 0.5); /* Темный цвет для выделенного блока */
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            color: white;
-            min-width: 150px;
-            font-size: 16px;
-            margin: 5px;
-            align-items: center;
-        }
-
-        .icon-and-text {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start; /* Выравнивание по левому краю */
-            color: rgba(255, 255, 255, 0.85);
-        }
-
-        .icon-and-text i {
-            font-size: 18px;
-            margin-right: 10px; /* Отступ между иконкой и чертой */
-        }
-
-        .separator {
-            width: 2px;
-            height: 50px; /* Увеличена высота черты */
-            background-color: rgba(255, 255, 255, 0.38);
-            margin-right: 10px; /* Отступ между чертой и текстом */
-            margin-left: 2px;
-        }
-
-        .text-content {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: left; /* Выровнять текст по левому краю */
-        }
-
-        .text-content p {
-            margin: 2px;
-            padding: 0;
-        }
-
-        .proposal-title {
-            font-size: 16px;
-            font-weight: 500;
-            color: rgba(74, 107, 112, 0.70); /* Цвет заголовка, соответствующий стилю сайта */
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .greeting {
-            font-size: 14px;
-            color: rgba(74, 107, 112, 0.6); /* Цвет текста, соответствующий стилю сайта */
-            text-align: right;
-            margin-bottom: 10px; /* Отступ после обращения */
-            margin-right: 10px;
-        }
-
-        .disclaimer {
-            font-size: 10px;
-            color: rgba(74, 107, 112, 0.6); /* Цвет текста */
-            text-align: center;
-            margin: 100px 20px 10px 20px;
-        }
-    </style>
-    <style>
-        .financial-summary {
-            display: flex;
-            justify-content: space-between;
-            background-color: rgba(74, 107, 112, 0.01); /* Фон блока */
-            color: #505050;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 10px 10px;
-        }
-
-        .financial-left-section {
-            width: 55%;
-        }
-
-        .financial-right-section {
-            width: 25%;
-            text-align: center;
-            background-color: rgba(74, 107, 112, 0.4);
-            padding: 5px;
-            border-radius: 8px;
-            justify-content: center;
-            color: white;
-        }
-
-        .financial-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-        }
-
-        .financial-row p {
-            margin: 0;
-        }
-
-        .financial-benefit {
-            margin-top: 20px;
-        }
-
-        .financial-total-cost {
-            font-size: 20px;
-            font-weight: bold;
-        }
-    </style>
-    <style>
-        .insurance-and-services {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 10px;
-        }
-
-        .insurance-section, .services-section {
-            width: 45%;
-            background-color: rgba(74, 107, 112, 0.02);
-            padding: 15px;
-            border-radius: 8px;
-            color: #505050;
-        }
-
-        .insurance-section h2, .services-section h2 {
-            font-size: 18px;
-            font-weight: bold;
-            color: rgba(74, 107, 112, 0.8);
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-
-        .insurance-section h2 i, .services-section h2 i {
-            margin-right: 10px;
-        }
-
-        .insurance-table, .services-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .insurance-table th, .insurance-table td, .services-table td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid rgba(74, 107, 112, 0.3);
-        }
-    </style>
-    <style>
-        .schedule-grid {
-            display: flex;
-            gap: 20px; /* Отступ между колонками */
-            flex-wrap: wrap;
-            margin-right: 20px;
-            margin-left: 20px;
-        }
-
-        .payment-column {
-            display: flex;
-            flex-direction: column;
-            width: 105px;
-        }
-
-        .payment-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(74, 107, 112, 0.3); /* Линия подчеркивания */
-        }
-
-        .payment-row span {
-            font-size: 12px; /* Размер шрифта */
-            color: rgba(77, 77, 77, 0.4); /* Цвет текста */
-            text-align: left;
-        }
-
-        .payment-row .amount {
-            color: #4d4d4d; /* Цвет текста */
-            font-size: 12px; /* Размер шрифта */
-            padding-left: 5px; /* Отступ между номером и суммой */
-            text-align: right;
-        }
-
-        .payment-schedule h2 {
-            font-size: 18px;
-            font-weight: bold;
-            color: #505050;
-            margin-bottom: 15px;
-            margin-left: 20px;
-            margin-top: 60px;
-            display: flex;
-            align-items: center;
-        }
-
-        .payment-schedule h2 i, .early-repurchase h2 i {
-            margin-right: 10px;
-        }
-
-        .early-repurchase h2 {
-            font-size: 18px;
-            font-weight: bold;
-            color: rgba(74, 107, 112, 0.8);
-            margin-bottom: 15px;
-            margin-left: 20px;
-            margin-top: 60px;
-            display: flex;
-            align-items: center;
-        }
-    </style>
-    <style>
-        .online-leasing {
-            text-align: center;
-            margin: 40px 0;
-        }
-
-        .online-leasing .title {
-            font-size: 24px;
-            font-weight: bold;
-            color: rgba(74, 107, 112, 0.8);
-            margin-bottom: 10px;
-        }
-
-        .online-leasing .subtitle {
-            font-size: 16px;
-            color: #505050;
-            margin-bottom: 30px;
-        }
-
-        .features {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 30px;
-        }
-
-        .feature {
-            text-align: center;
-            max-width: 150px;
-        }
-
-        .feature i {
-            font-size: 36px;
-            color: rgba(74, 107, 112, 0.8);
-            margin-bottom: 10px;
-        }
-
-        .feature p {
-            margin: 5px 0;
-            color: #505050;
-        }
-
-        .feature .description {
-            margin: 5px 0;
-            color: #505050;
-            font-size: 12px;
-        }
-
-        .feature strong {
-            color: #505050;
-            font-size: 14px;
-        }
-
-        .website a {
-            font-size: 20px;
-            font-weight: bold;
-            color: rgba(74, 107, 112, 0.8);
-            text-decoration: none;
-        }
-
-        .website a:hover {
-            text-decoration: underline;
-        }
-    </style>
-
-</head>
-<body>
-
-<div class="header">
-    <img src="{{ url_for('crm.static', filename='images/bmw2-blur.png') }}" alt="Background" class="background">
-    <div class="header-left">
-        <img src="{{ url_for('crm.static', filename='images/lkmb-logo.png') }}" alt="ЛКМБ-РТ">
-        <div class="contact-info">
-            <p>Ваш персональный менеджер:</p>
-            <p>{{ user_info.name }}</p><br>
-            <p><i class="fa-regular fa-envelope"></i> Email: {{ user_info.email }}</p>
-            <p><i class="fa-solid fa-phone"></i> Телефон: {{ user_info.phone }}</p>
-            <p><i class="fa-brands fa-telegram"></i> Telegram: {{ user_info.telegram }}</p>
-        </div>
-    </div>
-</div>
-
-<p class="greeting">№ {{ com_offer.offer.id }} от {{ today }}</p>
-<h1 class="proposal-title"></h1>
-
-<div class="details">
-    <div class="left-side">
-        <div class="item">
-            <i class="fa fa-briefcase"></i>
-            <div class="info">
-                <p><strong>ПРЕДМЕТ ЛИЗИНГА</strong></p>
-                <p>{{ com_offer.leas_calculator.item_name }}, {{ com_offer.leas_calculator.item_year }} г. в.
-                    ({{ com_offer.leas_calculator.item_condition }})</p>
-            </div>
-        </div>
-        <br>
-        <div class="item">
-            <i class="fa-solid fa-coins"></i>
-            <div class="info">
-                <p><strong>СТОИМОСТЬ</strong> <em style="font-size: 12px">(в т.ч. НДС)</em></p>
-                <p>{{ com_offer.leas_calculator.item_price_str }} ₽</p>
-                <p><em style="font-size: 12px">({{ vat }} ₽)</em></p>
-            </div>
-        </div>
-    </div>
-
-    <div class="right-side">
-        <div class="highlight">
-            <div class="icon-and-text">
-                <i class="fa-solid fa-sack-dollar"></i>
-                <div class="separator"></div>
-                <div class="text-content">
-                    <p>АВАНС</p>
-                    <p class="big-text">{{ initial_payment_percent }}%</p>
-                </div>
-            </div>
-        </div>
-        <div class="highlight">
-            <div class="icon-and-text">
-                <i class="fa-regular fa-calendar-days"></i>
-                <div class="separator"></div>
-                <div class="text-content">
-                    <p>СРОК</p>
-                    <p class="big-text">{{ com_offer.leas_calculator.credit_term }} мес.</p>
-                </div>
-            </div>
-        </div>
-        <div class="highlight">
-            <div class="icon-and-text">
-                <i class="fa-solid fa-wallet"></i>
-                <div class="separator"></div>
-                <div class="text-content">
-                    <p>ВЫКУПНОЙ</p>
-                    <p>ПЛАТЕЖ</p>
-                    <p class="big-text">{{ com_offer.main_data.redemption_value_str }} ₽</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="financial-summary">
-    <div class="financial-left-section">
-        <div class="financial-row">
-            <p><strong>Сумма договора лизинга </strong><em style="font-size: 14px">(в т. ч. НДС)</em></p>
-            <p>{{ com_offer.main_data.lease_agreement_amount_str }} ₽</p>
-        </div>
-        <div class="financial-row financial-benefit">
-            <p><strong>ВЫГОДА ПО НАЛОГАМ</strong></p>
-        </div>
-        <div class="financial-row">
-            <p>Возмещение НДС</p>
-            <p>- {{ com_offer.main_data.vat_refund_str }} ₽</p>
-        </div>
-        <div class="financial-row">
-            <p>Экономия по налогу на прибыль</p>
-            <p>- {{ com_offer.main_data.save_income_tax_str }} ₽</p>
-        </div>
-    </div>
-    <div class="financial-right-section">
-        <p>Итого затраты на приобретение</p>
-        <p class="financial-total-cost">{{ com_offer.main_data.total_cost_str }} ₽</p>
-    </div>
-</div>
-
-<div class="insurance-and-services">
-    <div class="insurance-section">
-        <h2><i class="fa-solid fa-file-alt"></i> СТРАХОВАНИЕ</h2>
-        <table class="insurance-table">
-            <tr>
-                <th>Услуга</th>
-                <th>КАСКО+ДГО</th>
-                <th>ОСАГО</th>
-            </tr>
-            <tr>
-                <td>Плательщик</td>
-                <td>Клиент</td>
-                <td>Клиент</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="services-section">
-        <h2><i class="fa-solid fa-handshake"></i> УСЛУГИ</h2>
-        <table class="services-table">
-            <tr>
-                <td>Баланcодержатель</td>
-                <td>Лизингополучатель</td>
-            </tr>
-            <tr>
-                <td>Постановка на учет</td>
-                <td>Клиент</td>
-            </tr>
-            <tr>
-                <td>Транспортный налог</td>
-                <td>Клиент</td>
-            </tr>
-        </table>
-    </div>
-</div>
-
-<p class="disclaimer">
-    Расчеты являются предварительными и ни при каких обстоятельствах не могут рассматриваться в качестве обязательств
-    ООО "Лизинговая компания малого бизнеса Республики Татарстан" по участию в сделке на указанных условиях.
-</p>
-
-<div class="payment-schedule">
-    <h2></h2>
-    <h2><i class="fa-regular fa-calendar-days"></i> ГРАФИК ЛИЗИНГОВЫХ ПЛАТЕЖЕЙ <em style="font-size: 12px">&nbsp;(в т.ч.
-        НДС)</em></h2>
-    <div class="schedule-grid">
-        {% for schedule in com_offer.schedule_data %}
-            {% if loop.index0 % 10 == 0 %}
-                <div class="payment-column">
-            {% endif %}
-        <div class="payment-row">
-            <span>{{ loop.index }}</span>
-            <span class="amount">{{ schedule.leas_payment_amount_str }}</span>
-        </div>
-        {% if loop.index0 % 10 == 9 or loop.last %}
-            </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-</div>
-
-<div class="early-repurchase">
-    <h2><i class="fa-regular fa-calendar-days"></i> ГРАФИК ПО ДОСРОЧНОМУ ПОГАШЕНИЮ <em style="font-size: 12px">&nbsp;(в
-        т.ч.
-        НДС)</em></h2>
-    <div class="schedule-grid">
-        {% for schedule in com_offer.schedule_data %}
-            {% if loop.index0 % 10 == 0 %}
-                <div class="payment-column">
-            {% endif %}
-        <div class="payment-row">
-            <span>{{ loop.index }}</span>
-            <span class="amount">
-                        {{ '-' if schedule.early_repayment_amount_str == '0,00' else schedule.early_repayment_amount_str }}
-                    </span>
-        </div>
-        {% if loop.index0 % 10 == 9 or loop.last %}
-            </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-</div>
-<p class="disclaimer" style="margin-top: 150px">
-    Расчеты являются предварительными и ни при каких обстоятельствах не могут рассматриваться в качестве обязательств
-    ООО "Лизинговая компания малого бизнеса Республики Татарстан" по участию в сделке на указанных условиях.
-</p>
-
-<div class="online-leasing">
-    <br>
-    <h2 class="title">Цифровой лизинг</h2>
-    <p class="subtitle">Заключение договора и передача автомобиля в режиме online</p>
-    <div class="features">
-        <div class="feature">
-            <i class="fa-regular fa-clock"></i>
-            <p><strong>БЫСТРО</strong></p>
-            <p class="description">Полностью цифровой процесс сделки</p>
-        </div>
-        <div class="feature">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <p><strong>УДОБНО</strong></p>
-            <p class="description">Несколько кликов вместо кипы бумаг</p>
-        </div>
-        <div class="feature">
-            <i class="fa-solid fa-sack-dollar"></i>
-            <p><strong>ВЫГОДНО</strong></p>
-            <p class="description">Экономия времени и выгодные условия финансирования</p>
-        </div>
-    </div>
-    <p class="website"><a href="https://lkmb-rt.ru/">www.lkmb-rt.ru</a></p>
-</div>
-
-
-</body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+		/>
+
+		<script src="
+    https://cdn.jsdelivr.net/npm/jsplumb@2.15.6/dist/js/jsplumb.min.js
+    "></script>
+		<link
+			href="
+    https://cdn.jsdelivr.net/npm/jsplumb@2.15.6/css/jsplumbtoolkit-defaults.min.css
+    "
+			rel="stylesheet"
+		/>
+		<title>ЛКМБ-РТ</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: 'Roboto', sans-serif;
+				background-color: #f7faff;
+			}
+
+			@font-face {
+				font-family: 'Roboto';
+				src: url('/crm/static/fonts/Roboto-Light.ttf') format('truetype');
+				font-weight: 300;
+			}
+
+			@page {
+				size: 210mm 297mm; /* Устанавливаем размер страницы */
+				margin: 0; /* Отступы */
+			}
+
+			.header {
+				position: relative;
+				height: 230px;
+				color: white;
+				display: flex;
+				align-items: center;
+				overflow: hidden;
+				font-size: 14px;
+			}
+
+			.header img.background {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				z-index: -1;
+			}
+
+			.header-left {
+				padding: 20px;
+				z-index: 1;
+			}
+
+			.header-left img {
+				height: 50px;
+			}
+
+			.contact-info {
+				padding: 10px;
+				color: white;
+			}
+
+			.contact-info p {
+				margin: 5px 0;
+				color: #f5f4f4;
+			}
+
+			.details {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				padding: 20px;
+				color: #505050;
+				border-radius: 1px;
+				margin: 10px;
+			}
+
+			.details .item {
+				display: flex;
+				align-items: center;
+				font-size: 18px;
+				padding: 10px;
+			}
+
+			.details .item i {
+				margin-right: 10px;
+				font-size: 24px;
+			}
+
+			.details .info {
+				padding-left: 20px;
+				border-left: 2px solid #d5d5d5;
+			}
+
+			.details .info p {
+				margin: 0;
+			}
+
+			.details .highlight {
+				background-color: rgba(
+					91,
+					109,
+					110,
+					0.5
+				); /* Темный цвет для выделенного блока */
+				padding: 10px;
+				border-radius: 8px;
+				text-align: center;
+				color: white;
+				min-width: 150px;
+				font-size: 16px;
+				margin: 5px;
+				align-items: center;
+			}
+
+			.icon-and-text {
+				display: flex;
+				align-items: center;
+				justify-content: flex-start; /* Выравнивание по левому краю */
+				color: rgba(255, 255, 255, 0.85);
+			}
+
+			.icon-and-text i {
+				font-size: 18px;
+				margin-right: 10px; /* Отступ между иконкой и чертой */
+			}
+
+			.separator {
+				width: 2px;
+				height: 50px; /* Увеличена высота черты */
+				background-color: rgba(255, 255, 255, 0.38);
+				margin-right: 10px; /* Отступ между чертой и текстом */
+				margin-left: 2px;
+			}
+
+			.text-content {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				text-align: left; /* Выровнять текст по левому краю */
+			}
+
+			.text-content p {
+				margin: 2px;
+				padding: 0;
+			}
+
+			.proposal-title {
+				font-size: 16px;
+				font-weight: 500;
+				color: rgba(
+					74,
+					107,
+					112,
+					0.7
+				); /* Цвет заголовка, соответствующий стилю сайта */
+				text-align: center;
+				margin-bottom: 10px;
+			}
+
+			.greeting {
+				font-size: 14px;
+				color: rgba(
+					74,
+					107,
+					112,
+					0.6
+				); /* Цвет текста, соответствующий стилю сайта */
+				text-align: right;
+				margin-bottom: 10px; /* Отступ после обращения */
+				margin-right: 10px;
+			}
+
+			.disclaimer {
+				font-size: 10px;
+				color: rgba(74, 107, 112, 0.6); /* Цвет текста */
+				text-align: center;
+				margin: 100px 20px 10px 20px;
+			}
+		</style>
+		<style>
+			.financial-summary {
+				display: flex;
+				justify-content: space-between;
+				background-color: rgba(74, 107, 112, 0.01); /* Фон блока */
+				color: #505050;
+				padding: 20px;
+				border-radius: 8px;
+				margin: 10px 10px;
+			}
+
+			.financial-left-section {
+				width: 55%;
+			}
+
+			.financial-right-section {
+				width: 25%;
+				text-align: center;
+				background-color: rgba(74, 107, 112, 0.4);
+				padding: 5px;
+				border-radius: 8px;
+				justify-content: center;
+				color: white;
+			}
+
+			.financial-row {
+				display: flex;
+				justify-content: space-between;
+				margin-bottom: 10px;
+			}
+
+			.financial-row p {
+				margin: 0;
+			}
+
+			.financial-benefit {
+				margin-top: 20px;
+			}
+
+			.financial-total-cost {
+				font-size: 20px;
+				font-weight: bold;
+			}
+		</style>
+		<style>
+			.insurance-and-services {
+				display: flex;
+				justify-content: space-between;
+				margin: 20px 10px;
+			}
+
+			.insurance-section,
+			.services-section {
+				width: 45%;
+				background-color: rgba(74, 107, 112, 0.02);
+				padding: 15px;
+				border-radius: 8px;
+				color: #505050;
+			}
+
+			.insurance-section h2,
+			.services-section h2 {
+				font-size: 18px;
+				font-weight: bold;
+				color: rgba(74, 107, 112, 0.8);
+				margin-bottom: 15px;
+				display: flex;
+				align-items: center;
+			}
+
+			.insurance-section h2 i,
+			.services-section h2 i {
+				margin-right: 10px;
+			}
+
+			.insurance-table,
+			.services-table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+
+			.insurance-table th,
+			.insurance-table td,
+			.services-table td {
+				padding: 8px;
+				text-align: left;
+				border-bottom: 1px solid rgba(74, 107, 112, 0.3);
+			}
+		</style>
+		<style>
+			.schedule-grid {
+				display: flex;
+				gap: 20px; /* Отступ между колонками */
+				flex-wrap: wrap;
+				margin-right: 20px;
+				margin-left: 20px;
+			}
+
+			.payment-column {
+				display: flex;
+				flex-direction: column;
+				width: 230px;
+			}
+
+			.payment-row {
+				display: flex;
+				justify-content: space-between;
+				padding: 10px 0;
+				border-bottom: 1px solid rgba(74, 107, 112, 0.3); /* Линия подчеркивания */
+				align-items: center; /* Выровнять по вертикали */
+			}
+
+			.payment-row span {
+				font-size: 12px; /* Размер шрифта */
+				color: rgba(77, 77, 77, 0.4); /* Цвет текста */
+				text-align: left;
+			}
+
+			.payment-row .amount {
+				color: #4d4d4d; /* Цвет текста */
+				font-size: 12px; /* Размер шрифта */
+				text-align: right;
+				min-width: 100px; /* Установите минимальную ширину для сумм */
+			}
+
+			.payment-schedule h2 {
+				font-size: 18px;
+				font-weight: bold;
+				color: #505050;
+				margin-bottom: 15px;
+				margin-left: 20px;
+				margin-top: 60px;
+				display: flex;
+				align-items: center;
+			}
+
+			.payment-schedule h2 i,
+			.early-repurchase h2 i {
+				margin-right: 10px;
+			}
+
+			.early-repurchase h2 {
+				font-size: 18px;
+				font-weight: bold;
+				color: rgba(74, 107, 112, 0.8);
+				margin-bottom: 15px;
+				margin-left: 20px;
+				margin-top: 60px;
+				display: flex;
+				align-items: center;
+			}
+
+			.table-header {
+				display: flex;
+				margin-top: 25px;
+				margin-bottom: 10px; /* Отступ снизу для линий */
+				font-size: 12px;
+				color: rgba(77, 77, 77, 0.6);
+				position: relative;
+			}
+
+			.header-item {
+				position: relative;
+				text-align: center;
+				line-height: 1.2;
+				margin-left: 20px;
+				margin-right: 50px;
+			}
+
+			.header-text {
+				display: inline-block;
+				margin-bottom: 0; /* Отступ для линии */
+			}
+
+			#header-amount {
+				color: #4d4d4d;
+			}
+
+			#header-buyout {
+				color: #4d4d4d;
+				font-weight: bold;
+			}
+		</style>
+		<style>
+			.online-leasing {
+				text-align: center;
+				margin: 40px 0;
+			}
+
+			.online-leasing .title {
+				font-size: 24px;
+				font-weight: bold;
+				color: rgba(74, 107, 112, 0.8);
+				margin-bottom: 10px;
+			}
+
+			.online-leasing .subtitle {
+				font-size: 16px;
+				color: #505050;
+				margin-bottom: 30px;
+			}
+
+			.features {
+				display: flex;
+				justify-content: space-around;
+				margin-bottom: 30px;
+			}
+
+			.feature {
+				text-align: center;
+				max-width: 150px;
+			}
+
+			.feature i {
+				font-size: 36px;
+				color: rgba(74, 107, 112, 0.8);
+				margin-bottom: 10px;
+			}
+
+			.feature p {
+				margin: 5px 0;
+				color: #505050;
+			}
+
+			.feature .description {
+				margin: 5px 0;
+				color: #505050;
+				font-size: 12px;
+			}
+
+			.feature strong {
+				color: #505050;
+				font-size: 14px;
+			}
+
+			.website a {
+				font-size: 20px;
+				font-weight: bold;
+				color: rgba(74, 107, 112, 0.8);
+				text-decoration: none;
+				text-align: center;
+				display: block;
+				margin-top: 100px;
+			}
+
+			.website a:hover {
+				text-decoration: underline;
+			}
+
+			@media print {
+				svg {
+					display: block; /* Убедитесь, что SVG отображается при печати */
+					height: auto;
+				}
+			}
+            
+            /* Стили для каждой линии */
+            .line-number {
+                stroke: #e0e0e0; /* Цвет линии для "Номер платежа" */
+            }
+        
+            .line-amount {
+                stroke: #4d4d4d; /* Цвет линии для "Сумма остатка всех платежей по ДЛ" */
+            }
+        
+            .line-buyout {
+                stroke: black; /* Цвет линии для "Сумма досрочного выкупа" */
+            }
+        
+            .line-allowed {
+                stroke: #e0e0e0; /* Цвет линии для "* допускается с 7 месяца" */
+            }
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<img
+				src="{{ url_for('crm.static', filename='images/bmw2-blur.png') }}"
+				alt="Background"
+				class="background"
+			/>
+			<div class="header-left">
+				<img
+					src="{{ url_for('crm.static', filename='images/lkmb-logo.png') }}"
+					alt="ЛКМБ-РТ"
+				/>
+				<div class="contact-info">
+					<p style="margin-bottom: 15px; font-size: 16px">ООО "ЛКМБ-РТ"</p>
+					<p>Ваш менеджер:</p>
+					<p style="margin-bottom: 10px">{{ user_info.name }}</p>
+					<p>
+						<i class="fa-regular fa-envelope"></i> Email: {{ user_info.email }}
+					</p>
+					<p>
+						<i class="fa-solid fa-phone"></i> Телефон: {{ user_info.phone }}
+					</p>
+					<p>
+						<i class="fa-brands fa-telegram"></i> Telegram: {{
+						user_info.telegram }}
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<p class="greeting">№ {{ com_offer.offer.id }} от {{ today }}</p>
+		<h1 class="proposal-title"></h1>
+
+		<div class="details">
+			<div class="left-side">
+				<div class="item">
+					<i class="fa fa-briefcase"></i>
+					<div class="info">
+						<p><strong>ПРЕДМЕТ ЛИЗИНГА</strong></p>
+						<p>
+							{{ com_offer.leas_calculator.item_name }}, {{
+							com_offer.leas_calculator.item_year }} г. в. ({{
+							com_offer.leas_calculator.item_condition }})
+						</p>
+					</div>
+				</div>
+				<br />
+				<div class="item">
+					<i class="fa-solid fa-coins"></i>
+					<div class="info">
+						<p>
+							<strong>СТОИМОСТЬ</strong>
+							<em style="font-size: 12px">(в т.ч. НДС)</em>
+						</p>
+						<p>{{ com_offer.leas_calculator.item_price_str }} ₽</p>
+						<p><em style="font-size: 12px">({{ vat }} ₽)</em></p>
+					</div>
+				</div>
+			</div>
+
+			<div class="right-side">
+				<div class="highlight">
+					<div class="icon-and-text">
+						<i class="fa-solid fa-sack-dollar"></i>
+						<div class="separator"></div>
+						<div class="text-content">
+							<p>АВАНС</p>
+							<p class="big-text">{{ initial_payment_percent }}%</p>
+							<p class="big-text">{{ initial_payment }} ₽</p>
+						</div>
+					</div>
+				</div>
+				<div class="highlight">
+					<div class="icon-and-text">
+						<i class="fa-regular fa-calendar-days"></i>
+						<div class="separator"></div>
+						<div class="text-content">
+							<p>СРОК</p>
+							<p class="big-text">
+								{{ com_offer.leas_calculator.credit_term }} мес.
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="highlight">
+					<div class="icon-and-text">
+						<i class="fa-solid fa-wallet"></i>
+						<div class="separator"></div>
+						<div class="text-content">
+							<p>ВЫКУПНОЙ</p>
+							<p>ПЛАТЕЖ</p>
+							<p class="big-text">
+								{{ com_offer.main_data.redemption_value_str }} ₽
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="financial-summary">
+			<div class="financial-left-section">
+				<div class="financial-row">
+					<p>
+						<strong>Сумма договора лизинга </strong
+						><em style="font-size: 14px">(в т. ч. НДС)</em>
+					</p>
+					<p>{{ com_offer.main_data.lease_agreement_amount_str }} ₽</p>
+				</div>
+				<div class="financial-row financial-benefit">
+					<p><strong>ВЫГОДА ПО НАЛОГАМ</strong></p>
+				</div>
+				<div class="financial-row">
+					<p>Возмещение НДС</p>
+					<p>- {{ com_offer.main_data.vat_refund_str }} ₽</p>
+				</div>
+				<div class="financial-row">
+					<p>Экономия по налогу на прибыль</p>
+					<p>- {{ com_offer.main_data.save_income_tax_str }} ₽</p>
+				</div>
+			</div>
+			<div class="financial-right-section">
+				<p>Итого затраты на приобретение</p>
+				<p class="financial-total-cost">
+					{{ com_offer.main_data.total_cost_str }} ₽
+				</p>
+			</div>
+		</div>
+
+		<div class="insurance-and-services">
+			<div class="insurance-section">
+				<h2><i class="fa-solid fa-file-alt"></i> СТРАХОВАНИЕ</h2>
+				<table class="insurance-table">
+					<tr>
+						<th>Услуга</th>
+						<th>КАСКО</th>
+						<th>ОСАГО</th>
+					</tr>
+					<tr>
+						<td>Плательщик</td>
+						<td>Клиент</td>
+						<td>Клиент</td>
+					</tr>
+				</table>
+			</div>
+
+			<div class="services-section">
+				<h2><i class="fa-solid fa-handshake"></i> УСЛУГИ</h2>
+				<table class="services-table">
+					<tr>
+						<td>Баланcодержатель</td>
+						<td>Клиент</td>
+					</tr>
+					<tr>
+						<td>Постановка на учет</td>
+						<td>Клиент</td>
+					</tr>
+					<tr>
+						<td>Транспортный налог</td>
+						<td>Клиент</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<p class="disclaimer">
+			Расчеты являются предварительными и ни при каких обстоятельствах не могут
+			рассматриваться в качестве обязательств ООО "Лизинговая компания малого
+			бизнеса Республики Татарстан" по участию в сделке на указанных условиях.
+		</p>
+
+		<div class="payment-schedule">
+			<h2></h2>
+			<h2>
+				<i class="fa-regular fa-calendar-days"></i> ГРАФИК ЛИЗИНГОВЫХ ПЛАТЕЖЕЙ
+				<em style="font-size: 12px">&nbsp;(в т.ч. НДС)</em>
+			</h2>
+
+			<div class="table-header">
+				<div class="header-item" id="header-number">
+					<span class="header-text">Номер<br />платежа</span>
+				</div>
+				<div class="header-item" id="header-amount">
+					<span class="header-text"
+						>Сумма остатка<br />всех платежей по ДЛ</span
+					>
+				</div>
+				<div class="header-item" id="header-buyout">
+					<span class="header-text">Сумма досрочного<br />выкупа</span>
+				</div>
+				<div class="header-item" id="header-allowed">
+					<span class="header-text" style="color: #d1d1d1">* допускается<br />с 7 месяца</span>
+				</div>
+			</div>
+
+			<svg width="100%" height="50" style="color: #4d4d4d">
+                <!-- Линия для "Номер платежа" -->
+                <path
+                    class="line-number"
+                    d="M25,-8 L25,90"
+                    stroke-width="1"
+                />
+            
+                <!-- Линия с изгибом для "Сумма остатка всех платежей по ДЛ" -->
+                <path
+                    class="line-amount"
+                    d="M140,0 L140,20 Q140,30 130,30 L100,30 Q95,30 95,35 L95,80"
+                    stroke-width="1"
+                    fill="none"
+                />
+            
+                <!-- Линия для "Сумма досрочного выкупа" -->
+                <path
+                    class="line-buyout"
+                    d="M330,0 L330,20 Q330,30 320,30 L210,30 Q205,30 205,35 L205,80"
+                    stroke-width="2"
+                    fill="none"
+                />
+            
+                <!-- Линия для "* допускается с 7 месяца" -->
+                <path
+                    class="line-allowed"
+                    d="M505,0 L505,20 Q505,30 495,30 L420,30 L350,30"
+                    stroke-width="1"
+                    fill="none"
+                />
+            </svg>
+
+			<div class="schedule-grid">
+				{% for schedule in com_offer.schedule_data %} {% if loop.index0 % 20 ==
+				0 %}
+				<div class="payment-column">
+					{% endif %}
+					<div class="payment-row">
+						<span style="margin-right: -20px">{{ loop.index }}</span>
+						<span class="amount">{{ schedule.leas_payment_amount_str }}</span>
+						<span class="amount" style="font-weight: bold"
+							>{{ '—' if schedule.early_repayment_amount_str == '0,00' else
+							schedule.early_repayment_amount_str }}</span
+						>
+					</div>
+					{% if loop.index0 % 20 == 19 or loop.last %}
+				</div>
+				{% endif %} {% endfor %}
+			</div>
+		</div>
+
+		{#
+		<div class="early-repurchase">
+			<h2>
+				<i class="fa-regular fa-calendar-days"></i> ГРАФИК ПО ДОСРОЧНОМУ
+				ПОГАШЕНИЮ <em style="font-size: 12px">&nbsp;(в т.ч. НДС)</em>
+			</h2>
+			<div class="schedule-grid">
+				{% for schedule in com_offer.schedule_data %} {% if loop.index0 % 10 ==
+				0 %}
+				<div class="payment-column">
+					{% endif %}
+					<div class="payment-row">
+						<span>{{ loop.index }}</span>
+						<span class="amount">
+							{{ '-' if schedule.early_repayment_amount_str == '0,00' else
+							schedule.early_repayment_amount_str }}
+						</span>
+					</div>
+					{% if loop.index0 % 10 == 9 or loop.last %}
+				</div>
+				{% endif %} {% endfor %}
+			</div>
+		</div>
+		#}
+		<p class="website"><a href="https://lkmb-rt.ru/">www.lkmb-rt.ru</a></p>
+		<p class="disclaimer" style="margin-top: 50px">
+			Расчеты являются предварительными и ни при каких обстоятельствах не могут
+			рассматриваться в качестве обязательств ООО "Лизинговая компания малого
+			бизнеса Республики Татарстан" по участию в сделке на указанных условиях.
+		</p>
+
+		{#
+		<div class="online-leasing">
+			<br />
+			<h2 class="title">Цифровой лизинг</h2>
+			<p class="subtitle">
+				Заключение договора и передача автомобиля в режиме online
+			</p>
+			<div class="features">
+				<div class="feature">
+					<i class="fa-regular fa-clock"></i>
+					<p><strong>БЫСТРО</strong></p>
+					<p class="description">Полностью цифровой процесс сделки</p>
+				</div>
+				<div class="feature">
+					<i class="fa-regular fa-thumbs-up"></i>
+					<p><strong>УДОБНО</strong></p>
+					<p class="description">Несколько кликов вместо кипы бумаг</p>
+				</div>
+				<div class="feature">
+					<i class="fa-solid fa-sack-dollar"></i>
+					<p><strong>ВЫГОДНО</strong></p>
+					<p class="description">
+						Экономия времени и выгодные условия финансирования
+					</p>
+				</div>
+			</div>
+			<p class="website"><a href="https://lkmb-rt.ru/">www.lkmb-rt.ru</a></p>
+		</div>
+		#}
+	</body>
 </html>

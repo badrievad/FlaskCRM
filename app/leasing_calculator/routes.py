@@ -503,6 +503,7 @@ def show_commercial_offer(offer_id) -> render_template:
         str(float(item_price) - float(item_price) / 1.2)
     )  # выделяем НДС 20%
     initial_payment_percent = validate_item_price(str(initial_payment_percent))
+    initial_payment = com_offers_list[0]["leas_calculator"].initial_payment_str
 
     return render_template(
         "commercial-offer.html",
@@ -511,6 +512,7 @@ def show_commercial_offer(offer_id) -> render_template:
         com_offer=com_offers_list[0],
         vat=vat,
         initial_payment_percent=initial_payment_percent,
+        initial_payment=initial_payment,
         user_info=user_info,
     )
 

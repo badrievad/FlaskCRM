@@ -180,3 +180,48 @@ th {
 .btn-back:hover {
     background-color: rgba(39, 63, 73, 0.7);
 }
+
+/* Стили для темной области внутри контейнера */
+.dark-area {
+    background-color: #414141;  /* Темный фон */
+    padding: 20px;
+    color: #fff;             /* Белый цвет текста */
+    width: 100%;             /* Занимает всю ширину контейнера */
+    box-sizing: border-box;  /* Учитывает padding в ширине */
+    margin-bottom: 20px;     /* Отступ снизу */
+}
+
+/* Стили для блока с чекбоксом */
+.rate-toggle {
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+
+.rate-toggle input[type="checkbox"] {
+    margin-right: 10px;
+    width: 18px;
+    height: 18px;
+}
+
+.rate-toggle label {
+    cursor: pointer;
+    color: #fff; /* Цвет текста метки */
+}
+
+/* Стили для текста состояния ставки удорожания */
+.increase-rate-status {
+    font-weight: bold !important;; 
+    color: initial; /* Сбрасываем цвет по умолчанию */
+}
+
+/* Когда ставка включена */
+.increase-rate-status.rate-included {
+    color: rgb(53, 117, 53) !important;
+}
+
+/* Когда ставка не включена */
+.increase-rate-status.rate-excluded {
+    color: rgb(126, 48, 48) !important;
+}

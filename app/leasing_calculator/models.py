@@ -459,6 +459,8 @@ class MainAnnuity(db.Model):
     company_margin_str = db.Column(db.String(255), nullable=False)
     effective_rate = db.Column(db.Float, nullable=False)
     effective_rate_str = db.Column(db.String(255), nullable=False)
+    increase_rate = db.Column(db.Float, nullable=False)
+    increase_rate_str = db.Column(db.String(255), nullable=False)
 
     # Обратное отношение к LeasCalculator
     leas_calculator = relationship("LeasCalculator", back_populates="main_annuity")
@@ -487,6 +489,8 @@ class MainDifferentiated(db.Model):
     company_margin_str = db.Column(db.String(255), nullable=False)
     effective_rate = db.Column(db.Float, nullable=False)
     effective_rate_str = db.Column(db.String(255), nullable=False)
+    increase_rate = db.Column(db.Float, nullable=False)
+    increase_rate_str = db.Column(db.String(255), nullable=False)
 
     # Обратное отношение к LeasCalculator
     leas_calculator = relationship(
@@ -517,6 +521,8 @@ class MainRegression(db.Model):
     company_margin_str = db.Column(db.String(255), nullable=False)
     effective_rate = db.Column(db.Float, nullable=False)
     effective_rate_str = db.Column(db.String(255), nullable=False)
+    increase_rate = db.Column(db.Float, nullable=False)
+    increase_rate_str = db.Column(db.String(255), nullable=False)
 
     # Обратное отношение к LeasCalculator
     leas_calculator = relationship("LeasCalculator", back_populates="main_regression")

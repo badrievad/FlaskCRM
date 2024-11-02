@@ -30,6 +30,7 @@ class MainInfoItem(BaseModel):
     transaction_processing_fee: float
     company_margin: float
     effective_rate: float
+    increase_rate: float
 
 
 class ScheduleItem(BaseModel):
@@ -197,6 +198,10 @@ def upload_main_info(data: dict):
                 effective_rate=validated_data.effective_rate,
                 effective_rate_str=validate_item_price(
                     str(validated_data.effective_rate)
+                ),
+                increase_rate=validated_data.increase_rate,
+                increase_rate_str=validate_item_price(
+                    str(validated_data.increase_rate)
                 ),
             )
 

@@ -192,7 +192,7 @@ def intensive_task_simulation(data: dict) -> dict:
 
         upload_schedule(calculation_results)
         upload_main_info(calculation_results)
-        com_off_name = f"Лизинговый калькулятор version 1.8_{new_calc.id}.xlsm"
+        com_off_name = f"Лизинговый калькулятор version 1.9_{new_calc.id}.xlsm"
 
         new_calc.path_to_xlsx = com_off_name
         db.session.commit()

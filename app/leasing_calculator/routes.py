@@ -377,7 +377,7 @@ def download_offers(calc_id):
 def download_calc(calc_id):
     logging.info(f"Запрос на скачивание расчета (id_{calc_id})")
     try:
-        file_name = f"Лизинговый калькулятор version 1.8_{calc_id}.xlsm"
+        file_name = f"Лизинговый калькулятор version 1.9_{calc_id}.xlsm"
         leas_calculate = yandex_download_file_s3(file_name)
 
         return send_file(leas_calculate, as_attachment=True)
@@ -586,7 +586,7 @@ def upload_file():
 
     try:
         calc_id = create_new_leas_calc(current_user.login)
-        file.filename = f"Лизинговый калькулятор version 1.8_{calc_id}.xlsm"
+        file.filename = f"Лизинговый калькулятор version 1.9_{calc_id}.xlsm"
 
         filename = file.filename
         logging.info(f"Имя файла: {filename}")

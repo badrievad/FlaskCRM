@@ -1,6 +1,6 @@
 from flask import session
-from flask_login import current_user
-from flask_socketio import join_room
+from flask_login import current_user  # type: ignore
+from flask_socketio import join_room  # type: ignore
 
 from logger import logging
 

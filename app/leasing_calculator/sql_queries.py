@@ -528,3 +528,4 @@ def write_information_to_leas_calc(data: dict, calc_id, file_name: str) -> None:
     except Exception as e:
         db.session.rollback()
         raise e
+    

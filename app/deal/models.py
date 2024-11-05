@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 from .. import db
 
 
-class Deal(db.Model):
+class Deal(db.Model):  # type: ignore
     __tablename__ = "deals"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -79,7 +79,7 @@ class Deal(db.Model):
         return len(self.leas_calculators) < self.deals_count
 
 
-class Client(db.Model):
+class Client(db.Model):  # type: ignore
     __tablename__ = "clients"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -101,7 +101,7 @@ class Client(db.Model):
     bank = relationship("Bank", back_populates="clients")
 
 
-class Bank(db.Model):
+class Bank(db.Model):  # type: ignore
     __tablename__ = "banks"
 
     id = db.Column(db.Integer, primary_key=True)

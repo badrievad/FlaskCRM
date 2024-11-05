@@ -3,6 +3,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from flask import (
+    Response,
     current_app,
     jsonify,
     redirect,
@@ -11,7 +12,7 @@ from flask import (
     send_file,
     url_for,
 )
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required  # type: ignore
 from sqlalchemy import desc
 from sqlalchemy.orm import joinedload
 
@@ -55,7 +56,7 @@ from .sql_queries import (
 @leas_calc_bp.route("/crm/calculator", methods=["GET"])
 @login_required
 @validate_active_session
-def get_leasing_calculator() -> render_template:
+def get_leasing_calculator() -> str:
     # установка фона для пользователя
     user_fon_filename = current_user.fon_url
     user_fon_url = url_for("crm.static", filename=user_fon_filename)
@@ -132,7 +133,7 @@ def update_table() -> str:
 
 @leas_calc_bp.route("/crm/calculator/<int:calc_id>", methods=["GET"])
 @login_required
-def get_leasing_calculator_by_id(calc_id: int) -> render_template:
+def get_leasing_calculator_by_id(calc_id: int) -> str:
     logging.info(f"Запрос на отображение расчета (id_{calc_id})")
     calc_list = get_list_of_leas_calculators(current_user.login, calc_id)
     return render_template(
@@ -202,7 +203,7 @@ def create_commercial_offer(leas_calculator_id):
 
 # Эндпоинт для запуска фоновой задачи
 @leas_calc_bp.route("/crm/calculator/start-task", methods=["POST"])
-def start_task() -> jsonify:
+def start_task() -> tuple[Response, int]:
     data: dict = request.get_json()
 
     curr_user_path = FORM_OFFERS_PATH / current_user.login
@@ -241,7 +242,7 @@ def start_task() -> jsonify:
 
 
 @leas_calc_bp.route("/crm/calculator/status/<task_id>", methods=["GET"])
-def get_status(task_id) -> jsonify:
+def get_status(task_id) -> tuple[Response, int]:
     try:
         task = long_task.AsyncResult(task_id)
 
@@ -288,7 +289,7 @@ def get_status(task_id) -> jsonify:
             current_app.logger.error(f"Task {task_id} failed with error: {task.info}")
 
         current_app.logger.info(f"Task {task_id} status: {response}")
-        return jsonify(response)
+        return jsonify(response), 200
 
     except Exception as e:
         current_app.logger.error(f"Error fetching status for task {task_id}: {e}")
@@ -296,7 +297,7 @@ def get_status(task_id) -> jsonify:
 
 
 @leas_calc_bp.route("/crm/calculator/delete/<int:calc_id>", methods=["POST"])
-def delete_calculation(calc_id) -> jsonify:
+def delete_calculation(calc_id) -> tuple[Response, int]:
     try:
         offer = (
             CommercialOffer.query.options(
@@ -317,11 +318,14 @@ def delete_calculation(calc_id) -> jsonify:
         db.session.delete(offer)  # Удалить запись из LeasCalculator
         db.session.commit()  # Подтвердить транзакцию
 
-        return jsonify(
-            {
-                "success": True,
-                "message": "Calculation and related tranche deleted successfully",
-            }
+        return (
+            jsonify(
+                {
+                    "success": True,
+                    "message": "Calculation and related tranche deleted successfully",
+                }
+            ),
+            200,
         )
 
     except Exception as e:
@@ -399,7 +403,7 @@ def download_calc(calc_id):
 
 
 @leas_calc_bp.route("/crm/calculator/autocomplete", methods=["GET"])
-def autocomplete() -> jsonify:
+def autocomplete() -> Response:
     query = request.args.get("query", "")
     suggestions = (
         LeasingItem.query.filter(LeasingItem.name.ilike(f"%{query}%")).limit(10).all()
@@ -442,7 +446,7 @@ def update_calculation(calc_id):
 
 @leas_calc_bp.route("/crm/calculator/get_exchange_rates", methods=["GET"])
 @cache.cached(timeout=600)
-def get_exchange_rates() -> jsonify:
+def get_exchange_rates() -> Response:
     api = CentralBankExchangeRates()
     exchange_rates: dict = api.get_exchange_rates()
     return jsonify(exchange_rates)
@@ -450,7 +454,7 @@ def get_exchange_rates() -> jsonify:
 
 @leas_calc_bp.route("/crm/calculator/get_key_rate", methods=["GET"])
 @cache.cached(timeout=36000)
-def get_key_rate() -> jsonify:
+def get_key_rate() -> Response:
     api = CentralBankKeyRate()
     key_rate = api.get_key_rate()
     return jsonify(key_rate)
@@ -459,7 +463,7 @@ def get_key_rate() -> jsonify:
 @leas_calc_bp.route(
     "/crm/calculator/copy-commercial-offer/<int:calc_id>", methods=["GET"]
 )
-def get_commercial_offer(calc_id: int) -> jsonify:
+def get_commercial_offer(calc_id: int) -> tuple[Response, int]:
     try:
         calc: LeasCalculator = LeasCalculator.query.filter_by(id=calc_id).first()
         if calc is None:
@@ -475,14 +479,14 @@ def get_commercial_offer(calc_id: int) -> jsonify:
             "tranches": tranches.to_dict(),
             "insurances": insurances.to_dict(),
         }
-        return jsonify({"success": True, "data": result})
+        return jsonify({"success": True, "data": result}), 200
 
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
 
 
 @leas_calc_bp.route("/crm/commercial-offer/<int:offer_id>", methods=["GET"])
-def show_commercial_offer(offer_id) -> render_template:
+def show_commercial_offer(offer_id) -> str:
     today = date.today().strftime("%d.%m.%Y")
     user_info = {
         "login": request.args.get("user_login"),
@@ -521,13 +525,13 @@ def show_commercial_offer(offer_id) -> render_template:
 
 
 @leas_calc_bp.route("/crm/calculator/overheads", methods=["GET"])
-def get_overheads() -> jsonify:
+def get_overheads() -> tuple[Response, int]:
     try:
         overheads_path = Path("app").resolve() / "static" / "jsons" / "overheads.json"
         logging.info(overheads_path)
         with open(overheads_path, "r") as f:
             overheads = json.load(f)
-        return jsonify(overheads)
+        return jsonify(overheads), 200
     except FileNotFoundError:
         logging.error("File not found")
         return jsonify({"error": "File not found"}), 404

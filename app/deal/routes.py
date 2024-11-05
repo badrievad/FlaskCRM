@@ -7,8 +7,9 @@ from flask import (
     request,
     session,
     url_for,
+    Response,
 )
-from flask_login import current_user
+from flask_login import current_user  # type: ignore
 from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -27,7 +28,7 @@ from .sql_queries import merge_deals_in_db
 from .work_with_folders import CompanyFolderAPI
 
 
-def send_notification(socket_path: str, error_message: str) -> jsonify:
+def send_notification(socket_path: str, error_message: str) -> tuple[Response, int]:
     logging.info(f"Session now: {session}")
     session_username = session.get("username")
     logging.info(f"session_username: {session_username}")
@@ -44,7 +45,7 @@ def send_notification(socket_path: str, error_message: str) -> jsonify:
 
 @deal_bp.route("/crm/deal/create_deal", methods=["POST"])
 @validate_active_session
-def create_deal() -> jsonify:
+def create_deal() -> tuple[Response, int]:
     api_folder = CompanyFolderAPI()
     deal_data = request.get_json()
     deal = DealsValidate(deal_data)
@@ -100,7 +101,7 @@ def create_deal() -> jsonify:
 
 @deal_bp.route("/crm/deal/delete_deal/<int:deal_id>", methods=["POST"])
 @validate_active_session
-def delete_deal(deal_id) -> jsonify:
+def delete_deal(deal_id) -> tuple[Response, int]:
     deal: Deal = Deal.query.get(deal_id)
     api_folder: CompanyFolderAPI = CompanyFolderAPI()
     if deal:
@@ -149,7 +150,7 @@ def delete_deal(deal_id) -> jsonify:
 
 @deal_bp.route("/crm/deal/deal_to_archive/<int:deal_id>", methods=["POST"])
 @validate_active_session
-def deal_to_archive(deal_id) -> jsonify:
+def deal_to_archive(deal_id) -> tuple[Response, int]:
     deal: Deal = Deal.query.get(deal_id)
     deal_with_user = deal.user.url_photo
     api_folder: CompanyFolderAPI = CompanyFolderAPI()
@@ -240,7 +241,7 @@ def deal_to_archive(deal_id) -> jsonify:
 
 @deal_bp.route("/crm/deal/deal_to_active/<int:deal_id>", methods=["POST"])
 @validate_active_session
-def deal_to_active(deal_id) -> jsonify:
+def deal_to_active(deal_id) -> tuple[Response, int]:
     """Изменить статус сделки на активную"""
 
     deal: Deal = Deal.query.get(deal_id)
@@ -305,7 +306,7 @@ def deal_to_active(deal_id) -> jsonify:
 @deal_bp.route("/crm", methods=["GET"])
 @_tester_required
 @validate_active_session
-def index_crm() -> render_template:
+def index_crm() -> str:
     session["username"] = current_user.login  # Устанавливаем username в сессию
     logging.info(f"Socket connected: {session}")
     logging.info(f"FON: {current_user.fon_url}")
@@ -332,7 +333,7 @@ def index_crm() -> render_template:
 
 
 @deal_bp.route("/crm/deals/active", methods=["GET"])
-def get_deals_active() -> jsonify:
+def get_deals_active() -> Response:
     user_fullname = request.args.get(
         "user_fullname"
     )  # Получаем параметр из строки запроса
@@ -387,7 +388,7 @@ def get_deals_active() -> jsonify:
 
 
 @deal_bp.route("/crm/deals/active-for-bind", methods=["GET"])
-def get_deals_active_for_bind() -> jsonify:
+def get_deals_active_for_bind() -> Response:
     user_fullname = request.args.get(
         "user_fullname"
     )  # Получаем параметр из строки запроса
@@ -397,11 +398,11 @@ def get_deals_active_for_bind() -> jsonify:
     active_deals_count: int = len(active_deals)
     archived_deals_count: int = Deal.query.filter_by(status="archived").count()
     if user_fullname:
-        active_deals: list[Deal] = (
+        active_deals: list[Deal] = (  # type: ignore
             Deal.query.filter_by(status="active", created_by=user_fullname)
             .order_by(desc(Deal.created_at))
             .all()
-        )
+        )  
 
     return jsonify(
         {
@@ -429,7 +430,7 @@ def get_deals_active_for_bind() -> jsonify:
 
 
 @deal_bp.route("/crm/deals/archived", methods=["GET"])
-def get_deals_archived() -> jsonify:
+def get_deals_archived() -> Response:
     archived_deals: list[Deal] = (
         Deal.query.filter_by(status="archived").order_by(desc(Deal.archived_at)).all()
     )

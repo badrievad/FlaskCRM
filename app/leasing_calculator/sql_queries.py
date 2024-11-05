@@ -1,5 +1,6 @@
 from datetime import date, datetime
 
+from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import joinedload
 
@@ -221,6 +222,7 @@ def get_list_of_commercial_offers(user_login, offer_id=None) -> list:
                 )
             )
             .filter(CommercialOffer.id == offer_id)
+            .order_by(desc(CommercialOffer.id))
         )
     else:
         query = (
@@ -232,6 +234,7 @@ def get_list_of_commercial_offers(user_login, offer_id=None) -> list:
                 )
             )
             .filter(LeasCalculator.manager_login == user_login)
+            .order_by(desc(CommercialOffer.id))
         )
 
     # Выполняем запрос

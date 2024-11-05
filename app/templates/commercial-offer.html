@@ -186,7 +186,7 @@
 				font-size: 10px;
 				color: rgba(74, 107, 112, 0.6); /* Цвет текста */
 				text-align: center;
-				margin: 100px 20px 10px 20px;
+				margin: 80px 20px 10px 20px;
 			}
 		</style>
 		<style>
@@ -444,23 +444,23 @@
 					height: auto;
 				}
 			}
-            
-            /* Стили для каждой линии */
-            .line-number {
-                stroke: #e0e0e0; /* Цвет линии для "Номер платежа" */
-            }
-        
-            .line-amount {
-                stroke: #4d4d4d; /* Цвет линии для "Сумма остатка всех платежей по ДЛ" */
-            }
-        
-            .line-buyout {
-                stroke: black; /* Цвет линии для "Сумма досрочного выкупа" */
-            }
-        
-            .line-allowed {
-                stroke: #e0e0e0; /* Цвет линии для "* допускается с 7 месяца" */
-            }
+
+			/* Стили для каждой линии */
+			.line-number {
+				stroke: #e0e0e0; /* Цвет линии для "Номер платежа" */
+			}
+
+			.line-amount {
+				stroke: #4d4d4d; /* Цвет линии для "Сумма остатка всех платежей по ДЛ" */
+			}
+
+			.line-buyout {
+				stroke: black; /* Цвет линии для "Сумма досрочного выкупа" */
+			}
+
+			.line-allowed {
+				stroke: #e0e0e0; /* Цвет линии для "* допускается с 7 месяца" */
+			}
 		</style>
 	</head>
 	<body>
@@ -583,6 +583,14 @@
 					<p>Экономия по налогу на прибыль</p>
 					<p>- {{ com_offer.main_data.save_income_tax_str }} ₽</p>
 				</div>
+				{% if user_info.include_rate == 'on' %}
+				<div class="financial-row" style="margin-top: 20px; margin-bottom: 0">
+					<p>
+						<strong>Ставка удорожания</strong>
+					</p>
+					<p>{{ com_offer.main_data.increase_rate_str }}</p>
+				</div>
+				{% endif %}
 			</div>
 			<div class="financial-right-section">
 				<p>Итого затраты на приобретение</p>
@@ -654,42 +662,40 @@
 					<span class="header-text">Сумма досрочного<br />выкупа</span>
 				</div>
 				<div class="header-item" id="header-allowed">
-					<span class="header-text" style="color: #d1d1d1">* допускается<br />с 7 месяца</span>
+					<span class="header-text" style="color: #d1d1d1"
+						>* допускается<br />с 7 месяца</span
+					>
 				</div>
 			</div>
 
 			<svg width="100%" height="50" style="color: #4d4d4d">
-                <!-- Линия для "Номер платежа" -->
-                <path
-                    class="line-number"
-                    d="M25,-8 L25,90"
-                    stroke-width="1"
-                />
-            
-                <!-- Линия с изгибом для "Сумма остатка всех платежей по ДЛ" -->
-                <path
-                    class="line-amount"
-                    d="M140,0 L140,20 Q140,30 130,30 L100,30 Q95,30 95,35 L95,80"
-                    stroke-width="1"
-                    fill="none"
-                />
-            
-                <!-- Линия для "Сумма досрочного выкупа" -->
-                <path
-                    class="line-buyout"
-                    d="M330,0 L330,20 Q330,30 320,30 L210,30 Q205,30 205,35 L205,80"
-                    stroke-width="2"
-                    fill="none"
-                />
-            
-                <!-- Линия для "* допускается с 7 месяца" -->
-                <path
-                    class="line-allowed"
-                    d="M505,0 L505,20 Q505,30 495,30 L420,30 L350,30"
-                    stroke-width="1"
-                    fill="none"
-                />
-            </svg>
+				<!-- Линия для "Номер платежа" -->
+				<path class="line-number" d="M25,-8 L25,90" stroke-width="1" />
+
+				<!-- Линия с изгибом для "Сумма остатка всех платежей по ДЛ" -->
+				<path
+					class="line-amount"
+					d="M140,0 L140,20 Q140,30 130,30 L100,30 Q95,30 95,35 L95,80"
+					stroke-width="1"
+					fill="none"
+				/>
+
+				<!-- Линия для "Сумма досрочного выкупа" -->
+				<path
+					class="line-buyout"
+					d="M330,0 L330,20 Q330,30 320,30 L210,30 Q205,30 205,35 L205,80"
+					stroke-width="2"
+					fill="none"
+				/>
+
+				<!-- Линия для "* допускается с 7 месяца" -->
+				<path
+					class="line-allowed"
+					d="M505,0 L505,20 Q505,30 495,30 L420,30 L350,30"
+					stroke-width="1"
+					fill="none"
+				/>
+			</svg>
 
 			<div class="schedule-grid">
 				{% for schedule in com_offer.schedule_data %} {% if loop.index0 % 20 ==

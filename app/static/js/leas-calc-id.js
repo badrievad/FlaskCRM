@@ -4,6 +4,10 @@ function createCommercialOffer(scheduleType, leasCalculatorId) {
 	document.getElementById('calculate-button-differentiated').disabled = true
 	document.getElementById('calculate-button-regression').disabled = true
 
+	// Получаем значение чекбокса
+	const includeRateCheckbox = document.getElementById('include-rate')
+	const includeRateValue = includeRateCheckbox.checked ? 'on' : 'off' // Или используйте 'true'/'false' или '1'/'0' в зависимости от ваших предпочтений
+
 	// Изменяем стиль для заблокированных кнопок
 	const buttons = document.querySelectorAll('.btn-hover')
 	buttons.forEach(button => {
@@ -29,6 +33,13 @@ function createCommercialOffer(scheduleType, leasCalculatorId) {
 	input.type = 'hidden'
 	input.name = 'type_of_schedule'
 	input.value = scheduleType
+
+	// Создаем скрытое поле для передачи состояния чекбокса
+    const inputIncludeRate = document.createElement('input');
+    inputIncludeRate.type = 'hidden';
+    inputIncludeRate.name = 'include_rate';
+    inputIncludeRate.value = includeRateValue;
+    form.appendChild(inputIncludeRate);
 
 	// Добавляем скрытое поле в форму
 	form.appendChild(input)

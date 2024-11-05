@@ -150,6 +150,7 @@ def get_leasing_calculator_by_id(calc_id: int) -> render_template:
 def create_commercial_offer(leas_calculator_id):
     # Получаем данные из формы
     type_of_schedule = request.form.get("type_of_schedule")
+    include_rate = request.form.get("include_rate")
 
     # Вызываем функцию, которая создаст коммерческое предложение в базе данных
     success, offer_id = create_commercial_offer_in_db(
@@ -164,6 +165,7 @@ def create_commercial_offer(leas_calculator_id):
             "user_email": current_user.email,
             "user_phone": current_user.mobilenumber,
             "user_telegram": current_user.telegram,
+            "include_rate": include_rate,
         }
         pdf_api = PDFGeneratorClient(offer_id, user_info)
 
@@ -488,6 +490,7 @@ def show_commercial_offer(offer_id) -> render_template:
         "email": request.args.get("email"),
         "phone": request.args.get("phone"),
         "telegram": request.args.get("telegram"),
+        "include_rate": request.args.get("include_rate"),
     }
 
     com_offers_list = get_list_of_commercial_offers(

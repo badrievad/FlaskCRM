@@ -402,7 +402,7 @@ def get_deals_active_for_bind() -> Response:
             Deal.query.filter_by(status="active", created_by=user_fullname)
             .order_by(desc(Deal.created_at))
             .all()
-        )  
+        )
 
     return jsonify(
         {

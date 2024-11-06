@@ -32,6 +32,8 @@
     <!-- Подключаем SweetAlert2 через CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script src="{{ url_for('crm.static', filename='js/timeUtils.js') }}"></script> 
+
     <style>
         .hidden {
             display: none;
@@ -262,6 +264,7 @@
                     checkboxCell = `<td></td>`;
                 }
                 const dealUserIcon = `${deal.created_by_icon}`;
+                const timeAgo = formatTimeAgo(deal.created_at);
                 const dealItem = `
                 <tr id="deal-${deal.id}">
                     ${checkboxCell}
@@ -272,7 +275,7 @@
                     <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">
                         <img src="${dealUserIcon}" alt="User Photo" class="profile-image-deal"> ${deal.created_by}
                     </td>
-                    <td class="deal-created" onclick="enterIntoDeal(${deal.id})">${new Date(deal.created_at).toLocaleString()}</td>
+                    <td class="deal-created" onclick="enterIntoDeal(${deal.id})">${timeAgo}</td>
                     <td>
                         ${(deal.created_by === userName || userRole === 'admin') ? `
                             <div class="btn-container">
@@ -343,7 +346,7 @@
                                 <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">
                                     <img src="${deal.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${deal.created_by}
                                 </td>
-                                <td class="deal-created">${new Date(deal.created_at).toLocaleString()}</td>
+                                <td class="deal-created">${deal.created_at}</td>
                                 <td class="deal-archived">${new Date(deal.archived_at).toLocaleString()}</td>
                                 ${(deal.created_by === userName || userRole === 'admin') ? `
                                     <td>
@@ -470,6 +473,7 @@
         console.log(data);
         var dealsList = document.getElementById('deal-rows');
         var currentIndex = dealsList.children.length + 1; // Calculate the new index
+        const timeAgo = formatTimeAgo(data.created_at);
         var dealItem = `
                             <tr id="deal-${data.id}">
                                 <td onclick="toggleCheckbox(${data.id}, event)">
@@ -482,7 +486,7 @@
                                 <td class="deal-manager" onclick="enterIntoDeal(${data.id})">
                                     <img src="${data.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${data.created_by}
                                 </td>
-                                <td class="deal-created" onclick="enterIntoDeal(${data.id})">${data.created_at}</td>
+                                <td class="deal-created" onclick="enterIntoDeal(${data.id})">${timeAgo}</td>
                                 <td>
                                     ${(data.created_by === userName || userRole === 'admin') ? `
                                         <div class="btn-container">
@@ -519,6 +523,7 @@
             // Переместить сделку в архивный список
             var archivedDealsList = document.getElementById('deal-rows-archived');
             var currentIndex = archivedDealsList.children.length + 1; // Calculate the new index
+            const timeAgo = formatTimeAgo(data.created_at);
             var archivedDealItem = `
                             <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
                                 <td>${currentIndex + 1}</td>
@@ -563,6 +568,7 @@
 
             // Переместить сделку в активный список
             var activeDealsList = document.getElementById('deal-rows');
+            const timeAgo = formatTimeAgo(data.created_at);
             var activedDealItem = `
                             <tr id="deal-${data.id}">
                                 <td onclick="toggleCheckbox(${data.id}, event)">
@@ -575,7 +581,7 @@
                                 <td class="deal-manager" onclick="enterIntoDeal(${data.id})">
                                     <img src="${data.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${data.created_by}
                                 </td>
-                                <td class="deal-created" onclick="enterIntoDeal(${data.id})">${data.created_at}</td>
+                                <td class="deal-created" onclick="enterIntoDeal(${data.id})">${timeAgo}</td>
                                 <td>
                                     ${(data.created_by === userName || userRole === 'admin') ? `
                                         <div class="btn-container">

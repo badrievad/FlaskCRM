@@ -609,10 +609,91 @@
 						<th>КАСКО</th>
 						<th>ОСАГО</th>
 					</tr>
-					<tr>
+					<tr style="font-size: 14px">
 						<td>Плательщик</td>
+						<!-- Начало логики для КАСКО -->
+						{% set non_zero_years = [] %} {% if
+						com_offer.leas_calculator.insurance.insurance_casko1 != 0.0 %} {%
+						set non_zero_years = non_zero_years + [1] %} {% endif %} {% if
+						com_offer.leas_calculator.insurance.insurance_casko2 != 0.0 %} {%
+						set non_zero_years = non_zero_years + [2] %} {% endif %} {% if
+						com_offer.leas_calculator.insurance.insurance_casko3 != 0.0 %} {%
+						set non_zero_years = non_zero_years + [3] %} {% endif %} {% if
+						com_offer.leas_calculator.insurance.insurance_casko4 != 0.0 %} {%
+						set non_zero_years = non_zero_years + [4] %} {% endif %} {% if
+						com_offer.leas_calculator.insurance.insurance_casko5 != 0.0 %} {%
+						set non_zero_years = non_zero_years + [5] %} {% endif %} {% if
+						non_zero_years|length == 0 %}
 						<td>Клиент</td>
+						{% else %} {% set year_names = {1: 'первый', 2: 'второй', 3:
+						'третий', 4: 'четвёртый', 5: 'пятый'} %} {% if non_zero_years == [1,
+						2, 3, 4, 5] %}
+						<td>ООО "ЛКМБ-РТ"</td>
+						{% elif non_zero_years == [1, 2, 3, 4] %}
+						<td style="font-size: 13px">Первые 4 года ООО "ЛКМБ-РТ", далее Клиент</td>
+						{% elif non_zero_years == [1, 2, 3] %}
+						<td style="font-size: 13px">Первые 3 года ООО "ЛКМБ-РТ", далее Клиент</td>
+						{% elif non_zero_years == [1, 2] %}
+						<td style="font-size: 13px">Первые 2 года ООО "ЛКМБ-РТ", далее Клиент</td>
+						{% elif non_zero_years == [1] %}
+						<td style="font-size: 13px">Первый год ООО "ЛКМБ-РТ", далее Клиент</td>
+						{% else %} {% set ns = namespace(year_words=[]) %} {% for year in
+						non_zero_years %} {% set word = year_names[year] %} {% set
+						ns.year_words = ns.year_words + [word] %} {% endfor %} {% if
+						ns.year_words|length == 1 %} {% set years_phrase = ns.year_words[0]
+						%} {% else %} {% set years_phrase = ns.year_words[:-1] | join(', ')
+						~ ' и ' ~ ns.year_words[-1] %} {% endif %} {% macro
+						get_year_word(number) %} {% set n = number %} {% if n % 10 == 1 and
+						n % 100 != 11 %} год {% elif 2 <= n % 10 <= 4 and (n % 100 < 10 or n
+						% 100 >= 20) %} год {% else %} год {% endif %} {% endmacro %}
+						<td style="font-size: 13px">
+							{{ years_phrase|capitalize }} {{
+							get_year_word(ns.year_words|length) }} ООО "ЛКМБ-РТ", остальные
+							Клиент
+						</td>
+						{% endif %} {% endif %}
+						<!-- Конец логики для КАСКО -->
+						<!-- Ячейка для ОСАГО -->
+						{% set non_zero_years_osago = [] %} {% if
+						com_offer.leas_calculator.insurance.insurance_osago1 != 0.0 %} {%
+						set non_zero_years_osago = non_zero_years_osago + [1] %} {% endif %} {% if
+						com_offer.leas_calculator.insurance.insurance_osago2 != 0.0 %} {%
+						set non_zero_years_osago = non_zero_years_osago + [2] %} {% endif %} {% if
+						com_offer.leas_calculator.insurance.insurance_osago3 != 0.0 %} {%
+						set non_zero_years_osago = non_zero_years_osago + [3] %} {% endif %} {% if
+						com_offer.leas_calculator.insurance.insurance_osago4 != 0.0 %} {%
+						set non_zero_years_osago = non_zero_years_osago + [4] %} {% endif %} {% if
+						com_offer.leas_calculator.insurance.insurance_osago5 != 0.0 %} {%
+						set non_zero_years_osago = non_zero_years_osago + [5] %} {% endif %} {% if
+						non_zero_years_osago|length == 0 %}
 						<td>Клиент</td>
+						{% else %} {% set year_names = {1: 'первый', 2: 'второй', 3:
+						'третий', 4: 'четвёртый', 5: 'пятый'} %} {% if non_zero_years_osago == [1,
+						2, 3, 4, 5] %}
+						<td>ООО "ЛКМБ-РТ"</td>
+						{% elif non_zero_years_osago == [1, 2, 3, 4] %}
+						<td style="font-size: 13px">Первые 4 года ООО "ЛКМБ-РТ", далее Клиент</td>
+						{% elif non_zero_years_osago == [1, 2, 3] %}
+						<td style="font-size: 13px">Первые 3 года ООО "ЛКМБ-РТ", далее Клиент</td>
+						{% elif non_zero_years_osago == [1, 2] %}
+						<td style="font-size: 13px">Первые 2 года ООО "ЛКМБ-РТ", далее Клиент</td>
+						{% elif non_zero_years_osago == [1] %}
+						<td style="font-size: 13px">Первый год ООО "ЛКМБ-РТ", далее Клиент</td>
+						{% else %} {% set ns = namespace(year_words=[]) %} {% for year in
+						non_zero_years_osago %} {% set word = year_names[year] %} {% set
+						ns.year_words = ns.year_words + [word] %} {% endfor %} {% if
+						ns.year_words|length == 1 %} {% set years_phrase = ns.year_words[0]
+						%} {% else %} {% set years_phrase = ns.year_words[:-1] | join(', ')
+						~ ' и ' ~ ns.year_words[-1] %} {% endif %} {% macro
+						get_year_word(number) %} {% set n = number %} {% if n % 10 == 1 and
+						n % 100 != 11 %} год {% elif 2 <= n % 10 <= 4 and (n % 100 < 10 or n
+						% 100 >= 20) %} год {% else %} год {% endif %} {% endmacro %}
+						<td style="font-size: 13px">
+							{{ years_phrase|capitalize }} {{
+							get_year_word(ns.year_words|length) }} ООО "ЛКМБ-РТ", остальные
+							Клиент
+						</td>
+						{% endif %} {% endif %}
 					</tr>
 				</table>
 			</div>

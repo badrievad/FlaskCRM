@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from .. import db
 
 
-class LeasCalculator(db.Model):
+class LeasCalculator(db.Model):  # type: ignore
     __tablename__ = "leas_calculator"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -218,7 +218,7 @@ class LeasCalculator(db.Model):
         }
 
 
-class Tranches(db.Model):
+class Tranches(db.Model):  # type: ignore
     __tablename__ = "tranches"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -293,7 +293,7 @@ class Tranches(db.Model):
         }
 
 
-class Insurances(db.Model):
+class Insurances(db.Model):  # type: ignore
     __tablename__ = "insurances"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -367,7 +367,7 @@ class Insurances(db.Model):
         }
 
 
-class LeasingItem(db.Model):
+class LeasingItem(db.Model):  # type: ignore
     """Модель для автоподсказок по имени предмета лизинга"""
 
     __tablename__ = "leas_items"
@@ -376,7 +376,7 @@ class LeasingItem(db.Model):
     name = db.Column(db.String(500), nullable=False)
 
 
-class ScheduleAnnuity(db.Model):
+class ScheduleAnnuity(db.Model):  # type: ignore
     """Модель для хранения графиков расчета (аннуитетный)"""
 
     __tablename__ = "schedule_annuity"
@@ -396,7 +396,7 @@ class ScheduleAnnuity(db.Model):
     )
 
 
-class ScheduleDifferentiated(db.Model):
+class ScheduleDifferentiated(db.Model):  # type: ignore
     """Модель для хранения графиков расчета (дифференцированный)"""
 
     __tablename__ = "schedule_differentiated"
@@ -416,7 +416,7 @@ class ScheduleDifferentiated(db.Model):
     )
 
 
-class ScheduleRegression(db.Model):
+class ScheduleRegression(db.Model):  # type: ignore
     """Модель для хранения графиков расчета (регрессивный)"""
 
     __tablename__ = "schedule_regression"
@@ -436,7 +436,7 @@ class ScheduleRegression(db.Model):
     )
 
 
-class MainAnnuity(db.Model):
+class MainAnnuity(db.Model):  # type: ignore
     """Модель для хранения данных расчета (аннуитетный)"""
 
     __tablename__ = "main_annuity"
@@ -466,7 +466,7 @@ class MainAnnuity(db.Model):
     leas_calculator = relationship("LeasCalculator", back_populates="main_annuity")
 
 
-class MainDifferentiated(db.Model):
+class MainDifferentiated(db.Model):  # type: ignore
     """Модель для хранения данных расчета (дифференцированный)"""
 
     __tablename__ = "main_differentiated"
@@ -498,7 +498,7 @@ class MainDifferentiated(db.Model):
     )
 
 
-class MainRegression(db.Model):
+class MainRegression(db.Model):  # type: ignore
     """Модель для хранения данных расчета (регрессивный)"""
 
     __tablename__ = "main_regression"
@@ -528,7 +528,7 @@ class MainRegression(db.Model):
     leas_calculator = relationship("LeasCalculator", back_populates="main_regression")
 
 
-class Seller(db.Model):
+class Seller(db.Model):  # type: ignore
     """Модель для хранения информации о продавце"""
 
     __tablename__ = "sellers"
@@ -552,7 +552,7 @@ class Seller(db.Model):
     bank = relationship("Bank", back_populates="sellers")
 
 
-class CommercialOffer(db.Model):
+class CommercialOffer(db.Model):  # type: ignore
     """Модель для хранения коммерческого предложения"""
 
     __tablename__ = "commercial_offers"

@@ -2,7 +2,7 @@ import json
 from datetime import date, datetime
 from pathlib import Path
 
-from flask import (
+from flask import (  # type: ignore
     Response,
     current_app,
     jsonify,
@@ -13,8 +13,8 @@ from flask import (
     url_for,
 )
 from flask_login import current_user, login_required  # type: ignore
-from sqlalchemy import desc
-from sqlalchemy.orm import joinedload
+from sqlalchemy import desc  # type: ignore
+from sqlalchemy.orm import joinedload  # type: ignore
 
 from logger import logging
 

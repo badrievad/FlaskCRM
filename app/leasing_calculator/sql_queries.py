@@ -1,8 +1,8 @@
 from datetime import date, datetime
 
-from sqlalchemy import desc
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import joinedload
+from sqlalchemy import desc  # type: ignore
+from sqlalchemy.exc import SQLAlchemyError  # type: ignore
+from sqlalchemy.orm import joinedload  # type: ignore
 
 from logger import logging
 

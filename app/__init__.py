@@ -1,10 +1,10 @@
 from flask import Flask, Blueprint
 from flask_caching import Cache
-from flask_migrate import Migrate
-from flask_socketio import SocketIO
-from flask_login import LoginManager
+from flask_migrate import Migrate  # type: ignore
+from flask_socketio import SocketIO  # type: ignore
+from flask_login import LoginManager  # type: ignore
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS  # type: ignore
 
 from .celery_utils import celery_init_app
 from .config import CELERY_BROKER_URL, CELERY_RESULT_BACKEND

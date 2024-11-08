@@ -224,7 +224,7 @@
                             <!-- Кнопка для привязки КП -->
                             {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
                                 <button class="attach-kp-button"
-                                        onclick="location.href='http://dev-lkmb/crm/calculator'">
+                                        onclick="location.href='{{ url_for('leas_calc.get_leasing_calculator') }}'">
                                     <i class="fa-solid fa-paperclip"></i> Привязать КП
                                 </button>
                             {% endif %}

@@ -303,7 +303,7 @@ def deal_to_active(deal_id) -> tuple[Response, int]:
     return jsonify({"result": "error", "message": "Deal not found"}), 404
 
 
-@deal_bp.route("/crm", methods=["GET"])
+@deal_bp.route("/crm/", methods=["GET"])
 @_tester_required
 @validate_active_session
 def index_crm() -> str:

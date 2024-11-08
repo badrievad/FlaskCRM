@@ -1,4 +1,6 @@
-var socket = io();
+const socket = io({
+    path: "/crm/socket.io"
+});
 
 socket.on('update_steps', function (response) {
     updateStepsStatus(response);

@@ -373,7 +373,9 @@
         window.location.href = `/crm/deal/inside/${dealId}`;
     }
 
-    var socket = io();
+    const socket = io({
+        path: "/crm/socket.io"
+    });
 
     socket.on('connect', function () {
         console.log('Connected to SocketIO server');

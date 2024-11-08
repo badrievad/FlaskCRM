@@ -518,7 +518,9 @@
 </script>
 <
 <script type="text/javascript" charset="utf-8">
-    const socket = io();
+    const socket = io({
+        path: "/crm/socket.io"
+    });
 
     // Подключаемся к комнате при загрузке страницы
     const dealId = '{{ deal_id }}';  // Должно содержать только ID сделки

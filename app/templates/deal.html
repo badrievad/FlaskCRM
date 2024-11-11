@@ -1,560 +1,782 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ deal.title }}</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-stepper.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-sidebar.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/deal-inside-responsible.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/leas-calc-toast-style.css') }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{{ deal.title }}</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/deal-style.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/deal-stepper.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/deal-sidebar.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/deal-inside-responsible.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/leas-calc-toast-style.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		/>
+		<link
+			rel="icon"
+			href="{{ url_for('crm.static', filename='/images/gpt.png') }}"
+			type="image/png"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap"
+			rel="stylesheet"
+		/>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+		<script src="https://unpkg.com/htmx.org@1.9.1"></script>
 
-    <!-- toastr -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js" defer></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css">
+		<!-- toastr -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"
+			defer
+		></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js"
+			defer
+		></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css"
+		/>
 
-    <!-- DADATA -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet"/>
-    <script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
+		<!-- DADATA -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<link
+			href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css"
+			rel="stylesheet"
+		/>
+		<script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
 
-    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+		<script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 
-    <!-- SweetAlert2 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<!-- SweetAlert2 -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
-</head>
-<body>
-<div class="sidebar" id="sidebar">
-    <ul>
-        <li class="clickable">
-            <a class="nav-link" href="{{ url_for('deal.index_crm') }}"><i class="fa-solid fa-chevron-left"></i>
-                Вернуться к сделкам</a>
-        </li>
-        <br>
-        <li class="nav-link" onclick="showForm('some')"><i class="fa-solid fa-database"></i> Данные по сделке</li>
-    </ul>
-    <h6>{{ current_user }}</h6>
-</div>
-<div class="main-content" id="main-content">
-    <div class="tabs">
-        <div class="tab active" onclick="showTab('general')"><i class="fa-solid fa-info-circle"></i> Общие</div>
-        <div class="tab" onclick="showTab('history')"><i class="fa-solid fa-clock-rotate-left"></i> История</div>
-    </div>
-    <div id="general" class="tab-content active">
-        <div class="stepper">
-            <div class="step">Отдел безопасности</div>
-            <div class="step">Юридический отдел</div>
-            <div class="step">Отдел рисков</div>
-            <div class="step">Отдел лизинга</div>
-            <div class="step">Хасанова Д. Р.</div>
-            <div class="step">Габдрахманов Р. Р.</div>
-            <div class="step">Каюмов А. Д.</div>
-            <div class="step">Завершить сделку</div>
-        </div>
-        <h4>Основные сведения по сделке</h4>
-        <div class="deal-info">
-            <div class="left">
-                <div class="section">
-                    <h3>Продукт</h3>
-                    <p>{{ deal.product }}</p>
-                </div>
-                <div class="section">
-                    <h3>Ответственный</h3>
-                    <p>
-                        <span id="current-created-by" data-user-id="{{ deal.created_by }}">{{ deal.created_by }}</span>
-                        {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
-                            <i class="fa-solid fa-pen fa-xs" id="user-icon"></i>
-                        {% endif %}
-                    </p>
-                    <p id="deal-created-at">{{ deal.created_at }}</p>
+		<style>
+			.hidden {
+				display: none;
+			}
+		</style>
+	</head>
+	<body>
+        <!-- Sidebar -->
+		{% include 'sidebar-deal.html' %}
 
-                    <!-- Контейнер для выпадающего списка с кнопками -->
-                    <div id="user-dropdown"
-                         style="display: none; position: absolute; background-color: white; border: 1px solid #ccc; z-index: 1000; padding: 10px;">
-                        <!-- Сюда будет добавляться список пользователей и кнопки -->
-                    </div>
-                </div>
-            </div>
-            <div class="right">
-                <div class="section">
-                    <h3 class="client-header">
-                        Клиент
-                        {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
-                            <i class="fa-solid fa-pen fa-xs edit-client-icon" id="edit-client-icon"
-                               style="font-size: 14px"></i>
-                        {% endif %}
-                        <button id="save-client" class="client-action-button save-client" deal-id="{{ deal.id }}"
-                                style="display:none;">Сохранить
-                        </button>
-                        <button id="cancel-client"
-                                class="client-action-button cancel-client"
-                                style="display:none;">Отменить
-                        </button>
-                    </h3>
-                    <div class="client-section">
-                        <span>Наименование:</span>
-                        <span id="client-name-display">{{ deal.client.name }}</span>
-                        <input type="text" id="client-name-input"
-                               value="{{ deal.client.name }}" class="client-input-field"
-                               maxlength="255" readonly>
-                    </div>
-                    <div class="client-section">
-                        <span>ИНН:</span>
-                        <span id="client-inn-display">{{ deal.client.inn }}</span>
-                        <input type="text" id="client-inn-input"
-                               value="{{ deal.client.inn }}" class="client-input-field"
-                               maxlength="20" readonly>
-                    </div>
-                    <div class="client-section">
-                        <span>Адрес:</span>
-                        <span id="client-address-display">{{ deal.client.address }}</span>
-                        <input type="text" id="client-address-input"
-                               value="{{ deal.client.address }}" class="client-input-field"
-                               maxlength="255">
-                    </div>
-                    <div class="client-section">
-                        <span>Телефон:</span>
-                        <span id="client-phone-display">{{ deal.client.phone }}</span>
-                        <input type="text" id="client-phone-input"
-                               value="{{ deal.client.phone }}" class="client-input-field"
-                               maxlength="20">
-                    </div>
-                    <div class="client-section">
-                        <span>Электронная почта:</span>
-                        <span id="client-email-display">{{ deal.client.email }}</span>
-                        <input type="text" id="client-email-input"
-                               value="{{ deal.client.email }}" class="client-input-field"
-                               maxlength="100">
-                    </div>
-                    <div class="client-section">
-                        <span>Подписант:</span>
-                        <span id="client-signer-display">{{ deal.client.signer }}</span>
-                        <input type="text" id="client-signer-input"
-                               value="{{ deal.client.signer }}" class="client-input-field"
-                               maxlength="255">
-                    </div>
-                    <div class="client-section">
-                        <span>На основании:</span>
-                        <span id="client-based-display">{{ deal.client.based_on }}</span>
-                        <input type="text" id="client-based-input"
-                               value="{{ deal.client.based_on }}" class="client-input-field"
-                               maxlength="255">
-                    </div>
-                    <h3 class="client-header">Реквизиты Клиента</h3>
-                    <script>
-                        var initialBankName = "{{ deal.client.bank.name | default('') }}";
-                    </script>
-                    <div class="client-section">
-                        <span>Название Банка:</span>
-                        <input type="hidden" id="client-bank-info">
-                        <span id="client-bank-display">{{ deal.client.bank.name }}</span>
-                        <input type="text" id="client-bank-input"
-                               value="{{ deal.client.bank.name }}" class="client-input-field"
-                               maxlength="100">
-                    </div>
-                    <div class="client-section">
-                        <span>Расчетный счет:</span>
-                        <span id="client-current-display">{{ deal.client.current_account }}</span>
-                        <input type="text" id="client-current-input"
-                               value="{{ deal.client.current_account }}" class="client-input-field"
-                               maxlength="20">
-                    </div>
-                </div>
-            </div>
-        </div>
+		<div class="main-content" id="main-content">
+			<div class="tabs">
+				<div class="tab active" onclick="showTab('general')">
+					<i class="fa-solid fa-info-circle"></i> Общие
+				</div>
+				<div class="tab" onclick="showTab('history')">
+					<i class="fa-solid fa-clock-rotate-left"></i> История
+				</div>
+			</div>
+			<div id="general" class="tab-content active">
+				<div class="stepper">
+					<div class="step">Отдел безопасности</div>
+					<div class="step">Юридический отдел</div>
+					<div class="step">Отдел рисков</div>
+					<div class="step">Отдел лизинга</div>
+					<div class="step">Хасанова Д. Р.</div>
+					<div class="step">Габдрахманов Р. Р.</div>
+					<div class="step">Каюмов А. Д.</div>
+					<div class="step">Завершить сделку</div>
+				</div>
+				<h4>Основные сведения по сделке</h4>
+				<div class="deal-info">
+					<div class="left">
+						<div class="section">
+							<h3>Продукт</h3>
+							<p>{{ deal.product }}</p>
+						</div>
+						<div class="section">
+							<h3>Ответственный</h3>
+							<p>
+								<span
+									id="current-created-by"
+									data-user-id="{{ deal.created_by }}"
+									>{{ deal.created_by }}</span
+								>
+								{% if current_user.role in ['admin'] or
+								current_user.abbreviation_name == deal.created_by %}
+								<i class="fa-solid fa-pen fa-xs" id="user-icon"></i>
+								{% endif %}
+							</p>
+							<p id="deal-created-at">{{ deal.created_at }}</p>
 
-        {% for item in deals_info %}
-            <div class="deal-info" data-id="{{ item.leas_calc.id if item.leas_calc else '' }}"
-                 id="deal-section-{{ loop.index }}">
-                <div class="icon-container">
-                    {% if (current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by) and item.dl_number != deal.dl_number %}
-                        <i class="fa-solid fa-circle-xmark remove-section-icon"
-                           id="remove-section-icon-{{ loop.index }}"
-                           data-index="{{ loop.index }}" data-id="{{ item.leas_calc.id }}" style="font-size: 25px"
-                           data-dl-number="{{ item.dl_number }}"></i>
-                    {% endif %}
-                </div>
-                <div class="left">
-                    <div class="section">
-                        <h3>№ договора лизинга</h3>
-                        <p>{{ item.dl_number }}</p>
-                    </div>
+							<!-- Контейнер для выпадающего списка с кнопками -->
+							<div
+								id="user-dropdown"
+								style="
+									display: none;
+									position: absolute;
+									background-color: white;
+									border: 1px solid #ccc;
+									z-index: 1000;
+									padding: 10px;
+								"
+							>
+								<!-- Сюда будет добавляться список пользователей и кнопки -->
+							</div>
+						</div>
+					</div>
+					<div class="right">
+						<div class="section">
+							<h3 class="client-header">
+								Клиент {% if current_user.role in ['admin'] or
+								current_user.abbreviation_name == deal.created_by %}
+								<i
+									class="fa-solid fa-pen fa-xs edit-client-icon"
+									id="edit-client-icon"
+									style="font-size: 14px"
+								></i>
+								{% endif %}
+								<button
+									id="save-client"
+									class="client-action-button save-client"
+									deal-id="{{ deal.id }}"
+									style="display: none"
+								>
+									Сохранить
+								</button>
+								<button
+									id="cancel-client"
+									class="client-action-button cancel-client"
+									style="display: none"
+								>
+									Отменить
+								</button>
+							</h3>
+							<div class="client-section">
+								<span>Наименование:</span>
+								<span id="client-name-display">{{ deal.client.name }}</span>
+								<input
+									type="text"
+									id="client-name-input"
+									value="{{ deal.client.name }}"
+									class="client-input-field"
+									maxlength="255"
+									readonly
+								/>
+							</div>
+							<div class="client-section">
+								<span>ИНН:</span>
+								<span id="client-inn-display">{{ deal.client.inn }}</span>
+								<input
+									type="text"
+									id="client-inn-input"
+									value="{{ deal.client.inn }}"
+									class="client-input-field"
+									maxlength="20"
+									readonly
+								/>
+							</div>
+							<div class="client-section">
+								<span>Адрес:</span>
+								<span id="client-address-display"
+									>{{ deal.client.address }}</span
+								>
+								<input
+									type="text"
+									id="client-address-input"
+									value="{{ deal.client.address }}"
+									class="client-input-field"
+									maxlength="255"
+								/>
+							</div>
+							<div class="client-section">
+								<span>Телефон:</span>
+								<span id="client-phone-display">{{ deal.client.phone }}</span>
+								<input
+									type="text"
+									id="client-phone-input"
+									value="{{ deal.client.phone }}"
+									class="client-input-field"
+									maxlength="20"
+								/>
+							</div>
+							<div class="client-section">
+								<span>Электронная почта:</span>
+								<span id="client-email-display">{{ deal.client.email }}</span>
+								<input
+									type="text"
+									id="client-email-input"
+									value="{{ deal.client.email }}"
+									class="client-input-field"
+									maxlength="100"
+								/>
+							</div>
+							<div class="client-section">
+								<span>Подписант:</span>
+								<span id="client-signer-display">{{ deal.client.signer }}</span>
+								<input
+									type="text"
+									id="client-signer-input"
+									value="{{ deal.client.signer }}"
+									class="client-input-field"
+									maxlength="255"
+								/>
+							</div>
+							<div class="client-section">
+								<span>На основании:</span>
+								<span id="client-based-display"
+									>{{ deal.client.based_on }}</span
+								>
+								<input
+									type="text"
+									id="client-based-input"
+									value="{{ deal.client.based_on }}"
+									class="client-input-field"
+									maxlength="255"
+								/>
+							</div>
+							<h3 class="client-header">Реквизиты Клиента</h3>
+							<script>
+								var initialBankName =
+									"{{ deal.client.bank.name | default('') }}"
+							</script>
+							<div class="client-section">
+								<span>Название Банка:</span>
+								<input type="hidden" id="client-bank-info" />
+								<span id="client-bank-display"
+									>{{ deal.client.bank.name }}</span
+								>
+								<input
+									type="text"
+									id="client-bank-input"
+									value="{{ deal.client.bank.name }}"
+									class="client-input-field"
+									maxlength="100"
+								/>
+							</div>
+							<div class="client-section">
+								<span>Расчетный счет:</span>
+								<span id="client-current-display"
+									>{{ deal.client.current_account }}</span
+								>
+								<input
+									type="text"
+									id="client-current-input"
+									value="{{ deal.client.current_account }}"
+									class="client-input-field"
+									maxlength="20"
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
 
-                    {% if item.leas_calc %}
-                        <div class="section">
-                            <h3>Предмет лизинга</h3>
-                            <p>{{ item.leas_calc.item_name }}</p>
-                        </div>
-                        <div class="section">
-                            <h3>Стоимость предмета лизинга</h3>
-                            <p>{{ item.leas_calc.item_price_str + ' ₽' }}</p>
-                        </div>
-                        <div class="section">
-                            <h3>Аванс</h3>
-                            <p>{{ item.leas_calc.initial_payment_str + ' ₽' }}</p>
-                        </div>
-                        <div class="section">
-                            <h3>Срок лизинга</h3>
-                            <p>{{ (item.leas_calc.credit_term | string) + ' мес.' }}</p>
-                        </div>
-                    {% else %}
-                        <div class="section">
-                            <p><i class="fa-solid fa-circle-exclamation fa-xl" style="color: #cc8985;"></i> К
-                                этому договору еще не привязан КП.</p>
-                            <!-- Кнопка для привязки КП -->
-                            {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
-                                <button class="attach-kp-button"
-                                        onclick="location.href='{{ url_for('leas_calc.get_leasing_calculator') }}'">
-                                    <i class="fa-solid fa-paperclip"></i> Привязать КП
-                                </button>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </div>
-                <div class="right">
-                    {% if item.leas_calc %}
-                        <div class="section">
-                            <h3 class="supplier-header">
-                                Поставщик
-                                {% if current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by %}
-                                    <i class="fa-solid fa-pen fa-xs edit-name-icon" id="edit-name-icon-{{ loop.index }}"
-                                       data-index="{{ loop.index }}" style="font-size: 14px"
-                                       data-leas-calc-id="{{ item.leas_calc.id }}"></i>
-                                {% endif %}
-                                {% if (current_user.role in ['admin'] or current_user.abbreviation_name == deal.created_by) and item.leas_calc.seller_id %}
-                                    <i class="fa-solid fa-xmark edit-delete-icon" id="edit-delete-icon-{{ loop.index }}"
-                                       data-index="{{ loop.index }}"
-                                       data-leas-calc-id="{{ item.leas_calc.id }}"></i>
-                                {% endif %}
-                                <button id="save-supplier-{{ loop.index }}" class="supplier-action-button save-supplier"
-                                        style="display:none;" data-index="{{ loop.index }}">Сохранить
-                                </button>
-                                <button id="cancel-supplier-{{ loop.index }}"
-                                        class="supplier-action-button cancel-supplier"
-                                        style="display:none;" data-index="{{ loop.index }}">Отменить
-                                </button>
-                            </h3>
-                            <div class="supplier-section">
-                                <span>Наименование:</span>
-                                <span id="supplier-name-display-{{ loop.index }}">{{ item.leas_calc.seller.name }}</span>
-                                <input type="text" id="supplier-name-input-{{ loop.index }}"
-                                       value="{{ item.leas_calc.seller.name }}" class="supplier-input-field"
-                                       maxlength="255">
-                            </div>
-                            <div class="supplier-section">
-                                <span>ИНН:</span>
-                                <span id="supplier-inn-display-{{ loop.index }}">{{ item.leas_calc.seller.inn }}</span>
-                                <input type="text" id="supplier-inn-input-{{ loop.index }}"
-                                       value="{{ item.leas_calc.seller.inn }}" class="supplier-input-field"
-                                       maxlength="20">
-                            </div>
-                            <div class="supplier-section">
-                                <span>Адрес:</span>
-                                <span id="supplier-address-display-{{ loop.index }}">{{ item.leas_calc.seller.address }}</span>
-                                <input type="text" id="supplier-address-input-{{ loop.index }}"
-                                       value="{{ item.leas_calc.seller.address }}" class="supplier-input-field"
-                                       maxlength="255">
-                            </div>
-                            <div class="supplier-section">
-                                <span>Телефон:</span>
-                                <span id="supplier-phone-display-{{ loop.index }}">{{ item.leas_calc.seller.phone }}</span>
-                                <input type="text" id="supplier-phone-input-{{ loop.index }}"
-                                       value="{{ item.leas_calc.seller.phone }}" class="supplier-input-field"
-                                       maxlength="20">
-                            </div>
-                            <div class="supplier-section">
-                                <span>Электронная почта:</span>
-                                <span id="supplier-email-display-{{ loop.index }}">{{ item.leas_calc.seller.email }}</span>
-                                <input type="text" id="supplier-email-input-{{ loop.index }}"
-                                       value="{{ item.leas_calc.seller.email }}" class="supplier-input-field">
-                            </div>
-                            <div class="supplier-section">
-                                <span>Подписант:</span>
-                                <span id="supplier-signer-display-{{ loop.index }}">{{ item.leas_calc.seller.signer }}</span>
-                                <input type="text" id="supplier-signer-input-{{ loop.index }}"
-                                       value="{{ item.leas_calc.seller.signer }}" class="supplier-input-field"
-                                       maxlength="100">
-                            </div>
-                            <div class="supplier-section">
-                                <span>На основании:</span>
-                                <span id="supplier-based-display-{{ loop.index }}">{{ item.leas_calc.seller.based_on }}</span>
-                                <input type="text" id="supplier-based-input-{{ loop.index }}"
-                                       value="{{ item.leas_calc.seller.based_on }}" class="supplier-input-field"
-                                       maxlength="255">
-                            </div>
-                             <h3 class="supplier-header">Реквизиты Поставщика</h3>
-                             <div class="supplier-section">
-                                <span>Название Банка:</span>
-                                {% if item.leas_calc and item.leas_calc.seller and item.leas_calc.seller.bank %}
-                                    <span id="supplier-bank-display-{{ loop.index }}">{{ item.leas_calc.seller.bank.name }}</span>
-                                {% else %}
-                                    <span id="supplier-bank-display-{{ loop.index }}"></span>
-                                {% endif %}
-                                <input type="hidden" id="supplier-bank-info-{{ loop.index }}">
+				{% for item in deals_info %}
+				<div
+					class="deal-info"
+					data-id="{{ item.leas_calc.id if item.leas_calc else '' }}"
+					id="deal-section-{{ loop.index }}"
+				>
+					<div class="icon-container">
+						{% if (current_user.role in ['admin'] or
+						current_user.abbreviation_name == deal.created_by) and
+						item.dl_number != deal.dl_number %}
+						<i
+							class="fa-solid fa-circle-xmark remove-section-icon"
+							id="remove-section-icon-{{ loop.index }}"
+							data-index="{{ loop.index }}"
+							data-id="{{ item.leas_calc.id }}"
+							style="font-size: 25px"
+							data-dl-number="{{ item.dl_number }}"
+						></i>
+						{% endif %}
+					</div>
+					<div class="left">
+						<div class="section">
+							<h3>№ договора лизинга</h3>
+							<p>{{ item.dl_number }}</p>
+						</div>
 
-                                {% set bank_name = '' %}
-                                {% if item.leas_calc and item.leas_calc.seller and item.leas_calc.seller.bank %}
-                                    {% set bank_name = item.leas_calc.seller.bank.name %}
-                                {% endif %}
+						{% if item.leas_calc %}
+						<div class="section">
+							<h3>Предмет лизинга</h3>
+							<p>{{ item.leas_calc.item_name }}</p>
+						</div>
+						<div class="section">
+							<h3>Стоимость предмета лизинга</h3>
+							<p>{{ item.leas_calc.item_price_str + ' ₽' }}</p>
+						</div>
+						<div class="section">
+							<h3>Аванс</h3>
+							<p>{{ item.leas_calc.initial_payment_str + ' ₽' }}</p>
+						</div>
+						<div class="section">
+							<h3>Срок лизинга</h3>
+							<p>{{ (item.leas_calc.credit_term | string) + ' мес.' }}</p>
+						</div>
+						{% else %}
+						<div class="section">
+							<p>
+								<i
+									class="fa-solid fa-circle-exclamation fa-xl"
+									style="color: #cc8985"
+								></i>
+								К этому договору еще не привязан КП.
+							</p>
+							<!-- Кнопка для привязки КП -->
+							{% if current_user.role in ['admin'] or
+							current_user.abbreviation_name == deal.created_by %}
+							<button
+								class="attach-kp-button"
+								onclick="location.href='{{ url_for('leas_calc.get_leasing_calculator') }}'"
+							>
+								<i class="fa-solid fa-paperclip"></i> Привязать КП
+							</button>
+							{% endif %}
+						</div>
+						{% endif %}
+					</div>
+					<div class="right">
+						{% if item.leas_calc %}
+						<div class="section">
+							<h3 class="supplier-header">
+								Поставщик {% if current_user.role in ['admin'] or
+								current_user.abbreviation_name == deal.created_by %}
+								<i
+									class="fa-solid fa-pen fa-xs edit-name-icon"
+									id="edit-name-icon-{{ loop.index }}"
+									data-index="{{ loop.index }}"
+									style="font-size: 14px"
+									data-leas-calc-id="{{ item.leas_calc.id }}"
+								></i>
+								{% endif %} {% if (current_user.role in ['admin'] or
+								current_user.abbreviation_name == deal.created_by) and
+								item.leas_calc.seller_id %}
+								<i
+									class="fa-solid fa-xmark edit-delete-icon"
+									id="edit-delete-icon-{{ loop.index }}"
+									data-index="{{ loop.index }}"
+									data-leas-calc-id="{{ item.leas_calc.id }}"
+								></i>
+								{% endif %}
+								<button
+									id="save-supplier-{{ loop.index }}"
+									class="supplier-action-button save-supplier"
+									style="display: none"
+									data-index="{{ loop.index }}"
+								>
+									Сохранить
+								</button>
+								<button
+									id="cancel-supplier-{{ loop.index }}"
+									class="supplier-action-button cancel-supplier"
+									style="display: none"
+									data-index="{{ loop.index }}"
+								>
+									Отменить
+								</button>
+							</h3>
+							<div class="supplier-section">
+								<span>Наименование:</span>
+								<span id="supplier-name-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.name }}</span
+								>
+								<input
+									type="text"
+									id="supplier-name-input-{{ loop.index }}"
+									value="{{ item.leas_calc.seller.name }}"
+									class="supplier-input-field"
+									maxlength="255"
+								/>
+							</div>
+							<div class="supplier-section">
+								<span>ИНН:</span>
+								<span id="supplier-inn-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.inn }}</span
+								>
+								<input
+									type="text"
+									id="supplier-inn-input-{{ loop.index }}"
+									value="{{ item.leas_calc.seller.inn }}"
+									class="supplier-input-field"
+									maxlength="20"
+								/>
+							</div>
+							<div class="supplier-section">
+								<span>Адрес:</span>
+								<span id="supplier-address-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.address }}</span
+								>
+								<input
+									type="text"
+									id="supplier-address-input-{{ loop.index }}"
+									value="{{ item.leas_calc.seller.address }}"
+									class="supplier-input-field"
+									maxlength="255"
+								/>
+							</div>
+							<div class="supplier-section">
+								<span>Телефон:</span>
+								<span id="supplier-phone-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.phone }}</span
+								>
+								<input
+									type="text"
+									id="supplier-phone-input-{{ loop.index }}"
+									value="{{ item.leas_calc.seller.phone }}"
+									class="supplier-input-field"
+									maxlength="20"
+								/>
+							</div>
+							<div class="supplier-section">
+								<span>Электронная почта:</span>
+								<span id="supplier-email-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.email }}</span
+								>
+								<input
+									type="text"
+									id="supplier-email-input-{{ loop.index }}"
+									value="{{ item.leas_calc.seller.email }}"
+									class="supplier-input-field"
+								/>
+							</div>
+							<div class="supplier-section">
+								<span>Подписант:</span>
+								<span id="supplier-signer-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.signer }}</span
+								>
+								<input
+									type="text"
+									id="supplier-signer-input-{{ loop.index }}"
+									value="{{ item.leas_calc.seller.signer }}"
+									class="supplier-input-field"
+									maxlength="100"
+								/>
+							</div>
+							<div class="supplier-section">
+								<span>На основании:</span>
+								<span id="supplier-based-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.based_on }}</span
+								>
+								<input
+									type="text"
+									id="supplier-based-input-{{ loop.index }}"
+									value="{{ item.leas_calc.seller.based_on }}"
+									class="supplier-input-field"
+									maxlength="255"
+								/>
+							</div>
+							<h3 class="supplier-header">Реквизиты Поставщика</h3>
+							<div class="supplier-section">
+								<span>Название Банка:</span>
+								{% if item.leas_calc and item.leas_calc.seller and
+								item.leas_calc.seller.bank %}
+								<span id="supplier-bank-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.bank.name }}</span
+								>
+								{% else %}
+								<span id="supplier-bank-display-{{ loop.index }}"></span>
+								{% endif %}
+								<input type="hidden" id="supplier-bank-info-{{ loop.index }}" />
 
-                                <input type="text" id="supplier-bank-input-{{ loop.index }}"
-                                   value="{{ bank_name }}" class="supplier-input-field"
-                                   maxlength="100"
-                                   data-initial-bank-name="{{ bank_name | escape }}">
-                            </div>
-                            <script>
-                                $("#supplier-bank-input-{{ loop.index }}").suggestions({
-                                    token: "{{ suggestions_token }}",
-                                    type: "BANK",
-                                    /* Вызывается, когда пользователь выбирает одну из подсказок */
-                                    onSelect: function (suggestion) {
-                                        var bankData = {
-                                            name: suggestion.value,
-                                            inn: suggestion.data.inn,
-                                            kpp: suggestion.data.kpp,
-                                            bic: suggestion.data.bic,
-                                            address: suggestion.data.address.unrestricted_value,
-                                            correspondent_account: suggestion.data.correspondent_account
-                                        };
-                                        $("#supplier-bank-info-{{ loop.index }}").val(JSON.stringify(bankData));
-                                        $("#supplier-bank-display-{{ loop.index }}").text(suggestion.value);
-                                        $("#supplier-bank-input-{{ loop.index }}").val(suggestion.value);
-                                    }
-                                });
-                            </script>
-                            <div class="supplier-section">
-                                <span>Расчетный счет:</span>
-                                {% if item.leas_calc and item.leas_calc.seller %}
-                                    <span id="supplier-current-display-{{ loop.index }}">{{ item.leas_calc.seller.current_account }}</span>
-                                    <input type="text" id="supplier-current-input-{{ loop.index }}"
-                                           value="{{ item.leas_calc.seller.current_account }}" class="supplier-input-field"
-                                           maxlength="20">
-                                {% else %}
-                                    <span id="supplier-current-display-{{ loop.index }}"></span>
-                                    <input type="text" id="supplier-current-input-{{ loop.index }}"
-                                           value="" class="supplier-input-field" maxlength="20">
-                                {% endif %}
-                            </div>
-                        </div>
-                    {% else %}
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
-        <script>
-            const token = "{{ suggestions_token }}";
-            const innCache = {};
+								{% set bank_name = '' %} {% if item.leas_calc and
+								item.leas_calc.seller and item.leas_calc.seller.bank %} {% set
+								bank_name = item.leas_calc.seller.bank.name %} {% endif %}
 
-            async function checkInnInDatabase(inn) {
-                if (innCache[inn]) {
-                    return innCache[inn];
-                }
-                try {
-                    const response = await $.ajax({
-                        url: '/crm/deal/inside/check-seller-inn',
-                        method: 'POST',
-                        contentType: 'application/json',
-                        data: JSON.stringify({inn: inn})
-                    });
-                    innCache[inn] = response;
-                    return response;
-                } catch (xhr) {
-                    if (xhr.status === 404) {
-                        innCache[inn] = null;
-                        return null;
-                    } else {
-                        throw new Error('Ошибка при проверке ИНН в базе');
-                    }
-                }
-            }
+								<input
+									type="text"
+									id="supplier-bank-input-{{ loop.index }}"
+									value="{{ bank_name }}"
+									class="supplier-input-field"
+									maxlength="100"
+									data-initial-bank-name="{{ bank_name | escape }}"
+								/>
+							</div>
+							<script>
+								$('#supplier-bank-input-{{ loop.index }}').suggestions({
+									token: '{{ suggestions_token }}',
+									type: 'BANK',
+									/* Вызывается, когда пользователь выбирает одну из подсказок */
+									onSelect: function (suggestion) {
+										var bankData = {
+											name: suggestion.value,
+											inn: suggestion.data.inn,
+											kpp: suggestion.data.kpp,
+											bic: suggestion.data.bic,
+											address: suggestion.data.address.unrestricted_value,
+											correspondent_account:
+												suggestion.data.correspondent_account,
+										}
+										$('#supplier-bank-info-{{ loop.index }}').val(
+											JSON.stringify(bankData)
+										)
+										$('#supplier-bank-display-{{ loop.index }}').text(
+											suggestion.value
+										)
+										$('#supplier-bank-input-{{ loop.index }}').val(
+											suggestion.value
+										)
+									},
+								})
+							</script>
+							<div class="supplier-section">
+								<span>Расчетный счет:</span>
+								{% if item.leas_calc and item.leas_calc.seller %}
+								<span id="supplier-current-display-{{ loop.index }}"
+									>{{ item.leas_calc.seller.current_account }}</span
+								>
+								<input
+									type="text"
+									id="supplier-current-input-{{ loop.index }}"
+									value="{{ item.leas_calc.seller.current_account }}"
+									class="supplier-input-field"
+									maxlength="20"
+								/>
+								{% else %}
+								<span id="supplier-current-display-{{ loop.index }}"></span>
+								<input
+									type="text"
+									id="supplier-current-input-{{ loop.index }}"
+									value=""
+									class="supplier-input-field"
+									maxlength="20"
+								/>
+								{% endif %}
+							</div>
+						</div>
+						{% else %} {% endif %}
+					</div>
+				</div>
+				{% endfor %}
+				<script>
+					const token = "{{ suggestions_token }}";
+					const innCache = {};
 
-            function initializeSuggestions(index) {
-                const supplierNameInput = `#supplier-name-input-${index}`;
-                const supplierInnInput = `#supplier-inn-input-${index}`;
+					async function checkInnInDatabase(inn) {
+					    if (innCache[inn]) {
+					        return innCache[inn];
+					    }
+					    try {
+					        const response = await $.ajax({
+					            url: '/crm/deal/inside/check-seller-inn',
+					            method: 'POST',
+					            contentType: 'application/json',
+					            data: JSON.stringify({inn: inn})
+					        });
+					        innCache[inn] = response;
+					        return response;
+					    } catch (xhr) {
+					        if (xhr.status === 404) {
+					            innCache[inn] = null;
+					            return null;
+					        } else {
+					            throw new Error('Ошибка при проверке ИНН в базе');
+					        }
+					    }
+					}
 
-                const onSelectHandler = debounce(async function (suggestion) {
-                    const inn = suggestion.data.inn;
+					function initializeSuggestions(index) {
+					    const supplierNameInput = `#supplier-name-input-${index}`;
+					    const supplierInnInput = `#supplier-inn-input-${index}`;
 
-                    try {
-                        const seller = await checkInnInDatabase(inn);
-                        if (seller) {
-                            // Используем данные из базы
-                            $(supplierNameInput).val(seller.name);
-                            $(supplierInnInput).val(seller.inn);
-                            $(`#supplier-address-input-${index}`).val(seller.address);
-                            $(`#supplier-phone-input-${index}`).val(seller.phone);
-                            $(`#supplier-email-input-${index}`).val(seller.email);
-                            $(`#supplier-signer-input-${index}`).val(seller.signer);
-                            $(`#supplier-based-input-${index}`).val(seller.based_on);
-                            $(`#supplier-current-input-${index}`).val(seller.current_account);
-                            $(`#supplier-bank-input-${index}`).val(seller.bank);
+					    const onSelectHandler = debounce(async function (suggestion) {
+					        const inn = suggestion.data.inn;
 
-                        } else {
-                            // Используем данные Dadata
-                            $(supplierNameInput).val(suggestion.data.name.short_with_opf.split(",")[0].trim());
-                            $(supplierInnInput).val(suggestion.data.inn);
-                            $(`#supplier-phone-input-${index}`).val('');
-                            $(`#supplier-email-input-${index}`).val('');
-                            $(`#supplier-address-input-${index}`).val(suggestion.data.address.unrestricted_value);
+					        try {
+					            const seller = await checkInnInDatabase(inn);
+					            if (seller) {
+					                // Используем данные из базы
+					                $(supplierNameInput).val(seller.name);
+					                $(supplierInnInput).val(seller.inn);
+					                $(`#supplier-address-input-${index}`).val(seller.address);
+					                $(`#supplier-phone-input-${index}`).val(seller.phone);
+					                $(`#supplier-email-input-${index}`).val(seller.email);
+					                $(`#supplier-signer-input-${index}`).val(seller.signer);
+					                $(`#supplier-based-input-${index}`).val(seller.based_on);
+					                $(`#supplier-current-input-${index}`).val(seller.current_account);
+					                $(`#supplier-bank-input-${index}`).val(seller.bank);
 
-                            if (suggestion.data?.management?.name) {
-                                $(`#supplier-signer-input-${index}`).val(suggestion.data.management.name);
-                            } else {
-                                $(`#supplier-signer-input-${index}`).val(suggestion.data.name.full);
-                            }
+					            } else {
+					                // Используем данные Dadata
+					                $(supplierNameInput).val(suggestion.data.name.short_with_opf.split(",")[0].trim());
+					                $(supplierInnInput).val(suggestion.data.inn);
+					                $(`#supplier-phone-input-${index}`).val('');
+					                $(`#supplier-email-input-${index}`).val('');
+					                $(`#supplier-address-input-${index}`).val(suggestion.data.address.unrestricted_value);
 
-                            // Логика для "based_on"
-                            let formatDateReg = '';
-                            if (suggestion.data.state?.registration_date) {
-                                const date = new Date(suggestion.data.state.registration_date);
-                                formatDateReg = date.toLocaleDateString('ru-RU');
-                            }
+					                if (suggestion.data?.management?.name) {
+					                    $(`#supplier-signer-input-${index}`).val(suggestion.data.management.name);
+					                } else {
+					                    $(`#supplier-signer-input-${index}`).val(suggestion.data.name.full);
+					                }
 
-                            const basedOn = (suggestion.data.inn.length === 10)
-                                ? 'Устава'
-                                : `выписки Листа записи Единого государственного реестра индивидуальных предпринимателей от ${formatDateReg}`;
+					                // Логика для "based_on"
+					                let formatDateReg = '';
+					                if (suggestion.data.state?.registration_date) {
+					                    const date = new Date(suggestion.data.state.registration_date);
+					                    formatDateReg = date.toLocaleDateString('ru-RU');
+					                }
 
-                            $(`#supplier-based-input-${index}`).val(basedOn);
-                            $(`#supplier-current-input-${index}`).val('');
-                            $(`#supplier-bank-input-${index}`).val('');
+					                const basedOn = (suggestion.data.inn.length === 10)
+					                    ? 'Устава'
+					                    : `выписки Листа записи Единого государственного реестра индивидуальных предпринимателей от ${formatDateReg}`;
+
+					                $(`#supplier-based-input-${index}`).val(basedOn);
+					                $(`#supplier-current-input-${index}`).val('');
+					                $(`#supplier-bank-input-${index}`).val('');
 
 
-                        }
-                    } catch (error) {
-                        console.error('Ошибка при проверке ИНН в базе данных:', error);
-                    }
-                }, 300); // Задержка в 300 мс
+					            }
+					        } catch (error) {
+					            console.error('Ошибка при проверке ИНН в базе данных:', error);
+					        }
+					    }, 300); // Задержка в 300 мс
 
-                // Инициализация подсказок для названия
-                $(supplierNameInput).suggestions({
-                    token: token,
-                    type: "PARTY",
-                    onSelect: onSelectHandler
-                });
+					    // Инициализация подсказок для названия
+					    $(supplierNameInput).suggestions({
+					        token: token,
+					        type: "PARTY",
+					        onSelect: onSelectHandler
+					    });
 
-                // Инициализация подсказок для ИНН
-                $(supplierInnInput).suggestions({
-                    token: token,
-                    type: "PARTY",
-                    onSelect: onSelectHandler
-                });
-            }
+					    // Инициализация подсказок для ИНН
+					    $(supplierInnInput).suggestions({
+					        token: token,
+					        type: "PARTY",
+					        onSelect: onSelectHandler
+					    });
+					}
 
-            // Инициализация для каждого элемента
-            {% for item in deals_info %}
-                initializeSuggestions({{ loop.index }});
-            {% endfor %}
+					// Инициализация для каждого элемента
+					{% for item in deals_info %}
+					    initializeSuggestions({{ loop.index }});
+					{% endfor %}
 
-            // Функция дебаунса
-            function debounce(func, wait) {
-                let timeout;
-                return function(...args) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => func.apply(this, args), wait);
-                };
-            }
-        </script>
-    </div>
-    <div id="history" class="tab-content">
-        <h2>История</h2>
-        <!-- Your comments tab content here -->
-    </div>
-</div>
-<script>
-    function showTab(tabId) {
-        var tabs = document.getElementsByClassName('tab-content');
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].classList.remove('active');
-        }
-        document.getElementById(tabId).classList.add('active');
+					// Функция дебаунса
+					function debounce(func, wait) {
+					    let timeout;
+					    return function(...args) {
+					        clearTimeout(timeout);
+					        timeout = setTimeout(() => func.apply(this, args), wait);
+					    };
+					}
+				</script>
+			</div>
+			<div id="history" class="tab-content">
+				<h2>История</h2>
+				<!-- Your comments tab content here -->
+			</div>
+		</div>
+		<script>
+			function showTab(tabId) {
+				var tabs = document.getElementsByClassName('tab-content')
+				for (var i = 0; i < tabs.length; i++) {
+					tabs[i].classList.remove('active')
+				}
+				document.getElementById(tabId).classList.add('active')
 
-        var tabButtons = document.getElementsByClassName('tab');
-        for (var i = 0; i < tabButtons.length; i++) {
-            tabButtons[i].classList.remove('active');
-        }
-        event.target.classList.add('active');
-    }
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const dateElement = document.getElementById('deal-created-at');
-        const date = new Date(dateElement.textContent);
-        dateElement.textContent = "Дата создания сделки: " + date.toLocaleString();
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var clickableItems = document.querySelectorAll('.sidebar ul li.clickable');
+				var tabButtons = document.getElementsByClassName('tab')
+				for (var i = 0; i < tabButtons.length; i++) {
+					tabButtons[i].classList.remove('active')
+				}
+				event.target.classList.add('active')
+			}
+		</script>
+		<script>
+			document.addEventListener('DOMContentLoaded', event => {
+				const dateElement = document.getElementById('deal-created-at')
+				const date = new Date(dateElement.textContent)
+				dateElement.textContent =
+					'Дата создания сделки: ' + date.toLocaleString()
+			})
+		</script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				var clickableItems = document.querySelectorAll(
+					'.sidebar ul li.clickable'
+				)
 
-        clickableItems.forEach(function (item) {
-            item.addEventListener('click', function () {
-                var link = item.querySelector('a.nav-link');
-                if (link) {
-                    window.location.href = link.href;
-                }
-            });
-        });
-    });
-</script>
-<
-<script type="text/javascript" charset="utf-8">
-    const socket = io({
-        path: "/crm/socket.io"
-    });
+				clickableItems.forEach(function (item) {
+					item.addEventListener('click', function () {
+						var link = item.querySelector('a.nav-link')
+						if (link) {
+							window.location.href = link.href
+						}
+					})
+				})
+			})
+		</script>
+		<
+		<script type="text/javascript" charset="utf-8">
+			const socket = io({
+				path: '/crm/socket.io',
+			})
 
-    // Подключаемся к комнате при загрузке страницы
-    const dealId = '{{ deal_id }}';  // Должно содержать только ID сделки
-    const room = dealId;  // Проверяем, что room устанавливается только как deal_id
-    const username = '{{ current_user.abbreviation_name }}';
+			// Подключаемся к комнате при загрузке страницы
+			const dealId = '{{ deal_id }}' // Должно содержать только ID сделки
+			const room = dealId // Проверяем, что room устанавливается только как deal_id
+			const username = '{{ current_user.abbreviation_name }}'
 
-    socket.emit('join', {username: username, room: room});
-    console.log('Joined room: ' + room);
+			socket.emit('join', { username: username, room: room })
+			console.log('Joined room: ' + room)
 
-    // Обработчик для получения сообщений
-    socket.on('update_created_by', function (data) {
-        // Обновляем текст текущего ответственного
-        document.getElementById('current-created-by').textContent = data.new_created_by;
-        // Отображаем уведомление
-        showInfo(data.message);
-    });
+			// Обработчик для получения сообщений
+			socket.on('update_created_by', function (data) {
+				// Обновляем текст текущего ответственного
+				document.getElementById('current-created-by').textContent =
+					data.new_created_by
+				// Отображаем уведомление
+				showInfo(data.message)
+			})
 
-    // Отключаемся от комнаты перед закрытием страницы
-    window.onbeforeunload = function () {
-        socket.emit('leave', {username: username, room: room});
-        console.log('Left room: ' + room);
-    };
+			// Отключаемся от комнаты перед закрытием страницы
+			window.onbeforeunload = function () {
+				socket.emit('leave', { username: username, room: room })
+				console.log('Left room: ' + room)
+			}
 
-    // Отключаемся от комнаты при клике на ссылку
-    document.querySelector('.clickable a').addEventListener('click', function (event) {
-        event.preventDefault(); // Останавливаем переход по ссылке
-        socket.emit('leave', {username: username, room: room});
-    });
-</script>
+			// Отключаемся от комнаты при клике на ссылку
+			document
+				.querySelector('.clickable a')
+				.addEventListener('click', function (event) {
+					event.preventDefault() // Останавливаем переход по ссылке
+					socket.emit('leave', { username: username, room: room })
+				})
+		</script>
 
-<!-- Scripts -->
-<script src="{{ url_for('crm.static', filename='js/deal-inside-responsible.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/deal-inside-delete-seller.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/deal-inside-delete-group.js') }}"></script>
-<script src="{{ url_for('crm.static', filename='js/deal-inside-dadata-bank.js') }}"></script>
-</body>
+		<!-- Scripts -->
+		<script src="{{ url_for('crm.static', filename='js/deal-inside-responsible.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/deal-inside-delete-seller.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/deal-inside-delete-group.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/deal-inside-dadata-bank.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/risk_department/navigate-to-risk-page.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/navigate-to-deal-page.js') }}"></script>
+	</body>
 </html>

@@ -1,0 +1,81 @@
+<div class="sidebar" id="sidebar">
+	<ul>
+		<li class="clickable">
+			<a class="nav-link" href="{{ url_for('deal.index_crm') }}">
+				<i class="fa-solid fa-chevron-left"></i> Вернуться к сделкам
+			</a>
+		</li>
+		<br />
+
+		<!-- Данные по сделке - доступно всем пользователям -->
+		<li class="nav-link" onclick="navigateToDeal('{{ url_for('deal_inside.enter_into_deal', deal_id=deal_id) }}')">
+			<img
+				width="25"
+				height="25"
+				src="https://img.icons8.com/pulsar-line/48/data-configuration.png"
+				alt="data-configuration"
+			/>
+			Данные по сделке
+		</li>
+
+		<!-- Отдел рисков -->
+		{% if current_user.role == 'risk' or current_user.role == 'tester' or
+		current_user.role == 'admin' %}
+		<li
+			class="nav-link"
+			onclick="navigateToRiskDepartment('{{ url_for('risk_department.risk_department', deal_id=deal_id) }}')"
+		>
+			<img
+				width="25"
+				height="25"
+				src="https://img.icons8.com/pulsar-line/48/identification-documents-error.png"
+				alt="identification-documents-error"
+			/>
+			Отдел рисков
+		</li>
+		{% endif %}
+
+		<!-- Отдел безопасности -->
+		{% if current_user.role == 'security' or current_user.role == 'tester' or
+		current_user.role == 'admin' %}
+		<li class="nav-link" onclick="showForm('security')">
+			<img
+				width="25"
+				height="25"
+				src="https://img.icons8.com/pulsar-line/48/security-checked.png"
+				alt="security-checked"
+			/>
+			Отдел безопасности
+		</li>
+		{% endif %}
+
+		<!-- Юридический отдел -->
+		{% if current_user.role == 'legal' or current_user.role == 'tester' or
+		current_user.role == 'admin' %}
+		<li class="nav-link" onclick="showForm('legal')">
+			<img
+				width="25"
+				height="25"
+				src="https://img.icons8.com/pulsar-line/48/digital-signature.png"
+				alt="digital-signature"
+			/>
+			Юридический отдел
+		</li>
+		{% endif %}
+
+		<!-- Отдел лизинга -->
+		{% if current_user.role == 'leasing' or current_user.role == 'tester' or
+		current_user.role == 'admin' %}
+		<li class="nav-link" onclick="showForm('leasing')">
+			<img
+				width="25"
+				height="25"
+				src="https://img.icons8.com/pulsar-line/48/bunch-of-keys-1.png"
+				alt="bunch-of-keys-1"
+			/>
+			Отдел лизинга
+		</li>
+		{% endif %}
+	</ul>
+	<h6>{{ current_user }}</h6>
+</div>

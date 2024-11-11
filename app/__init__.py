@@ -39,6 +39,7 @@ def create_app(debug=False):
     Migrate(app, db)
 
     from .deal import deal_bp as deal_blueprint
+    from .deal.risk_department import risk_department_bp
     from .user import user_bp as user_blueprint
     from .leasing_calculator import leas_calc_bp as leas_calc_blueprint
     from .deal_inside import deal_inside_bp as deal_inside_blueprint
@@ -48,6 +49,7 @@ def create_app(debug=False):
     app.register_blueprint(user_blueprint)
     app.register_blueprint(leas_calc_blueprint)
     app.register_blueprint(deal_inside_blueprint)
+    app.register_blueprint(risk_department_bp)
 
     cache.init_app(app)
     socketio.init_app(app, cors_allowed_origins="*", path="/crm/socket.io")

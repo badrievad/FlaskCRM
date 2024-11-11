@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Отдел рисков</title>
+		<!-- Подключите ваш файл CSS -->
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/risk-department.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/risk-department-modal.css') }}"
+		/>
+		<link
+			rel="icon"
+			href="{{ url_for('crm.static', filename='/images/gpt.png') }}"
+			type="image/png"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/deal-sidebar.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		/>
+	</head>
+	<body>
+		<!-- Боковое меню -->
+		{% include 'sidebar-deal.html' %}
+
+		<!-- Основной контент -->
+		<div class="main-content">
+			<!-- Окно с сформированными документами по сделке -->
+			<div class="content-container">
+				<!-- Основное содержимое слева -->
+				<div class="main-section">
+					<!-- Другой контент может быть добавлен здесь -->
+				</div>
+				<!-- Секция документов справа -->
+				<div class="documents-container">
+					<h2 style="text-align: center; font-size: 22px">Сформированные документы</h2>
+					<div class="documents-section">
+						<ul class="documents-list">
+							{% for document in documents %}
+							<li>
+								<a
+									href="{{ url_for('download_document', document_id=document.id) }}"
+									target="_blank"
+								>
+									{{ document.name }}
+								</a>
+							</li>
+							{% else %}
+							<p>Документы по сделке отсутствуют.</p>
+							{% endfor %}
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- Кнопка "Принять решение" -->
+			<div class="decision-section">
+				<button
+					id="make-decision-button"
+					class="btn btn-primary"
+					data-toggle="modal"
+					data-target="#decision-modal"
+				>
+					Принять решение
+				</button>
+			</div>
+
+			<!-- Кастомное модальное окно -->
+			<div id="decision-modal" class="custom-modal">
+				<div class="custom-modal-content">
+					<span class="custom-close-button" id="close-modal">
+						<i class="fas fa-times"></i>
+					</span>
+					<h2>Выберите действие</h2>
+					<div class="modal-buttons">
+						<button class="option-button" onclick="submitDecision('approve')">
+							<i class="fas fa-check"></i> Одобрить
+						</button>
+						<button
+							class="option-button"
+							onclick="submitDecision('send_to_committee')"
+						>
+							<i class="fas fa-paper-plane"></i> Отправить на инвесткомитет
+						</button>
+						<button class="option-button" onclick="submitDecision('reject')">
+							<i class="fas fa-times"></i> Отказать
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Подключаем JavaScript -->
+		<script src="{{ url_for('crm.static', filename='js/risk_department/risk-department.js') }}"></script>
+	</body>
+	<script src="{{ url_for('crm.static', filename='js/risk_department/navigate-to-risk-page.js') }}"></script>
+	<script src="{{ url_for('crm.static', filename='js/navigate-to-deal-page.js') }}"></script>
+</html>

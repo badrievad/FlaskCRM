@@ -1,38 +1,6 @@
-/* Подключаем шрифт Roboto */
-/* Общие стили */
-body {
-	font-family: 'Roboto', sans-serif;
-	background-color: #f0f2f5;
-	margin: 0;
-	padding: 0;
-}
-
-/* Основной контент */
-.main-content {
-	font-family: 'Roboto', sans-serif;
-	padding: 20px;
-	margin-left: 250px; /* Ширина сайдбара */
-}
-
-/* Стилизация кнопки "Принять решение" */
-#make-decision-button {
-	padding: 12px 25px;
-	font-size: 16px;
-	background-color: #007bff;
-	color: #fff;
-	border: none;
-	border-radius: 5px;
-	cursor: pointer;
-	transition: background 0.3s;
-	font-weight: 500;
-}
-
-#make-decision-button:hover {
-	background-color: #0069d9;
-}
-
 /* Кастомное модальное окно */
 .custom-modal {
+	font-family: 'Roboto', sans-serif;
 	display: none;
 	position: fixed;
 	z-index: 1000;
@@ -149,86 +117,21 @@ body {
 	align-items: flex-start;
 }
 
-/* Основная секция слева (3/4 ширины) */
-.main-section {
-	flex: 3;
-	padding-right: 20px; /* Отступ справа для разделения */
-}
-
-/* Контейнер для секции документов справа */
-.documents-container {
-	flex: 1;
-	padding: 100px;
-}
-
-/* Заголовок секции документов */
-.documents-container h2 {
-	margin-top: 0;
-	font-weight: 600;
-	margin-bottom: 15px;
-	color: #333; /* Цвет заголовка */
-}
-
-/* Секция документов с фоном */
-.documents-section {
-	background-color: #eef1f1; /* Светлый фон */
-	color: #333; /* Темный текст */
-	padding: 20px;
-	border-radius: 8px;
-}
-
-/* Стили для списка документов */
-.documents-list {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.documents-list li {
-	margin-bottom: 10px;
-}
-
-.documents-list a {
-	text-decoration: none;
-	color: #007bff;
+/* Стилизация кнопки "Принять решение" */
+#make-decision-button {
+	padding: 10px 15px;
+	font-size: 16px;
+	background-color: #3d5159;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background 0.3s;
 	font-weight: 500;
-	transition: color 0.3s;
+	margin: 50px auto;
+	display: block;
 }
 
-.documents-list a:hover {
-	color: #0056b3;
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-	.custom-modal-content {
-		width: 80%;
-		margin-top: 20%;
-	}
-
-	.content-container {
-		flex-direction: column;
-	}
-
-	.main-section,
-	.documents-container {
-		flex: none;
-		width: 100%;
-		padding-right: 0;
-		margin-bottom: 20px;
-	}
-}
-
-/* Для очень маленьких экранов */
-@media (max-width: 480px) {
-	.custom-modal-content {
-		width: 90%;
-		margin-top: 25%;
-	}
-}
-
-/* Обеспечиваем, чтобы сайдбар был выше затемнения */
-.sidebar {
-	position: relative;
-	z-index: 1001;
+#make-decision-button:hover {
+	background-color: #3d5159;
 }

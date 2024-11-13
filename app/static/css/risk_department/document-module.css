@@ -1,0 +1,25 @@
+/* Стили для списка документов */
+.documents-list {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	background-color: rgb(38, 38, 38); 
+	padding: 20px;
+	margin: 100px;
+	border-radius: 10px;
+}
+
+.documents-list li {
+	margin: 10px 0;
+	text-align: center;
+}
+
+.documents-list a {
+	text-decoration: none;
+	color: #007bff;
+}
+
+.documents-list a:hover {
+	text-decoration: underline;
+}

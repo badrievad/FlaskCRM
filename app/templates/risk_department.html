@@ -6,11 +6,15 @@
 		<!-- Подключите ваш файл CSS -->
 		<link
 			rel="stylesheet"
-			href="{{ url_for('crm.static', filename='css/risk-department.css') }}"
+			href="{{ url_for('crm.static', filename='css/risk_department/background.css') }}"
 		/>
 		<link
 			rel="stylesheet"
-			href="{{ url_for('crm.static', filename='css/risk-department-modal.css') }}"
+			href="{{ url_for('crm.static', filename='css/risk_department/modal-decision.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/risk_department/document-module.css') }}"
 		/>
 		<link
 			rel="icon"
@@ -35,73 +39,118 @@
 		/>
 	</head>
 	<body>
+		<!-- Кастомное модальное окно -->
+		<div id="decision-modal" class="custom-modal">
+			<div class="custom-modal-content">
+				<span class="custom-close-button" id="close-modal">
+					<i class="fas fa-times"></i>
+				</span>
+				<h2>Выберите действие</h2>
+				<div class="modal-buttons">
+					<button class="option-button" onclick="submitDecision('approve')">
+						<i class="fas fa-check"></i> Одобрить
+					</button>
+					<button
+						class="option-button"
+						onclick="submitDecision('send_to_committee')"
+					>
+						<i class="fas fa-paper-plane"></i> Отправить на инвесткомитет
+					</button>
+					<button class="option-button" onclick="submitDecision('reject')">
+						<i class="fas fa-times"></i> Отказать
+					</button>
+				</div>
+			</div>
+		</div>
+
 		<!-- Боковое меню -->
 		{% include 'sidebar-deal.html' %}
 
 		<!-- Основной контент -->
 		<div class="main-content">
-			<!-- Окно с сформированными документами по сделке -->
+			<!-- Контейнер для разделения на колонки -->
 			<div class="content-container">
-				<!-- Основное содержимое слева -->
-				<div class="main-section">
-					<!-- Другой контент может быть добавлен здесь -->
+				<!-- Первая колонка с основными данными -->
+				<div class="left-column">
+					<!-- Здесь разместите основные данные по компании, продавцу и предмету лизинга -->
+					<h2>Основные данные</h2>
+					<!-- Ваш контент для основных данных -->
+					 <h5># Лизингополучаетель</h5>
+					 <h6>Наименование:</h6>
+					 <p></p>
+					 <h6>ИНН:</h6>
+					 <p></p>
+					 <h6>Адрес:</h6>
+					 <p></p>
+					 <h6>Директор:</h6>
+					 <p></p>
+					 <h6>Учредитель:</h6>
+					 <p></p>
+					 <h5># Продавец</h5>
+					 <h6>Наименование:</h6>
+					 <p></p>
+					 <h6>ИНН:</h6>
+					 <p></p>
+					 <h6>Адрес:</h6>
+					 <p></p>
+					 <h6>Директор:</h6>
+					 <p></p>
+					 <h6>Учредитель:</h6>
+					 <p></p>
+					 <h5># Предмет лизинга</h5>
+					 <h6>Наименование:</h6>
+					 <p></p>
+					 <h6>Стоимость предмета лизинга:</h6>
+					 <p></p>
+					 <h6>Год выпуска:</h6>
+					 <p></p>
 				</div>
-				<!-- Секция документов справа -->
-				<div class="documents-container">
-					<h2 style="text-align: center; font-size: 22px">Сформированные документы</h2>
+
+				<!-- Вторая колонка, поделена на две части -->
+				<div class="right-column">
+					<!-- Первая часть: Сформированные документы -->
 					<div class="documents-section">
-						<ul class="documents-list">
-							{% for document in documents %}
-							<li>
-								<a
-									href="{{ url_for('download_document', document_id=document.id) }}"
-									target="_blank"
-								>
-									{{ document.name }}
-								</a>
-							</li>
-							{% else %}
-							<p>Документы по сделке отсутствуют.</p>
-							{% endfor %}
-						</ul>
+						<h2>
+							Сформированные документы
+						</h2>
+						<div class="documents-list-container">
+							<ul class="documents-list">
+								{% for document in documents %}
+								<li>
+									<a
+										href="{{ url_for('download_document', document_id=document.id) }}"
+										target="_blank"
+									>
+										{{ document.name }}
+									</a>
+								</li>
+								{% else %}
+								<p>Документы по сделке отсутствуют.</p>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+
+					<!-- Вторая часть: Решение по проекту -->
+					<div class="decision-section">
+						<h2>
+							Решение по проекту
+						</h2>
+						<button
+							id="make-decision-button"
+							class="btn btn-primary"
+							data-toggle="modal"
+							data-target="#decision-modal"
+						>
+							Принять решение
+						</button>
 					</div>
 				</div>
-			</div>
-
-			<!-- Кнопка "Принять решение" -->
-			<div class="decision-section">
-				<button
-					id="make-decision-button"
-					class="btn btn-primary"
-					data-toggle="modal"
-					data-target="#decision-modal"
-				>
-					Принять решение
-				</button>
 			</div>
 
 			<!-- Кастомное модальное окно -->
 			<div id="decision-modal" class="custom-modal">
-				<div class="custom-modal-content">
-					<span class="custom-close-button" id="close-modal">
-						<i class="fas fa-times"></i>
-					</span>
-					<h2>Выберите действие</h2>
-					<div class="modal-buttons">
-						<button class="option-button" onclick="submitDecision('approve')">
-							<i class="fas fa-check"></i> Одобрить
-						</button>
-						<button
-							class="option-button"
-							onclick="submitDecision('send_to_committee')"
-						>
-							<i class="fas fa-paper-plane"></i> Отправить на инвесткомитет
-						</button>
-						<button class="option-button" onclick="submitDecision('reject')">
-							<i class="fas fa-times"></i> Отказать
-						</button>
-					</div>
-				</div>
+				<!-- Ваш существующий контент модального окна -->
 			</div>
 		</div>
 

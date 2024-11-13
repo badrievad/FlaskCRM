@@ -1,0 +1,119 @@
+/* Общие стили */
+body {
+	font-family: 'Roboto', sans-serif;
+	background-color: #f0f2f5;
+	margin: 0;
+	padding: 0;
+}
+
+/* Обеспечиваем, чтобы сайдбар был выше затемнения */
+.sidebar {
+	position: relative;
+	z-index: 1001;
+}
+
+/* Основной контент */
+.main-content {
+	margin-left: 250px; /* Ширина сайдбара */
+	font-family: 'Roboto', sans-serif;
+}
+
+/* Контейнер для колонок */
+.content-container {
+	display: flex;
+	flex-wrap: wrap;
+	height: calc(100vh - 40px); /* Высота окна браузера минус отступы */
+}
+
+/* Левая колонка */
+.left-column {
+	flex: 1 1 50%; /* Занимает 50% ширины */
+	box-sizing: border-box;
+	background-color: rgb(37, 36, 36);
+	padding: 0; /* Убираем отступы */
+	margin: 0; /* Убираем отступы */
+	min-height: 100vh; /* Высота на 100% родителя */
+	color: #ddd8d8;
+	padding-left: 20px;
+}
+
+/* Правая колонка */
+.right-column {
+	flex: 1 1 50%; /* Занимает оставшиеся 50% */
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	padding: 0; /* Убираем отступы */
+	margin: 0; /* Убираем отступы */
+	color: #ddd8d8;
+    min-height: 100vh; /* Высота на 100% родителя */
+    height: 100%;
+}
+
+/* Секции внутри правой колонки */
+.documents-section {
+	flex: 1;
+	background-color: rgb(37, 37, 37);
+	box-sizing: border-box;
+	padding: 0; /* Убираем отступы */
+	margin: 0; /* Убираем отступы */
+	height: 60%; /* 60% высоты родителя (.right-column) */
+}
+
+.decision-section {
+	flex: 1;
+	background-color: rgb(38, 37, 37);
+	box-sizing: border-box;
+	padding: 0; /* Убираем отступы */
+	margin: 0; /* Убираем отступы */
+	height: 40%; /* 40% высоты родителя (.right-column) */
+}
+
+/* Стили для заголовков */
+.left-column h2,
+.documents-section h2,
+.decision-section h2 {
+	display: block;
+	font-size: 22px;
+	margin: 20px 0;
+	text-align: center;
+	position: relative; /* Для псевдоэлемента */
+}
+
+/* Стили для заголовков */
+.left-column h5,
+.documents-section h5,
+.decision-section h5 {
+	margin-bottom: 20px;
+	margin-top: 40px;
+	font-weight: bold;
+}
+
+.left-column h2::after,
+.documents-section h2::after,
+.decision-section h2::after {
+	content: '';
+	position: absolute;
+	bottom: -10px; /* Расстояние ниже заголовка */
+	left: 50%;
+	transform: translateX(-50%);
+	width: 20%; /* Длина линии относительно заголовка */
+	border-bottom: 2px solid rgb(144, 34, 34);
+	border-radius: 15px;
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 768px) {
+	.left-column,
+	.right-column {
+		flex: 1 1 100%;
+	}
+}
+
+.sidebar {
+	background-color: rgb(34, 34, 34) !important;
+}
+
+.sidebar ul li:hover {
+	background-color: rgb(42, 41, 41) !important;
+}

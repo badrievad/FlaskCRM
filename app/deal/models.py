@@ -96,6 +96,7 @@ class Client(db.Model):  # type: ignore
     current_account = db.Column(db.String(30), nullable=True)
     date_of_registration = db.Column(db.Date, nullable=True)
     bank_id = db.Column(db.Integer, db.ForeignKey("banks.id"), nullable=True)
+    director = db.Column(db.String(100), nullable=True)
 
     deals = relationship("Deal", back_populates="client")
     bank = relationship("Bank", back_populates="clients")

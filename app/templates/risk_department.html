@@ -10,6 +10,10 @@
 		/>
 		<link
 			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/risk_department/main-data.css') }}"
+		/>
+		<link
+			rel="stylesheet"
 			href="{{ url_for('crm.static', filename='css/risk_department/modal-decision.css') }}"
 		/>
 		<link
@@ -72,47 +76,40 @@
 			<div class="content-container">
 				<!-- Первая колонка с основными данными -->
 				<div class="left-column">
-					<!-- Здесь разместите основные данные по компании, продавцу и предмету лизинга -->
+					<!-- Основные данные -->
 					<h2>Основные данные</h2>
-					<!-- Ваш контент для основных данных -->
-					 <h5># Лизингополучаетель</h5>
-					 <h6>Наименование:</h6>
-					 <p></p>
-					 <h6>ИНН:</h6>
-					 <p></p>
-					 <h6>Адрес:</h6>
-					 <p></p>
-					 <h6>Директор:</h6>
-					 <p></p>
-					 <h6>Учредитель:</h6>
-					 <p></p>
-					 <h5># Продавец</h5>
-					 <h6>Наименование:</h6>
-					 <p></p>
-					 <h6>ИНН:</h6>
-					 <p></p>
-					 <h6>Адрес:</h6>
-					 <p></p>
-					 <h6>Директор:</h6>
-					 <p></p>
-					 <h6>Учредитель:</h6>
-					 <p></p>
-					 <h5># Предмет лизинга</h5>
-					 <h6>Наименование:</h6>
-					 <p></p>
-					 <h6>Стоимость предмета лизинга:</h6>
-					 <p></p>
-					 <h6>Год выпуска:</h6>
-					 <p></p>
+
+					<!-- Раздел "Лизингополучатель" -->
+					<h5>Лизингополучатель</h5>
+					<div class="data-section">
+						<div class="data-row">
+							<span class="data-label">Наименование:</span>
+							<span class="data-value">{{ client.name }}</span>
+						</div>
+						<div class="data-row">
+							<span class="data-label">ИНН:</span>
+							<span class="data-value">{{ client.inn }}</span>
+						</div>
+						<div class="data-row">
+							<span class="data-label">Дата регистрации:</span>
+							<span class="data-value" id="registration-date">{{ client.date_of_registration }}</span>
+						</div>
+						<div class="data-row">
+							<span class="data-label">Адрес:</span>
+							<span class="data-value">{{ client.address }}</span>
+						</div>
+						<div class="data-row">
+							<span class="data-label">Директор:</span>
+							<span class="data-value">{{ client.director }}</span>
+						</div>
+					</div>
 				</div>
 
 				<!-- Вторая колонка, поделена на две части -->
 				<div class="right-column">
 					<!-- Первая часть: Сформированные документы -->
 					<div class="documents-section">
-						<h2>
-							Сформированные документы
-						</h2>
+						<h2>Сформированные документы</h2>
 						<div class="documents-list-container">
 							<ul class="documents-list">
 								{% for document in documents %}
@@ -133,9 +130,7 @@
 
 					<!-- Вторая часть: Решение по проекту -->
 					<div class="decision-section">
-						<h2>
-							Решение по проекту
-						</h2>
+						<h2>Решение по проекту</h2>
 						<button
 							id="make-decision-button"
 							class="btn btn-primary"
@@ -159,4 +154,5 @@
 	</body>
 	<script src="{{ url_for('crm.static', filename='js/risk_department/navigate-to-risk-page.js') }}"></script>
 	<script src="{{ url_for('crm.static', filename='js/navigate-to-deal-page.js') }}"></script>
+	<script src="{{ url_for('crm.static', filename='js/risk_department/formatting-date.js') }}"></script>
 </html>

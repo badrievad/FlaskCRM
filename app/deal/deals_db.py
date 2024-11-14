@@ -78,6 +78,7 @@ def get_or_create_client(client_data: DealsValidate):
             phone="",
             email="",
             current_account="",
+            director=client_data.get_company_signer,
         )
         db.session.add(new_client)
         db.session.commit()

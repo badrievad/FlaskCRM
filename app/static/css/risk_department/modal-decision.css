@@ -2,6 +2,9 @@
 .custom-modal {
 	font-family: 'Roboto', sans-serif;
 	display: none;
+	opacity: 0;
+	transform: translateY(-50px);
+	transition: opacity 0.3s ease, transform 0.3s ease;
 	position: fixed;
 	z-index: 1000;
 	left: 250px; /* Ширина сайдбара */
@@ -34,6 +37,13 @@
 		opacity: 1;
 		transform: translateY(0);
 	}
+}
+
+/* Стиль для отображения модального окна */
+.custom-modal.modal-visible {
+	display: block; /* Показываем модальное окно */
+	opacity: 1;
+	transform: translateY(0);
 }
 
 /* Анимация исчезновения модального окна */

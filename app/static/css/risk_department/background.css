@@ -97,7 +97,7 @@ body {
 	bottom: -10px; /* Расстояние ниже заголовка */
 	left: 50%;
 	transform: translateX(-50%);
-	width: 20%; /* Длина линии относительно заголовка */
+	width: 10%; /* Длина линии относительно заголовка */
 	border-bottom: 2px solid rgb(144, 34, 34);
 	border-radius: 15px;
 }

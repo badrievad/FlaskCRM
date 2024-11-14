@@ -121,11 +121,6 @@
 		/>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-		<!-- Tippy.js -->
-		<link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" />
-		<script src="https://unpkg.com/@popperjs/core@2"></script>
-		<script src="https://unpkg.com/tippy.js@6"></script>
-
 		<style>
 			.hidden {
 				display: none;
@@ -2513,8 +2508,8 @@
 			                    serviceLife: serviceLife,
 			                    amortization: amortization,
 			                    ndsSize: ndsSize,
-                                differentialPaymentIncreaseFactor: differentialPaymentIncreaseFactor,
-                                monthsRegressivePayments: monthsRegressivePayments,
+			                             differentialPaymentIncreaseFactor: differentialPaymentIncreaseFactor,
+			                             monthsRegressivePayments: monthsRegressivePayments,
 			                    tranches: {
 			                        tranche1: {
 			                            size: tranche1Size,
@@ -2765,6 +2760,7 @@
 			    {% endwith %}
 			});
 		</script>
+
 		<!-- Autocomplete Script -->
 		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-autocomplete.js') }}"></script>
 

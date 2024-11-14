@@ -1,0 +1,29 @@
+/* Стили для левой колонки */
+.left-column h5 {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+/* Контейнер для данных */
+.data-section {
+	margin-top: 10px;
+}
+
+/* Каждая строка данных */
+.data-row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 15px;
+}
+
+/* Стили для заголовков */
+.data-label {
+	width: 170px; /* Установите нужную ширину */
+	font-weight: bold;
+	color: #8e8e8e;
+}
+
+/* Стили для значений */
+.data-value {
+	flex: 1; /* Значение занимает оставшееся пространство */
+}

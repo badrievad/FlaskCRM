@@ -6,18 +6,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 	// Открытие модального окна при клике на кнопку "Принять решение"
 	makeDecisionButton.addEventListener('click', function () {
-		modal.style.display = 'block'
-		setTimeout(function () {
-			modal.classList.add('modal-visible')
-		}, 10)
+		modal.classList.add('modal-visible')
 	})
 
 	// Функция для закрытия модального окна
 	function closeModal() {
 		modal.classList.remove('modal-visible')
-		setTimeout(function () {
-			modal.style.display = 'none'
-		}, 300) // Время должно совпадать с временем анимации
 	}
 
 	// Закрытие модального окна при клике на крестик

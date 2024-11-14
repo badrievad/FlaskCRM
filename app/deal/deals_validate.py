@@ -19,7 +19,11 @@ class DealsValidate:
     @property
     def get_company_based_on(self) -> str:
         try:
-            format_date_reg = self.get_company_reg_date.strftime("%d.%m.%Y")
+            format_date_reg = (
+                self.get_company_reg_date.strftime("%d.%m.%Y")
+                if self.get_company_reg_date
+                else ""
+            )
         except Exception as e:
             logging.error(f"Error: {e}")
             format_date_reg = ""
@@ -42,7 +46,7 @@ class DealsValidate:
 
     @property
     def get_company_inn(self) -> str:
-        info_json: json = self._data.get("info")
+        info_json: str = self._data.get("info") or ""
         if info_json:
             info: dict = json.loads(info_json)
         else:
@@ -51,7 +55,7 @@ class DealsValidate:
 
     @property
     def get_company_ogrn(self) -> str:
-        info_json: json = self._data.get("info")
+        info_json: str = self._data.get("info") or ""
         if info_json:
             info: dict = json.loads(info_json)
         else:
@@ -60,7 +64,7 @@ class DealsValidate:
 
     @property
     def get_company_kpp(self) -> str:
-        info_json: json = self._data.get("info")
+        info_json: str = self._data.get("info") or ""
         if info_json:
             info: dict = json.loads(info_json)
         else:
@@ -69,7 +73,7 @@ class DealsValidate:
 
     @property
     def get_company_okato(self) -> str:
-        info_json: json = self._data.get("info")
+        info_json: str = self._data.get("info") or ""
         if info_json:
             info: dict = json.loads(info_json)
         else:
@@ -78,7 +82,7 @@ class DealsValidate:
 
     @property
     def get_company_address(self) -> str:
-        info_json: json = self._data.get("info")
+        info_json: str = self._data.get("info") or ""
         if info_json:
             info: dict = json.loads(info_json)
         else:
@@ -87,7 +91,7 @@ class DealsValidate:
 
     @property
     def get_company_signer(self) -> str:
-        info_json: json = self._data.get("info")
+        info_json: str = self._data.get("info") or ""
         if info_json:
             info: dict = json.loads(info_json)
         else:
@@ -101,7 +105,7 @@ class DealsValidate:
 
     @property
     def get_company_reg_date(self) -> date | None:
-        info_json: str = self._data.get("info")
+        info_json: str = self._data.get("info") or ""
         if info_json:
             info: dict = json.loads(info_json)
         else:

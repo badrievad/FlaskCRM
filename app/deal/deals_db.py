@@ -52,7 +52,7 @@ def write_deal_path_to_db(folder_path: str, deal_id: str) -> None:
 def get_or_create_client(client_data: DealsValidate):
     """
     Получает информацию о клиенте из client_data.
-    Если клиент с таким ИНН существует, возвращает его id.
+    Если клиент с таким ИНН существует, обновляет его данные при необходимости и возвращает его id.
     Иначе создаёт нового клиента и возвращает его id.
     """
     inn = client_data.get_company_inn
@@ -62,6 +62,31 @@ def get_or_create_client(client_data: DealsValidate):
     # Проверяем, существует ли клиент с таким ИНН
     client = Client.query.filter_by(inn=inn).first()
     if client:
+        updated = False  # Флаг для отслеживания обновлений
+
+        # Сопоставляем и обновляем поля
+        fields_to_update = {
+            "name": client_data.get_company_name,
+            "ogrn": client_data.get_company_ogrn,
+            "kpp": client_data.get_company_kpp,
+            "okato": client_data.get_company_okato,
+            "address": client_data.get_company_address,
+            "signer": client_data.get_company_signer,
+            "based_on": client_data.get_company_based_on,
+            "date_of_registration": client_data.get_company_reg_date,
+            "director": client_data.get_company_signer,
+        }
+
+        for field, new_value in fields_to_update.items():
+            current_value = getattr(client, field)
+            if current_value != new_value:
+                setattr(client, field, new_value)
+                updated = True
+
+        # Если были изменения, сохраняем их в базе данных
+        if updated:
+            db.session.commit()
+
         return client.id
     else:
         # Создаем нового клиента

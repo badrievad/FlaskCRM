@@ -472,11 +472,10 @@
     socket.on('new_deal', function (data) {
         const userName = '{{ user_name }}';
         const userRole = '{{ user_role }}';
-        console.log(data);
-        var dealsList = document.getElementById('deal-rows');
-        var currentIndex = dealsList.children.length + 1; // Calculate the new index
+        let dealsList = document.getElementById('deal-rows');
+        let currentIndex = dealsList.children.length + 1; // Calculate the new index
         const timeAgo = formatTimeAgo(data.created_at);
-        var dealItem = `
+        const dealItem = `
                             <tr id="deal-${data.id}">
                                 <td onclick="toggleCheckbox(${data.id}, event)">
                                     <input type="checkbox" class="deal-checkbox" data-deal-id="${data.id}" id="checkbox-${data.id}" style="cursor: pointer;">

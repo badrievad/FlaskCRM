@@ -57,14 +57,14 @@ class Deal(db.Model):  # type: ignore
         if self.archived_at is None:
             archived_at = None
         else:
-            archived_at = self.archived_at.strftime("%d.%m.%Y %H:%M:%S")
+            archived_at = self.archived_at.strftime("%Y-%m-%d %H:%M:%S")
         return {
             "id": self.id,
             "product": self.product,
             "title": self.title,
             "company_inn": self.company_inn,
             "created_by": self.created_by,
-            "created_at": self.created_at.strftime("%d.%m.%Y %H:%M:%S"),
+            "created_at": self.created_at.strftime("%Y-%m-%d %H:%M:%S"),
             "archived_at": archived_at,
             "dl_number": self.dl_number,
             "dl_number_windows": self.dl_number_windows,

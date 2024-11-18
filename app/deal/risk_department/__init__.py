@@ -4,4 +4,4 @@ risk_department_bp = Blueprint(
     "risk_department", __name__, url_prefix="/crm/deal/inside/risk-department"
 )
 
-from . import routes  # noqa F401
+from . import routes, models  # noqa F401

@@ -38,6 +38,7 @@ class Deal(db.Model):  # type: ignore
     leas_calculators = relationship("LeasCalculator", back_populates="deal")
     client = relationship("Client", back_populates="deals")
     user = relationship("User", back_populates="deals")  # Связь с моделью User
+    risk_department = relationship("RiskDepartment", back_populates="deal")
 
     @classmethod
     def generate_dl_number(cls):

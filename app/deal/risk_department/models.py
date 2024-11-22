@@ -8,6 +8,7 @@ class RiskDepartment(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     deal_id = db.Column(db.Integer, db.ForeignKey("deals.id"), nullable=False)
+    decision = db.Column(db.String(100), nullable=True)
     decision_time = db.Column(db.DateTime, nullable=True)
     responsible_person = db.Column(db.String(100), nullable=True)
 

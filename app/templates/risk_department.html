@@ -41,6 +41,14 @@
 			rel="stylesheet"
 			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
 		/>
+
+		<!-- SweetAlert2 -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
+		/>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		
 	</head>
 	<body>
 		<!-- Кастомное модальное окно -->
@@ -92,7 +100,9 @@
 						</div>
 						<div class="data-row">
 							<span class="data-label">Дата регистрации:</span>
-							<span class="data-value" id="registration-date">{{ client.date_of_registration }}</span>
+							<span class="data-value" id="registration-date"
+								>{{ client.date_of_registration }}</span
+							>
 						</div>
 						<div class="data-row">
 							<span class="data-label">Адрес:</span>

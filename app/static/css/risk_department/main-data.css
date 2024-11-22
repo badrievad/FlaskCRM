@@ -6,6 +6,7 @@
 
 /* Контейнер для данных */
 .data-section {
+	font-family: 'Roboto', sans-serif;
 	margin-top: 10px;
 }
 

@@ -97,9 +97,10 @@ function submitDecision(decision) {
 					// Обработка ответа от сервера
 					if (data.success) {
 						Swal.fire({
-							title: 'Успех',
 							text: data.message,
 							icon: 'success',
+							showConfirmButton: false,
+							timer: 1500,
 						}).then(() => {
 							// Обновляем страницу или выполняем другие действия
 							location.reload()
@@ -109,6 +110,8 @@ function submitDecision(decision) {
 							title: 'Ошибка',
 							text: data.message,
 							icon: 'error',
+							showConfirmButton: false,
+							timer: 2000,
 						})
 					}
 				})
@@ -118,6 +121,8 @@ function submitDecision(decision) {
 						title: 'Ошибка',
 						text: 'Произошла ошибка при обработке запроса.',
 						icon: 'error',
+						showConfirmButton: false,
+						timer: 2000,
 					})
 				})
 		}

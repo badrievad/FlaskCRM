@@ -21,6 +21,10 @@
 			href="{{ url_for('crm.static', filename='css/risk_department/document-module.css') }}"
 		/>
 		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/risk_department/decision-part.css') }}"
+		/>
+		<link
 			rel="icon"
 			href="{{ url_for('crm.static', filename='/images/gpt.png') }}"
 			type="image/png"
@@ -48,7 +52,6 @@
 			href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css"
 		/>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-		
 	</head>
 	<body>
 		<!-- Кастомное модальное окно -->
@@ -138,9 +141,30 @@
 						</div>
 					</div>
 
-					<!-- Вторая часть: Решение по проекту -->
 					<div class="decision-section">
 						<h2>Решение по проекту</h2>
+						{% if decision %}
+						<div id="decision-display">
+							<p class="decision-text">
+								<img
+									width="35"
+									height="35"
+									src={{ decision.decision_icon }}
+									alt="cancel-2"
+								/>
+								{{ decision.decision_text }}
+							</p>
+							<p class="decision-time">Решение принято: {{ decision.decision_time }}</p>
+						</div>
+						<button
+							id="make-decision-button"
+							class="btn btn-primary"
+							data-toggle="modal"
+							data-target="#decision-modal"
+						>
+							Изменить решение
+						</button>
+						{% else %}
 						<button
 							id="make-decision-button"
 							class="btn btn-primary"
@@ -149,6 +173,7 @@
 						>
 							Принять решение
 						</button>
+						{% endif %}
 					</div>
 				</div>
 			</div>

@@ -11,5 +11,6 @@ class RiskDepartment(db.Model):
     decision = db.Column(db.String(100), nullable=True)
     decision_time = db.Column(db.DateTime, nullable=True)
     responsible_person = db.Column(db.String(100), nullable=True)
+    decision_icon = db.Column(db.String(100), nullable=True)
 
     deal = relationship("Deal", back_populates="risk_department")

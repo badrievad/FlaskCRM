@@ -1,8 +1,9 @@
-from flask import jsonify, redirect, render_template, request, url_for
+from flask import jsonify, render_template, request
 
 from logger import logging
 
 from ...deal.models import Deal
+from ..risk_department.db_func import get_decision, process_risk_decision
 from . import risk_department_bp
 
 
@@ -10,7 +11,13 @@ from . import risk_department_bp
 def risk_department(deal_id) -> str:
     logging.info(f"Deal ID: {deal_id}")
     client = Deal.query.get(deal_id).client
-    return render_template("risk_department.html", deal_id=deal_id, client=client)
+    decision = get_decision(deal_id)
+    return render_template(
+        "risk_department.html",
+        deal_id=deal_id,
+        client=client,
+        decision=decision,
+    )
 
 
 @risk_department_bp.route("/process_decision/<int:deal_id>", methods=["POST"])
@@ -19,20 +26,11 @@ def process_decision(deal_id):
     decision = data.get("decision")
     logging.info(f"Deal ID: {deal_id}, Decision: {decision}")
 
-    if decision == "approve":
-        # Логика для одобрения сделки
-        message = "Сделка одобрена."
-    elif decision == "send_to_committee":
-        # Логика для отправки на инвестиционный комитет
-        message = "Сделка отправлена на инвестиционный комитет."
-    elif decision == "reject":
-        # Логика для отказа по сделке
-        message = "По сделке отказано."
+    success, message = process_risk_decision(deal_id, decision)
+
+    if success:
+        return jsonify({"success": True, "message": message})
     else:
-        # Обработка неверного решения
-        return jsonify({"success": False, "message": "Некорректное решение."}), 400
-
-    # Выполняем необходимые действия с базой данных
-    # ...
-
-    return jsonify({"success": True, "message": message})
+        # Если решение некорректно или произошла ошибка, возвращаем соответствующий статус
+        status_code = 400 if message == "Некорректное решение." else 500
+        return jsonify({"success": False, "message": message}), status_code

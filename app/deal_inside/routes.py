@@ -12,6 +12,7 @@ from logger import logging
 from .. import socketio
 from ..config import suggestions_token
 from ..deal.models import Client, Deal
+from ..deal.risk_department.models import RiskDepartment
 from ..leasing_calculator.models import LeasCalculator, Seller
 from ..user.auth_utils import validate_active_session
 from . import deal_inside_bp
@@ -99,12 +100,18 @@ def enter_into_deal(deal_id: int):
             deals_info.append(deal_info)
 
     logging.info(f"Deals info: {deals_info}")
+
+    # Получаем решение из базы данных
+    risk_record = RiskDepartment.query.filter_by(deal_id=deal_id).first()
+    decision = risk_record.decision if risk_record else None
+
     return render_template(
         "deal.html",
         deal=deal,
         deals_info=deals_info,
         deal_id=deal_id,
         suggestions_token=suggestions_token,
+        decision=decision,
     )
 
 

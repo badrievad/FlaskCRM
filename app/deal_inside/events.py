@@ -9,7 +9,7 @@ from logger import logging
 from .. import db, socketio
 
 # Словарь для хранения сопоставления username и socket.id
-user_sessions = {}
+user_sessions: dict = {}
 
 
 @socketio.on("join")

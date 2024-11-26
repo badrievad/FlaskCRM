@@ -91,7 +91,7 @@
 		</style>
 	</head>
 	<body>
-        <!-- Sidebar -->
+		<!-- Sidebar -->
 		{% include 'sidebar-deal.html' %}
 
 		<div class="main-content" id="main-content">
@@ -105,9 +105,9 @@
 			</div>
 			<div id="general" class="tab-content active">
 				<div class="stepper">
-					<div class="step">Отдел безопасности</div>
+					<div class="step" id="step-security">Отдел безопасности</div>
 					<div class="step">Юридический отдел</div>
-					<div class="step">Отдел рисков</div>
+					<div class="step" id="step-risk">Отдел рисков</div>
 					<div class="step">Отдел лизинга</div>
 					<div class="step">Хасанова Д. Р.</div>
 					<div class="step">Габдрахманов Р. Р.</div>
@@ -716,6 +716,12 @@
 				dateElement.textContent =
 					'Дата создания сделки: ' + date.toLocaleString()
 			})
+
+			document.addEventListener('DOMContentLoaded', function () {
+				// Получаем текущее решение из переменной шаблона
+				const currentDecision = {{ decision | tojson }};
+				updateStepper(currentDecision)
+			})
 		</script>
 		<script>
 			document.addEventListener('DOMContentLoaded', function () {
@@ -769,6 +775,21 @@
 					event.preventDefault() // Останавливаем переход по ссылке
 					socket.emit('leave', { username: username, room: room })
 				})
+
+			socket.on('decision_update', function (data) {
+				const deal_id = data.deal_id
+				const decision = data.decision
+
+				// Проверяем, относится ли обновление к текущей сделке
+				const currentUrl = window.location.href
+				const dealIdMatch = currentUrl.match(/deal\/inside\/(\d+)/)
+				const currentDealId = dealIdMatch ? dealIdMatch[1] : null
+
+				if (currentDealId == deal_id) {
+					// Обновляем степпер на странице
+					updateStepper(decision)
+				}
+			})
 		</script>
 
 		<!-- Scripts -->
@@ -778,5 +799,6 @@
 		<script src="{{ url_for('crm.static', filename='js/deal-inside-dadata-bank.js') }}"></script>
 		<script src="{{ url_for('crm.static', filename='js/risk_department/navigate-to-risk-page.js') }}"></script>
 		<script src="{{ url_for('crm.static', filename='js/navigate-to-deal-page.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/update-risk-step.js') }}"></script>
 	</body>
 </html>

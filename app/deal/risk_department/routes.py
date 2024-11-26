@@ -2,6 +2,7 @@ from flask import jsonify, render_template, request
 
 from logger import logging
 
+from ... import socketio
 from ...deal.models import Deal
 from ..risk_department.db_func import (
     delete_risk_decision,
@@ -33,6 +34,10 @@ def process_decision(deal_id):
     success, message = process_risk_decision(deal_id, decision)
 
     if success:
+        socketio.emit(
+            "decision_update",
+            {"deal_id": deal_id, "decision": decision},
+        )
         return jsonify({"success": True, "message": message})
     else:
         # Если решение некорректно или произошла ошибка, возвращаем соответствующий статус
@@ -47,6 +52,7 @@ def delete_decision(deal_id):
     success, message = delete_risk_decision(deal_id)
 
     if success:
+        socketio.emit("decision_update", {"deal_id": deal_id, "decision": None})
         return jsonify({"success": True, "message": message})
     else:
         status_code = 404 if message == "Решение не найдено." else 500

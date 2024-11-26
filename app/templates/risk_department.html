@@ -157,6 +157,13 @@
 							<p class="decision-time">Решение принято: {{ decision.decision_time }}</p>
 						</div>
 						<button
+							id="delete-decision-button"
+							class="btn btn-primary"
+							onclick="deleteDecision()"
+						>
+							Удалить решение
+						</button>
+						<button
 							id="make-decision-button"
 							class="btn btn-primary"
 							data-toggle="modal"
@@ -170,6 +177,7 @@
 							class="btn btn-primary"
 							data-toggle="modal"
 							data-target="#decision-modal"
+							style="margin-top: 40px"
 						>
 							Принять решение
 						</button>

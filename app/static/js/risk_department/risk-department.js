@@ -128,3 +128,74 @@ function submitDecision(decision) {
 		}
 	})
 }
+
+function deleteDecision() {
+	// Подтверждение действия
+	Swal.fire({
+		title: 'Подтверждение',
+		text: 'Вы уверены, что хотите удалить решение?',
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonText: 'Да, удалить',
+		cancelButtonText: 'Отмена',
+		confirmButtonColor: '#67a2d5',
+	}).then(result => {
+		if (result.isConfirmed) {
+			// Получаем текущий URL
+			const currentUrl = window.location.href
+
+			// Извлекаем deal_id из URL
+			const dealIdMatch = currentUrl.match(/risk-department\/(\d+)/)
+			const deal_id = dealIdMatch ? dealIdMatch[1] : null
+
+			if (!deal_id) {
+				console.error('Не удалось получить deal_id из URL')
+				Swal.fire({
+					title: 'Ошибка',
+					text: 'Не удалось получить идентификатор сделки.',
+					icon: 'error',
+				})
+				return
+			}
+
+			// Отправляем AJAX-запрос с помощью fetch
+			fetch(`./delete_decision/${deal_id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			})
+				.then(response => response.json())
+				.then(data => {
+					// Обработка ответа от сервера
+					if (data.success) {
+						// Показываем сообщение об успехе
+						Swal.fire({
+							title: 'Успех',
+							text: data.message,
+							icon: 'success',
+							showConfirmButton: false,
+							timer: 1500,
+						}).then(() => {
+							// Обновляем страницу
+							location.reload()
+						})
+					} else {
+						Swal.fire({
+							title: 'Ошибка',
+							text: data.message,
+							icon: 'error',
+						})
+					}
+				})
+				.catch(error => {
+					console.error('Ошибка:', error)
+					Swal.fire({
+						title: 'Ошибка',
+						text: 'Произошла ошибка при обработке запроса.',
+						icon: 'error',
+					})
+				})
+		}
+	})
+}

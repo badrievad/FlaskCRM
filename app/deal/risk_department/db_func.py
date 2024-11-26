@@ -71,3 +71,20 @@ def get_decision(deal_id) -> dict[str, str] | None:
         "decision_icon": decision_icon,
         "decision_time": decision_time,
     }
+
+
+def delete_risk_decision(deal_id):
+    # Получаем запись RiskDepartment по deal_id
+    risk_record = RiskDepartment.query.filter_by(deal_id=deal_id).first()
+    if not risk_record:
+        return False, "Решение не найдено."
+
+    # Удаляем запись из базы данных
+    try:
+        db.session.delete(risk_record)
+        db.session.commit()
+        return True, "Решение успешно удалено."
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Ошибка при удалении решения из БД: {e}")
+        return False, "Ошибка при удалении решения."

@@ -138,10 +138,29 @@
 	cursor: pointer;
 	transition: background 0.3s;
 	font-weight: 500;
-	margin: 50px auto;
+	margin: 10px auto;
 	display: block;
 }
 
 #make-decision-button:hover {
 	background-color: #384a51;
+}
+
+/* Стилизация кнопки "Удалить решение" */
+#delete-decision-button {
+	padding: 10px 20px;
+	font-size: 16px;
+	background-color: #692e26;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background 0.3s;
+	font-weight: 500;
+	margin: 20px auto;
+	display: block;
+}
+
+#delete-decision-button:hover {
+	background-color: #57251e;
 }

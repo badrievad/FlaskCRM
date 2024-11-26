@@ -3,7 +3,11 @@ from flask import jsonify, render_template, request
 from logger import logging
 
 from ...deal.models import Deal
-from ..risk_department.db_func import get_decision, process_risk_decision
+from ..risk_department.db_func import (
+    delete_risk_decision,
+    get_decision,
+    process_risk_decision,
+)
 from . import risk_department_bp
 
 
@@ -33,4 +37,17 @@ def process_decision(deal_id):
     else:
         # Если решение некорректно или произошла ошибка, возвращаем соответствующий статус
         status_code = 400 if message == "Некорректное решение." else 500
+        return jsonify({"success": False, "message": message}), status_code
+
+
+@risk_department_bp.route("/delete_decision/<int:deal_id>", methods=["DELETE"])
+def delete_decision(deal_id):
+    logging.info(f"Удаление решения для сделки с ID: {deal_id}")
+
+    success, message = delete_risk_decision(deal_id)
+
+    if success:
+        return jsonify({"success": True, "message": message})
+    else:
+        status_code = 404 if message == "Решение не найдено." else 500
         return jsonify({"success": False, "message": message}), status_code

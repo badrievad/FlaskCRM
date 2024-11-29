@@ -99,6 +99,13 @@
 				<div class="tab active" onclick="showTab('general')">
 					<i class="fa-solid fa-info-circle"></i> Общие
 				</div>
+				<div
+					class="tab"
+					onclick="window.location.href='{{ url_for('deal_inside.conclusion', deal_id=deal_id) }}';"
+				>
+					<i class="fa-solid fa-file"></i> Экономическое заключение
+				</div>
+
 				<div class="tab" onclick="showTab('history')">
 					<i class="fa-solid fa-clock-rotate-left"></i> История
 				</div>

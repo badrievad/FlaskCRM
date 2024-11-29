@@ -295,3 +295,9 @@ def update_client_info():
     )
 
     return jsonify(response_data), status_code
+
+
+@deal_inside_bp.route("/conclusion/<deal_id>", methods=["GET"])
+def conclusion(deal_id: int):
+    return render_template("conclusion.html", deal_id=deal_id)
+    

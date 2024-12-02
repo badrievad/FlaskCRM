@@ -299,5 +299,5 @@ def update_client_info():
 
 @deal_inside_bp.route("/conclusion/<deal_id>", methods=["GET"])
 def conclusion(deal_id: int):
+    """Страница экономического заключения сделки"""
     return render_template("conclusion.html", deal_id=deal_id)
-    

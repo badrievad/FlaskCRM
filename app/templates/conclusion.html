@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Заключение по проекту</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			rel="icon"
+			href="{{ url_for('crm.static', filename='/images/gpt.png') }}"
+			type="image/png"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/economic-conclusion/styles.css') }}"
+		/>
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<p>
+					Приложение к протоколу заседания Инвестиционного комитета по проекту
+					{{ client.name }} от 12.09.2024 г.
+				</p>
+			</header>
+
+			<h1>Заключение по проекту {{ client.name }}"</h1>
+
+			<section>
+				<h2>Раздел 1. Общая информация о Лизингополучателе</h2>
+				<table>
+					<tr>
+						<td>1.1 Наименование Лизингополучателя:</td>
+						<td>{{ client.name }}</td>
+					</tr>
+					<tr>
+						<td>1.2 ИНН / КПП:</td>
+						<td>{{ client.inn }} / {{ client.kpp }}</td>
+					</tr>
+					<tr>
+						<td>1.3 Дата государственной регистрации:</td>
+						<td>{{ client.date_of_registration.strftime('%d.%m.%Y') }}</td>
+					</tr>
+					<tr>
+						<td>1.4 Юридический адрес:</td>
+						<td>{{ client.address }}</td>
+					</tr>
+					<tr>
+						<td>1.5 Фактический адрес ведения деятельности:</td>
+						<td>{{ client.address }}</td>
+					</tr>
+					<tr>
+						<td>1.6 Руководитель:</td>
+						<td>{{ client.director }}</td>
+					</tr>
+					<tr>
+						<td>1.7 Акционеры (участники):</td>
+						<td>... - доля 100%</td>
+					</tr>
+					<tr>
+						<td>1.8 Среднесписочная численность работников:</td>
+						<td>---</td>
+					</tr>
+					<tr>
+						<td>1.9 Аффилированные лица:</td>
+						<td>...</td>
+					</tr>
+					<tr>
+						<td>1.10 Сведения о ранее заключённых договорах:</td>
+						<td>Отсутствуют</td>
+					</tr>
+					<tr>
+						<td>1.11 Статус текущей задолженности:</td>
+						<td>---</td>
+					</tr>
+				</table>
+			</section>
+		</div>
+	</body>
+</html>

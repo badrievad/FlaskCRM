@@ -1,11 +1,5 @@
 {
   "default": {
-    "tracker": 43000.0,
-    "tracker-value": 43000.0,
-    "tracker-display": "43 000,00",
-    "mayak": 15000.0,
-    "mayak-value": 15000.0,
-    "mayak-display": "15 000,00",
     "fedresurs": 2000.0,
     "fedresurs-value": 2000.0,
     "fedresurs-display": "2 000,00",

@@ -1354,74 +1354,110 @@
 							<button class="btn-hover-sm color-3" id="clear-button">
 								<i class="fa-solid fa-trash"></i> Очистить
 							</button>
-							<div class="form-group">
-								<div class="input-container">
-									<label>Трекеры, руб.</label>
-									<input
-										type="text"
-										id="tracker-display"
-										name="tracker-display"
-										value="43 000,00"
-										placeholder="руб."
-										maxlength="7"
-									/>
-									<input
-										type="hidden"
-										id="tracker-value"
-										name="tracker-value"
-										value="43000"
-									/>
-								</div>
-								<div class="slider-container">
-									<input
-										type="range"
-										id="tracker"
-										name="tracker"
-										min="0"
-										max="100000"
-										value="43000"
-										step="100"
-									/>
-								</div>
-								<div class="range-labels">
-									<span>0 руб.</span>
-									<span>100 тыс. руб.</span>
+
+							<!-- Таблица с затратами -->
+							<table class="styled-table">
+								<thead>
+									<tr>
+										<th>Наименование расходов</th>
+										<th>Сумма (руб.)</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											Разовые расходы на средства мониторинга «Стандарт» (Маяк)
+											без НДС
+										</td>
+										<td>
+											<input
+												type="number"
+												id="one-time-mayak"
+												value="6500"
+												style="width: 100px"
+												max="20000"
+											/>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Ежемесячные расходы на средства мониторинга «Стандарт»
+											(Маяк) без НДС
+										</td>
+										<td>
+											<input
+												type="number"
+												id="monthly-mayak"
+												value="250"
+												style="width: 100px"
+												max="20000"
+											/>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Разовые расходы на средства мониторинга «Не стандарт»
+											(Трекер) без НДС
+										</td>
+										<td>
+											<input
+												type="number"
+												id="one-time-treker"
+												value="6250"
+												style="width: 100px"
+												max="20000"
+											/>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											Ежемесячные расходы на средства мониторинга «Не стандарт»
+											(Трекер) без НДС
+										</td>
+										<td>
+											<input
+												type="number"
+												id="monthly-treker"
+												value="250"
+												style="width: 100px"
+												max="20000"
+											/>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+
+							<div class="product-selection">
+								<label>Выберите вариант</label>
+								<div class="options-container">
+									<label class="option-item">
+										<input type="radio" name="product" value="mayaki" checked />
+										<span class="option-title">Маячки</span>
+										<span class="option-price" id="mayaki-price"
+											>1 000 руб.</span
+										>
+									</label>
+									<label class="option-item">
+										<input type="radio" name="product" value="trackery" />
+										<span class="option-title">Трекеры</span>
+										<span class="option-price" id="trackery-price"
+											>1 000 руб.</span
+										>
+									</label>
+									<label class="option-item">
+										<input
+											type="radio"
+											name="product"
+											value="mayaki-trackery"
+										/>
+										<span class="option-title">Трекеры + Маячки</span>
+										<span class="option-price" id="mayaki-trackery-price"
+											>2 000 руб.</span
+										>
+									</label>
 								</div>
 							</div>
-							<div class="form-group">
-								<div class="input-container">
-									<label>Маячки, руб.</label>
-									<input
-										type="text"
-										id="mayak-display"
-										name="mayak-display"
-										value="15 000,00"
-										placeholder="руб."
-										maxlength="7"
-									/>
-									<input
-										type="hidden"
-										id="mayak-value"
-										name="mayak-value"
-										value="15000"
-									/>
-								</div>
-								<div class="slider-container">
-									<input
-										type="range"
-										id="mayak"
-										name="mayak"
-										min="0"
-										max="100000"
-										value="15000"
-										step="100"
-									/>
-								</div>
-								<div class="range-labels">
-									<span>0 руб.</span>
-									<span>100 тыс. руб.</span>
-								</div>
-							</div>
+
 							<div class="form-group">
 								<div class="input-container">
 									<label>Федресурс, руб.</label>
@@ -2774,5 +2810,6 @@
 		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-filter-calcs.js') }}"></script>
 		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-first-leas-day.js') }}"></script>
 		<script src="{{ url_for('crm.static', filename='js/leasing-calculator-upload.js') }}"></script>
+		<script src="{{ url_for('crm.static', filename='js/mayak-and-tracker.js') }}"></script>
 	</body>
 </html>

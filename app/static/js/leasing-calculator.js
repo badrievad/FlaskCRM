@@ -526,32 +526,6 @@ document
 		}
 	})
 
-// Трекеры
-document.getElementById('tracker').addEventListener('input', function () {
-	document.getElementById('tracker-value').value = this.value
-	document.getElementById('tracker-display').value = this.value
-})
-
-document
-	.getElementById('tracker-display')
-	.addEventListener('input', function () {
-		var value = parseInt(this.value.replace(/\D/g, ''), 10)
-		document.getElementById('tracker-value').value = value
-		document.getElementById('tracker').value = value
-	})
-
-// Маячки
-document.getElementById('mayak').addEventListener('input', function () {
-	document.getElementById('mayak-value').value = this.value
-	document.getElementById('mayak-display').value = this.value
-})
-
-document.getElementById('mayak-display').addEventListener('input', function () {
-	var value = parseInt(this.value.replace(/\D/g, ''), 10)
-	document.getElementById('mayak-value').value = value
-	document.getElementById('mayak').value = value
-})
-
 // Федресурс
 document.getElementById('fedresurs').addEventListener('input', function () {
 	document.getElementById('fedresurs-value').value = this.value
@@ -705,12 +679,6 @@ document.getElementById('egrul-display').addEventListener('input', function () {
 })
 
 document
-	.getElementById('tracker-display')
-	.addEventListener('keypress', allowOnlyNumbers)
-document
-	.getElementById('mayak-display')
-	.addEventListener('keypress', allowOnlyNumbers)
-document
 	.getElementById('fedresurs-display')
 	.addEventListener('keypress', allowOnlyNumbers)
 document
@@ -746,36 +714,6 @@ document
 document
 	.getElementById('egrul-display')
 	.addEventListener('keypress', allowOnlyNumbers)
-
-document
-	.getElementById('tracker-display')
-	.addEventListener('blur', function () {
-		this.value = formatNumber(parseFormattedNumber(this.value))
-		if (this.value.trim() === 'не число') {
-			this.value = '0,00'
-			document.getElementById('tracker').value = 0
-		}
-	})
-
-// Обработчик для слайдера tracker
-document.getElementById('tracker').addEventListener('input', function () {
-	var value = parseInt(this.value, 10)
-	document.getElementById('tracker-display').value = formatNumber(value)
-})
-
-document.getElementById('mayak-display').addEventListener('blur', function () {
-	this.value = formatNumber(parseFormattedNumber(this.value))
-	if (this.value.trim() === 'не число') {
-		this.value = '0,00'
-		document.getElementById('mayak').value = 0
-	}
-})
-
-// Обработчик для слайдера mayak
-document.getElementById('mayak').addEventListener('input', function () {
-	var value = parseInt(this.value, 10)
-	document.getElementById('mayak-display').value = formatNumber(value)
-})
 
 document
 	.getElementById('fedresurs-display')
@@ -1093,12 +1031,6 @@ document.addEventListener('DOMContentLoaded', function () {
 		document.getElementById('agent-commission').value = calc.agent_commission
 		document.getElementById('manager-bonus-value').value = calc.manager_bonus
 		document.getElementById('manager-bonus').value = calc.manager_bonus
-		document.getElementById('tracker-value').value = calc.tracker
-		document.getElementById('tracker-display').value = calc.tracker_str
-		document.getElementById('tracker').value = calc.tracker
-		document.getElementById('mayak-value').value = calc.mayak
-		document.getElementById('mayak-display').value = calc.mayak_str
-		document.getElementById('mayak').value = calc.mayak
 		document.getElementById('fedresurs-value').value = calc.fedresurs
 		document.getElementById('fedresurs-display').value = calc.fedresurs_str
 		document.getElementById('fedresurs').value = calc.fedresurs

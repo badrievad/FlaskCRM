@@ -1,318 +1,320 @@
 html {
-    scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
 .main-content {
-    padding-top: 20px;
-    min-width: 1100px;
+	padding-top: 20px;
+	min-width: 1100px;
 }
 
 .main-content.shrink {
-    margin-left: 0;
+	margin-left: 0;
 }
 
 .card {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+	background-color: rgba(255, 255, 255, 0.8);
+	padding: 20px;
+	margin-bottom: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
 }
 
 h1 {
-    font-size: 1.5em;
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+	font-size: 1.5em;
+	text-align: center;
+	margin-bottom: 20px;
+	color: #333;
 }
 
-
 .form-section {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .form-group {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
 }
 
 .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
+	display: block;
+	margin-bottom: 5px;
+	font-weight: bold;
+	color: #333;
 }
 
 output {
-    display: inline-block;
-    margin-top: 5px;
-    font-weight: bold;
-    font-size: 1em;
-    color: #333;
+	display: inline-block;
+	margin-top: 5px;
+	font-weight: bold;
+	font-size: 1em;
+	color: #333;
 }
 
 .revenue-options {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
+	display: flex;
+	justify-content: space-between;
+	margin-top: 10px;
 }
 
 .revenue-options label {
-    display: flex;
-    align-items: center;
-    font-size: 0.9em;
-    color: #333;
+	display: flex;
+	align-items: center;
+	font-size: 0.9em;
+	color: #333;
 }
 
-.revenue-options input[type="radio"] {
-    margin-right: 5px;
+.revenue-options input[type='radio'] {
+	margin-right: 5px;
 }
 
 .calculate-btn {
-    display: block;
-    width: 100%;
-    padding: 15px 0;
-    background-color: rgba(0, 123, 255, 0.49);
-    color: rgba(255, 255, 255, 0.42);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1.2em;
-    transition: background 0.3s;
+	display: block;
+	width: 100%;
+	padding: 15px 0;
+	background-color: rgba(0, 123, 255, 0.49);
+	color: rgba(255, 255, 255, 0.42);
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 1.2em;
+	transition: background 0.3s;
 }
 
 .calculate-btn:hover {
-    background-color: rgba(0, 86, 179, 0.5);
+	background-color: rgba(0, 86, 179, 0.5);
 }
 
 .result-section {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+	background-color: rgba(255, 255, 255, 0.8);
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	text-align: center;
 }
 
 .result-section h2 {
-    margin-top: 0;
-    font-size: 1.5em;
-    color: #333;
+	margin-top: 0;
+	font-size: 1.5em;
+	color: #333;
 }
 
 .result-section p {
-    margin: 5px 0;
-    font-size: 1.2em;
-    color: #333;
+	margin: 5px 0;
+	font-size: 1.2em;
+	color: #333;
 }
 
 .monthly-payment {
-    font-size: 2em;
-    font-weight: bold;
-    color: #333;
+	font-size: 2em;
+	font-weight: bold;
+	color: #333;
 }
 
 .tax-saving {
-    color: #28a745;
-    font-weight: bold;
+	color: #28a745;
+	font-weight: bold;
 }
 
-.annual-interest, .contract-amount {
-    font-size: 1em;
-    color: #666;
+.annual-interest,
+.contract-amount {
+	font-size: 1em;
+	color: #666;
 }
 
 .vehicle-types {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+	flex-wrap: wrap;
 }
 
 .vehicle-type {
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background 0.3s;
-    border: 1px solid rgba(221, 221, 221, 0.7);
-    background-color: rgba(255, 255, 255, 0.7);
-    border-radius: 4px;
-    margin: 5px;
-    font-size: 0.9em;
-    color: #333;
-    flex: 1 1 auto;
-    text-align: center;
-    max-width: 150px;
+	padding: 10px 20px;
+	cursor: pointer;
+	transition: background 0.3s;
+	border: 1px solid rgba(221, 221, 221, 0.7);
+	background-color: rgba(255, 255, 255, 0.7);
+	border-radius: 4px;
+	margin: 5px;
+	font-size: 0.9em;
+	color: #333;
+	flex: 1 1 auto;
+	text-align: center;
+	max-width: 150px;
 }
 
-.tabs, .vehicle-types {
-    flex-wrap: wrap;
+.tabs,
+.vehicle-types {
+	flex-wrap: wrap;
 }
 
 @media (max-width: 768px) {
-    .main-content {
-        margin-left: 0;
-        padding: 10px;
-    }
+	.main-content {
+		margin-left: 0;
+		padding: 10px;
+	}
 }
 
 .vehicle-type:hover,
 .vehicle-type.active {
-    background-color: rgba(0, 123, 255, 0.45);
-    color: rgba(255, 255, 255, 0.45);
-    border-color: rgba(0, 123, 255, 0.48);
+	background-color: rgba(0, 123, 255, 0.45);
+	color: rgba(255, 255, 255, 0.45);
+	border-color: rgba(0, 123, 255, 0.48);
 }
 
 .container {
-    margin: 0 auto;
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px); /* Размытие фона */
+	margin: 0 auto;
+	background-color: rgba(255, 255, 255, 0.95);
+	padding: 20px;
+	border-radius: 8px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	backdrop-filter: blur(10px); /* Размытие фона */
 }
 
 .tabs button i {
-    margin-right: 8px;
+	margin-right: 8px;
 }
 
 .header {
-    text-align: center;
-    margin-bottom: 20px;
+	text-align: center;
+	margin-bottom: 20px;
 }
 
 .header h1 {
-    margin: 0;
-    font-size: 18px;
+	margin: 0;
+	font-size: 18px;
 }
 
 .tabs {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 50px;
-    margin-top: 35px;
-    border-top: 2px solid rgba(69, 154, 108, 0.05); /* Верхняя линия */
-    border-bottom: 2px solid rgba(69, 154, 108, 0.05); /* Нижняя линия */
-    padding-top: 20px; /* Отступ сверху */
-    padding-bottom: 20px; /* Отступ снизу */
+	display: flex;
+	justify-content: space-around;
+	margin-bottom: 50px;
+	margin-top: 35px;
+	border-top: 2px solid rgba(69, 154, 108, 0.05); /* Верхняя линия */
+	border-bottom: 2px solid rgba(69, 154, 108, 0.05); /* Нижняя линия */
+	padding-top: 20px; /* Отступ сверху */
+	padding-bottom: 20px; /* Отступ снизу */
 }
 
 .tabs button {
-    background-color: rgba(255, 255, 255);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 40px;
-    cursor: pointer;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
+	background-color: rgba(255, 255, 255);
+	border: none;
+	padding: 10px 20px;
+	border-radius: 40px;
+	cursor: pointer;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
 }
 
 .tabs button:hover {
-    background-color: rgba(156, 192, 174, 0.05);
+	background-color: rgba(156, 192, 174, 0.05);
 }
 
 .tabs button.active {
-    background-color: rgba(7, 119, 70, 0.7);
-    color: rgba(255, 255, 255);
+	background-color: rgba(7, 119, 70, 0.7);
+	color: rgba(255, 255, 255);
 }
 
 .content {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
+	display: flex;
+	justify-content: space-between;
+	width: 100%;
 }
 
 .form-group {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
+	margin-bottom: 20px;
+	display: flex;
+	flex-direction: column;
 }
 
 .form-group label {
-    font-size: 14px;
-    margin-bottom: 5px;
+	font-size: 14px;
+	margin-bottom: 5px;
 }
 
-.form-group .input-container, .input-container-item-name {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.form-group .input-container,
+.input-container-item-name {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .form-group .input-container .input-group {
-    display: flex;
-    justify-content: right;
-    gap: 10px;
+	display: flex;
+	justify-content: right;
+	gap: 10px;
 }
 
 .form-group .input-container input {
-    width: 140px;
-    font-size: 14px;
-    padding: 5px;
-    -moz-appearance: textfield;
-    text-align: center;
-    border: 1px solid rgba(204, 204, 204, 0.4);
-    border-radius: 4px;
+	width: 140px;
+	font-size: 14px;
+	padding: 5px;
+	-moz-appearance: textfield;
+	text-align: center;
+	border: 1px solid rgba(204, 204, 204, 0.4);
+	border-radius: 4px;
 }
 
 .form-group .input-container-item-name input {
-    width: 500px;
-    font-size: 14px;
-    padding: 6px;
-    -moz-appearance: textfield;
-    text-align: center;
-    border: 1px solid rgba(204, 204, 204, 0.4);
-    border-radius: 4px;
-    margin-right: 8px;
+	width: 500px;
+	font-size: 14px;
+	padding: 6px;
+	-moz-appearance: textfield;
+	text-align: center;
+	border: 1px solid rgba(204, 204, 204, 0.4);
+	border-radius: 4px;
+	margin-right: 8px;
 }
 
 .form-group .input-container input::-webkit-outer-spin-button,
 .form-group .input-container input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+	-webkit-appearance: none;
+	margin: 0;
 }
 
 .form-group .slider-container {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
 }
 
-.form-group input[type="range"] {
-    flex-grow: 1;
-    margin: 0 10px;
-    height: 2px;
-    -webkit-appearance: none;
-    border-radius: 4px;
+.form-group input[type='range'] {
+	flex-grow: 1;
+	margin: 0 10px;
+	height: 2px;
+	-webkit-appearance: none;
+	border-radius: 4px;
 }
 
 .range-labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    margin-top: 10px;
-    margin-bottom: 30px;
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	margin-top: 10px;
+	margin-bottom: 30px;
 }
 
 .results {
-    width: 35%;
-    height: 100%;
-    padding: 20px;
-    border-left: 2px solid rgba(69, 154, 108, 0.05);
-    text-align: center;
+	width: 35%;
+	height: 100%;
+	padding: 20px;
+	border-left: 2px solid rgba(69, 154, 108, 0.05);
+	text-align: center;
 }
 
 .result p {
-    margin: 5px 0;
-    font-size: 14px;
+	margin: 5px 0;
+	font-size: 14px;
 }
 
 .result .big {
-    font-size: 24px;
-    font-weight: bold;
+	font-size: 24px;
+	font-weight: bold;
 }
 
 .result .savings {
-    color: green;
-    font-size: 16px;
+	color: green;
+	font-size: 16px;
 }
 
 /*.calculate-button {*/
@@ -328,472 +330,610 @@ output {
 /*}*/
 
 .calculate-button:hover {
-    background-color: rgba(55, 101, 86, 1);
+	background-color: rgba(55, 101, 86, 1);
 }
 
 .input-section {
-    width: 70%;
-    padding-right: 20px;
+	width: 70%;
+	padding-right: 20px;
 }
 
-input[type="number"] {
-    background: rgba(255, 255, 255, 0.56);
-    border: none;
+input[type='number'] {
+	background: rgba(255, 255, 255, 0.56);
+	border: none;
 }
 
-input[type="text"] {
-    background: rgba(255, 255, 255, 0.56);
-    border: none;
+input[type='text'] {
+	background: rgba(255, 255, 255, 0.56);
+	border: none;
 }
 
 .input-group {
-    display: flex;
-    align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .input-container {
-    position: relative;
-    display: flex;
-    align-items: center;
+	position: relative;
+	display: flex;
+	align-items: center;
 }
 
 .input-container input {
-    padding-right: 30px; /* Увеличим padding для правого отступа */
+	padding-right: 30px; /* Увеличим padding для правого отступа */
 }
 
 .currency-label,
 .percent-label {
-    position: absolute;
-    right: 10px;
-    top: 55%;
-    transform: translateY(-55%);
-    white-space: nowrap;
-    pointer-events: none;
-    color: rgba(0, 0, 0, 0.5);
+	position: absolute;
+	right: 10px;
+	top: 55%;
+	transform: translateY(-55%);
+	white-space: nowrap;
+	pointer-events: none;
+	color: rgba(0, 0, 0, 0.5);
 }
 
 .input-container {
-    margin-right: 10px; /* Добавим отступ между контейнерами */
+	margin-right: 10px; /* Добавим отступ между контейнерами */
 }
 
-input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 3px;
-    outline: none;
-    opacity: 0.7;
-    transition: opacity .15s ease-in-out;
+input[type='range'] {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 100%;
+	height: 3px;
+	outline: none;
+	opacity: 0.7;
+	transition: opacity 0.15s ease-in-out;
 }
 
-input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 18px;
-    height: 18px;
-    background-color: rgba(255, 255, 255, 0);
-    border-radius: 50%;
-    cursor: pointer;
-    position: relative;
-    border: 3px solid rgba(7, 119, 70, 0.7);
+input[type='range']::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 18px;
+	height: 18px;
+	background-color: rgba(255, 255, 255, 0);
+	border-radius: 50%;
+	cursor: pointer;
+	position: relative;
+	border: 3px solid rgba(7, 119, 70, 0.7);
 }
 
-input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
-    background-color: rgba(255, 255, 255, 0);
-    border-radius: 50%;
-    cursor: pointer;
-    position: relative;
-    border: 4px solid rgba(7, 119, 70, 0.7);
+input[type='range']::-moz-range-thumb {
+	width: 20px;
+	height: 20px;
+	background-color: rgba(255, 255, 255, 0);
+	border-radius: 50%;
+	cursor: pointer;
+	position: relative;
+	border: 4px solid rgba(7, 119, 70, 0.7);
 }
 
-input[type="range"]::-ms-thumb {
-    width: 20px;
-    height: 20px;
-    background-color: rgba(255, 255, 255, 0);
-    border-radius: 50%;
-    cursor: pointer;
-    position: relative;
-    border: 4px solid rgba(7, 119, 70, 0.7);
+input[type='range']::-ms-thumb {
+	width: 20px;
+	height: 20px;
+	background-color: rgba(255, 255, 255, 0);
+	border-radius: 50%;
+	cursor: pointer;
+	position: relative;
+	border: 4px solid rgba(7, 119, 70, 0.7);
 }
 
-input[type="text"],
+input[type='text'],
 select {
-    width: 140px;
-    padding: 4px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-    transition: border-color 0.3s;
-    text-align: center;
+	width: 140px;
+	padding: 4px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	transition: border-color 0.3s;
+	text-align: center;
 }
 
 select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-size: 10px 10px;
-    background-color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(204, 204, 204, 0.5);
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-size: 10px 10px;
+	background-color: rgba(255, 255, 255, 0.6);
+	border: 1px solid rgba(204, 204, 204, 0.5);
 }
 
 select:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 .foreign-cost-container {
-    transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    max-height: 0;
-    opacity: 0;
-    overflow: auto;
+	transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+	max-height: 0;
+	opacity: 0;
+	overflow: auto;
 }
 
 .foreign-cost-container.show {
-    max-height: 500px; /* достаточное значение для содержимого */
-    opacity: 1;
+	max-height: 500px; /* достаточное значение для содержимого */
+	opacity: 1;
 }
 
 * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .buttons {
-    margin: 10%;
-    text-align: center;
+	margin: 10%;
+	text-align: center;
 }
 
 .btn-hover {
-    width: 200px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    margin: 10px;
-    height: 45px;
-    text-align: center;
-    border: none;
-    background-size: 300% 100%;
+	width: 200px;
+	font-size: 14px;
+	font-weight: 500;
+	color: #fff;
+	cursor: pointer;
+	margin: 10px;
+	height: 45px;
+	text-align: center;
+	border: none;
+	background-size: 300% 100%;
 
-    border-radius: 0;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
+	border-radius: 0;
+	moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
 
 .btn-hover-sm {
-    width: 120px;
-    font-size: 12px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    margin: 5px;
-    margin-bottom: 25px;
-    height: 35px;
-    text-align: center;
-    border: none;
-    background-size: 300% 100%;
+	width: 120px;
+	font-size: 12px;
+	font-weight: 500;
+	color: #fff;
+	cursor: pointer;
+	margin: 5px;
+	margin-bottom: 25px;
+	height: 35px;
+	text-align: center;
+	border: none;
+	background-size: 300% 100%;
 
-    border-radius: 0;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
+	border-radius: 0;
+	moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
 
-.btn-hover:hover, .btn-hover-sm:hover {
-    background-position: 100% 0;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
+.btn-hover:hover,
+.btn-hover-sm:hover {
+	background-position: 100% 0;
+	moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
 
-.btn-hover:focus, .btn-hover-sm:focus {
-    outline: none;
+.btn-hover:focus,
+.btn-hover-sm:focus {
+	outline: none;
 }
 
 .btn-hover.color-5 {
-    background-image: linear-gradient(to right, rgba(7, 119, 70, 0.7), rgba(45, 152, 119, 0.7), rgba(23, 154, 95, 0.7), rgba(41, 189, 116, 0.7));
-    box-shadow: 0 1px 15px 0 rgba(23, 168, 108, 0.55);
+	background-image: linear-gradient(
+		to right,
+		rgba(7, 119, 70, 0.7),
+		rgba(45, 152, 119, 0.7),
+		rgba(23, 154, 95, 0.7),
+		rgba(41, 189, 116, 0.7)
+	);
+	box-shadow: 0 1px 15px 0 rgba(23, 168, 108, 0.55);
 }
 
 .btn-hover.color-4 {
-    background-image: linear-gradient(to right, rgba(57, 117, 154, 0.7), rgba(51, 102, 140, 0.7), rgba(56, 94, 136, 0.7), rgba(63, 158, 241, 0.7));
-    box-shadow: 0 1px 15px 0 rgba(63, 170, 196, 0.55);
+	background-image: linear-gradient(
+		to right,
+		rgba(57, 117, 154, 0.7),
+		rgba(51, 102, 140, 0.7),
+		rgba(56, 94, 136, 0.7),
+		rgba(63, 158, 241, 0.7)
+	);
+	box-shadow: 0 1px 15px 0 rgba(63, 170, 196, 0.55);
 }
 
 .btn-hover-sm.color-3 {
-    background-image: linear-gradient(to right, rgba(84, 100, 115, 0.7), rgba(116, 132, 147, 0.7));
-    box-shadow: 0 1px 15px 0 rgba(91, 98, 101, 0.25);
+	background-image: linear-gradient(
+		to right,
+		rgba(84, 100, 115, 0.7),
+		rgba(116, 132, 147, 0.7)
+	);
+	box-shadow: 0 1px 15px 0 rgba(91, 98, 101, 0.25);
 }
 
-
 .bbtn-hover {
-    width: 150px;
-    font-size: 15px;
-    font-weight: 500;
-    color: #fff;
-    cursor: pointer;
-    margin: 10px;
-    height: 35px;
-    text-align: center;
-    border: none;
-    background-size: 300% 100%;
+	width: 150px;
+	font-size: 15px;
+	font-weight: 500;
+	color: #fff;
+	cursor: pointer;
+	margin: 10px;
+	height: 35px;
+	text-align: center;
+	border: none;
+	background-size: 300% 100%;
 
-    border-radius: 50px;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
+	border-radius: 50px;
+	moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
 
 .bbtn-hover:hover {
-    background-position: 100% 0;
-    moz-transition: all .4s ease-in-out;
-    -o-transition: all .4s ease-in-out;
-    -webkit-transition: all .4s ease-in-out;
-    transition: all .4s ease-in-out;
+	background-position: 100% 0;
+	moz-transition: all 0.4s ease-in-out;
+	-o-transition: all 0.4s ease-in-out;
+	-webkit-transition: all 0.4s ease-in-out;
+	transition: all 0.4s ease-in-out;
 }
 
 .bbtn-hover:focus {
-    outline: none;
+	outline: none;
 }
 
 .bbtn-hover.color-1 {
-    background-image: linear-gradient(to right, #115d4e, #40e495, #30dd8a, #2bb673);
+	background-image: linear-gradient(
+		to right,
+		#115d4e,
+		#40e495,
+		#30dd8a,
+		#2bb673
+	);
 }
 
 .bbtn-hover.color-11 {
-    background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);
-    box-shadow: 0 5px 15px rgba(242, 97, 103, .4);
+	background-image: linear-gradient(
+		to right,
+		#eb3941,
+		#f15e64,
+		#e14e53,
+		#e2373f
+	);
+	box-shadow: 0 5px 15px rgba(242, 97, 103, 0.4);
 }
 
 .input-container-item-condition {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
+	display: flex;
+	align-items: center;
+	margin-top: 10px;
 }
 
 .button-group {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    font-size: 16px;
+	display: flex;
+	align-items: center;
+	gap: 0;
+	font-size: 16px;
 }
 
-.button-group-nds, .button-group-redemption, .button-group-deposit {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    font-size: 14px;
+.button-group-nds,
+.button-group-redemption,
+.button-group-deposit {
+	display: flex;
+	align-items: center;
+	gap: 0;
+	font-size: 14px;
 }
 
 .toggle-btn {
-    padding: 3px 16px;
-    border: 1px solid #fffefe;
-    background-color: #fffdfd;
-    cursor: pointer;
-    outline: none;
-    border-radius: 0;
+	padding: 3px 16px;
+	border: 1px solid #fffefe;
+	background-color: #fffdfd;
+	cursor: pointer;
+	outline: none;
+	border-radius: 0;
 }
 
 .toggle-btn.active {
-    background-color: rgba(69, 141, 116, 0.8);
-    color: white;
+	background-color: rgba(69, 141, 116, 0.8);
+	color: white;
 }
 
 .toggle-btn:first-child {
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
 }
 
 .toggle-btn:last-child {
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
 }
 
 .toggle-btn:not(:first-child) {
-    border-left: none;
+	border-left: none;
 }
 
 .line {
-    height: 4px;
-    border-top: 2px dotted rgba(37, 143, 86, 0.1); /* Толщина и цвет линии */
-    margin-bottom: 20px; /* Отступы сверху и снизу, можно настроить по своему усмотрению */
-    position: relative;
-    border-radius: 6px;
+	height: 4px;
+	border-top: 2px dotted rgba(37, 143, 86, 0.1); /* Толщина и цвет линии */
+	margin-bottom: 20px; /* Отступы сверху и снизу, можно настроить по своему усмотрению */
+	position: relative;
+	border-radius: 6px;
 }
 
 .scroll-to-top {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: white;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    cursor: pointer;
-    transition: background-color 0.3s;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	background-color: rgba(0, 0, 0, 0.6);
+	color: white;
+	border-radius: 50%;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	transition: background-color 0.3s;
 }
 
 .scroll-to-top:hover {
-    background-color: rgba(0, 0, 0, 0.8);
+	background-color: rgba(0, 0, 0, 0.8);
 }
 
 .scroll-to-top i {
-    font-size: 20px;
+	font-size: 20px;
 }
 
 .part-container {
-    background-color: rgba(169, 169, 169, 0.03);
-    border-radius: 8px;
-    padding: 10px;
+	background-color: rgba(169, 169, 169, 0.03);
+	border-radius: 8px;
+	padding: 10px;
 }
 
 .item-container {
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 /* Общие стили для контейнера */
 .part-container.first-part {
-    border-radius: 8px; /* Скругленные углы */
-    padding: 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
+	border-radius: 8px; /* Скругленные углы */
+	padding: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
 }
 
 /* Стили для каждого элемента */
-.input-container-item-name, .input-container-item-condition, .button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+.input-container-item-name,
+.input-container-item-condition,
+.button-group {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
 }
 
 /* Стили для input и select */
-input[type="text"], input[type="number"], select {
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%; /* Ширина на всю доступную область */
-    box-sizing: border-box; /* Учитываем padding в общей ширине */
-    font-size: 14px;
-    transition: border-color 0.3s ease;
+input[type='text'],
+input[type='number'],
+select {
+	padding: 8px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	width: 100%; /* Ширина на всю доступную область */
+	box-sizing: border-box; /* Учитываем padding в общей ширине */
+	font-size: 14px;
+	transition: border-color 0.3s ease;
 }
 
-input[type="text"]:focus, input[type="number"]:focus, select:focus {
-    border-color: #327741; /* Цвет рамки при фокусе */
-    outline: none; /* Убираем стандартное выделение */
+input[type='text']:focus,
+input[type='number']:focus,
+select:focus {
+	border-color: #327741; /* Цвет рамки при фокусе */
+	outline: none; /* Убираем стандартное выделение */
 }
 
 /* Выравнивание по вертикали */
 .first-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 15px;
 }
 
 /* Настройка ширины для select и input */
-input[type="number"], select {
-    width: auto; /* Автоматическая ширина, чтобы не занимать слишком много места */
+input[type='number'],
+select {
+	width: auto; /* Автоматическая ширина, чтобы не занимать слишком много места */
 }
 
 .select-container {
-    width: 50px;
-    padding: 3px;
-    border: 1px solid #eeeeee;
+	width: 50px;
+	padding: 3px;
+	border: 1px solid #eeeeee;
 }
 
 .amort-container {
-    font-size: 12px;
-    width: 140px;
+	font-size: 12px;
+	width: 140px;
 }
 
 .size-btn {
-    width: 80px;
-    height: 40px;
-    font-size: 14px;
-    padding: 0;
+	width: 80px;
+	height: 40px;
+	font-size: 14px;
+	padding: 0;
 }
 
 input[readonly] {
-    background-color: #f0f0f0; /* Светло-серый фон */
-    color: #555; /* Цвет текста */
-    cursor: not-allowed; /* Курсор при наведении */
+	background-color: #f0f0f0; /* Светло-серый фон */
+	color: #555; /* Цвет текста */
+	cursor: not-allowed; /* Курсор при наведении */
 }
 
 /* Стили формы для фильтрации по датам */
 .leasing-calculator-date-filter-form {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 20px;
 }
 
 .leasing-calculator-form-group {
-    display: flex;
-    flex-direction: column;
-    margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
 }
 
 .leasing-calculator-date-input {
-    width: 120px !important;  /* Установите желаемую ширину */
-    padding: 5px;
-    font-size: 16px;
+	width: 120px !important; /* Установите желаемую ширину */
+	padding: 5px;
+	font-size: 16px;
 }
 
-
-
 .leasing-calculator-filter-btn {
-    margin-top: 20px;
-    width: 100%;
-    text-align: center;
+	margin-top: 20px;
+	width: 100%;
+	text-align: center;
 }
 
 .leasing-calculator-filter-button {
-    padding: 10px 20px;
-    background-color: rgba(72, 104, 121, 0.5);
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: bold;
+	padding: 10px 20px;
+	background-color: rgba(72, 104, 121, 0.5);
+	color: white;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	cursor: pointer;
+	font-weight: bold;
 }
 
 .leasing-calculator-filter-button:hover {
-    background-color: rgba(72, 104, 121, 0.6);
+	background-color: rgba(72, 104, 121, 0.6);
 }
 
 #calculated-payment-date {
-    color: #1e6034;
+	color: #1e6034;
 }
 
 #date-warning-icon {
-    cursor: pointer;
-    display: inline-block; /* Убедитесь, что это inline-block, чтобы анимация применялась */
-    animation: bounce 2s ease-in-out infinite; /* Анимация прыжка */
+	cursor: pointer;
+	display: inline-block; /* Убедитесь, что это inline-block, чтобы анимация применялась */
+	animation: bounce 2s ease-in-out infinite; /* Анимация прыжка */
 }
 
 /* Анимация "подскока" */
 @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0); /* Исходная позиция */
-    }
-    40% {
-        transform: translateY(-20px); /* Высота прыжка */
-    }
-    60% {
-        transform: translateY(-10px); /* Небольшой отскок */
-    }
+	0%,
+	20%,
+	50%,
+	80%,
+	100% {
+		transform: translateY(0); /* Исходная позиция */
+	}
+	40% {
+		transform: translateY(-20px); /* Высота прыжка */
+	}
+	60% {
+		transform: translateY(-10px); /* Небольшой отскок */
+	}
 }
 
+.product-selection {
+	margin-bottom: 20px;
+}
+
+.product-selection > label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.selected-price {
+	margin-bottom: 15px;
+	display: flex;
+	align-items: baseline;
+	font-size: 14px;
+}
+
+.total-text {
+	margin-right: 5px;
+	font-weight: bold;
+}
+
+.total-price {
+	color: #333;
+	font-weight: bold;
+}
+
+.options-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.option-item {
+	display: flex;
+	align-items: center;
+	background: #f5f5f5;
+	border-radius: 5px;
+	padding: 10px 15px;
+	cursor: pointer;
+	transition: 0.3s ease;
+	border: 1px solid transparent;
+	flex-direction: row; /* если хотите оставить горизонтальный флекс, но всё равно перенести строчки */
+	flex-wrap: wrap; /* разрешить перенос строк */
+}
+
+.option-item:hover {
+	background: #eaeaea;
+}
+
+.option-item input[type='radio'] {
+	margin-right: 10px;
+}
+
+.option-title {
+	font-weight: normal;
+	margin-right: 10px;
+	display: block;
+	text-align: center;
+	width: 100%; /* Займут всю ширину, тем самым перейдут на новую строку */
+	margin-bottom: 10px;
+}
+
+.option-price {
+	font-size: 14px;
+	color: #333;
+	font-weight: bold;
+	display: block;
+	width: 100%; /* Займут всю ширину, тем самым перейдут на новую строку */
+	text-align: center;
+}
+
+.styled-table {
+	border-collapse: collapse;
+	font-family: Arial, sans-serif;
+	min-width: 500px;
+	width: 100%;
+	margin: 20px 0;
+	font-size: 14px;
+	line-height: 1.4;
+	color: #333;
+}
+
+.styled-table thead tr {
+	background-color: #f2f2f2;
+	text-align: left;
+	font-weight: bold;
+}
+
+.styled-table th,
+.styled-table td {
+	border: 1px solid #ccc;
+	padding: 8px 12px;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+	background-color: #fafafa;
+}

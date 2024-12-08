@@ -1348,13 +1348,6 @@
 						</div>
 						<br />
 						<div class="part-container">
-							<button class="btn-hover-sm color-3" id="default-button">
-								<i class="fa-solid fa-check"></i> По умолчанию
-							</button>
-							<button class="btn-hover-sm color-3" id="clear-button">
-								<i class="fa-solid fa-trash"></i> Очистить
-							</button>
-
 							<!-- Таблица с затратами -->
 							<table class="styled-table">
 								<thead>
@@ -1431,7 +1424,14 @@
 								<label>Выберите вариант</label>
 								<div class="options-container">
 									<label class="option-item">
-										<input type="radio" name="product" value="mayaki" checked />
+										<input type="radio" name="product" value="nothing" checked />
+										<span class="option-title">Ничего</span>
+										<span class="option-price" id="nothing-price"
+											>0 руб.</span
+										>
+									</label>
+									<label class="option-item">
+										<input type="radio" name="product" value="mayaki" />
 										<span class="option-title">Маячки</span>
 										<span class="option-price" id="mayaki-price"
 											>1 000 руб.</span
@@ -1457,6 +1457,13 @@
 									</label>
 								</div>
 							</div>
+
+							<button class="btn-hover-sm color-3" id="default-button">
+								<i class="fa-solid fa-check"></i> По умолчанию
+							</button>
+							<button class="btn-hover-sm color-3" id="clear-button">
+								<i class="fa-solid fa-trash"></i> Очистить
+							</button>
 
 							<div class="form-group">
 								<div class="input-container">

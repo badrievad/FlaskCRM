@@ -868,8 +868,7 @@ input[readonly] {
 
 .options-container {
 	display: flex;
-	flex-wrap: wrap;
-	gap: 20px;
+	gap: 10px;
 }
 
 .option-item {
@@ -877,7 +876,7 @@ input[readonly] {
 	align-items: center;
 	background: #f5f5f5;
 	border-radius: 5px;
-	padding: 10px 15px;
+	padding: 5px 5px;
 	cursor: pointer;
 	transition: 0.3s ease;
 	border: 1px solid transparent;
@@ -895,11 +894,11 @@ input[readonly] {
 
 .option-title {
 	font-weight: normal;
-	margin-right: 10px;
+	margin-right: 5px;
 	display: block;
 	text-align: center;
 	width: 100%; /* Займут всю ширину, тем самым перейдут на новую строку */
-	margin-bottom: 10px;
+	margin-bottom: 5px;
 }
 
 .option-price {

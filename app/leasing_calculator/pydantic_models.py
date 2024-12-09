@@ -122,8 +122,8 @@ class ValidateFields(BaseModel):
     insurances: Insurances
     agent_commission: float = Field(alias="agentCommission", default=0.0)
     manager_bonus: float = Field(alias="managerBonus", default=0.0)
-    tracker: float = 0.0
-    mayak: float = 0.0
+    tracker: int = 0
+    mayak: int = 0
     fedresurs: float = 0.0
     gsm: float = 0.0
     mail: float = 0.0

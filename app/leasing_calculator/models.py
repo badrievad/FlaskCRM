@@ -33,10 +33,8 @@ class LeasCalculator(db.Model):  # type: ignore
     lkmb_commission = db.Column(db.Float, nullable=True)
     agent_commission = db.Column(db.Float, nullable=True)
     manager_bonus = db.Column(db.Float, nullable=True)
-    tracker = db.Column(db.Float, nullable=True)
-    tracker_str = db.Column(db.String(50), nullable=True)
-    mayak = db.Column(db.Float, nullable=True)
-    mayak_str = db.Column(db.String(50), nullable=True)
+    tracker = db.Column(db.Integer, nullable=True)
+    mayak = db.Column(db.Integer, nullable=True)
     fedresurs = db.Column(db.Float, nullable=True)
     fedresurs_str = db.Column(db.String(50), nullable=True)
     gsm = db.Column(db.Float, nullable=True)
@@ -172,9 +170,7 @@ class LeasCalculator(db.Model):  # type: ignore
             "agent_commission": self.agent_commission,
             "manager_bonus": self.manager_bonus,
             "tracker": self.tracker,
-            "tracker_str": self.tracker_str,
             "mayak": self.mayak,
-            "mayak_str": self.mayak_str,
             "fedresurs": self.fedresurs,
             "fedresurs_str": self.fedresurs_str,
             "gsm": self.gsm,

@@ -481,9 +481,7 @@ def write_information_to_leas_calc(data: dict, calc_id, file_name: str) -> None:
         calculator.agent_commission = data["agent_commission"]
         calculator.manager_bonus = data["manager_bonus"]
         calculator.tracker = data["tracker"]
-        calculator.tracker_str = validate_item_price(str(data["tracker"]))
         calculator.mayak = data["mayak"]
-        calculator.mayak_str = validate_item_price(str(data["mayak"]))
         calculator.fedresurs = data["fedresurs"]
         calculator.fedresurs_str = validate_item_price(str(data["fedresurs"]))
         calculator.gsm = data["gsm"]

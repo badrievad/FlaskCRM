@@ -1424,11 +1424,14 @@
 								<label>Выберите вариант</label>
 								<div class="options-container">
 									<label class="option-item">
-										<input type="radio" name="product" value="nothing" checked />
+										<input
+											type="radio"
+											name="product"
+											value="nothing"
+											checked
+										/>
 										<span class="option-title">Ничего</span>
-										<span class="option-price" id="nothing-price"
-											>0 руб.</span
-										>
+										<span class="option-price" id="nothing-price">0 руб.</span>
 									</label>
 									<label class="option-item">
 										<input type="radio" name="product" value="mayaki" />
@@ -2400,8 +2403,33 @@
 
 			            const agentCommission = document.getElementById('agent-commission-value').value;
 			            const managerBonus = document.getElementById('manager-bonus-value').value;
-			            const tracker = document.getElementById('tracker-value').value;
-			            const mayak = document.getElementById('mayak-value').value;
+
+						const productRadios = document.querySelectorAll('input[name="product"]');
+
+						// Определяем значение mayak и tracker в зависимости от выбранного варианта
+						const selectedValue = document.querySelector('input[name="product"]:checked').value;
+						let mayak = 0;
+						let tracker = 0;
+
+						switch (selectedValue) {
+							case 'nothing':
+								mayak = 2;
+								tracker = 2;
+								break;
+							case 'mayaki':
+								mayak = 1;
+								tracker = 2;
+								break;
+							case 'trackery':
+								mayak = 2;
+								tracker = 1;
+								break;
+							case 'mayaki-trackery':
+								mayak = 2;
+								tracker = 2;
+								break;
+						}
+						
 			            const fedresurs = document.getElementById('fedresurs-value').value;
 			            const gsm = document.getElementById('gsm-value').value;
 			            const mail = document.getElementById('mail-value').value;

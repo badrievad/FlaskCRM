@@ -1018,11 +1018,11 @@ document.addEventListener('DOMContentLoaded', function () {
 		// 3) tracker = 2, mayak = 2 -> "nothing"
 		// 4) tracker = 1, mayak = 1 -> "mayaki-trackery"
 
-		if (trackerVal === 1 && mayakVal === 2) {
+		if (trackerVal === 2 && mayakVal === 1) {
 			document.querySelector(
 				'input[name="product"][value="mayaki"]'
 			).checked = true
-		} else if (trackerVal === 2 && mayakVal === 1) {
+		} else if (trackerVal === 1 && mayakVal === 2) {
 			document.querySelector(
 				'input[name="product"][value="trackery"]'
 			).checked = true

@@ -7,6 +7,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet" />
     <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png" />
     <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/economic-conclusion/styles.css') }}" />
+    <style>
+        .styled-select {
+            padding: 10px;
+            font-size: 16px;
+            border: none; /* Убираем границу */
+            background-color: transparent; /* Прозрачный фон */
+            width: 100%;
+            cursor: pointer;
+            appearance: none; /* Убираем стандартный стиль браузера */
+            -webkit-appearance: none; /* Для Safari */
+            -moz-appearance: none; /* Для Firefox */
+            margin: 0; /* Убираем отступы */
+        }
+        .styled-select:focus {
+            outline: none; /* Убираем контур при фокусировке */
+        }
+        /* Стиль для псевдоэлемента, чтобы добавить стрелку */
+        .styled-select::after {
+            content: '▼'; /* Стрелка вниз */
+            position: absolute;
+            right: 10px;
+            pointer-events: none; /* Игнорировать события мыши */
+        }
+
+    </style>
+    <style>
+        
+        .custom-input {
+            border: none;
+            background-color: transparent;
+            padding: 5px 10px;
+            font-size: 16px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+        
+        .custom-input-container {
+            border: 0px solid #ccc;
+            border-radius: 4px;
+            padding: 2px;
+        }     
+
+    </style>
 </head>
 <body>
     <div class="container">
@@ -59,19 +102,25 @@
                     <td>...</td>
                 </tr>
                 <tr>
-                    <td>1.10 Сведения о ранее заключённых договорах:</td>
-                    <td>Отсутствуют</td>
+                    <td>1.10 Сведения о ранее заключенных договорах финансовой аренды (лизинга) с ООО «ЛКМБ-РТ»</td>
+                    <td>
+                        <div class="custom-input-container">
+                            <input type="text" id="customInput" placeholder="Введите значение" class="custom-input" />
+                            
+                        </div>
+                    </td>
                 </tr>
                 <tr>
                     <td>1.11 Статус текущей задолженности:</td>
-                    <td>Непроблемная/Проблемная</td>
+                    <td>
+                        <select id="clientStatus" class="styled-select">
+                        <option value="non-problematic">Непроблемная.</option>
+                        <option value="problematic">Проблемная.</option>
+                    </select>
+                </td>
                 </tr>
 				<table>
-					<thead>
-						<tr>
-							<td><strong>Договоры лизинга/аренды/перенайма</strong></td>
-						</tr>
-					</thead>
+            
 					<tbody>
 						<tr>
 							<td>

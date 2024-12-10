@@ -57,10 +57,6 @@ function calculateFirstPaymentDate() {
         document.getElementById('date-warning-icon').style.display = 'inline'; // Показываем иконку
         preCalculateButton.disabled = true; // Заблокировать кнопку
         preCalculateButton.classList.add('button-disabled'); // Добавить класс для изменения цвета
-        tippy(calcIcon, {
-            content: 'Дата первого лизингового платежа меньше чем текущая дата. Необходимо изменить дату выдачи кредита либо добавить отсрочку платежа.',
-            placement: 'bottom',
-        });
     } else {
         // Если дата больше текущей, окрашиваем в зеленый и скрываем иконку
         calculatedDateElement.style.color = 'green';

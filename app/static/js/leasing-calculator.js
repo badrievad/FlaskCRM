@@ -1002,6 +1002,40 @@ document.addEventListener('DOMContentLoaded', function () {
 		}
 
 		// Заполните основные поля
+
+		// Привязка маяка и трекера к радиокнопкам
+		const mayakVal = calc.mayak // здесь должно быть значение mayak из БД, например calc.mayak
+		const trackerVal = calc.tracker // аналогично для tracker
+
+		// Снимем сначала все checked (на случай если есть уже выбранный)
+		document
+			.querySelectorAll('input[name="product"]')
+			.forEach(el => (el.checked = false))
+
+		// Логика выбора согласно условиям
+		// 1) tracker = 1, mayak = 2 -> "mayaki"
+		// 2) tracker = 2, mayak = 1 -> "trackery"
+		// 3) tracker = 2, mayak = 2 -> "nothing"
+		// 4) tracker = 1, mayak = 1 -> "mayaki-trackery"
+
+		if (trackerVal === 2 && mayakVal === 1) {
+			document.querySelector(
+				'input[name="product"][value="mayaki"]'
+			).checked = true
+		} else if (trackerVal === 1 && mayakVal === 2) {
+			document.querySelector(
+				'input[name="product"][value="trackery"]'
+			).checked = true
+		} else if (trackerVal === 2 && mayakVal === 2) {
+			document.querySelector(
+				'input[name="product"][value="nothing"]'
+			).checked = true
+		} else if (trackerVal === 1 && mayakVal === 1) {
+			document.querySelector(
+				'input[name="product"][value="mayaki-trackery"]'
+			).checked = true
+		}
+
 		document.getElementById('item-name').value = calc.item_name
 		document.getElementById('production-year-value').value = calc.item_year
 		document.getElementById('cost-value').value = calc.item_price

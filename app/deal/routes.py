@@ -392,6 +392,8 @@ def get_deals_active_for_bind() -> Response:
     user_fullname = request.args.get(
         "user_fullname"
     )  # Получаем параметр из строки запроса
+    user_id = User.query.filter_by(fullname=user_fullname).first().id
+    logging.info(f"user_id: {user_id}")
     active_deals: list[Deal] = (
         Deal.query.filter_by(status="active").order_by(desc(Deal.created_at)).all()
     )
@@ -399,7 +401,7 @@ def get_deals_active_for_bind() -> Response:
     archived_deals_count: int = Deal.query.filter_by(status="archived").count()
     if user_fullname:
         active_deals: list[Deal] = (  # type: ignore
-            Deal.query.filter_by(status="active", created_by=user_fullname)
+            Deal.query.filter_by(status="active", user_id=user_id)
             .order_by(desc(Deal.created_at))
             .all()
         )

@@ -11,45 +11,45 @@
         .styled-select {
             padding: 10px;
             font-size: 16px;
-            border: none; /* Убираем границу */
-            background-color: transparent; /* Прозрачный фон */
+            border: none;
+            background-color: transparent;
             width: 100%;
             cursor: pointer;
-            appearance: none; /* Убираем стандартный стиль браузера */
-            -webkit-appearance: none; /* Для Safari */
-            -moz-appearance: none; /* Для Firefox */
-            margin: 0; /* Убираем отступы */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            margin: 0;
         }
         .styled-select:focus {
-            outline: none; /* Убираем контур при фокусировке */
+            outline: none;
         }
-        /* Стиль для псевдоэлемента, чтобы добавить стрелку */
         .styled-select::after {
-            content: '▼'; /* Стрелка вниз */
+            content: '▼';
             position: absolute;
             right: 10px;
-            pointer-events: none; /* Игнорировать события мыши */
+            pointer-events: none;
         }
 
         table {
-            border-collapse: collapse; /* Убирает рамки между ячейками */
-            width: 100%; /* Устанавливает ширину таблицы на 100% */
-            margin-bottom: 0; /* Убирает отступ снизу */
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 0;
         }
-        td {
-            border: none; /* Убирает рамки у ячеек */
-            padding: 5px; /* Устанавливает отступы внутри ячеек */
+        td, th {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
         }
         textarea {
-            border: none; /* Убирает рамки у текстового поля */
-            resize: none; /* Запрещает изменение размера текстового поля */
-            background: transparent; /* Делаем фон прозрачным */
-            outline: none; /* Убирает обводку при фокусе */
-            font-family: inherit; /* Использует шрифт родителя для согласованности */
-            font-size: inherit; /* Использует размер шрифта родителя */
-            width: 99%; /* Устанавливает ширину текстового поля на 99% */
-            height: auto; /* Устанавливает высоту текстового поля на автоматическую */
-            overflow: hidden; /* Скрывает ползунок */
+            border: none;
+            resize: none;
+            background: transparent;
+            outline: none;
+            font-family: inherit;
+            font-size: inherit;
+            width: 99%;
+            height: auto;
+            overflow: hidden;
         }
         tr {
             margin-bottom: 0;
@@ -59,7 +59,6 @@
             margin-top: 10px;
         }
     </style>
-</style>
 </head>
 <body>
     <div class="container">
@@ -128,140 +127,207 @@
                         <select id="clientStatus" class="styled-select">
                             <option value="non-problematic">Непроблемная.</option>
                             <option value="problematic">Проблемная.</option>
-                    </select>
-                </td>
+                        </select>
+                    </td>
                 </tr>
-                <div class="table-wrapper">
-				<table id="additionalTable">
-					<tbody>
-						<tr>
-							<td>
-								<table>
-									<thead>
-										<tr>
-											<td>№ и дата договора</td>
-											<td>Сумма по договору лизинга, руб.</td>
-											<td>Срок лизинга, мес.</td>
-											<td>Предмет лизинга</td>
-											<td>Среднемесячный лизинговый платеж, руб.</td>
-											<td>Остаток задолженности по договору лизинга, руб. на дату составления заключения (указать дату)</td>
-											<td>Просроченная задолженность, руб./Переплата, руб. на дату составления заключения (указать дату)</td>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>221/23 от 18.09.2023</td>
-											<td>18 536 434,00</td>
-											<td>60</td>
-											<td>самосвал SHACMAN (SHAANXI) Х3000</td>
-											<td>300 618,69</td>
-											<td>16 836 206,64</td>
-											<td>+2 662,68</td>
-										</tr>
-										<tr>
-											<td>Итого</td>
-											<td>18 536 434,00</td>
-											<td>---</td>
-											<td>---</td>
-											<td>300 618,69</td>
-											<td>16 836 206,64</td>
-											<td>+2 662,68</td>
-										</tr>
-									</tbody>
-								</table>
-							</td>
-						</tr>
-                    </table>
-                <!-- нижний скрипт отвечает за таблицу по ранее заключенным дл -->
-                    <script>
-                        function adjustTextarea(textarea) {
-                            textarea.style.height = '';
-                            textarea.style.height = textarea.scrollHeight + 'px';
-                    
-                            const additionalTable = document.getElementById('additionalTable');
-                            if (textarea.value.trim() === 'Отсутствует') {
-                                additionalTable.style.display = 'none';
-                            } else {
-                                additionalTable.style.display = 'table';
-                            }
-                        }
-                    </script>
-					<section>
-						<h2>Раздел 2. Операционно-хозяйственная деятельность Лизингополучателя</h2>
-						<table>
-							<tr>
-								<td>2.1 Отраслевая принадлежность и основные виды продукции (услуг):</td>
-								<td>47.19 Торговля розничная прочая в неспециализированных магазинах.</td>
-							</tr>
-							<tr>
-								<td>2.2 Описание бизнеса Лизингополучателя</td>
-								<td>Общество создано в марте 2016 года. ООО «КрепежСнаб». Основным видом деятельности, согласно выписке из ЕГРЮЛ является  Торговля розничная прочая в неспециализированных магазинах, в том числе компания осуществляет деятельность по дополнительному виду деятельности согласно ОКВЭД 49.41 Деятельность автомобильного грузового транспорта.
-									На приобретаемом автомобиле планируется оказание услуг по откачке канализационных стоков в частном секторе г. Азнакаево, Азнакаевского района,  г. Бугульма, Бугульминского района.
-								  </td>
-							</tr>
+            </table>
+        </section>
+
+<div class="table-wrapper">
+    <table id="additionalTable">
+        <tbody>
+            <tr>
+                <td>
+                    <table>
+                        <thead>
                             <tr>
-								<td>2.3 Предоставленные договоры с контрагентами в подтверждение текущей деятельности</td>
-								<td>-</td>
-							</tr>
+                                <td>№ и дата договора</td>
+                                <td>Сумма по договору лизинга, руб.</td>
+                                <td>Срок лизинга, мес.</td>
+                                <td>Предмет лизинга</td>
+                                <td>Среднемесячный лизинговый платеж, руб.</td>
+                                <td>Остаток задолженности по договору лизинга, руб. на дату составления заключения (указать дату)</td>
+                                <td>Просроченная задолженность, руб./Переплата, руб. на дату составления заключения (указать дату)</td>
+                            </tr>
+                        </thead>
+                        <tbody id="leasingBody">
                             <tr>
-                                <td colspan="2">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <td><strong>Лизингополучатель является исполнителем по следующим договорам:</strong></td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <table>
-                                                        <thead>
-                                                            <tr>
-                                                                <td>П/п</td>
-                                                                <td>Договор №</td>
-                                                                <td>Контрагент</td>
-                                                                <td>ИНН</td>
-                                                                <td>Дата заключения договора</td>
-                                                                <td>Предмет договора</td>
-                                                                <td>Стоимость</td>
-                                                                <td>Дата окончания договора</td>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <tr>
-                                                                <td>1.</td>
-                                                                <td>№30112023/1</td>
-                                                                <td>ООО «ГК»МЕГА-ЛИТ»</td>
-                                                                <td>7801348890</td>
-                                                                <td>30.11.2023</td>
-                                                                <td>ООО «КрепежСнаб» обязуется передать в собственность ООО «ГК»МЕГА-ЛИТ» товар, в ассортименте, в количестве и в сроки согласно заявке.</td>
-                                                                <td>Согласно заявки.</td>
-                                                                <td>Согласно заявки.</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                <td>
+                                    <textarea id="num_dl_additional" rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                </td>
+                                <td>
+                                    <textarea id="sum_dl_additional" rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                </td>
+                                <td>
+                                    <textarea id="time_dl_additional" rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                </td>
+                                <td>
+                                    <textarea id="subject_dl_additional" rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                </td>
+                                <td>
+                                    <textarea id="month_payment_dl_additional" rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                </td>
+                                <td>
+                                    <textarea id="balance_payment_dl_additional" rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                </td>
+                                <td>
+                                    <textarea id="delay_payment_dl_additional" rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
                                 </td>
                             </tr>
                             <tr>
-								<td>2.4 Основные средства</td>
-								<td>Информация не предоставлена.</td>
-							</tr>
-                            <tr>
-								<td>2.5 Цель лизингового проекта</td>
-								<td>Увеличение автомобильного парка.</td>
-							</tr>
-							<tr>
-								<td>2.6 Социальный эффект</td>
-								<td>Создание новых рабочих мест.</td>
-							</tr>
-						</table>
-					</section>
-                </tbody>
-            </table>
-        </section>
-    </body>
+                                <td>Итого</td>
+                                <td id="totalSum">0.00</td>
+                                <td>---</td>
+                                <td>---</td>
+                                <td id="totalMonthlyPayment">0.00</td>
+                                <td id="totalBalance">0.00</td>
+                                <td id="totalDelay">0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <button id="addRowButton" onclick="addRow()">Добавить строку</button>
+    <button id="removeRowButton" onclick="removeRow()">Удалить</button>
+</div>
+
+<script>
+    function adjustTextarea(textarea) {
+        textarea.style.height = '';
+        textarea.style.height = textarea.scrollHeight + 'px';
+
+        const additionalTable = document.getElementById('additionalTable');
+        const addRowButton = document.getElementById('addRowButton');
+        const removeRowButton = document.getElementById('removeRowButton');
+
+        if (textarea.value.trim().toLowerCase() === 'отсутствует') {
+            additionalTable.style.display = 'none';
+            addRowButton.style.display = 'none';
+            removeRowButton.style.display = 'none';
+        } else {
+            additionalTable.style.display = 'table';
+            addRowButton.style.display = 'inline-block';
+            removeRowButton.style.display = 'inline-block';
+        }
+    }
+
+    function addRow() {
+        const leasingBody = document.getElementById('leasingBody');
+        const newRow = leasingBody.insertRow(leasingBody.rows.length - 1); // Добавляем перед строкой "Итого"
+        
+        for (let i = 0; i < 7; i++) {
+            const newCell = newRow.insertCell(i);
+            const textarea = document.createElement("textarea");
+            textarea.rows = 1;
+            textarea.wrap = "soft";
+            textarea.oninput = function() {
+                adjustTextarea(this);
+                updateTotals();
+            };
+            newCell.appendChild(textarea);
+        }
+    }
+
+    function removeRow() {
+        const leasingBody = document.getElementById('leasingBody');
+        if (leasingBody.rows.length > 2) { // Убедитесь, что остается хотя бы одна строка ввода
+            leasingBody.deleteRow(leasingBody.rows.length - 2); // Удаляем последнюю добавленную строку
+            updateTotals(); // Обновляем итоги после удаления
+        }
+    }
+
+    function updateTotals() {
+        const rows = document.querySelectorAll("#leasingBody tr");
+        let totalSum = 0;
+        let totalMonthlyPayment = 0;
+        let totalBalance = 0;
+        let totalDelay = 0;
+
+        rows.forEach((row, index) => {
+            if (index === rows.length - 1) return; // Пропускаем строку "Итого"
+            const cells = row.querySelectorAll("textarea");
+            if (cells[1].value) totalSum += parseFloat(cells[1].value.replace(/[^0-9.-]+/g, "")) || 0;
+            if (cells[4].value) totalMonthlyPayment += parseFloat(cells[4].value.replace(/[^0-9.-]+/g, "")) || 0;
+            if (cells[5].value) totalBalance += parseFloat(cells[5].value.replace(/[^0-9.-]+/g, "")) || 0;
+            if (cells[6].value) totalDelay += parseFloat(cells[6].value.replace(/[^0-9.-]+/g, "")) || 0;
+        });
+
+        document.getElementById("totalSum").innerText = totalSum.toFixed(2);
+        document.getElementById("totalMonthlyPayment").innerText = totalMonthlyPayment.toFixed(2);
+        document.getElementById("totalBalance").innerText = totalBalance.toFixed(2);
+        document.getElementById("totalDelay").innerText = totalDelay.toFixed(2);
+    }
+</script>
+
+
+
+
+        <section>
+            <h2>Раздел 2. Операционно-хозяйственная деятельность Лизингополучателя</h2>
+            <table>
+                <tr>
+                    <td>2.1 Отраслевая принадлежность и основные виды продукции (услуг):</td>
+                    <td>47.19 Торговля розничная прочая в неспециализированных магазинах.</td>
+                </tr>
+                <tr>
+                    <td>2.2 Описание бизнеса Лизингополучателя</td>
+                    <td>Общество создано в марте 2016 года. ООО «КрепежСнаб». Основным видом деятельности, согласно выписке из ЕГРЮЛ является  Торговля розничная прочая в неспециализированных магазинах, в том числе компания осуществляет деятельность по дополнительному виду деятельности согласно ОКВЭД 49.41 Деятельность автомобильного грузового транспорта.
+                        На приобретаемом автомобиле планируется оказание услуг по откачке канализационных стоков в частном секторе г. Азнакаево, Азнакаевского района,  г. Бугульма, Бугульминского района.
+                    </td>
+                </tr>
+                <tr>
+                    <td>2.3 Предоставленные договоры с контрагентами в подтверждение текущей деятельности</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td><strong>Лизингополучатель является исполнителем по следующим договорам:</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <td>П/п</td>
+                                                    <td>Договор №</td>
+                                                    <td>Контрагент</td>
+                                                    <td>ИНН</td>
+                                                    <td>Дата заключения договора</td>
+                                                    <td>Предмет договора</td>
+                                                    <td>Стоимость</td>
+                                                    <td>Дата окончания договора</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1.</td>
+                                                    <td>№30112023/1</td>
+                                                    <td>Контрагент 1</td>
+                                                    <td>1234567890</td>
+                                                    <td>01.01.2024</td>
+                                                    <td>Предмет 1</td>
+                                                    <td>1000000</td>
+                                                    <td>01.01.2025</td>
+                                                </tr>
+                                                <!-- Добавьте другие строки по необходимости -->
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</div>
+</body>
 </html>

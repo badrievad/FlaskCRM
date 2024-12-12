@@ -119,6 +119,7 @@ def update_table() -> str:
             joinedload(LeasCalculator.deal)  # Предварительная загрузка связи deal
         )
         .filter(LeasCalculator.manager_login == user_login)
+        .filter(LeasCalculator.status == "completed")
         .filter(LeasCalculator.date.between(start_date, end_date))
         .order_by(desc(LeasCalculator.id))
         .all()

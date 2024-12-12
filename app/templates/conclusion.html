@@ -404,76 +404,73 @@ function removeTable(tableDiv) {
                 </tr>
                 <tr>
                     <td>
-                        <div id="business_agreements_client_pole" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                        <div id="business_agreements_client_pole" contenteditable="true" class='textarea' 
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
                             2.3 Предоставленные договоры с контрагентами в подтверждение текущей деятельности
                         </div>
                     </td>
                     <td>
-                        <div id="business_agreements_client" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                        <div id="business_agreements_client" contenteditable="true" class='textarea' 
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
                             Отсутствуют/Предоставлены договоры
                         </div>
-                </tr>                                
-                <div class="table-wrapper">
-                    <textarea rows="1" wrap="soft" style="width: 100%; font-weight: bold;" oninput="adjustTextarea1(this);"></textarea>  
-                    <table id="additionalTable1">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <td>п/п</td>
-                                                <td>Договор №</td>
-                                                <td>Контрагент</td>
-                                                <td>ИНН</td>
-                                                <td>Предмет договора</td>
-                                                <td>Стоимость</td>
-                                                <td>Дата окончания договора</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="leasingBody1">
-                                            <tr>
-                                                <td>
-                                                    <textarea id="serial_number" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                                </td>
-                                                <td>
-                                                    <textarea id="number_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                                </td>
-                                                <td>
-                                                    <textarea id="leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                                </td>
-                                                <td>
-                                                    <textarea id="inn_leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                                </td>
-                                                <td>
-                                                    <textarea id="pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                                </td>
-                                                <td>
-                                                    <textarea id="price_pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                                </td>
-                                                <td>
-                                                    <textarea id="date_end_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                    <button id="addRowButton1" onclick="addRow1()">Добавить строку</button>
-                    <button id="removeRowButton1" onclick="removeRow1()">Удалить строку</button>
-                </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>п/п</th>
+                                        <th>Договор №</th>
+                                        <th>Контрагент</th>
+                                        <th>ИНН</th>
+                                        <th>Предмет договора</th>
+                                        <th>Стоимость</th>
+                                        <th>Дата окончания договора</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="leasingBody1">
+                                    <tr>
+                                        <td>
+                                            <textarea id="serial_number" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea id="number_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea id="leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea id="inn_leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea id="pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea id="price_pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                        </td>
+                                        <td>
+                                            <textarea id="date_end_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button id="addRowButton1" onclick="addRow1()">Добавить строку</button>
+                            <button id="removeRowButton1" onclick="removeRow1()">Удалить строку</button>
+                        </div>
+                    </td>
+                </tr>                        
             </tbody>       
         </table>
     </section>
 
-    <script>    
-        function addRow1() {
+<script>    
+    function addRow1() {
         const leasingBody1 = document.getElementById('leasingBody1');
         const newRow = leasingBody1.insertRow(leasingBody1.rows.length);
-        
+
         for (let i = 0; i < 7; i++) {
             const newCell = newRow.insertCell(i);
             const textarea = document.createElement("textarea");
@@ -481,17 +478,25 @@ function removeTable(tableDiv) {
             textarea.wrap = "soft";
             textarea.style.width = "100%";
             newCell.style.width = "150px";
+            
+            // Добавляем обработчик для авторасширения
+            textarea.oninput = function() {
+                this.style.height = 'auto';
+                this.style.height = this.scrollHeight + 'px';
+            };
+
             newCell.appendChild(textarea);
         }
     }
 
-        function removeRow1() {
+    function removeRow1() {
         const leasingBody1 = document.getElementById('leasingBody1');
         if (leasingBody1.rows.length > 1) {
             leasingBody1.deleteRow(leasingBody1.rows.length - 1);
         }
-}
-    </script>
+    }
+</script>
+
 </div>
 </body>
 </html>

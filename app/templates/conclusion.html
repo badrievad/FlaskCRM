@@ -32,7 +32,7 @@
 
         table {
             border-collapse: collapse;
-            width: 100%;
+            width: 100%; /* Фиксированная ширина таблицы */
             margin-bottom: 0;
         }
         td, th {
@@ -47,9 +47,10 @@
             outline: none;
             font-family: inherit;
             font-size: inherit;
-            width: 99%;
+            width: 100%; /* Ensure full width */
             height: auto;
             overflow: hidden;
+            padding: 4px; /* Add padding for better text visibility */
         }
         tr {
             margin-bottom: 0;
@@ -58,6 +59,23 @@
         .table-wrapper {
             margin-top: 10px;
         }
+
+        .editable-div {
+            padding: 4px; /* Add padding for better text visibility */
+            font-weight: bold; /* Make text bold */
+            width: 100%; /* Ensure full width */
+            height: auto; /* Allow height to adjust */
+            overflow-wrap: break-word; /* Перенос слов */
+            word-wrap: break-word; /* Для старых браузеров */
+            box-sizing: border-box; /* Include padding in width calculation */
+            min-width: 0; /* Убираем минимальную ширину */
+        }
+
+        #affiliates_person, #history_dl_lkmb_pole {
+        width: 250px; /* Задайте нужную ширину */
+        overflow: auto; /* Добавляет прокрутку, если содержимое превышает ширину */
+    }
+
     </style>
 </head>
 <body>
@@ -101,7 +119,7 @@
                 <tr>
                     <td>1.7 Акционеры (участники):</td>
                     <td>Либо руками писать либо с дадата сведения брать - доля 100%</td>
-                    <textarea id="average-employee-count" rows="1" wrap="soft" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px';"></textarea>
+                    <textarea id="owner_company" rows="1" wrap="soft" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px';"></textarea>
                 </tr>
                 <tr>
                     <td>1.8 Среднесписочная численность работников:</td>
@@ -116,17 +134,34 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>1.10 Сведения о ранее заключенных договорах финансовой аренды (лизинга) с ООО «ЛКМБ-РТ»</td>
+                    <td>
+                        <div id="history_dl_lkmb_pole" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            1.10 Сведения о ранее заключенных договорах финансовой аренды (лизинга)/аренды с ООО «ЛКМБ-РТ»
+                        </div>
+                    </td>
                     <td>
                         <textarea id="history_dl_lkmb" rows="1" wrap="soft" oninput="adjustTextarea(this); this.style.height = this.scrollHeight + 'px';"></textarea>
                     </td>
+
+
+
+
+                    {# <td>1.10 Сведения о ранее заключенных договорах финансовой аренды (лизинга)/аренды с ООО «ЛКМБ-РТ»</td>
+                    <td>
+                        <textarea id="history_dl_lkmb" rows="1" wrap="soft" oninput="adjustTextarea(this); this.style.height = this.scrollHeight + 'px';"></textarea>
+                    </td> #}
                 </tr>
                 <tr>
-                    <td>1.11 Статус текущей задолженности:</td>
+                    <td>
+                        <div id="clientStatus_pole" contenteditable="true" class='textarea'>
+                            1.11 Статус текущей задолженности
+                        </div>
+                    </td>
                     <td>
                         <select id="clientStatus" class="styled-select">
                             <option value="non-problematic">Непроблемная.</option>
                             <option value="problematic">Проблемная.</option>
+                            <option value="problematic">Проблемная(имеются реструктуризации платежей)</option>
                         </select>
                     </td>
                 </tr>

@@ -160,7 +160,6 @@
                 </tr>
             </table>
         </section>
-
 <div class="table-wrapper">
     <textarea rows="1" wrap="soft" style="width: 100%; font-weight: bold;" oninput="adjustTextarea(this);"></textarea>  
     <table id="additionalTable">
@@ -374,74 +373,125 @@ function removeTable(tableDiv) {
 }
     
 </script>
-
-
         <section>
             <h2>Раздел 2. Операционно-хозяйственная деятельность Лизингополучателя</h2>
             <table>
+               <tr>
+                    <td>
+                        <div id="industry_of_client_pole" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            2.1 Отраслевая принадлежность и основные виды продукции (услуг):
+                        </div>
+                    </td>
+                    <td>
+                        <div id="industry_of_client" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            45.19 — Торговля прочими автотранспортными средствами.
+                        </div>
+                    </td>
+                </tr>
                 <tr>
                     <td>
-                        <textarea id="clients_industry" rows="1" wrap="soft" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px';"></textarea>
+                        <div id="business_description_client_pole" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            2.2 Описание бизнеса Лизингополучателя/Арендатора (услуг)
+                        </div>
                     </td>
-                    <td>47.19 Торговля розничная прочая в неспециализированных магазинах.</td>
-                </tr>
-                <tr>
-                    <td>2.2 Описание бизнеса Лизингополучателя</td>
-                    <td>Общество создано в марте 2016 года. ООО «КрепежСнаб». Основным видом деятельности, согласно выписке из ЕГРЮЛ является  Торговля розничная прочая в неспециализированных магазинах, в том числе компания осуществляет деятельность по дополнительному виду деятельности согласно ОКВЭД 49.41 Деятельность автомобильного грузового транспорта.
-                        На приобретаемом автомобиле планируется оказание услуг по откачке канализационных стоков в частном секторе г. Азнакаево, Азнакаевского района,  г. Бугульма, Бугульминского района.
-                    </td>
-                </tr>
-                <tr>
-                    <td>2.3 Предоставленные договоры с контрагентами в подтверждение текущей деятельности</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <td><strong>Лизингополучатель является исполнителем по следующим договорам:</strong></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <td>П/п</td>
-                                                    <td>Договор №</td>
-                                                    <td>Контрагент</td>
-                                                    <td>ИНН</td>
-                                                    <td>Дата заключения договора</td>
-                                                    <td>Предмет договора</td>
-                                                    <td>Стоимость</td>
-                                                    <td>Дата окончания договора</td>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1.</td>
-                                                    <td>№30112023/1</td>
-                                                    <td>Контрагент 1</td>
-                                                    <td>1234567890</td>
-                                                    <td>01.01.2024</td>
-                                                    <td>Предмет 1</td>
-                                                    <td>1000000</td>
-                                                    <td>01.01.2025</td>
-                                                </tr>
-                                                <!-- Добавьте другие строки по необходимости -->
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <td>
+                        <div id="business_description_client" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            Компания ООО «Зумлион Партс» создана в июне 2021 года. Основной вид деятельности - Торговля легковыми автомобилями и грузовыми автомобилями малой грузоподъемности (45.11). ООО «Зумлион Партс» 
+                            является официальным дилером по продаже китайской спецтехники Zoomlion (Сертификаты представлены). На данный момент ООО «Зумлион Партс» подписала договор на оказания услуг по доставке, монтажу, 
+                            выполнение работ и последующему демонтажу башенных кранов XGT6013В-8S1 и XGT6515-10S., Башенные краны XGT7026-12S1– 3 единицы
+                        </div>
                     </td>
                 </tr>
-            </tbody>
+                <tr>
+                    <td>
+                        <div id="business_agreements_client_pole" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            2.3 Предоставленные договоры с контрагентами в подтверждение текущей деятельности
+                        </div>
+                    </td>
+                    <td>
+                        <div id="business_agreements_client" contenteditable="true" class='textarea' oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            Отсутствуют/Предоставлены договоры
+                        </div>
+                </tr>                                
+                <div class="table-wrapper">
+                    <textarea rows="1" wrap="soft" style="width: 100%; font-weight: bold;" oninput="adjustTextarea1(this);"></textarea>  
+                    <table id="additionalTable1">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <td>п/п</td>
+                                                <td>Договор №</td>
+                                                <td>Контрагент</td>
+                                                <td>ИНН</td>
+                                                <td>Предмет договора</td>
+                                                <td>Стоимость</td>
+                                                <td>Дата окончания договора</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="leasingBody1">
+                                            <tr>
+                                                <td>
+                                                    <textarea id="serial_number" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                </td>
+                                                <td>
+                                                    <textarea id="number_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                </td>
+                                                <td>
+                                                    <textarea id="leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                </td>
+                                                <td>
+                                                    <textarea id="inn_leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                </td>
+                                                <td>
+                                                    <textarea id="pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                </td>
+                                                <td>
+                                                    <textarea id="price_pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                </td>
+                                                <td>
+                                                    <textarea id="date_end_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                    <button id="addRowButton1" onclick="addRow1()">Добавить строку</button>
+                    <button id="removeRowButton1" onclick="removeRow1()">Удалить строку</button>
+                </div>
+            </tbody>       
         </table>
     </section>
+
+    <script>    
+        function addRow1() {
+        const leasingBody1 = document.getElementById('leasingBody1');
+        const newRow = leasingBody1.insertRow(leasingBody1.rows.length);
+        
+        for (let i = 0; i < 7; i++) {
+            const newCell = newRow.insertCell(i);
+            const textarea = document.createElement("textarea");
+            textarea.rows = 1;
+            textarea.wrap = "soft";
+            textarea.style.width = "100%";
+            newCell.style.width = "150px";
+            newCell.appendChild(textarea);
+        }
+    }
+
+        function removeRow1() {
+        const leasingBody1 = document.getElementById('leasingBody1');
+        if (leasingBody1.rows.length > 1) {
+            leasingBody1.deleteRow(leasingBody1.rows.length - 1);
+        }
+}
+    </script>
 </div>
 </body>
 </html>

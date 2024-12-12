@@ -118,8 +118,9 @@
                 </tr>
                 <tr>
                     <td>1.7 Акционеры (участники):</td>
-                    <td>Либо руками писать либо с дадата сведения брать - доля 100%</td>
-                    <textarea id="owner_company" rows="1" wrap="soft" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px';"></textarea>
+                        <td> 
+                            <textarea id="average-owner_company-count" rows="1" wrap="soft" oninput="this.style.height = ''; this.style.height = this.scrollHeight + 'px';"></textarea>
+                        </td>
                 </tr>
                 <tr>
                     <td>1.8 Среднесписочная численность работников:</td>
@@ -142,14 +143,6 @@
                     <td>
                         <textarea id="history_dl_lkmb" rows="1" wrap="soft" oninput="adjustTextarea(this); this.style.height = this.scrollHeight + 'px';"></textarea>
                     </td>
-
-
-
-
-                    {# <td>1.10 Сведения о ранее заключенных договорах финансовой аренды (лизинга)/аренды с ООО «ЛКМБ-РТ»</td>
-                    <td>
-                        <textarea id="history_dl_lkmb" rows="1" wrap="soft" oninput="adjustTextarea(this); this.style.height = this.scrollHeight + 'px';"></textarea>
-                    </td> #}
                 </tr>
                 <tr>
                     <td>
@@ -169,6 +162,7 @@
         </section>
 
 <div class="table-wrapper">
+    <textarea rows="1" wrap="soft" style="width: 100%; font-weight: bold;" oninput="adjustTextarea(this);"></textarea>  
     <table id="additionalTable">
         <tbody>
             <tr>
@@ -225,7 +219,9 @@
         </tbody>
     </table>
     <button id="addRowButton" onclick="addRow()">Добавить строку</button>
-    <button id="removeRowButton" onclick="removeRow()">Удалить</button>
+    <button id="removeRowButton" onclick="removeRow()">Удалить строку</button>
+    <button id="addTableButton" onclick="addTable()">Добавить таблицу</button>
+    <button id="removeTableButton" onclick="removeTable()">Удалить таблицу</button>
 </div>
 
 <script>
@@ -236,20 +232,25 @@
         const additionalTable = document.getElementById('additionalTable');
         const addRowButton = document.getElementById('addRowButton');
         const removeRowButton = document.getElementById('removeRowButton');
+        const addTableButton = document.getElementById('addTableButton');
+        const removeTableButton = document.getElementById('removeTableButton');
 
         if (textarea.value.trim().toLowerCase() === 'отсутствует') {
             additionalTable.style.display = 'none';
             addRowButton.style.display = 'none';
             removeRowButton.style.display = 'none';
+            addTableButton.style.display = 'none';
+            removeTableButton.style.display = 'none';
         } else {
             additionalTable.style.display = 'table';
             addRowButton.style.display = 'inline-block';
             removeRowButton.style.display = 'inline-block';
+            addTableButton.style.display = 'inline-block';
+            removeTableButton.style.display = 'inline-block';
         }
     }
 
-    function addRow() {
-        const leasingBody = document.getElementById('leasingBody');
+    function addRow(leasingBody = document.getElementById('leasingBody')) {
         const newRow = leasingBody.insertRow(leasingBody.rows.length - 1); // Добавляем перед строкой "Итого"
         
         for (let i = 0; i < 7; i++) {
@@ -265,8 +266,7 @@
         }
     }
 
-    function removeRow() {
-        const leasingBody = document.getElementById('leasingBody');
+    function removeRow(leasingBody = document.getElementById('leasingBody')) {
         if (leasingBody.rows.length > 2) { // Убедитесь, что остается хотя бы одна строка ввода
             leasingBody.deleteRow(leasingBody.rows.length - 2); // Удаляем последнюю добавленную строку
             updateTotals(); // Обновляем итоги после удаления
@@ -274,29 +274,106 @@
     }
 
     function updateTotals() {
-        const rows = document.querySelectorAll("#leasingBody tr");
-        let totalSum = 0;
-        let totalMonthlyPayment = 0;
-        let totalBalance = 0;
-        let totalDelay = 0;
+        const leasingBodies = document.querySelectorAll('tbody[id^="leasingBody"]');
+        leasingBodies.forEach(leasingBody => {
+            let totalSum = 0;
+            let totalMonthlyPayment = 0;
+            let totalBalance = 0;
+            let totalDelay = 0;
 
-        rows.forEach((row, index) => {
-            if (index === rows.length - 1) return; // Пропускаем строку "Итого"
-            const cells = row.querySelectorAll("textarea");
-            if (cells[1].value) totalSum += parseFloat(cells[1].value.replace(/[^0-9.-]+/g, "")) || 0;
-            if (cells[4].value) totalMonthlyPayment += parseFloat(cells[4].value.replace(/[^0-9.-]+/g, "")) || 0;
-            if (cells[5].value) totalBalance += parseFloat(cells[5].value.replace(/[^0-9.-]+/g, "")) || 0;
-            if (cells[6].value) totalDelay += parseFloat(cells[6].value.replace(/[^0-9.-]+/g, "")) || 0;
+            const rows = leasingBody.rows;
+            for (let i = 0; i < rows.length - 1; i++) {
+                const cells = rows[i].querySelectorAll("textarea");
+                if (cells[1].value) totalSum += parseFloat(cells[1].value.replace(/[^0-9.-]+/g, "")) || 0;
+                if (cells[4].value) totalMonthlyPayment += parseFloat(cells[4].value.replace(/[^0-9.-]+/g, "")) || 0;
+                if (cells[5].value) totalBalance += parseFloat(cells[5].value.replace(/[^0-9.-]+/g, "")) || 0;
+                if (cells[6].value) totalDelay += parseFloat(cells[6].value.replace(/[^0-9.-]+/g, "")) || 0;
+            }
+
+            const totalRow = leasingBody.rows[leasingBody.rows.length - 1];
+            totalRow.cells[1].innerText = totalSum.toFixed(2);
+            totalRow.cells[4].innerText = totalMonthlyPayment.toFixed(2);
+            totalRow.cells[5].innerText = totalBalance.toFixed(2);
+            totalRow.cells[6].innerText = totalDelay.toFixed(2);
         });
-
-        document.getElementById("totalSum").innerText = totalSum.toFixed(2);
-        document.getElementById("totalMonthlyPayment").innerText = totalMonthlyPayment.toFixed(2);
-        document.getElementById("totalBalance").innerText = totalBalance.toFixed(2);
-        document.getElementById("totalDelay").innerText = totalDelay.toFixed(2);
     }
+
+    function addTable() {
+    const tableWrapper = document.querySelector('.table-wrapper');
+    const newTableDiv = document.createElement('div');
+    
+    newTableDiv.innerHTML = `
+        <textarea rows="1" wrap="soft" style="width: 100%; font-weight: bold;" oninput="adjustTextarea(this);"></textarea>
+        <table id="additionalTable${document.querySelectorAll('table[id^="additionalTable"]').length + 1}">
+            <tbody>
+                <tr>
+                    <td>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <td>№ и дата договора</td>
+                                    <td>Сумма по договору лизинга, руб.</td>
+                                    <td>Срок лизинга, мес.</td>
+                                    <td>Предмет лизинга</td>
+                                    <td>Среднемесячный лизинговый платеж, руб.</td>
+                                    <td>Остаток задолженности по договору лизинга, руб. на дату составления заключения (указать дату)</td>
+                                    <td>Просроченная задолженность, руб./Переплата, руб. на дату составления заключения (указать дату)</td>
+                                </tr>
+                            </thead>
+                            <tbody id="leasingBody${document.querySelectorAll('tbody[id^="leasingBody"]').length + 1}">
+                                <tr>
+                                    <td>
+                                        <textarea rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                    </td>
+                                    <td>
+                                        <textarea rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                    </td>
+                                    <td>
+                                        <textarea rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                    </td>
+                                    <td>
+                                        <textarea rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                    </td>
+                                    <td>
+                                        <textarea rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                    </td>
+                                    <td>
+                                        <textarea rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                    </td>
+                                    <td>
+                                        <textarea rows="1" wrap="soft" oninput="adjustTextarea(this); updateTotals();"></textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Итого</td>
+                                    <td>0.00</td>
+                                    <td>---</td>
+                                    <td>---</td>
+                                    <td>0.00</td>
+                                    <td>0.00</td>
+                                    <td>0.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button onclick="addRow(this.parentNode.querySelector('tbody[id^=leasingBody]'));">Добавить строку</button>
+        <button onclick="removeRow(this.parentNode.querySelector('tbody[id^=leasingBody]'));">Удалить строку</button>
+        <button onclick="removeTable(this.parentNode)">Удалить таблицу</button>
+    `;
+    tableWrapper.appendChild(newTableDiv);
+
+    updateTotals();
+}
+
+function removeTable(tableDiv) {
+    tableDiv.remove();
+    updateTotals();
+}
+    
 </script>
-
-
 
 
         <section>

@@ -75,6 +75,36 @@
         width: 250px; /* Задайте нужную ширину */
         overflow: auto; /* Добавляет прокрутку, если содержимое превышает ширину */
     }
+{# /* Стили для границ ячеек */
+        .leasing-cell {
+            border: 1px solid #000; /* Черная граница */
+            padding: 5px; /* Отступы внутри ячейки */
+        }
+
+        /* Установка ширины для textarea */
+        .leasing-cell textarea {
+            width: 100%; /* Ширина 100% от родительской ячейки */
+            box-sizing: border-box; /* Учитывать границы и отступы в ширине */
+        }
+
+        /* Ширина для ИНН */
+        #inn_leasee {
+            width: 150px; /* Ширина для ИНН */
+        }
+        /* Ширина для ИНН */
+        #serial_number {
+            width: 30px; /* Ширина для ИНН */
+        }
+
+        /* Уменьшение ширины для "Дата окончания договора" и "п/п" */
+        #date_end_dl {
+            width: 80px; /* Ширина для "Дата окончания договора" */
+        }
+
+        #pl {
+            width: 80px; /* Ширина для "п/п" */
+        } #}
+
 
     </style>
 </head>
@@ -421,39 +451,39 @@ function removeTable(tableDiv) {
                         <div class="table-wrapper">
                             <table>
                                 <thead>
-                                    <tr>
-                                        <th>п/п</th>
-                                        <th>Договор №</th>
-                                        <th>Контрагент</th>
-                                        <th>ИНН</th>
-                                        <th>Предмет договора</th>
-                                        <th>Стоимость</th>
-                                        <th>Дата окончания договора</th>
+                                     <tr>
+                                        <th style="width: 50px;">п/п</th>
+                                        <th style="width: 100px;">Договор №</th>
+                                        <th style="width: 200px;">Контрагент</th>
+                                        <th style="width: 300px;">ИНН</th>
+                                        <th style="width: 250px;">Предмет договора</th>
+                                        <th style="width: 100px;">Стоимость</th>
+                                        <th style="width: 50px;">Дата окончания договора</th>
                                     </tr>
                                 </thead>
-                                <tbody id="leasingBody1">
-                                    <tr>
-                                        <td>
-                                            <textarea id="serial_number" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                        </td>
-                                        <td>
-                                            <textarea id="number_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                        </td>
-                                        <td>
-                                            <textarea id="leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                        </td>
-                                        <td>
-                                            <textarea id="inn_leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                        </td>
-                                        <td>
-                                            <textarea id="pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                        </td>
-                                        <td>
-                                            <textarea id="price_pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                        </td>
-                                        <td>
-                                            <textarea id="date_end_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
-                                        </td>
+                                    <tbody id="leasingBody1">
+                                                <tr>
+                                                    <td class="leasing-cell">
+                                                        <textarea id="serial_number" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                    </td>
+                                                    <td class="leasing-cell">
+                                                        <textarea id="number_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                    </td>
+                                                    <td class="leasing-cell">
+                                                        <textarea id="leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                    </td>
+                                                    <td class="leasing-cell">
+                                                        <textarea id="inn_leasee" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                    </td>
+                                                    <td class="leasing-cell">
+                                                        <textarea id="pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                    </td>
+                                                    <td class="leasing-cell">
+                                                        <textarea id="price_pl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                    </td>
+                                                    <td class="leasing-cell">
+                                                        <textarea id="date_end_dl" rows="1" wrap="soft" oninput="adjustTextarea(this);"></textarea>
+                                                    </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -461,7 +491,49 @@ function removeTable(tableDiv) {
                             <button id="removeRowButton1" onclick="removeRow1()">Удалить строку</button>
                         </div>
                     </td>
-                </tr>                        
+                </tr>
+                <tr>
+                    <td>
+                        <div id="fixed_assets_pole" contenteditable="true" class='textarea' 
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            2.4 Основные средства
+                        </div>
+                    </td>
+                    <td>
+                        <div id="fixed_assets" contenteditable="true" class='textarea' 
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            Согласно представленной бухгалтерской отчетности на 30.09.2024 г. – 313 588 тыс. руб.
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="mission_project_pole" contenteditable="true" class='textarea' 
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            2.5 Цель лизингового проекта
+                        </div>
+                    </td>
+                    <td>
+                        <div id="mission_project" contenteditable="true" class='textarea' 
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            Увеличение парка спецтехники.
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id="social_effect_pole" contenteditable="true" class='textarea' 
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            2.6 Социальный эффект
+                        </div>
+                    </td>
+                    <td>
+                        <div id="social_effect" contenteditable="true" class='textarea' 
+                            oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px';">
+                            Создание рабочих мест.\Сохранение действующих рабочих мест.
+                        </div>
+                    </td>
+                </tr>                                  
             </tbody>       
         </table>
     </section>

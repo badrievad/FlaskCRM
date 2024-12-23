@@ -9,6 +9,7 @@ from ..risk_department.db_func import (
     get_decision,
     process_risk_decision,
 )
+from ..risk_department.other_utils import format_russian_date
 from . import risk_department_bp
 
 
@@ -16,12 +17,45 @@ from . import risk_department_bp
 def risk_department(deal_id) -> str:
     logging.info(f"Deal ID: {deal_id}")
     client = Deal.query.get(deal_id).client
+
+    # Получаем group_id основной сделки
+    deal: Deal = Deal.query.get(deal_id)
+    group_id = deal.group_id
+    if group_id:
+        related_deals = Deal.query.filter_by(group_id=group_id).all()
+    else:
+        related_deals = Deal.query.filter_by(id=deal_id).all()
+
+    sellers: dict = {}
+    try:
+        for i, leas_calculator in enumerate(
+            leas_calculator
+            for related_deal in related_deals
+            for leas_calculator in related_deal.leas_calculators
+        ):
+            sellers[f"Продавец {i + 1}"] = {
+                "name": leas_calculator.seller.name,
+                "inn": leas_calculator.seller.inn,
+                "date_of_registration": format_russian_date(
+                    leas_calculator.seller.date_of_registration
+                ),
+                "address": leas_calculator.seller.address,
+                "item_name": leas_calculator.item_name,
+                "item_year": leas_calculator.item_year,
+                "item_price": leas_calculator.item_price_str,
+                "item_type": leas_calculator.item_type,
+            }
+    except Exception as ex:
+        logging.error(ex)
+
+    logging.info(f"Sellers: {sellers}")
     decision = get_decision(deal_id)
     return render_template(
         "risk_department.html",
         deal_id=deal_id,
         client=client,
         decision=decision,
+        sellers=sellers,
     )
 
 

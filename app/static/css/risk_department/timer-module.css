@@ -1,0 +1,11 @@
+.time-list {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+	background-color: rgb(38, 38, 38); 
+	padding: 20px;
+	margin: 100px;
+	border-radius: 10px;
+	font-family: 'Roboto', sans-serif;
+}

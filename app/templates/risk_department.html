@@ -22,6 +22,10 @@
 		/>
 		<link
 			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/risk_department/timer-module.css') }}"
+		/>
+		<link
+			rel="stylesheet"
 			href="{{ url_for('crm.static', filename='css/risk_department/decision-part.css') }}"
 		/>
 		<link
@@ -116,6 +120,48 @@
 							<span class="data-value">{{ client.director }}</span>
 						</div>
 					</div>
+					<!-- Раздел "Продавца" -->
+					<div class="data-section">
+						{% for seller_key, seller in sellers.items() %}
+						<div class="seller-block">
+							<h5>{{ seller_key }}</h5>
+							<div class="data-row">
+								<span class="data-label">Имя:</span>
+								<span class="data-value">{{ seller.name }}</span>
+							</div>
+							<div class="data-row">
+								<span class="data-label">ИНН:</span>
+								<span class="data-value">{{ seller.inn }}</span>
+							</div>
+							<div class="data-row">
+								<span class="data-label">Дата регистрации:</span>
+								<span class="data-value">{{ seller.date_of_registration }}</span>
+							</div>
+							<div class="data-row">
+								<span class="data-label">Адрес:</span>
+								<span class="data-value">{{ seller.address }}</span>
+							</div>
+							<div class="data-row">
+								<span class="data-label">Наименование ПЛ:</span>
+								<span class="data-value">{{ seller.item_name }}</span>
+							</div>
+							<div class="data-row">
+								<span class="data-label">Год выпуска ПЛ:</span>
+								<span class="data-value">{{ seller.item_year }}</span>
+							</div>
+							<div class="data-row">
+								<span class="data-label">Цена ПЛ:</span>
+								<span class="data-value">{{ seller.item_price }} руб.</span>
+							</div>
+							<div class="data-row">
+								<span class="data-label">Тип ПЛ:</span>
+								<span class="data-value">{{ seller.item_type }}</span>
+							</div>
+						</div>
+						{% else %}
+						<h5>КП еще не привязан к сделке/Не заполнены все данные</h5>
+						{% endfor %}
+					</div>
 				</div>
 
 				<!-- Вторая колонка, поделена на две части -->
@@ -123,10 +169,6 @@
 
 					<div class="time-section">
 						<h2>Срок рассмотрения</h2>
-						<div class="time-list-container">
-							<ul class="time-list">
-							</ul>
-						</div>
 					</div>
 
 					<!-- Вторая часть: Сформированные документы -->

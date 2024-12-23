@@ -1,7 +1,7 @@
 /* Общие стили */
 body {
 	font-family: 'Roboto', sans-serif;
-	background-color: #f0f2f5;
+	background-color: rgb(38, 37, 37) !important;
 	margin: 0;
 	padding: 0;
 }
@@ -47,7 +47,7 @@ body {
 	margin: 0; /* Убираем отступы */
 	color: #ddd8d8;
     min-height: 100vh; /* Высота на 100% родителя */
-    height: 100%;
+	background-color: rgb(38, 37, 37);
 }
 
 /* Секции внутри правой колонки */
@@ -57,7 +57,16 @@ body {
 	box-sizing: border-box;
 	padding: 0; /* Убираем отступы */
 	margin: 0; /* Убираем отступы */
-	height: 60%; /* 60% высоты родителя (.right-column) */
+	height: 40%; /* 60% высоты родителя (.right-column) */
+}
+
+.time-section {
+	flex: 1;
+	background-color: rgb(37, 35, 35);
+	box-sizing: border-box;
+	padding: 0; /* Убираем отступы */
+	margin: 0; /* Убираем отступы */
+	height: 20%; /* 60% высоты родителя (.right-column) */
 }
 
 .decision-section {
@@ -66,13 +75,14 @@ body {
 	box-sizing: border-box;
 	padding: 0; /* Убираем отступы */
 	margin: 0; /* Убираем отступы */
-	height: 40%; /* 40% высоты родителя (.right-column) */
+	height: 100%; /* 40% высоты родителя (.right-column) */
 }
 
 /* Стили для заголовков */
 .left-column h2,
 .documents-section h2,
-.decision-section h2 {
+.decision-section h2,
+.time-section h2 {
 	display: block;
 	font-size: 22px;
 	margin: 20px 0;
@@ -83,7 +93,8 @@ body {
 /* Стили для заголовков */
 .left-column h5,
 .documents-section h5,
-.decision-section h5 {
+.decision-section h5,
+.time-section h5 {
 	margin-bottom: 20px;
 	margin-top: 40px;
 	font-weight: bold;
@@ -91,7 +102,8 @@ body {
 
 .left-column h2::after,
 .documents-section h2::after,
-.decision-section h2::after {
+.decision-section h2::after,
+.time-section h2::after {
 	content: '';
 	position: absolute;
 	bottom: -10px; /* Расстояние ниже заголовка */

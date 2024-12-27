@@ -4,9 +4,9 @@
 	padding: 0;
 	margin: 0;
 	text-align: center;
-	background-color: rgb(38, 38, 38); 
+	background-color: rgb(38, 38, 38);
 	padding: 20px;
-	margin: 100px;
+	margin-top: 100px;
 	border-radius: 10px;
 	font-family: 'Roboto', sans-serif;
 }
@@ -23,4 +23,46 @@
 
 .documents-list a:hover {
 	text-decoration: underline;
+}
+
+.documents-section h6 {
+	margin-left: 25px;
+	margin-top: 20px;
+}
+
+.icon-container {
+	display: flex;
+	justify-content: center;
+	gap: 20px; /* Расстояние между иконками */
+	margin-top: 20px; /* Отступ сверху */
+}
+
+.icon-item {
+	text-align: center;
+}
+
+.icon-item img {
+	margin-bottom: 10px; /* Отступ между иконкой и подписью */
+	transition: transform 0.3s, box-shadow 0.3s; /* Плавный эффект */
+}
+
+.icon-item img:hover {
+    transform: scale(1.1); /* Увеличение иконки */
+	cursor: pointer;
+}
+
+.icon-item p {
+	font-size: 14px;
+	color: #696868; /* Цвет текста подписи */
+	margin: 0;
+	transition: color 0.3s; /* Плавное изменение цвета текста */
+}
+
+.icon-item:hover p {
+    color: #b84646; /* Изменение цвета подписи при наведении */
+	cursor: pointer;
+}
+
+.copyable {
+    cursor: pointer;
 }

@@ -103,8 +103,7 @@
 						</div>
 						<div class="data-row">
 							<span class="data-label">ИНН:</span>
-							<span class="data-value copyable" data-copy="{{ client.inn }}">{{ client.inn }}</span>
-							<img class="copyable" style="opacity: 0.4;" width="25" height="25" src="https://img.icons8.com/pulsar-line/48/copy.png" alt="copy" data-copy="{{ client.inn }}" />
+							<span class="data-value copyable" data-copy="{{ client.inn }}">{{ client.inn }} <img class="copyable" style="opacity: 0.4;" width="25" height="25" src="https://img.icons8.com/pulsar-line/48/copy.png" alt="copy" data-copy="{{ client.inn }}" /></span>
 						</div>
 						<div class="data-row">
 							<span class="data-label">Дата регистрации:</span>
@@ -132,8 +131,8 @@
 							</div>
 							<div class="data-row">
 								<span class="data-label">ИНН:</span>
-								<span class="data-value copyable" data-copy="{{ seller.inn }}">{{ seller.inn }}</span>
-								<img class="copyable" style="opacity: 0.4;" width="25" height="25" src="https://img.icons8.com/pulsar-line/48/copy.png" alt="copy" data-copy="{{ seller.inn }}" />
+								<span class="data-value copyable" data-copy="{{ seller.inn }}">{{ seller.inn }} <img class="copyable" style="opacity: 0.4;" width="25" height="25" src="https://img.icons8.com/pulsar-line/48/copy.png" alt="copy" data-copy="{{ seller.inn }}" /></span>
+								
 							</div>
 							<div class="data-row">
 								<span class="data-label">Дата регистрации:</span>
@@ -193,11 +192,11 @@
 							</ul>
 						</div>
 						<div class="icon-container">
-							<div class="icon-item">
+							<div class="icon-item" data-folder-path="{{ folder_path }}">
 								<img width="60" style="opacity: 0.5;" height="60" src="https://img.icons8.com/pulsar-line/96/mac-folder.png" alt="mac-folder"/>
 								<p>Папка сделки</p>
 							</div>
-							<div class="icon-item">
+							<div class="icon-item" data-url="{{ url_for('deal_inside.conclusion', deal_id=deal_id) }}">
 								<img width="60" style="opacity: 0.5;" height="60" src="https://img.icons8.com/pulsar-line/96/document.png" alt="document"/>
 								<p>Эконом. заключение</p>
 							</div>
@@ -261,4 +260,5 @@
 	<script src="{{ url_for('crm.static', filename='js/navigate-to-deal-page.js') }}"></script>
 	<script src="{{ url_for('crm.static', filename='js/risk_department/formatting-date.js') }}"></script>
 	<script src="{{ url_for('crm.static', filename='js/risk_department/copy-text.js') }}"></script>
+	<script src="{{ url_for('crm.static', filename='js/risk_department/go-to-conclusion.js') }}"></script>
 </html>

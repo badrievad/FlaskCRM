@@ -50,12 +50,16 @@ def risk_department(deal_id) -> str:
 
     logging.info(f"Sellers: {sellers}")
     decision = get_decision(deal_id)
+
+    folder_path = deal.deal_path
+
     return render_template(
         "risk_department.html",
         deal_id=deal_id,
         client=client,
         decision=decision,
         sellers=sellers,
+        folder_path=folder_path,
     )
 
 

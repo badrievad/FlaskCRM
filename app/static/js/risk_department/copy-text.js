@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (parentRow) {
                     const dataValue = parentRow.querySelector('.data-value');
                     if (dataValue) {
-                        dataValue.style.color = '#696969'; // Например, синий
+                        dataValue.style.color = '#FF4C4C'; // Например, светло-красный
                         dataValue.style.transition = 'color 0.3s';
 
                         // Сбрасываем цвет через 1.5 секунды

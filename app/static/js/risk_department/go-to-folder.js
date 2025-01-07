@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			const folderPath = item.getAttribute('data-folder-path')
 			if (folderPath) {
 				try {
-					const response = await fetch('http://localhost:5001/open-folder', {
+					const response = await fetch('http://localhost:5001/open-deal-folder', {
 						method: 'POST',
 						headers: {
 							'Content-Type': 'application/json',

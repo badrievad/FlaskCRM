@@ -912,7 +912,7 @@ input[readonly] {
 
 .styled-table {
 	border-collapse: collapse;
-	font-family: Arial, sans-serif;
+	font-family: 'Roboto', sans-serif;
 	min-width: 500px;
 	width: 100%;
 	margin: 20px 0;

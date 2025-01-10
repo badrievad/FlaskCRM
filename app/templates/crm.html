@@ -1,354 +1,549 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сделки ООО «ЛКМБ-РТ»</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/style-crm.css') }}">
-    <link rel="stylesheet" href="{{ url_for('crm.static', filename='css/toast-style.css') }}">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="icon" href="{{ url_for('crm.static', filename='/images/gpt.png') }}" type="image/png">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap" rel="stylesheet">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Сделки ООО «ЛКМБ-РТ»</title>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/style-crm.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="{{ url_for('crm.static', filename='css/toast-style.css') }}"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+		/>
+		<link
+			rel="icon"
+			href="{{ url_for('crm.static', filename='/images/gpt.png') }}"
+			type="image/png"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Dosis:wght@200&display=swap"
+			rel="stylesheet"
+		/>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.9.1"></script>
+		<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.0/socket.io.js"></script>
+		<script src="https://unpkg.com/htmx.org@1.9.1"></script>
 
-    <!-- toastr -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js" defer></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css">
+		<!-- toastr -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"
+			defer
+		></script>
+		<script
+			src="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.js"
+			defer
+		></script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://cdn.jsdelivr.net/npm/toastr@2/build/toastr.min.css"
+		/>
 
-    <!-- DADATA -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css" rel="stylesheet"/>
-    <script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
+		<!-- DADATA -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<link
+			href="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/css/suggestions.min.css"
+			rel="stylesheet"
+		/>
+		<script src="http://cdn.jsdelivr.net/npm/suggestions-jquery@22.6.0/dist/js/jquery.suggestions.min.js"></script>
 
-    <!-- Подключаем SweetAlert2 через CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<!-- Подключаем SweetAlert2 через CDN -->
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script src="{{ url_for('crm.static', filename='js/timeUtils.js') }}"></script> 
+		<script src="{{ url_for('crm.static', filename='js/timeUtils.js') }}"></script>
 
-    <style>
-        .hidden {
-            display: none;
-        }
+		<style>
+			.hidden {
+				display: none;
+			}
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-            background-image: url('{{ user_fon }}');
-            background-position: center; /* Изображение будет центрировано */
-            background-repeat: no-repeat; /* Изображение не будет повторяться */
-            background-attachment: fixed; /* изменено со scroll на fixed */
-            background-size: cover;
-        }
-    </style>
-</head>
-<body>
+			body {
+				font-family: 'Roboto', sans-serif;
+				background-color: #f5f5f5;
+				margin: 0;
+				padding: 0;
+				display: flex;
+				height: 100vh;
+				overflow: hidden;
+				background-image: url('{{ user_fon }}');
+				background-position: center; /* Изображение будет центрировано */
+				background-repeat: no-repeat; /* Изображение не будет повторяться */
+				background-attachment: fixed; /* изменено со scroll на fixed */
+				background-size: cover;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="sidebar">
+			<h2 style="margin-bottom: 50px; font-family: 'Dosis', cursive">
+				<img
+					src="{{ url_for('crm.static', filename='images/atom.png') }}"
+					alt="Логотип AtomCRM"
+					class="logo"
+				/>
+				AtomCRM
+			</h2>
+			<ul>
+				<li onclick="toggleSubmenu('deals-submenu')" class="default-li">
+					<i class="fas fa-handshake"></i> Список сделок
+				</li>
+				<ul id="deals-submenu" class="submenu">
+					<li
+						id="active-deals-link"
+						onclick="showForm('active-deals')"
+						class="default-li"
+					>
+						Активные сделки
+					</li>
+					<li
+						id="archived-deals-link"
+						onclick="showForm('archived-deals')"
+						class="default-li"
+					>
+						Архивные сделки
+					</li>
+				</ul>
+				<li onclick="showForm('task')" class="default-li">
+					<i class="fas fa-tasks"></i> Создать сделку
+				</li>
+				<br /><br /><br /><br />
+				<ul>
+					<li class="clickable-in">
+						<a
+							class="nav-link"
+							href="{{ url_for('leas_calc.get_leasing_calculator') }}"
+						>
+							<i class="fa-solid fa-calculator"></i> Лизинговый калькулятор
+						</a>
+					</li>
+				</ul>
+			</ul>
+			<!-- Начало затемненной области -->
+			<div class="darkened-section">
+				<div class="user-photo">
+					<img src="{{ user_url }}" alt="User Photo" class="profile-image" />
+				</div>
+				<h6>{{ current_user }}</h6>
+				<h6>Должность: {{ user_role }}</h6>
+			</div>
+			<h6>
+				<a class="nav-link exit-link" href="{{ url_for('user.exit_user') }}">
+					<i class="fa-solid fa-right-from-bracket"></i> Выйти из аккаунта
+				</a>
+			</h6>
 
-<div class="sidebar">
-    <h2 style="margin-bottom: 50px; font-family: 'Dosis', cursive;">
-        <img src="{{ url_for('crm.static', filename='images/atom.png') }}"
-             alt="Логотип AtomCRM" class="logo">
-        AtomCRM
-    </h2>
-    <ul>
-        <li onclick="toggleSubmenu('deals-submenu')" class="default-li"><i class="fas fa-handshake"></i> Список сделок
-        </li>
-        <ul id="deals-submenu" class="submenu">
-            <li id="active-deals-link" onclick="showForm('active-deals')" class="default-li">Активные сделки</li>
-            <li id="archived-deals-link" onclick="showForm('archived-deals')" class="default-li">Архивные сделки</li>
-        </ul>
-        <li onclick="showForm('task')" class="default-li"><i class="fas fa-tasks"></i> Создать сделку</li>
-        <br><br><br><br>
-        <ul>
-            <li class="clickable-in">
-                <a class="nav-link" href="{{ url_for('leas_calc.get_leasing_calculator') }}">
-                    <i class="fa-solid fa-calculator"></i> Лизинговый калькулятор
-                </a>
-            </li>
-        </ul>
-    </ul>
-    <!-- Начало затемненной области -->
-    <div class="darkened-section">
-        <div class="user-photo">
-            <img src="{{ user_url }}" alt="User Photo" class="profile-image">
-        </div>
-        <h6>{{ current_user }}</h6>
-        <h6>Должность: {{ user_role }}</h6>
-    </div>
-    <h6>
-        <a class="nav-link exit-link" href="{{ url_for('user.exit_user') }}">
-            <i class="fa-solid fa-right-from-bracket"></i> Выйти из аккаунта
-        </a>
-    </h6>
+			<!-- Конец затемненной области -->
+		</div>
 
-    <!-- Конец затемненной области -->
-</div>
+		<div class="main-content">
+			<div id="active-deals" class="card">
+				<h2>Активные сделки</h2>
+				<button id="merge-deals-button" disabled>
+					<i class="fa-solid fa-code-merge"></i> Объединить сделки
+				</button>
+				<h4 id="filter-search"><i class="fa-solid fa-magnifying-glass"></i></h4>
+				<table class="deal-table">
+					<thead>
+						<tr>
+							<th></th>
+							<th>№</th>
+							<th>№ ДЛ</th>
+							<th id="filter-header">Лизингополучатель</th>
+							<th id="filter-header-product">Продукт</th>
+							<th id="filter-header-manager">Менеджер</th>
+							<th id="filter-header-create">Дата создания сделки</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tr id="filter-row" class="hidden filter-row">
+						<th></th>
+						<th></th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-dl"
+								class="filter-input-dl"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input"
+								class="filter-input"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-product"
+								class="filter-input-product"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-manager"
+								class="filter-input-manager"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-created"
+								class="filter-input-created"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th></th>
+					</tr>
+					<tbody id="deal-rows">
+						<!-- Динамически добавленные строки -->
+					</tbody>
+				</table>
+				<div
+					id="load-more-container"
+					style="text-align: center; margin-top: 20px"
+				>
+					<button id="load-more-button" class="load-more-button">
+						Показать ещё
+					</button>
+				</div>
+			</div>
+			<div id="archived-deals" class="card hidden">
+				<h2>Архивные сделки</h2>
+				<h4 id="filter-search-archived">
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</h4>
+				<table class="deal-table">
+					<thead>
+						<tr>
+							<th>№</th>
+							<th>№ ДЛ</th>
+							<th id="filter-header-archived">Лизингополучатель</th>
+							<th id="filter-header-product-archived">Продукт</th>
+							<th id="filter-header-manager-archived">Менеджер</th>
+							<th id="filter-header-created-archived">Дата создания сделки</th>
+							<th id="filter-header-to-archive-archived">
+								Дата добавления в архив
+							</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tr id="filter-row-archived" class="hidden filter-row-archived">
+						<th></th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-dl-archived"
+								class="filter-input-dl-archived"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-archived"
+								class="filter-input-archived"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-product-archived"
+								class="filter-input-product-archived"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-manager-archived"
+								class="filter-input-manager-archived"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-created-archived"
+								class="filter-input-created-archived"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th>
+							<input
+								type="text"
+								id="filter-input-to-archive-archived"
+								class="filter-input-to-archive-archived"
+								placeholder="Поиск..."
+							/>
+						</th>
+						<th></th>
+					</tr>
+					<tbody id="deal-rows-archived">
+						<!-- Динамически добавленные строки -->
+					</tbody>
+				</table>
+			</div>
+			<div id="task" class="card hidden">
+				<h2>Создать сделку</h2>
+				<form id="create-deal-form">
+					<input
+						type="text"
+						id="deal-title"
+						placeholder="Введите наименование лизингополучателя"
+						required
+					/>
+					<input type="hidden" id="deal-info" placeholder="" required />
+					<button type="submit">Добавить сделку</button>
+				</form>
+				<script>
+					var suggestionsToken = '{{ suggestions_token }}'
+				</script>
+				<script src="{{ url_for('crm.static', filename='js/inn_dada.js') }}"></script>
+				<script src="{{ url_for('crm.static', filename='js/main-filter.js') }}"></script>
+			</div>
+		</div>
+		<script src="{{ url_for('crm.static', filename='js/deal-merge-deals.js') }}"></script>
+		<script>
+			function toggleSubmenu(id) {
+				var submenu = document.getElementById(id)
+				if (submenu.classList.contains('show')) {
+					submenu.classList.remove('show')
+				} else {
+					submenu.classList.add('show')
+				}
+			}
 
-<div class="main-content">
-    <div id="active-deals" class="card">
-        <h2>Активные сделки</h2>
-        <button id="merge-deals-button" disabled><i class="fa-solid fa-code-merge"></i> Объединить сделки</button>
-        <h4 id="filter-search"><i class="fa-solid fa-magnifying-glass"></i></h4>
-        <table class="deal-table">
-            <thead>
-            <tr>
-                <th></th>
-                <th>№</th>
-                <th>№ ДЛ</th>
-                <th id="filter-header">Лизингополучатель</th>
-                <th id="filter-header-product">Продукт</th>
-                <th id="filter-header-manager">Менеджер</th>
-                <th id="filter-header-create">Дата создания сделки</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tr id="filter-row" class="hidden filter-row">
-                <th></th>
-                <th></th>
-                <th><input type="text" id="filter-input-dl" class="filter-input-dl" placeholder="Поиск..."></th>
-                <th><input type="text" id="filter-input" class="filter-input" placeholder="Поиск..."></th>
-                <th><input type="text" id="filter-input-product" class="filter-input-product" placeholder="Поиск...">
-                </th>
-                <th><input type="text" id="filter-input-manager" class="filter-input-manager" placeholder="Поиск...">
-                </th>
-                <th><input type="text" id="filter-input-created" class="filter-input-created" placeholder="Поиск...">
-                </th>
-                <th></th>
-            </tr>
-            <tbody id="deal-rows">
-            <!-- Динамически добавленные строки -->
-            </tbody>
-        </table>
-        <div id="load-more-container" style="text-align: center; margin-top: 20px;">
-            <button id="load-more-button" class="load-more-button">Показать ещё</button>
-        </div>
-    </div>
-    <div id="archived-deals" class="card hidden">
-        <h2>Архивные сделки</h2>
-        <h4 id="filter-search-archived"><i class="fa-solid fa-magnifying-glass"></i></h4>
-        <table class="deal-table">
-            <thead>
-            <tr>
-                <th>№</th>
-                <th>№ ДЛ</th>
-                <th id="filter-header-archived">Лизингополучатель</th>
-                <th id="filter-header-product-archived">Продукт</th>
-                <th id="filter-header-manager-archived">Менеджер</th>
-                <th id="filter-header-created-archived">Дата создания сделки</th>
-                <th id="filter-header-to-archive-archived">Дата добавления в
-                    архив
-                </th>
-                <th></th>
-            </tr>
-            </thead>
-            <tr id="filter-row-archived" class="hidden filter-row-archived">
-                <th></th>
-                <th><input type="text" id="filter-input-dl-archived" class="filter-input-dl-archived"
-                           placeholder="Поиск..."></th>
-                <th><input type="text" id="filter-input-archived" class="filter-input-archived" placeholder="Поиск...">
-                </th>
-                <th><input type="text" id="filter-input-product-archived" class="filter-input-product-archived"
-                           placeholder="Поиск..."></th>
-                <th><input type="text" id="filter-input-manager-archived" class="filter-input-manager-archived"
-                           placeholder="Поиск..."></th>
-                <th><input type="text" id="filter-input-created-archived" class="filter-input-created-archived"
-                           placeholder="Поиск..."></th>
-                <th><input type="text" id="filter-input-to-archive-archived" class="filter-input-to-archive-archived"
-                           placeholder="Поиск..."></th>
-                <th></th>
-            </tr>
-            <tbody id="deal-rows-archived">
-            <!-- Динамически добавленные строки -->
-            </tbody>
-        </table>
-    </div>
-    <div id="task" class="card hidden">
-        <h2>Создать сделку</h2>
-        <form id="create-deal-form">
-            <input type="text" id="deal-title" placeholder="Введите наименование лизингополучателя" required>
-            <input type="hidden" id="deal-info" placeholder="" required>
-            <button type="submit">Добавить сделку</button>
-        </form>
-        <script>
-            var suggestionsToken = "{{ suggestions_token }}";
-        </script>
-        <script src="{{ url_for('crm.static', filename='js/inn_dada.js') }}"></script>
-        <script src="{{ url_for('crm.static', filename='js/main-filter.js') }}"></script>
-    </div>
-</div>
-<script src="{{ url_for('crm.static', filename='js/deal-merge-deals.js') }}"></script>
-<script>
-    function toggleSubmenu(id) {
-        var submenu = document.getElementById(id);
-        if (submenu.classList.contains('show')) {
-            submenu.classList.remove('show');
-        } else {
-            submenu.classList.add('show');
-        }
-    }
+			function showForm(formId) {
+				document.querySelectorAll('.deal-content .card').forEach(card => {
+					card.classList.add('hidden')
+				})
+				document.getElementById(formId).classList.remove('hidden')
+			}
+		</script>
+		<script>
+			function showForm(formId) {
+				document.querySelectorAll('.main-content .card').forEach(card => {
+					card.classList.add('hidden')
+				})
+				document.getElementById(formId).classList.remove('hidden')
+				localStorage.setItem('currentView', formId)
+			}
 
-    function showForm(formId) {
-        document.querySelectorAll('.deal-content .card').forEach(card => {
-            card.classList.add('hidden');
-        });
-        document.getElementById(formId).classList.remove('hidden');
-    }
-</script>
-<script>
-    function showForm(formId) {
-        document.querySelectorAll('.main-content .card').forEach(card => {
-            card.classList.add('hidden');
-        });
-        document.getElementById(formId).classList.remove('hidden');
-        localStorage.setItem('currentView', formId);
-    }
+			// Показать форму на основе сохраненного состояния при загрузке страницы
+			const currentView = localStorage.getItem('currentView') || 'active-deals' // Показать 'active-deals' по умолчанию
+			showForm(currentView)
+		</script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const userName = '{{ user_name }}'
+				const userRole = '{{ user_role }}'
+				const dealsPerPage = 10
+				let currentIndex = 0
+				let dealsData = [] // Для хранения всех сделок
 
-    // Показать форму на основе сохраненного состояния при загрузке страницы
-    const currentView = localStorage.getItem('currentView') || 'active-deals'; // Показать 'active-deals' по умолчанию
-    showForm(currentView);
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const userName = '{{ user_name }}';
-        const userRole = '{{ user_role }}';
-        const dealsPerPage = 10;
-        let currentIndex = 0;
-        let dealsData = []; // Для хранения всех сделок
+				fetch('/crm/deals/active')
+					.then(response => response.json())
+					.then(data => {
+						dealsData = data.deals // Сохраняем все сделки
+						applyFilters() // Отображаем первые сделки (с учетом возможных фильтров)
+					})
 
-        fetch('/crm/deals/active')
-            .then(response => response.json())
-            .then(data => {
-                dealsData = data.deals; // Сохраняем все сделки
-                applyFilters(); // Отображаем первые сделки (с учетом возможных фильтров)
-            });
+				// Добавить обработчики событий для фильтров
+				document
+					.getElementById('filter-input-dl')
+					.addEventListener('input', applyFilters)
+				document
+					.getElementById('filter-input')
+					.addEventListener('input', applyFilters)
+				document
+					.getElementById('filter-input-product')
+					.addEventListener('input', applyFilters)
+				document
+					.getElementById('filter-input-manager')
+					.addEventListener('input', applyFilters)
+				document
+					.getElementById('filter-input-created')
+					.addEventListener('input', applyFilters)
 
-        // Добавить обработчики событий для фильтров
-        document.getElementById('filter-input-dl').addEventListener('input', applyFilters);
-        document.getElementById('filter-input').addEventListener('input', applyFilters);
-        document.getElementById('filter-input-product').addEventListener('input', applyFilters);
-        document.getElementById('filter-input-manager').addEventListener('input', applyFilters);
-        document.getElementById('filter-input-created').addEventListener('input', applyFilters);
+				document
+					.getElementById('load-more-button')
+					.addEventListener('click', function () {
+						displayDeals(filteredDeals) // Отображаем следующие сделки (используя текущие отфильтрованные данные)
+					})
 
-        document.getElementById('load-more-button').addEventListener('click', function () {
-            displayDeals(filteredDeals); // Отображаем следующие сделки (используя текущие отфильтрованные данные)
-        });
+				let filteredDeals = [] // Для хранения отфильтрованных данных
 
-        let filteredDeals = []; // Для хранения отфильтрованных данных
+				function displayDeals(dealsArray) {
+					const dealsList = document.getElementById('deal-rows')
+					const endIndex = currentIndex + dealsPerPage
+					const dealsToDisplay = dealsArray.slice(currentIndex, endIndex)
 
-        function displayDeals(dealsArray) {
-            const dealsList = document.getElementById('deal-rows');
-            const endIndex = currentIndex + dealsPerPage;
-            const dealsToDisplay = dealsArray.slice(currentIndex, endIndex);
-
-            dealsToDisplay.forEach((deal, index) => {
-                let checkboxCell = '';
-                if (userRole === 'admin' || userName === deal.created_by) {
-                    checkboxCell = `
+					dealsToDisplay.forEach((deal, index) => {
+						let checkboxCell = ''
+						if (userRole === 'admin' || userName === deal.created_by) {
+							checkboxCell = `
                     <td onclick="toggleCheckbox(${deal.id}, event)">
                         <input type="checkbox" class="deal-checkbox" data-deal-id="${deal.id}" id="checkbox-${deal.id}" style="cursor: pointer;">
-                    </td>`;
-                } else {
-                    checkboxCell = `<td></td>`;
-                }
-                const dealUserIcon = `${deal.created_by_icon}`;
-                const timeAgo = formatTimeAgo(deal.created_at);
-                const dealItem = `
+                    </td>`
+						} else {
+							checkboxCell = `<td></td>`
+						}
+						const dealUserIcon = `${deal.created_by_icon}`
+						const timeAgo = formatTimeAgo(deal.created_at)
+						const dealItem = `
                 <tr id="deal-${deal.id}">
                     ${checkboxCell}
-                    <td onclick="enterIntoDeal(${deal.id})">${currentIndex + index + 1}</td>
-                    <td class="deal-dl" onclick="enterIntoDeal(${deal.id})">${deal.dl_number}</td>
-                    <td class="deal-title" onclick="enterIntoDeal(${deal.id})">${deal.title}</td>
-                    <td class="deal-product" onclick="enterIntoDeal(${deal.id})">${deal.product}</td>
-                    <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">
-                        <img src="${dealUserIcon}" alt="User Photo" class="profile-image-deal"> ${deal.created_by}
+                    <td onclick="enterIntoDeal(${deal.id})">${
+							currentIndex + index + 1
+						}</td>
+                    <td class="deal-dl" onclick="enterIntoDeal(${deal.id})">${
+							deal.dl_number
+						}</td>
+                    <td class="deal-title" onclick="enterIntoDeal(${
+											deal.id
+										})">${deal.title}</td>
+                    <td class="deal-product" onclick="enterIntoDeal(${
+											deal.id
+										})">${deal.product}</td>
+                    <td class="deal-manager" onclick="enterIntoDeal(${
+											deal.id
+										})">
+                        <img src="${dealUserIcon}" alt="User Photo" class="profile-image-deal"> ${
+							deal.created_by
+						}
                     </td>
-                    <td class="deal-created" onclick="enterIntoDeal(${deal.id})">${timeAgo}</td>
+                    <td class="deal-created" onclick="enterIntoDeal(${
+											deal.id
+										})">${timeAgo}</td>
                     <td>
-                        ${(deal.created_by === userName || userRole === 'admin') ? `
+                        ${
+													deal.created_by === userName || userRole === 'admin'
+														? `
                             <div class="btn-container">
                                 <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${deal.id})">
                                     <i class="fa-regular fa-square-minus"></i>
                                 </button>
                             </div>
-                        ` : ''}
+                        `
+														: ''
+												}
                     </td>
-                </tr>`;
-                dealsList.insertAdjacentHTML('beforeend', dealItem);
-            });
+                </tr>`
+						dealsList.insertAdjacentHTML('beforeend', dealItem)
+					})
 
-            currentIndex += dealsPerPage;
+					currentIndex += dealsPerPage
 
-            // Если все сделки загружены, скрыть кнопку "Показать ещё"
-            if (currentIndex >= dealsArray.length) {
-                document.getElementById('load-more-button').style.display = 'none';
-            } else {
-                document.getElementById('load-more-button').style.display = 'block';
-            }
-        }
+					// Если все сделки загружены, скрыть кнопку "Показать ещё"
+					if (currentIndex >= dealsArray.length) {
+						document.getElementById('load-more-button').style.display = 'none'
+					} else {
+						document.getElementById('load-more-button').style.display = 'block'
+					}
+				}
 
-        function applyFilters() {
-            // Сбросить текущий индекс и очистить таблицу
-            currentIndex = 0;
-            const dealsList = document.getElementById('deal-rows');
-            dealsList.innerHTML = '';
+				function applyFilters() {
+					// Сбросить текущий индекс и очистить таблицу
+					currentIndex = 0
+					const dealsList = document.getElementById('deal-rows')
+					dealsList.innerHTML = ''
 
-            // Получить значения фильтров
-            const dlFilter = document.getElementById('filter-input-dl').value.toLowerCase();
-            const titleFilter = document.getElementById('filter-input').value.toLowerCase();
-            const productFilter = document.getElementById('filter-input-product').value.toLowerCase();
-            const managerFilter = document.getElementById('filter-input-manager').value.toLowerCase();
-            const createdFilter = document.getElementById('filter-input-created').value.toLowerCase();
+					// Получить значения фильтров
+					const dlFilter = document
+						.getElementById('filter-input-dl')
+						.value.toLowerCase()
+					const titleFilter = document
+						.getElementById('filter-input')
+						.value.toLowerCase()
+					const productFilter = document
+						.getElementById('filter-input-product')
+						.value.toLowerCase()
+					const managerFilter = document
+						.getElementById('filter-input-manager')
+						.value.toLowerCase()
+					const createdFilter = document
+						.getElementById('filter-input-created')
+						.value.toLowerCase()
 
-            // Применить фильтры к данным
-            filteredDeals = dealsData.filter(deal => {
-                return (
-                    deal.dl_number.toLowerCase().includes(dlFilter) &&
-                    deal.title.toLowerCase().includes(titleFilter) &&
-                    deal.product.toLowerCase().includes(productFilter) &&
-                    deal.created_by.toLowerCase().includes(managerFilter) &&
-                    new Date(deal.created_at).toLocaleString().toLowerCase().includes(createdFilter)
-                );
-            });
+					// Применить фильтры к данным
+					filteredDeals = dealsData.filter(deal => {
+						return (
+							deal.dl_number.toLowerCase().includes(dlFilter) &&
+							deal.title.toLowerCase().includes(titleFilter) &&
+							deal.product.toLowerCase().includes(productFilter) &&
+							deal.created_by.toLowerCase().includes(managerFilter) &&
+							new Date(deal.created_at)
+								.toLocaleString()
+								.toLowerCase()
+								.includes(createdFilter)
+						)
+					})
 
-            displayDeals(filteredDeals);
-        }
-    });
+					displayDeals(filteredDeals)
+				}
+			})
 
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const userName = '{{ user_name }}';
-        const userRole = '{{ user_role }}';
-        fetch('/crm/deals/archived')
-            .then(response => response.json())
-            .then(data => {
-                var dealsList = document.getElementById('deal-rows-archived');
-                dealsList.innerHTML = ''; // Очистить существующие элементы
-                data.deals.forEach((deal, index) => {
-                    var dealItem = `
-                            <tr id="deal-${deal.id}" onclick="enterIntoDeal(${deal.id})">
+			document.addEventListener('DOMContentLoaded', function () {
+				const userName = '{{ user_name }}'
+				const userRole = '{{ user_role }}'
+				fetch('/crm/deals/archived')
+					.then(response => response.json())
+					.then(data => {
+						var dealsList = document.getElementById('deal-rows-archived')
+						dealsList.innerHTML = '' // Очистить существующие элементы
+						data.deals.forEach((deal, index) => {
+							var dealItem = `
+                            <tr id="deal-${deal.id}" onclick="enterIntoDeal(${
+								deal.id
+							})">
                                 <td>${index + 1}</td>
                                 <td class="deal-dl">${deal.dl_number}</td>
                                 <td class="deal-title">${deal.title}</td>
                                 <td class="deal-product">${deal.product}</td>
-                                <td class="deal-manager" onclick="enterIntoDeal(${deal.id})">
-                                    <img src="${deal.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${deal.created_by}
+                                <td class="deal-manager" onclick="enterIntoDeal(${
+																	deal.id
+																})">
+                                    <img src="${
+																			deal.created_by_icon
+																		}" alt="User Photo" class="profile-image-deal"> ${
+								deal.created_by
+							}
                                 </td>
                                 <td class="deal-created">${deal.created_at}</td>
-                                <td class="deal-archived">${new Date(deal.archived_at).toLocaleString()}</td>
-                                ${(deal.created_by === userName || userRole === 'admin') ? `
+                                <td class="deal-archived">${new Date(
+																	deal.archived_at
+																).toLocaleString()}</td>
+                                ${
+																	deal.created_by === userName ||
+																	userRole === 'admin'
+																		? `
                                     <td>
                                         <div class="btn-container">
                                             <button class="icon-button" onclick="event.stopPropagation(); confirmActive(${deal.id})">
@@ -361,182 +556,228 @@
                                             </button>
                                         </div>
                                     </td>
-                                    ` : '<td></td>'}
+                                    `
+																		: '<td></td>'
+																}
                                 </td>
-                            </tr>`;
-                    dealsList.insertAdjacentHTML('beforeend', dealItem);
-                });
-            });
-    });
+                            </tr>`
+							dealsList.insertAdjacentHTML('beforeend', dealItem)
+						})
+					})
+			})
 
-    function enterIntoDeal(dealId) {
-        window.location.href = `/crm/deal/inside/${dealId}`;
-    }
+			function enterIntoDeal(dealId) {
+				window.location.href = `/crm/deal/inside/${dealId}`
+			}
 
-    const socket = io({
-        path: "/crm/socket.io"
-    });
+			const socket = io({
+				path: '/crm/socket.io',
+			})
 
-    socket.on('connect', function () {
-        console.log('Connected to SocketIO server');
-    });
+			socket.on('connect', function () {
+				console.log('Connected to SocketIO server')
+			})
 
-    // Обработчик для получения сообщений
-    socket.on('update_created_by_all', function (data) {
-        // Обновляем текст в таблице на другой странице
-        var dealManagerCell = document.querySelector(`tr[id="deal-${data.deal_id}"] .deal-manager`);
-        if (dealManagerCell) {
-            console.log('Deal manager updated:', data.new_created_by);
-            dealManagerCell.textContent = data.new_created_by;
-        }
-    });
+			// Обработчик для получения сообщений
+			socket.on('update_created_by_all', function (data) {
+				// Обновляем текст в таблице на другой странице
+				var dealManagerCell = document.querySelector(
+					`tr[id="deal-${data.deal_id}"] .deal-manager`
+				)
+				if (dealManagerCell) {
+					console.log('Deal manager updated:', data.new_created_by)
+					dealManagerCell.textContent = data.new_created_by
+				}
+			})
 
-    // Обновляем после группировки сделок
-    socket.on('update_deals_table', function () {
-        updateDealsTable();  // Перезагружаем таблицу для всех подключённых пользователей
-    });
+			// Обновляем после группировки сделок
+			socket.on('update_deals_table', function () {
+				updateDealsTable() // Перезагружаем таблицу для всех подключённых пользователей
+			})
 
-    socket.on('notification_delete_deal', function (data) {
-        // Настройки для toastr
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "5000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
+			socket.on('notification_delete_deal', function (data) {
+				// Настройки для toastr
+				toastr.options = {
+					closeButton: true,
+					debug: false,
+					newestOnTop: false,
+					progressBar: true,
+					positionClass: 'toast-bottom-right',
+					preventDuplicates: false,
+					onclick: null,
+					showDuration: '300',
+					hideDuration: '1000',
+					timeOut: '5000',
+					extendedTimeOut: '1000',
+					showEasing: 'swing',
+					hideEasing: 'linear',
+					showMethod: 'fadeIn',
+					hideMethod: 'fadeOut',
+				}
 
-        // Показываем уведомление
-        toastr.error(data.message, 'Сделку удалить невозможно. Открыт файл:');
-    });
+				// Показываем уведомление
+				toastr.error(data.message, 'Сделку удалить невозможно. Открыт файл:')
+			})
 
-    socket.on('notification_to_archive_deal', function (data) {
-        // Настройки для toastr
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "5000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
+			socket.on('notification_to_archive_deal', function (data) {
+				// Настройки для toastr
+				toastr.options = {
+					closeButton: true,
+					debug: false,
+					newestOnTop: false,
+					progressBar: true,
+					positionClass: 'toast-bottom-right',
+					preventDuplicates: false,
+					onclick: null,
+					showDuration: '300',
+					hideDuration: '1000',
+					timeOut: '5000',
+					extendedTimeOut: '1000',
+					showEasing: 'swing',
+					hideEasing: 'linear',
+					showMethod: 'fadeIn',
+					hideMethod: 'fadeOut',
+				}
 
-        // Показываем уведомление
-        toastr.error(data.message, 'Сделку невозможно отправить в архив. Открыт файл:');
-    });
+				// Показываем уведомление
+				toastr.error(
+					data.message,
+					'Сделку невозможно отправить в архив. Открыт файл:'
+				)
+			})
 
+			socket.on('notification_to_active_deal', function (data) {
+				// Настройки для toastr
+				toastr.options = {
+					closeButton: true,
+					debug: false,
+					newestOnTop: false,
+					progressBar: true,
+					positionClass: 'toast-bottom-right',
+					preventDuplicates: false,
+					onclick: null,
+					showDuration: '300',
+					hideDuration: '1000',
+					timeOut: '5000',
+					extendedTimeOut: '1000',
+					showEasing: 'swing',
+					hideEasing: 'linear',
+					showMethod: 'fadeIn',
+					hideMethod: 'fadeOut',
+				}
 
-    socket.on('notification_to_active_deal', function (data) {
-        // Настройки для toastr
-        toastr.options = {
-            closeButton: true,
-            debug: false,
-            newestOnTop: false,
-            progressBar: true,
-            positionClass: "toast-bottom-right",
-            preventDuplicates: false,
-            onclick: null,
-            showDuration: "300",
-            hideDuration: "1000",
-            timeOut: "5000",
-            extendedTimeOut: "1000",
-            showEasing: "swing",
-            hideEasing: "linear",
-            showMethod: "fadeIn",
-            hideMethod: "fadeOut"
-        };
+				// Показываем уведомление
+				toastr.error(
+					data.message,
+					'Сделку невозможно вернуть в активные. Открыт файл:'
+				)
+			})
 
-        // Показываем уведомление
-        toastr.error(data.message, 'Сделку невозможно вернуть в активные. Открыт файл:');
-    });
-
-    socket.on('new_deal', function (data) {
-        const userName = '{{ user_name }}';
-        const userRole = '{{ user_role }}';
-        let dealsList = document.getElementById('deal-rows');
-        let currentIndex = dealsList.children.length + 1; // Calculate the new index
-        const timeAgo = formatTimeAgo(data.created_at);
-        const dealItem = `
+			socket.on('new_deal', function (data) {
+				const userName = '{{ user_name }}'
+				const userRole = '{{ user_role }}'
+				let dealsList = document.getElementById('deal-rows')
+				let currentIndex = dealsList.children.length + 1 // Calculate the new index
+				const timeAgo = formatTimeAgo(data.created_at)
+				const dealItem = `
                             <tr id="deal-${data.id}">
                                 <td onclick="toggleCheckbox(${data.id}, event)">
-                                    <input type="checkbox" class="deal-checkbox" data-deal-id="${data.id}" id="checkbox-${data.id}" style="cursor: pointer;">
+                                    <input type="checkbox" class="deal-checkbox" data-deal-id="${
+																			data.id
+																		}" id="checkbox-${
+					data.id
+				}" style="cursor: pointer;">
                                 </td>
-                                <td onclick="enterIntoDeal(${data.id})">${currentIndex + 1}</td>
-                                <td class="deal-dl" onclick="enterIntoDeal(${data.id})">${data.dl_number}</td>
-                                <td class="deal-title" onclick="enterIntoDeal(${data.id})">${data.title}</td>
-                                <td class="deal-product" onclick="enterIntoDeal(${data.id})">${data.product}</td>
-                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">
-                                    <img src="${data.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${data.created_by}
+                                <td onclick="enterIntoDeal(${data.id})">${
+					currentIndex + 1
+				}</td>
+                                <td class="deal-dl" onclick="enterIntoDeal(${
+																	data.id
+																})">${data.dl_number}</td>
+                                <td class="deal-title" onclick="enterIntoDeal(${
+																	data.id
+																})">${data.title}</td>
+                                <td class="deal-product" onclick="enterIntoDeal(${
+																	data.id
+																})">${data.product}</td>
+                                <td class="deal-manager" onclick="enterIntoDeal(${
+																	data.id
+																})">
+                                    <img src="${
+																			data.created_by_icon
+																		}" alt="User Photo" class="profile-image-deal"> ${
+					data.created_by
+				}
                                 </td>
-                                <td class="deal-created" onclick="enterIntoDeal(${data.id})">${timeAgo}</td>
+                                <td class="deal-created" onclick="enterIntoDeal(${
+																	data.id
+																})">${timeAgo}</td>
                                 <td>
-                                    ${(data.created_by === userName || userRole === 'admin') ? `
+                                    ${
+																			data.created_by === userName ||
+																			userRole === 'admin'
+																				? `
                                         <div class="btn-container">
                                             <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${data.id})">
                                                 <i class="fa-regular fa-square-minus"></i>
                                             </button>
                                         </div>
-                                    ` : ''}
+                                    `
+																				: ''
+																		}
                                 </td>
-                            </tr>`;
-        dealsList.insertAdjacentHTML('afterbegin', dealItem);
+                            </tr>`
+				dealsList.insertAdjacentHTML('afterbegin', dealItem)
+			})
 
-    });
+			socket.on('delete_deal', function (data) {
+				console.log('Deleting deal:', data)
+				var dealItem = document.getElementById(`deal-${data.id}`)
+				if (dealItem) {
+					dealItem.remove()
+				} else {
+					console.log('Deal item not found:', data.id)
+				}
+			})
 
-    socket.on('delete_deal', function (data) {
-        console.log('Deleting deal:', data);
-        var dealItem = document.getElementById(`deal-${data.id}`);
-        if (dealItem) {
-            dealItem.remove();
-        } else {
-            console.log('Deal item not found:', data.id);
-        }
-    });
+			socket.on('deal_to_archive', function (data) {
+				const userName = '{{ user_name }}'
+				const userRole = '{{ user_role }}'
+				console.log('Archiving deal:', data)
 
-    socket.on('deal_to_archive', function (data) {
-        const userName = '{{ user_name }}';
-        const userRole = '{{ user_role }}';
-        console.log('Archiving deal:', data);
+				var dealItem = document.getElementById(`deal-${data.id}`)
+				if (dealItem) {
+					dealItem.remove()
 
-        var dealItem = document.getElementById(`deal-${data.id}`);
-        if (dealItem) {
-            dealItem.remove();
-
-            // Переместить сделку в архивный список
-            var archivedDealsList = document.getElementById('deal-rows-archived');
-            var currentIndex = archivedDealsList.children.length + 1; // Calculate the new index
-            const timeAgo = formatTimeAgo(data.created_at);
-            var archivedDealItem = `
-                            <tr id="deal-${data.id}" onclick="enterIntoDeal(${data.id})">
+					// Переместить сделку в архивный список
+					var archivedDealsList = document.getElementById('deal-rows-archived')
+					var currentIndex = archivedDealsList.children.length + 1 // Calculate the new index
+					const timeAgo = formatTimeAgo(data.created_at)
+					var archivedDealItem = `
+                            <tr id="deal-${data.id}" onclick="enterIntoDeal(${
+						data.id
+					})">
                                 <td>${currentIndex + 1}</td>
                                 <td class="deal-dl">${data.dl_number}</td>
                                 <td class="deal-title">${data.title}</td>
                                 <td class="deal-product">${data.product}</td>
-                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">
-                                    <img src="${data.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${data.created_by}
+                                <td class="deal-manager" onclick="enterIntoDeal(${
+																	data.id
+																})">
+                                    <img src="${
+																			data.created_by_icon
+																		}" alt="User Photo" class="profile-image-deal"> ${
+						data.created_by
+					}
                                 </td>
                                 <td class="deal-created">${data.created_at}</td>
-                                <td class="deal-archived">${data.archived_at}</td>
-                                ${(data.created_by === userName || userRole === 'admin') ? `
+                                <td class="deal-archived">${
+																	data.archived_at
+																}</td>
+                                ${
+																	data.created_by === userName ||
+																	userRole === 'admin'
+																		? `
                                     <td>
                                         <div class="btn-container">
                                             <button class="icon-button" onclick="event.stopPropagation(); confirmActive(${data.id})">
@@ -549,244 +790,281 @@
                                             </button>
                                         </div>
                                     </td>
-                                    ` : '<td></td>'}
+                                    `
+																		: '<td></td>'
+																}
                                 </td>
-                            </tr>`;
-            archivedDealsList.insertAdjacentHTML('afterbegin', archivedDealItem);
-        } else {
-            console.log('Deal item not found:', data.id);
-        }
-    });
+                            </tr>`
+					archivedDealsList.insertAdjacentHTML('afterbegin', archivedDealItem)
+				} else {
+					console.log('Deal item not found:', data.id)
+				}
+			})
 
-    socket.on('deal_to_active', function (data) {
-        const userName = '{{ user_name }}';
-        const userRole = '{{ user_role }}';
-        console.log('Deal to active:', data);
-        var dealItem = document.getElementById(`deal-${data.id}`);
-        var currentIndex = dealItem.children.length + 1; // Calculate the new index
-        if (dealItem) {
-            dealItem.remove();
+			socket.on('deal_to_active', function (data) {
+				const userName = '{{ user_name }}'
+				const userRole = '{{ user_role }}'
+				console.log('Deal to active:', data)
+				var dealItem = document.getElementById(`deal-${data.id}`)
+				var currentIndex = dealItem.children.length + 1 // Calculate the new index
+				if (dealItem) {
+					dealItem.remove()
 
-            // Переместить сделку в активный список
-            var activeDealsList = document.getElementById('deal-rows');
-            const timeAgo = formatTimeAgo(data.created_at);
-            var activedDealItem = `
+					// Переместить сделку в активный список
+					var activeDealsList = document.getElementById('deal-rows')
+					const timeAgo = formatTimeAgo(data.created_at)
+					var activedDealItem = `
                             <tr id="deal-${data.id}">
                                 <td onclick="toggleCheckbox(${data.id}, event)">
-                                    <input type="checkbox" class="deal-checkbox" id="checkbox-${data.id}" data-deal-id="${data.id}" style="cursor: pointer;">
+                                    <input type="checkbox" class="deal-checkbox" id="checkbox-${
+																			data.id
+																		}" data-deal-id="${
+						data.id
+					}" style="cursor: pointer;">
                                 </td>
-                                <td onclick="enterIntoDeal(${data.id})">${currentIndex + 1}</td>
-                                <td class="deal-dl" onclick="enterIntoDeal(${data.id})">${data.dl_number}</td>
-                                <td class="deal-title" onclick="enterIntoDeal(${data.id})">${data.title}</td>
-                                <td class="deal-product" onclick="enterIntoDeal(${data.id})">${data.product}</td>
-                                <td class="deal-manager" onclick="enterIntoDeal(${data.id})">
-                                    <img src="${data.created_by_icon}" alt="User Photo" class="profile-image-deal"> ${data.created_by}
+                                <td onclick="enterIntoDeal(${data.id})">${
+						currentIndex + 1
+					}</td>
+                                <td class="deal-dl" onclick="enterIntoDeal(${
+																	data.id
+																})">${data.dl_number}</td>
+                                <td class="deal-title" onclick="enterIntoDeal(${
+																	data.id
+																})">${data.title}</td>
+                                <td class="deal-product" onclick="enterIntoDeal(${
+																	data.id
+																})">${data.product}</td>
+                                <td class="deal-manager" onclick="enterIntoDeal(${
+																	data.id
+																})">
+                                    <img src="${
+																			data.created_by_icon
+																		}" alt="User Photo" class="profile-image-deal"> ${
+						data.created_by
+					}
                                 </td>
-                                <td class="deal-created" onclick="enterIntoDeal(${data.id})">${timeAgo}</td>
+                                <td class="deal-created" onclick="enterIntoDeal(${
+																	data.id
+																})">${timeAgo}</td>
                                 <td>
-                                    ${(data.created_by === userName || userRole === 'admin') ? `
+                                    ${
+																			data.created_by === userName ||
+																			userRole === 'admin'
+																				? `
                                         <div class="btn-container">
                                             <button class="icon-button" onclick="event.stopPropagation(); confirmArchive(${data.id})">
                                                 <i class="fa-regular fa-square-minus"></i>
                                             </button>
                                         </div>
-                                    ` : ''}
+                                    `
+																				: ''
+																		}
                                 </td>
-                            </tr>`;
-            activeDealsList.insertAdjacentHTML('afterbegin', activedDealItem);
-        } else {
-            console.log('Deal item not found:', data.id);
-        }
-    });
+                            </tr>`
+					activeDealsList.insertAdjacentHTML('afterbegin', activedDealItem)
+				} else {
+					console.log('Deal item not found:', data.id)
+				}
+			})
 
-    document.getElementById('create-deal-form').addEventListener('submit', async function (event) {
-        event.preventDefault();
-        const title = document.getElementById('deal-title').value;
-        let fullInfo = document.getElementById('deal-info').value;
+			document
+				.getElementById('create-deal-form')
+				.addEventListener('submit', async function (event) {
+					event.preventDefault()
+					const title = document.getElementById('deal-title').value
+					let fullInfo = document.getElementById('deal-info').value
 
-        if (!fullInfo) {
-            Swal.fire({
-                text: "Необходимо выбрать компанию из выпадающего списка",
-                icon: "warning",
-                confirmButtonColor: "#5789b9",
-            });
-            if (ipAddress) {
-                fullInfo = ipAddress;
-            } else {
-                // Если пользователь нажал "Отмена", вы можете либо вернуть, либо обработать это иначе
-                return;
-            }
-        }
+					if (!fullInfo) {
+						Swal.fire({
+							text: 'Необходимо выбрать компанию из выпадающего списка',
+							icon: 'warning',
+							confirmButtonColor: '#5789b9',
+						})
+						if (ipAddress) {
+							fullInfo = ipAddress
+						} else {
+							// Если пользователь нажал "Отмена", вы можете либо вернуть, либо обработать это иначе
+							return
+						}
+					}
 
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/crm/deal/create_deal', true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.onload = function () {
-            if (xhr.status === 201) {
-                document.getElementById('deal-title').value = '';
-                document.getElementById('deal-info').value = '';
-                const newDeal = JSON.parse(xhr.responseText);
-                socket.emit('new_deal', newDeal);
-                showForm('active-deals');
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: "Сделка создана."
-                });
-            }
-        };
-        const data = JSON.stringify({
-            title: title,
-            info: fullInfo
-        });
-        xhr.send(data);
-    });
+					const xhr = new XMLHttpRequest()
+					xhr.open('POST', '/crm/deal/create_deal', true)
+					xhr.setRequestHeader('Content-Type', 'application/json')
+					xhr.onload = function () {
+						if (xhr.status === 201) {
+							document.getElementById('deal-title').value = ''
+							document.getElementById('deal-info').value = ''
+							const newDeal = JSON.parse(xhr.responseText)
+							socket.emit('new_deal', newDeal)
+							showForm('active-deals')
+							const Toast = Swal.mixin({
+								toast: true,
+								position: 'top-end',
+								showConfirmButton: false,
+								timer: 2000,
+								timerProgressBar: true,
+								didOpen: toast => {
+									toast.onmouseenter = Swal.stopTimer
+									toast.onmouseleave = Swal.resumeTimer
+								},
+							})
+							Toast.fire({
+								icon: 'success',
+								title: 'Сделка создана.',
+							})
+						}
+					}
+					const data = JSON.stringify({
+						title: title,
+						info: fullInfo,
+					})
+					xhr.send(data)
+				})
 
+			function deleteDeal(dealId) {
+				const xhr = new XMLHttpRequest()
+				xhr.open('POST', `/crm/deal/delete_deal/${dealId}`, true)
+				xhr.setRequestHeader(
+					'Content-Type',
+					'application/x-www-form-urlencoded'
+				)
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						console.log(`Deal ${dealId} deleted successfully.`)
+						// Emit delete_deal event to notify other clients
+						socket.emit('delete_deal', { id: dealId })
+					}
+				}
+				xhr.send()
+			}
 
-    function deleteDeal(dealId) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', `/crm/deal/delete_deal/${dealId}`, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                console.log(`Deal ${dealId} deleted successfully.`);
-                // Emit delete_deal event to notify other clients
-                socket.emit('delete_deal', {id: dealId});
-            }
-        };
-        xhr.send();
-    }
+			function dealToArchive(dealId) {
+				const xhr = new XMLHttpRequest()
+				xhr.open('POST', `/crm/deal/deal_to_archive/${dealId}`, true)
+				xhr.setRequestHeader(
+					'Content-Type',
+					'application/x-www-form-urlencoded'
+				)
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						console.log(`Deal ${dealId} archived successfully.`)
+						// Emit deal_to_archive event to notify other clients
+						socket.emit('deal_to_archive', { id: dealId })
+					}
+				}
+				xhr.send()
+			}
 
-    function dealToArchive(dealId) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', `/crm/deal/deal_to_archive/${dealId}`, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                console.log(`Deal ${dealId} archived successfully.`);
-                // Emit deal_to_archive event to notify other clients
-                socket.emit('deal_to_archive', {id: dealId});
-            }
-        };
-        xhr.send();
-    }
+			function dealToActive(dealId) {
+				const xhr = new XMLHttpRequest()
+				xhr.open('POST', `/crm/deal/deal_to_active/${dealId}`, true)
+				xhr.setRequestHeader(
+					'Content-Type',
+					'application/x-www-form-urlencoded'
+				)
+				xhr.onload = function () {
+					if (xhr.status === 200) {
+						console.log(`Deal ${dealId} active successfully.`)
+						// Emit deal_to_archive event to notify other clients
+						socket.emit('deal_to_active', { id: dealId })
+					}
+				}
+				xhr.send()
+			}
 
-    function dealToActive(dealId) {
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', `/crm/deal/deal_to_active/${dealId}`, true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                console.log(`Deal ${dealId} active successfully.`);
-                // Emit deal_to_archive event to notify other clients
-                socket.emit('deal_to_active', {id: dealId});
-            }
-        };
-        xhr.send();
-    }
+			function confirmDelete(dealId) {
+				Swal.fire({
+					text: 'Вы уверены, что хотите удалить сделку?',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Да, удалить',
+					cancelButtonText: 'Отмена',
+					confirmButtonColor: '#67a2d5',
+					cancelButtonColor: '#ad6c72',
+				}).then(result => {
+					if (result.isConfirmed) {
+						deleteDeal(dealId)
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top-end',
+							showConfirmButton: false,
+							timer: 2000,
+							timerProgressBar: true,
+							didOpen: toast => {
+								toast.onmouseenter = Swal.stopTimer
+								toast.onmouseleave = Swal.resumeTimer
+							},
+						})
+						Toast.fire({
+							icon: 'success',
+							title: 'Сделка была успешно удалена.',
+						})
+					}
+				})
+			}
 
-    function confirmDelete(dealId) {
-        Swal.fire({
-            text: 'Вы уверены, что хотите удалить сделку?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Да, удалить',
-            cancelButtonText: 'Отмена',
-            confirmButtonColor: '#67a2d5',
-            cancelButtonColor: '#ad6c72',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                deleteDeal(dealId);
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: "Сделка была успешно удалена."
-                });
-            }
-        });
-    }
+			function confirmArchive(dealId) {
+				Swal.fire({
+					text: 'Вы хотите переместить сделку в архив?',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Да, архивировать',
+					cancelButtonText: 'Отмена',
+					confirmButtonColor: '#67a2d5',
+					cancelButtonColor: '#ad6c72',
+				}).then(result => {
+					if (result.isConfirmed) {
+						dealToArchive(dealId)
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top-end',
+							showConfirmButton: false,
+							timer: 2000,
+							timerProgressBar: true,
+							didOpen: toast => {
+								toast.onmouseenter = Swal.stopTimer
+								toast.onmouseleave = Swal.resumeTimer
+							},
+						})
+						Toast.fire({
+							icon: 'success',
+							title: 'Сделка была успешно перемещена в архив.',
+						})
+					}
+				})
+			}
 
-    function confirmArchive(dealId) {
-        Swal.fire({
-            text: 'Вы хотите переместить сделку в архив?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Да, архивировать',
-            cancelButtonText: 'Отмена',
-            confirmButtonColor: '#67a2d5',
-            cancelButtonColor: '#ad6c72',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                dealToArchive(dealId);
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: "Сделка была успешно перемещена в архив."
-                });
-            }
-        });
-    }
-
-    function confirmActive(dealId) {
-        Swal.fire({
-            text: 'Вы уверены, что хотите вернуть сделку в активные?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Да, вернуть',
-            cancelButtonText: 'Отмена',
-            confirmButtonColor: '#67a2d5',
-            cancelButtonColor: '#ad6c72',
-        }).then((result) => {
-            if (result.isConfirmed) {
-                dealToActive(dealId);
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "top-end",
-                    showConfirmButton: false,
-                    timer: 2000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.onmouseenter = Swal.stopTimer;
-                        toast.onmouseleave = Swal.resumeTimer;
-                    }
-                });
-                Toast.fire({
-                    icon: "success",
-                    title: "Сделка была успешно возвращена в активные."
-                });
-            }
-        });
-    }
-</script>
-</body>
+			function confirmActive(dealId) {
+				Swal.fire({
+					text: 'Вы уверены, что хотите вернуть сделку в активные?',
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonText: 'Да, вернуть',
+					cancelButtonText: 'Отмена',
+					confirmButtonColor: '#67a2d5',
+					cancelButtonColor: '#ad6c72',
+				}).then(result => {
+					if (result.isConfirmed) {
+						dealToActive(dealId)
+						const Toast = Swal.mixin({
+							toast: true,
+							position: 'top-end',
+							showConfirmButton: false,
+							timer: 2000,
+							timerProgressBar: true,
+							didOpen: toast => {
+								toast.onmouseenter = Swal.stopTimer
+								toast.onmouseleave = Swal.resumeTimer
+							},
+						})
+						Toast.fire({
+							icon: 'success',
+							title: 'Сделка была успешно возвращена в активные.',
+						})
+					}
+				})
+			}
+		</script>
+	</body>
 </html>

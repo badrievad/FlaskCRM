@@ -56,7 +56,6 @@ pyrsistent==0.18.1
 PySocks==1.7.1
 python-dateutil==2.9.0.post0
 pytz==2024.2
-PyYAML==5.4.1
 requests==2.31.0
 ruff==0.3.7
 SecretStorage==3.3.1

@@ -4,7 +4,7 @@ from datetime import date
 
 from celery import shared_task
 
-from logger import logging
+from log_conf import logger
 
 from .. import db
 from .api_for_leas_calc import post_request_leas_calc, upload_main_info, upload_schedule
@@ -185,7 +185,7 @@ def intensive_task_simulation(data: dict) -> dict:
         calculation_results = post_request_leas_calc(data, new_calc.id)
 
         if calculation_results.get("error"):
-            logging.error(calculation_results.get("error"))
+            logger.error(calculation_results.get("error"))
             raise Exception
 
         upload_schedule(calculation_results)
@@ -207,5 +207,5 @@ def intensive_task_simulation(data: dict) -> dict:
 def long_task(data: dict) -> dict:
     start_time = time.perf_counter()
     result = intensive_task_simulation(data)
-    logging.info(f"Время выполнения функции: {time.perf_counter() - start_time}")
+    logger.info(f"Время выполнения функции: {time.perf_counter() - start_time}")
     return result

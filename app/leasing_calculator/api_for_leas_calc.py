@@ -5,7 +5,7 @@ from flask import jsonify
 from pydantic import BaseModel, Field, ValidationError, field_validator
 from sqlalchemy.exc import SQLAlchemyError
 
-from logger import logging
+from log_conf import logger
 
 from .. import db
 from ..config import URL_XLSX_API
@@ -54,7 +54,7 @@ def upload_schedule(data: dict):
     """
     Записывает в БД графики из расчетов Димы.
     """
-    logging.info("Received data for schedule upload.")
+    logger.info("Received data for schedule upload.")
     schedule_models = {
         "annuity": ScheduleAnnuity,
         "differentiated": ScheduleDifferentiated,
@@ -65,7 +65,7 @@ def upload_schedule(data: dict):
 
     for schedule_name, model_name in schedule_models.items():
         if not data.get(schedule_name) or not isinstance(data.get(schedule_name), list):
-            logging.warning(f"No valid data for schedule '{schedule_name}'. Skipping.")
+            logger.warning(f"No valid data for schedule '{schedule_name}'. Skipping.")
             continue
 
         validation_errors = []
@@ -75,11 +75,11 @@ def upload_schedule(data: dict):
             try:
                 validated_item = ScheduleItem(**item)
                 validated_items.append(validated_item)
-                logging.info(
+                logger.info(
                     f"Validated item {idx + 1} in '{schedule_name}': {validated_item}"
                 )
             except ValidationError as e:
-                logging.error(
+                logger.error(
                     f"Validation error in item {idx + 1} of '{schedule_name}': {e}"
                 )
                 validation_errors.append({"item_index": idx + 1, "errors": e.errors()})
@@ -106,13 +106,13 @@ def upload_schedule(data: dict):
                 db.session.add(new_schedule)
 
             db.session.commit()
-            logging.info(
+            logger.info(
                 f"Schedule '{schedule_name}' successfully uploaded and committed to the database."
             )
 
         except Exception as e:
             db.session.rollback()
-            logging.exception(
+            logger.exception(
                 f"An error occurred while uploading schedule '{schedule_name}'."
             )
             overall_errors[schedule_name] = {
@@ -147,7 +147,7 @@ def upload_main_info(data: dict):
     """
     Uploads main calculation data to the database.
     """
-    logging.info("Received data for main info upload.")
+    logger.info("Received data for main info upload.")
 
     main_info_models = {
         "annuity_data": MainAnnuity,
@@ -160,13 +160,13 @@ def upload_main_info(data: dict):
     for main_info_name, model_class in main_info_models.items():
         main_info_data = data.get(main_info_name)
         if not main_info_data:
-            logging.warning(f"No data provided for '{main_info_name}'. Skipping.")
+            logger.warning(f"No data provided for '{main_info_name}'. Skipping.")
             continue
 
         try:
             # Validate data using Pydantic
             validated_data = MainInfoItem(**main_info_data)
-            logging.info(f"Validated data for '{main_info_name}': {validated_data}")
+            logger.info(f"Validated data for '{main_info_name}': {validated_data}")
 
             # Create model instance
             new_main_info = model_class(
@@ -207,20 +207,20 @@ def upload_main_info(data: dict):
 
             db.session.add(new_main_info)
             db.session.commit()
-            logging.info(f"Data for '{main_info_name}' successfully uploaded.")
+            logger.info(f"Data for '{main_info_name}' successfully uploaded.")
 
         except ValidationError as ve:
-            logging.error(f"Validation error for '{main_info_name}': {ve}")
+            logger.error(f"Validation error for '{main_info_name}': {ve}")
             overall_errors[main_info_name] = ve.errors()
             db.session.rollback()
 
         except SQLAlchemyError as sae:
-            logging.error(f"Database error for '{main_info_name}': {sae}")
+            logger.error(f"Database error for '{main_info_name}': {sae}")
             overall_errors[main_info_name] = "Database error occurred."
             db.session.rollback()
 
         except Exception as e:
-            logging.exception(
+            logger.exception(
                 f"An unexpected error occurred for '{main_info_name}'. Description: {e}"
             )
             overall_errors[main_info_name] = "An unexpected error occurred."
@@ -245,9 +245,9 @@ def post_request_upload_file_site(file_name: str, calc_id: int | str) -> dict:
     headers = {"Content-Type": "application/json"}
     json_data = {"file_name": file_name, "calc_id": calc_id}
     try:
-        logging.info(f"Отправляем POST запрос на {url} с данными: {json_data}")
+        logger.info(f"Отправляем POST запрос на {url} с данными: {json_data}")
         response: dict = requests.post(url, headers=headers, json=json_data).json()
     except Exception as e:
-        logging.error(f"An error occurred while uploading the file: {e}")
+        logger.error(f"An error occurred while uploading the file: {e}")
         response = {"error": "An error occurred while uploading the file."}
     return response

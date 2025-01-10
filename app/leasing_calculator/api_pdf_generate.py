@@ -1,6 +1,6 @@
 import requests
 
-from logger import logging
+from log_conf import logger
 
 from ..config import URL_PDF_API
 
@@ -19,19 +19,19 @@ class PDFGeneratorClient:
             **self.user_info,
         }
 
-        logging.info(f"Sending POST request to {url} with payload: {payload}")
+        logger.info(f"Sending POST request to {url} with payload: {payload}")
 
         response = requests.post(url, json=payload)
 
         if response.status_code == 200:
             data = response.json()
             if data.get("status") == "Completed":
-                logging.info(f"PDF создан: {data['pdf_path']}")
+                logger.info(f"PDF создан: {data['pdf_path']}")
                 return data["pdf_path"]
             else:
-                logging.info("Процесс генерации PDF не завершен.")
+                logger.info("Процесс генерации PDF не завершен.")
         else:
-            logging.info(f"Ошибка при запросе: {response.status_code}")
+            logger.info(f"Ошибка при запросе: {response.status_code}")
             response.raise_for_status()
 
         return None

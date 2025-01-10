@@ -16,7 +16,7 @@ from flask_login import current_user, login_required  # type: ignore
 from sqlalchemy import desc  # type: ignore
 from sqlalchemy.orm import joinedload  # type: ignore
 
-from logger import logging
+from log_conf import logger
 
 from .. import cache, db
 from ..celery_utils import is_celery_alive
@@ -135,7 +135,7 @@ def update_table() -> str:
 @leas_calc_bp.route("/crm/calculator/<int:calc_id>", methods=["GET"])
 @login_required
 def get_leasing_calculator_by_id(calc_id: int) -> str:
-    logging.info(f"Запрос на отображение расчета (id_{calc_id})")
+    logger.info(f"Запрос на отображение расчета (id_{calc_id})")
     calc_list = get_list_of_leas_calculators(current_user.login, calc_id)
     return render_template(
         "leasing_calculator_by_id.html",
@@ -184,19 +184,19 @@ def create_commercial_offer(leas_calculator_id):
         try:
             pdf_api.generate_pdf()
             new_title_pdf = f"Коммерческое предложение (id_{offer_id}).pdf"
-            logging.info(f"Создание коммерческого предложения: {new_title_pdf}")
+            logger.info(f"Создание коммерческого предложения: {new_title_pdf}")
             offer.leas_calculator.title = new_title_pdf
             db.session.commit()
         except Exception as e:
             db.session.rollback()
-            logging.error(f"Error generating PDF: {e}")
-            logging.info("PDF не создался. Сервис недоступен.")
+            logger.error(f"Error generating PDF: {e}")
+            logger.info("PDF не создался. Сервис недоступен.")
 
-        logging.info(
+        logger.info(
             f"Коммерческое предложение успешно создано для графика: {type_of_schedule}. id_{offer_id}"
         )
     else:
-        logging.info("Произошла ошибка при создании коммерческого предложения")
+        logger.info("Произошла ошибка при создании коммерческого предложения")
 
     # Возвращаем пользователя на предыдущую страницу
     return redirect(url_for("leas_calc.get_leasing_calculator") + "#created-proposals")
@@ -225,7 +225,7 @@ def start_task() -> tuple[Response, int]:
     try:
         # Проверка состояния Celery
         if not is_celery_alive(current_app.extensions["celery"]):
-            logging.info("Сервер Celery недоступен")
+            logger.info("Сервер Celery недоступен")
             return jsonify({"error": "Сервер временно недоступен"}), 503
 
         user_info: dict = {
@@ -235,7 +235,7 @@ def start_task() -> tuple[Response, int]:
             "user_phone": current_user.mobilenumber,
             "user_telegram": current_user.telegram,
         }
-        logging.info(user_info)
+        logger.info(user_info)
         task = long_task.delay({**user_info, **validate_data})
         return jsonify({"task_id": task.id}), 202
     except Exception as e:
@@ -260,7 +260,7 @@ def get_status(task_id) -> tuple[Response, int]:
                 calc_id = task.result.get("calc_id")
 
                 if calc_id is not None:
-                    logging.info(
+                    logger.info(
                         f"Task {task_id} completed successfully. Calc_id: {calc_id}"
                     )
 
@@ -282,9 +282,9 @@ def get_status(task_id) -> tuple[Response, int]:
                             "status": calculator.status,
                         }
                     else:
-                        logging.warning(f"Calculator with Calc_id {calc_id} not found.")
+                        logger.warning(f"Calculator with Calc_id {calc_id} not found.")
                 else:
-                    logging.warning(f"Task {task_id} completed but no calc_id found.")
+                    logger.warning(f"Task {task_id} completed but no calc_id found.")
         else:
             response["status"] = str(task.info)
             current_app.logger.error(f"Task {task_id} failed with error: {task.info}")
@@ -346,7 +346,7 @@ def delete_calculation(calc_id) -> tuple[Response, int]:
 @leas_calc_bp.route("/crm/calculator/download/<int:calc_id>", methods=["GET"])
 @validate_active_session
 def download_offers(calc_id):
-    logging.info(f"Запрос на скачивание КП (id_{calc_id})")
+    logger.info(f"Запрос на скачивание КП (id_{calc_id})")
     try:
         offer = (
             CommercialOffer.query.options(
@@ -366,7 +366,7 @@ def download_offers(calc_id):
         return send_file(commercial_offer, as_attachment=True)
 
     except Exception as e:
-        logging.info(f"Ошибка при скачивании КП: {e}")
+        logger.info(f"Ошибка при скачивании КП: {e}")
         return (
             jsonify(
                 {
@@ -382,7 +382,7 @@ def download_offers(calc_id):
 @leas_calc_bp.route("/crm/calculator/leas-calc-download/<int:calc_id>", methods=["GET"])
 @validate_active_session
 def download_calc(calc_id):
-    logging.info(f"Запрос на скачивание расчета (id_{calc_id})")
+    logger.info(f"Запрос на скачивание расчета (id_{calc_id})")
     try:
         file_name = f"Лизинговый калькулятор version 1.9_{calc_id}.xlsm"
         leas_calculate = yandex_download_file_s3(file_name)
@@ -390,7 +390,7 @@ def download_calc(calc_id):
         return send_file(leas_calculate, as_attachment=True)
 
     except Exception as e:
-        logging.info(f"Ошибка при скачивании КП: {e}")
+        logger.info(f"Ошибка при скачивании КП: {e}")
         return (
             jsonify(
                 {
@@ -417,7 +417,7 @@ def autocomplete() -> Response:
 def update_calculation(calc_id):
     try:
         if not request.is_json:
-            logging.error("Request data is not in JSON format")
+            logger.error("Request data is not in JSON format")
             return (
                 jsonify(
                     {"success": False, "message": "Request data must be in JSON format"}
@@ -426,13 +426,13 @@ def update_calculation(calc_id):
             )
 
         data = request.get_json()
-        logging.info(f"Request to update calculation (id_{calc_id}): {data}")
+        logger.info(f"Request to update calculation (id_{calc_id}): {data}")
 
         result = update_calculation_service(calc_id, data)
         return jsonify(result), result["status_code"]
 
     except Exception as e:
-        logging.error(f"Error updating calculation: {str(e)}")
+        logger.error(f"Error updating calculation: {str(e)}")
         return (
             jsonify(
                 {
@@ -501,7 +501,7 @@ def show_commercial_offer(offer_id) -> str:
     com_offers_list = get_list_of_commercial_offers(
         user_info["login"], offer_id=offer_id
     )
-    logging.info(com_offers_list)
+    logger.info(com_offers_list)
     item_price = com_offers_list[0]["leas_calculator"].item_price
     initial_payment_percent = com_offers_list[0][
         "leas_calculator"
@@ -529,18 +529,18 @@ def show_commercial_offer(offer_id) -> str:
 def get_overheads() -> tuple[Response, int]:
     try:
         overheads_path = Path("app").resolve() / "static" / "jsons" / "overheads.json"
-        logging.info(overheads_path)
+        logger.info(overheads_path)
         with open(overheads_path, "r") as f:
             overheads = json.load(f)
         return jsonify(overheads), 200
     except FileNotFoundError:
-        logging.error("File not found")
+        logger.error("File not found")
         return jsonify({"error": "File not found"}), 404
     except json.JSONDecodeError:
-        logging.error("Error decoding JSON")
+        logger.error("Error decoding JSON")
         return jsonify({"error": "Error decoding JSON"}), 500
     except Exception as e:
-        logging.error(str(e))
+        logger.error(str(e))
         return jsonify({"error": str(e)}), 500
 
 
@@ -586,7 +586,7 @@ def update_seller():
 
 @leas_calc_bp.route("/crm/calculator/upload-file", methods=["POST"])
 def upload_file():
-    logging.info("Запрос на загрузку файла в Yandex Object Storage")
+    logger.info("Запрос на загрузку файла в Yandex Object Storage")
     file = request.files.get("file")
 
     if not file:
@@ -597,11 +597,11 @@ def upload_file():
         file.filename = f"Лизинговый калькулятор version 1.9_{calc_id}.xlsm"
 
         filename = file.filename
-        logging.info(f"Имя файла: {filename}")
+        logger.info(f"Имя файла: {filename}")
         yandex_upload_file_s3(file, filename)
 
         if calc_id:
-            logging.info(f"Новый ID расчета: {calc_id}")
+            logger.info(f"Новый ID расчета: {calc_id}")
             response_data: dict = post_request_upload_file_site(filename, calc_id)
 
             if response_data.get("error"):
@@ -627,5 +627,5 @@ def upload_file():
         )
 
     except Exception as e:
-        logging.error(f"Ошибка при загрузке файла: {str(e)}")
+        logger.error(f"Ошибка при загрузке файла: {str(e)}")
         return jsonify({"error": f"Ошибка при загрузке файла: {str(e)}"}), 500

@@ -1,4 +1,4 @@
-from logger import logging
+from log_conf import logger
 
 from .. import db
 from .deals_validate import DealsValidate
@@ -46,7 +46,7 @@ def write_deal_path_to_db(folder_path: str, deal_id: str) -> None:
         deal.deal_path = folder_path
         db.session.commit()
     except Exception as e:
-        logging.error(f"Database error: {deal_id}: {e}")
+        logger.error(f"Database error: {deal_id}: {e}")
 
 
 def get_or_create_client(client_data: DealsValidate):

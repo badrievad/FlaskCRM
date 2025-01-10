@@ -7,7 +7,7 @@ from flask import (
 )
 from sqlalchemy.orm import joinedload
 
-from logger import logging
+from log_conf import logger
 
 from .. import socketio
 from ..config import suggestions_token
@@ -44,7 +44,7 @@ def enter_into_deal(deal_id: int):
     group_id = deal.group_id
 
     if group_id:
-        logging.info(f"Group ID: {group_id}")
+        logger.info(f"Group ID: {group_id}")
         # Получаем все связанные сделки по group_id
         related_deals = (
             Deal.query.options(
@@ -57,7 +57,7 @@ def enter_into_deal(deal_id: int):
             .all()
         )
     else:
-        logging.info("Group ID: None")
+        logger.info("Group ID: None")
         # Если group_id пуст, возвращаем только текущую сделку
         related_deals = [deal]
 
@@ -99,7 +99,7 @@ def enter_into_deal(deal_id: int):
             }
             deals_info.append(deal_info)
 
-    logging.info(f"Deals info: {deals_info}")
+    logger.info(f"Deals info: {deals_info}")
 
     # Получаем решение из базы данных
     risk_record = RiskDepartment.query.filter_by(deal_id=deal_id).first()
@@ -130,7 +130,7 @@ def update_created_by(deal_id):
         new_created_by = request.json.get("created_by")
 
         if not new_created_by:
-            logging.error(
+            logger.error(
                 f"Invalid input: 'created_by' not provided for deal_id {deal_id}"
             )
             return jsonify({"error": "Invalid input"}), 400
@@ -138,13 +138,13 @@ def update_created_by(deal_id):
         deal, error = update_deal_created_by(deal_id, new_created_by)
         if error:
             if error == "Deal not found":
-                logging.error(f"Deal not found: deal_id {deal_id}")
+                logger.error(f"Deal not found: deal_id {deal_id}")
                 return jsonify({"error": "Deal not found"}), 404
             else:
-                logging.error(f"Error updating deal_id {deal_id}: {error}")
+                logger.error(f"Error updating deal_id {deal_id}: {error}")
                 return jsonify({"error": "Failed to update deal"}), 500
 
-        logging.info(
+        logger.info(
             f"Deal updated successfully: deal_id {deal_id} updated to created_by {new_created_by}"
         )
         # Отправка уведомления всем пользователям в комнате
@@ -166,7 +166,7 @@ def update_created_by(deal_id):
         return jsonify({"message": "Deal updated successfully"}), 200
 
     except Exception as e:
-        logging.exception(
+        logger.exception(
             f"Unexpected error occurred while updating deal_id {deal_id}: {str(e)}"
         )
         return jsonify({"error": "An unexpected error occurred"}), 500
@@ -218,7 +218,7 @@ def delete_seller():
         return jsonify({"success": True, "message": message}), 200
 
     except Exception as e:
-        logging.exception(f"Ошибка при удалении продавца: {str(e)}")
+        logger.exception(f"Ошибка при удалении продавца: {str(e)}")
         return (
             jsonify(
                 {
@@ -280,7 +280,7 @@ def update_client_info():
     new_bank: dict = json.loads(data.get("bank")) if data.get("bank") else None
     new_current = data.get("current")
 
-    logging.info(f"Bank: {new_bank}")
+    logger.info(f"Bank: {new_bank}")
 
     # Вызываем функцию обновления клиента в базе данных
     response_data, status_code = update_client_in_db(

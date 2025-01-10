@@ -3,7 +3,7 @@ import datetime
 import requests
 from bs4 import BeautifulSoup
 
-from logger import logging
+from log_conf import logger
 
 
 class Bs4Stub:
@@ -31,7 +31,7 @@ class CentralBankExchangeRates:
             soup = BeautifulSoup(_xml_data, "xml")
             return soup
         else:
-            logging.error(f"Error: {response.status_code}")
+            logger.error(f"Error: {response.status_code}")
             return Bs4Stub()  # заглушка
 
     @staticmethod
@@ -87,7 +87,7 @@ class CentralBankKeyRate:
             soup = BeautifulSoup(_xml_data, "xml")
             return soup
         else:
-            logging.error(f"Error: {response.status_code}")
+            logger.error(f"Error: {response.status_code}")
             return Bs4Stub()  # заглушка
 
     def get_key_rate(self) -> dict:
@@ -99,13 +99,13 @@ class CentralBankKeyRate:
             )[1]
 
         except Exception as e:
-            logging.error(f"Error: {e}")
+            logger.error(f"Error: {e}")
             table = Bs4Stub()
 
         try:
             date, key_rate = map(lambda x: x.text, table.find_all("td"))  # noqa C417
         except Exception as e:
-            logging.error(f"Error: {e}")
+            logger.error(f"Error: {e}")
             date, key_rate = datetime.date.today().strftime("%d.%m.%Y"), "-"
 
         return {

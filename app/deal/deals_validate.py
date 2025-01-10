@@ -1,7 +1,7 @@
 import json
 from datetime import date, datetime
 
-from logger import logging
+from log_conf import logger
 
 
 class DealsValidate:
@@ -25,7 +25,7 @@ class DealsValidate:
                 else ""
             )
         except Exception as e:
-            logging.error(f"Error: {e}")
+            logger.error(f"Error: {e}")
             format_date_reg = ""
 
         based_on = (

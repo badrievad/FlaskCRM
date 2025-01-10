@@ -3,7 +3,7 @@ from datetime import datetime
 
 from dadata import Dadata
 
-from logger import logging
+from log_conf import logger
 
 from ..config import suggestions_token
 
@@ -51,7 +51,7 @@ def dadata_info_company(inn: str) -> dict:
         dadata = Dadata(suggestions_token)
         result = dadata.find_by_id("party", inn)[0]
     except Exception as e:
-        logging.error(f"Error: {e}")
+        logger.error(f"Error: {e}")
         result = {}
 
     return result

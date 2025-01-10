@@ -23,6 +23,6 @@ def is_celery_alive(celery_app: Celery) -> bool:
         if response:
             return True
     except Exception as e:
-        logging.info(f"CELERY: {e}")
+        logger.info(f"CELERY: {e}")
         pass
     return False

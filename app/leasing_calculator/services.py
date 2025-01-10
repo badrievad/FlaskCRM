@@ -1,6 +1,6 @@
 from sqlalchemy.orm import joinedload
 
-from logger import logging
+from log_conf import logger
 
 from .. import db
 from ..deal.models import Deal
@@ -23,7 +23,7 @@ def update_calculation_service(calc_id, data):
             }
 
         deal = calc.deal
-        logging.info(f"Found deal: {deal}")
+        logger.info(f"Found deal: {deal}")
         deal_id = data.get("deal_id")
 
         updated_data = {
@@ -36,15 +36,15 @@ def update_calculation_service(calc_id, data):
         }
 
         if deal_id in [None, "", "-"]:
-            logging.info(
+            logger.info(
                 f"Deal_id: {deal_id}. Detaching offer from deal or deal not selected"
             )
         else:
             deals_count = Deal.query.filter_by(id=deal_id).count()
-            logging.info(f"Number of deals in DB with id {deal_id}: {deals_count}")
+            logger.info(f"Number of deals in DB with id {deal_id}: {deals_count}")
 
             offers_count = LeasCalculator.query.filter_by(deal_id=deal_id).count()
-            logging.info(f"Number of linked calculators: {offers_count}")
+            logger.info(f"Number of linked calculators: {offers_count}")
 
             if offers_count >= deals_count:
                 if deal is None:
@@ -55,7 +55,7 @@ def update_calculation_service(calc_id, data):
                         "status_code": 400,
                     }
                 if int(deal.id) == int(deal_id):
-                    logging.info(f"Deal {deal.id} is already linked to calculator")
+                    logger.info(f"Deal {deal.id} is already linked to calculator")
                     for key, value in data.items():
                         setattr(calc, key, None if value in ["-", "", None] else value)
 
@@ -85,7 +85,7 @@ def update_calculation_service(calc_id, data):
         path_to_pdf = calc.path_to_pdf
 
         folder_api = CompanyFolderAPI()
-        logging.info(f"Path: {path_to_xlsx} and deal_id: {deal_id}")
+        logger.info(f"Path: {path_to_xlsx} and deal_id: {deal_id}")
 
         #  Сохраняем КП и расчет в папке сделки
         folder_api.copy_commercial_offer_to_deal(deal_id, path_to_xlsx, path_to_pdf)
@@ -99,7 +99,7 @@ def update_calculation_service(calc_id, data):
 
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Error updating calculator: {str(e)}")
+        logger.error(f"Error updating calculator: {str(e)}")
         return {
             "success": False,
             "message": "An error occurred while updating the calculation",

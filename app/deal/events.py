@@ -2,7 +2,7 @@ from flask import session
 from flask_login import current_user  # type: ignore
 from flask_socketio import join_room  # type: ignore
 
-from logger import logging
+from log_conf import logger
 
 from .. import socketio
 
@@ -16,13 +16,13 @@ def handle_connect():
     if username:
         user_sessions[username] = current_user.login
         join_room(username)  # Присоединяем пользователя к комнате с его именем
-        logging.info(f"User {username} connected with session ID {current_user.login}")
+        logger.info(f"User {username} connected with session ID {current_user.login}")
 
 
 @socketio.on("disconnect")
 def handle_disconnect():
     username = session.get("username")
-    logging.info(f"User {username} disconnected")
+    logger.info(f"User {username} disconnected")
     if username and username in user_sessions:
         del user_sessions[username]  # Удаляем запись при отключении
-        logging.info(f"User {username} disconnected")
+        logger.info(f"User {username} disconnected")

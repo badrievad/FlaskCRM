@@ -1,6 +1,6 @@
 from sqlalchemy.exc import SQLAlchemyError
 
-from logger import logging
+from log_conf import logger
 
 from .. import db
 from ..deal.models import Bank, Client, Deal
@@ -81,7 +81,7 @@ def delete_seller_by_calc_id(calc_id):
 
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Ошибка при удалении продавца для calc_id {calc_id}: {str(e)}")
+        logger.error(f"Ошибка при удалении продавца для calc_id {calc_id}: {str(e)}")
         return False, str(e)
 
 
@@ -217,14 +217,14 @@ def update_client_in_db(
 
     except SQLAlchemyError as e:
         db.session.rollback()
-        logging.error(f"Ошибка при обновлении данных клиента и банка: {e}")
+        logger.error(f"Ошибка при обновлении данных клиента и банка: {e}")
         return {
             "success": False,
             "message": "Ошибка базы данных при обновлении данных клиента и банка",
         }, 500
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Неизвестная ошибка при обновлении данных клиента и банка: {e}")
+        logger.error(f"Неизвестная ошибка при обновлении данных клиента и банка: {e}")
         return {
             "success": False,
             "message": "Произошла ошибка при обновлении данных клиента и банка",

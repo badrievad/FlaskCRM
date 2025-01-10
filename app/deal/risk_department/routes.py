@@ -1,6 +1,6 @@
 from flask import jsonify, render_template, request
 
-from logger import logging
+from log_conf import logger
 
 from ... import socketio
 from ...deal.models import Deal
@@ -15,7 +15,7 @@ from . import risk_department_bp
 
 @risk_department_bp.route("/<int:deal_id>", methods=["GET"])
 def risk_department(deal_id) -> str:
-    logging.info(f"Deal ID: {deal_id}")
+    logger.info(f"Deal ID: {deal_id}")
     client = Deal.query.get(deal_id).client
 
     # Получаем group_id основной сделки
@@ -46,9 +46,9 @@ def risk_department(deal_id) -> str:
                 "item_type": leas_calculator.item_type,
             }
     except Exception as ex:
-        logging.error(ex)
+        logger.error(ex)
 
-    logging.info(f"Sellers: {sellers}")
+    logger.info(f"Sellers: {sellers}")
     decision = get_decision(deal_id)
 
     folder_path = deal.deal_path
@@ -67,7 +67,7 @@ def risk_department(deal_id) -> str:
 def process_decision(deal_id):
     data = request.get_json()
     decision = data.get("decision")
-    logging.info(f"Deal ID: {deal_id}, Decision: {decision}")
+    logger.info(f"Deal ID: {deal_id}, Decision: {decision}")
 
     success, message = process_risk_decision(deal_id, decision)
 
@@ -85,7 +85,7 @@ def process_decision(deal_id):
 
 @risk_department_bp.route("/delete_decision/<int:deal_id>", methods=["DELETE"])
 def delete_decision(deal_id):
-    logging.info(f"Удаление решения для сделки с ID: {deal_id}")
+    logger.info(f"Удаление решения для сделки с ID: {deal_id}")
 
     success, message = delete_risk_decision(deal_id)
 

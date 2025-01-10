@@ -1,6 +1,6 @@
 import requests
 
-from logger import logging
+from log_conf import logger
 
 from ..config import URL_FOLDER_API
 
@@ -18,25 +18,25 @@ class CompanyFolderAPI:
             "company_id": company_id,
             "dl_number": dl_number,
         }
-        logging.info(f"Sending POST request to {url} with data: {data}")
+        logger.info(f"Sending POST request to {url} with data: {data}")
         try:
             response = requests.post(url, json=data)
             response.raise_for_status()  # Проверка на ошибки HTTP
             response_json = response.json()
             return response_json["path_to_folder"]
         except requests.exceptions.RequestException as e:
-            logging.error(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
             raise PermissionError from e
 
     def delete_folder(self, company_id: str):
         url = f"{self.base_url}/delete/{company_id}"
-        logging.info(f"Sending DELETE request to {url}")
+        logger.info(f"Sending DELETE request to {url}")
         try:
             response = requests.delete(url)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
-            logging.error(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
             raise PermissionError from e
 
     def active_or_archive_folder(self, company_id: str, dl_number: str, status: str):
@@ -48,10 +48,10 @@ class CompanyFolderAPI:
         }
 
         if status not in urls:
-            logging.error(f"Invalid status: {status}")
+            logger.error(f"Invalid status: {status}")
             raise ValueError(f"Invalid status: {status}")
 
-        logging.info(f"Sending PUT request to {urls[status]}")
+        logger.info(f"Sending PUT request to {urls[status]}")
         data = {
             "dl_number": dl_number,
         }
@@ -61,18 +61,18 @@ class CompanyFolderAPI:
             response_json = response.json()
             return response_json["path_to_folder"]
         except requests.exceptions.RequestException as e:
-            logging.error(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
             raise
 
     def is_available(self) -> bool:
         url = f"{self.base_url}/is_available"
-        logging.info(f"Sending GET request to {url}")
+        logger.info(f"Sending GET request to {url}")
         try:
             response = requests.get(url)
             response.raise_for_status()
             return response.json().get("available", False)
         except requests.exceptions.RequestException as e:
-            logging.error(f"An error occurred: {e}")
+            logger.error(f"An error occurred: {e}")
             raise PermissionError from e
 
     def copy_commercial_offer_to_deal(
@@ -81,10 +81,10 @@ class CompanyFolderAPI:
         """Функция для копирования коммерческого предложения в папку сделки"""
 
         url = f"{self.base_url}/commercial-offer/upload"
-        logging.info(f"Sending POST request to {url} with company_id: {company_id}")
+        logger.info(f"Sending POST request to {url} with company_id: {company_id}")
 
         if company_id in [None, "", "-"]:
-            logging.info(
+            logger.info(
                 f"Company_id: {company_id}. Detaching offer from deal or deal not selected"
             )
             return
@@ -99,13 +99,13 @@ class CompanyFolderAPI:
             response.raise_for_status()  # Проверка на ошибки HTTP
 
         except requests.exceptions.RequestException as e:
-            logging.error(f"Failed to upload file: {e}")
+            logger.error(f"Failed to upload file: {e}")
             raise PermissionError from e
         except FileNotFoundError as e:
-            logging.error(f"File not found: {e}")
+            logger.error(f"File not found: {e}")
             raise
         except Exception as e:
-            logging.error(f"An unexpected error occurred: {e}")
+            logger.error(f"An unexpected error occurred: {e}")
             raise
 
     def create_commercial_offer(self, file_path: str, user_login: str):
@@ -125,8 +125,8 @@ class CompanyFolderAPI:
             if response.status_code == 200:
                 response_data = response.json()
                 path_to_xlsx = response_data.get("path_to_xlsx")
-                logging.info("Success:", path_to_xlsx)
+                logger.info("Success:", path_to_xlsx)
                 return path_to_xlsx
             else:
-                logging.info("Error:", response.status_code, response.text)
+                logger.info("Error:", response.status_code, response.text)
                 response.raise_for_status()

@@ -13,7 +13,7 @@ from flask_login import current_user  # type: ignore
 from sqlalchemy import desc
 from sqlalchemy.exc import SQLAlchemyError
 
-from logger import logging
+from log_conf import logger
 
 from .. import db, socketio
 from ..config import suggestions_token
@@ -29,9 +29,9 @@ from .work_with_folders import CompanyFolderAPI
 
 
 def send_notification(socket_path: str, error_message: str) -> tuple[Response, int]:
-    logging.info(f"Session now: {session}")
+    logger.info(f"Session now: {session}")
     session_username = session.get("username")
-    logging.info(f"session_username: {session_username}")
+    logger.info(f"session_username: {session_username}")
     if session_username:
         socketio.emit(
             socket_path,
@@ -39,7 +39,7 @@ def send_notification(socket_path: str, error_message: str) -> tuple[Response, i
             room=session_username,
         )
     else:
-        logging.info("Не удалось отправить уведомление: session_username не найден.")
+        logger.info("Не удалось отправить уведомление: session_username не найден.")
     return jsonify({"result": "error", "message": error_message}), 500
 
 
@@ -84,7 +84,7 @@ def create_deal() -> tuple[Response, int]:
         )  # Запись пути к папке (к сделке) в БД
 
         # Логирование и уведомление
-        logging.info(
+        logger.info(
             f"{current_user.abbreviation_name} создал новую сделку. Название сделки: {company_name}. "
             f"ID сделки: {deal_id}. Дата создания: {deal_record['created_at']}."
         )
@@ -95,7 +95,7 @@ def create_deal() -> tuple[Response, int]:
     except Exception as e:
         # Откат транзакции в случае ошибки
         db.session.rollback()
-        logging.error(f"Ошибка при создании сделки: {e}")
+        logger.error(f"Ошибка при создании сделки: {e}")
         return jsonify({"success": False, "message": str(e)}), 500
 
 
@@ -118,13 +118,13 @@ def delete_deal(deal_id) -> tuple[Response, int]:
 
         except PermissionError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(f"Permission error while deleting deal {deal_id}: {e}")
+            logger.error(f"Permission error while deleting deal {deal_id}: {e}")
             error_message: str = str(e).replace("[Errno 13] Permission denied: ", "")
             return send_notification("notification_delete_deal", error_message)
 
         except SQLAlchemyError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(f"Database error while deleting deal {deal_id}: {e}")
+            logger.error(f"Database error while deleting deal {deal_id}: {e}")
             return (
                 jsonify(
                     {
@@ -137,7 +137,7 @@ def delete_deal(deal_id) -> tuple[Response, int]:
 
         except Exception as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(f"Error while deleting deal {deal_id} or company folder: {e}")
+            logger.error(f"Error while deleting deal {deal_id} or company folder: {e}")
             return (
                 jsonify(
                     {"result": "error", "message": "Failed to delete company folder"}
@@ -195,9 +195,9 @@ def deal_to_archive(deal_id) -> tuple[Response, int]:
                 path_to_folder = api_folder.active_or_archive_folder(
                     related_deal.id, old_dl_number, "archive"
                 )
-                logging.info("Обновляем путь к папке со сделкой (Архивная)")
-                logging.info(f"New path: {path_to_folder}")
-                logging.info(f"Deal ID: {related_deal.id}")
+                logger.info("Обновляем путь к папке со сделкой (Архивная)")
+                logger.info(f"New path: {path_to_folder}")
+                logger.info(f"Deal ID: {related_deal.id}")
                 write_deal_path_to_db(path_to_folder, related_deal.id)
 
                 # Отправляем уведомление по SocketIO
@@ -209,12 +209,12 @@ def deal_to_archive(deal_id) -> tuple[Response, int]:
             return jsonify({"result": "success"}), 200
         except PermissionError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(f"Permission error while archiving deal {deal_id}: {e}")
+            logger.error(f"Permission error while archiving deal {deal_id}: {e}")
             error_message: str = str(e).replace("[Errno 13] Permission denied: ", "")
             return send_notification("notification_to_archive_deal", error_message)
         except SQLAlchemyError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(f"Database error while archiving deal {deal_id}: {e}")
+            logger.error(f"Database error while archiving deal {deal_id}: {e}")
             return (
                 jsonify(
                     {
@@ -226,9 +226,7 @@ def deal_to_archive(deal_id) -> tuple[Response, int]:
             )
         except Exception as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(
-                f"Error while archiving deal {deal_id} or company folder: {e}"
-            )
+            logger.error(f"Error while archiving deal {deal_id} or company folder: {e}")
             return (
                 jsonify(
                     {"result": "error", "message": "Failed to archive company folder"}
@@ -260,9 +258,9 @@ def deal_to_active(deal_id) -> tuple[Response, int]:
             path_to_folder = api_folder.active_or_archive_folder(
                 deal_id, deal.dl_number_windows, "active"
             )
-            logging.info("Обновляем путь к папке со сделкой (Активная)")
-            logging.info(f"New path: {path_to_folder}")
-            logging.info(f"Deal ID: {deal_id}")
+            logger.info("Обновляем путь к папке со сделкой (Активная)")
+            logger.info(f"New path: {path_to_folder}")
+            logger.info(f"Deal ID: {deal_id}")
             write_deal_path_to_db(path_to_folder, deal_id)
 
             socketio.emit(
@@ -271,12 +269,12 @@ def deal_to_active(deal_id) -> tuple[Response, int]:
             return jsonify({"result": "success"}), 200
         except PermissionError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(f"Permission error while return active deal {deal_id}: {e}")
+            logger.error(f"Permission error while return active deal {deal_id}: {e}")
             error_message: str = str(e).replace("[Errno 13] Permission denied: ", "")
             return send_notification("notification_to_active_deal", error_message)
         except SQLAlchemyError as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(f"Database error while return active deal {deal_id}: {e}")
+            logger.error(f"Database error while return active deal {deal_id}: {e}")
             return (
                 jsonify(
                     {
@@ -288,7 +286,7 @@ def deal_to_active(deal_id) -> tuple[Response, int]:
             )
         except Exception as e:
             db.session.rollback()  # Откат транзакции в случае ошибки
-            logging.error(
+            logger.error(
                 f"Error while return active deal {deal_id} or company folder: {e}"
             )
             return (
@@ -308,8 +306,8 @@ def deal_to_active(deal_id) -> tuple[Response, int]:
 @validate_active_session
 def index_crm() -> str:
     session["username"] = current_user.login  # Устанавливаем username в сессию
-    logging.info(f"Socket connected: {session}")
-    logging.info(f"FON: {current_user.fon_url}")
+    logger.info(f"Socket connected: {session}")
+    logger.info(f"FON: {current_user.fon_url}")
     deals: list[Deal] = Deal.query.all()
     users: list[User] = User.query.all()
 
@@ -393,7 +391,7 @@ def get_deals_active_for_bind() -> Response:
         "user_fullname"
     )  # Получаем параметр из строки запроса
     user_id = User.query.filter_by(fullname=user_fullname).first().id
-    logging.info(f"user_id: {user_id}")
+    logger.info(f"user_id: {user_id}")
     active_deals: list[Deal] = (
         Deal.query.filter_by(status="active").order_by(desc(Deal.created_at)).all()
     )
@@ -508,7 +506,7 @@ def merge_deals():
         return jsonify({"success": True, "message": "Сделки успешно объединены"}), 200
 
     except Exception as e:
-        logging.exception(f"Error while merging deals: {str(e)}")
+        logger.exception(f"Error while merging deals: {str(e)}")
         return (
             jsonify(
                 {"success": False, "message": "Произошла ошибка при объединении сделок"}

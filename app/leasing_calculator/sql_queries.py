@@ -4,7 +4,7 @@ from sqlalchemy import desc  # type: ignore
 from sqlalchemy.exc import SQLAlchemyError  # type: ignore
 from sqlalchemy.orm import joinedload  # type: ignore
 
-from logger import logging
+from log_conf import logger
 
 from .. import db
 from ..deal.models import Bank
@@ -130,11 +130,11 @@ def create_or_update_seller_and_link_to_leas_calc(
 
     except SQLAlchemyError as e:
         db.session.rollback()
-        logging.error(f"Database error: {e}")
+        logger.error(f"Database error: {e}")
         return {"error": "Database error occurred"}, 500
     except Exception as e:
         db.session.rollback()
-        logging.error(f"An unexpected error occurred: {e}")
+        logger.error(f"An unexpected error occurred: {e}")
         return {"error": "An unexpected error occurred"}, 500
 
 
@@ -175,7 +175,7 @@ def process_bank_info(seller: Seller, new_bank: dict) -> bool:
             seller.bank = bank
             bank_updated = True
     else:
-        logging.error("BIC not provided in new_bank data.")
+        logger.error("BIC not provided in new_bank data.")
         raise ValueError("Bank BIC is required.")
 
     return bank_updated
@@ -203,14 +203,14 @@ def create_commercial_offer_in_db(leas_calculator_id, type_of_schedule):
         db.session.rollback()
 
         # Логируем ошибку для дальнейшего анализа
-        logging.error(f"Ошибка при создании коммерческого предложения: {str(e)}")
+        logger.error(f"Ошибка при создании коммерческого предложения: {str(e)}")
 
         # Возвращаем False в случае ошибки
         return False
 
 
 def get_list_of_commercial_offers(user_login, offer_id=None) -> list:
-    logging.info(f"Оффер ID: {offer_id}")
+    logger.info(f"Оффер ID: {offer_id}")
     # Запрос для получения коммерческих предложений
     if offer_id:
         query = (
@@ -286,7 +286,7 @@ def get_list_of_commercial_offers(user_login, offer_id=None) -> list:
 
 
 def get_list_of_leas_calculators(user_login, calc_id=None) -> list:
-    logging.info(f"LeasCalculator ID: {calc_id}")
+    logger.info(f"LeasCalculator ID: {calc_id}")
 
     # Запрос для получения лизинговых калькуляторов
     if calc_id:
@@ -345,10 +345,10 @@ def create_new_leas_calc(user_login) -> int | None:
         db.session.commit()
         return new_calc.id
     except SQLAlchemyError as e:
-        logging.error(f"Error creating new LeasCalculator. Error: {str(e)}")
+        logger.error(f"Error creating new LeasCalculator. Error: {str(e)}")
         return None
     except Exception as e:
-        logging.error(str(e))
+        logger.error(str(e))
         return None
 
 

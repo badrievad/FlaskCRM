@@ -4,7 +4,7 @@ from flask import session
 from flask_socketio import emit, join_room, leave_room
 
 from app.deal_inside.models import DealSteps
-from logger import logging
+from log_conf import logger
 
 from .. import db, socketio
 
@@ -17,11 +17,11 @@ def on_join(data):
     username = data["username"]
     room = data["room"]
     if room:  # Проверяем, что комната не пустая
-        logging.info(f"{username} подключился к комнате {room}.")
+        logger.info(f"{username} подключился к комнате {room}.")
         join_room(room)
         emit(f"{username} подключился к комнате {room}.", to=room)
     else:
-        logging.info("Ошибка: не удалось подключиться, комната не указана.")
+        logger.info("Ошибка: не удалось подключиться, комната не указана.")
 
 
 @socketio.on("leave")
@@ -32,7 +32,7 @@ def on_leave(data):
         leave_room(room)
         emit(f"{username} покинул комнату {room}.", to=room)
     else:
-        logging.info("Ошибка: не удалось выйти, комната не указана.")
+        logger.info("Ошибка: не удалось выйти, комната не указана.")
 
 
 @socketio.on("update_data")
@@ -42,7 +42,7 @@ def handle_update(data):
         # Отправляем сообщение всем пользователям в комнате
         emit(data["message"], to=room)
     else:
-        logging.info("Ошибка: не удалось отправить данные, комната не указана.")
+        logger.info("Ошибка: не удалось отправить данные, комната не указана.")
 
 
 @socketio.on("approve_step")

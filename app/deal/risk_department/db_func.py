@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from logger import logging
+from log_conf import logger
 
 from ... import db
 from ..risk_department.models import RiskDepartment
@@ -40,7 +40,7 @@ def process_risk_decision(deal_id, decision):
         return True, message
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Ошибка при сохранении решения в БД: {e}")
+        logger.error(f"Ошибка при сохранении решения в БД: {e}")
         return False, "Ошибка сохранения решения."
 
 
@@ -86,5 +86,5 @@ def delete_risk_decision(deal_id):
         return True, "Решение успешно удалено."
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Ошибка при удалении решения из БД: {e}")
+        logger.error(f"Ошибка при удалении решения из БД: {e}")
         return False, "Ошибка при удалении решения."

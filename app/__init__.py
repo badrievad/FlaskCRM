@@ -43,7 +43,9 @@ def create_app(debug=False):
     from .user import user_bp as user_blueprint
     from .leasing_calculator import leas_calc_bp as leas_calc_blueprint
     from .deal_inside import deal_inside_bp as deal_inside_blueprint
-    from .client_application import client_application_bp as client_application_blueprint
+    from .client_application import (
+        client_application_bp as client_application_blueprint,
+    )
 
     app.register_blueprint(crm_static_bp)
     app.register_blueprint(deal_blueprint)

@@ -1,4 +1,4 @@
-import logging
+from log_conf import logger
 
 from celery import Celery, Task
 from flask import Flask

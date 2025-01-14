@@ -3,6 +3,7 @@ from flask import jsonify
 from . import client_application_bp
 from ..config import CLIENT_APPLICATION_VERSION, CLIENT_APPLICATION_URL
 
+
 @client_application_bp.route("/latest-version", methods=["GET"])
 def latest_version():
     """

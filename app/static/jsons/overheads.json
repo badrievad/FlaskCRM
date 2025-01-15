@@ -1,8 +1,8 @@
 {
   "default": {
-    "fedresurs": 2000.0,
-    "fedresurs-value": 2000.0,
-    "fedresurs-display": "2 000,00",
+    "fedresurs": 2450.0,
+    "fedresurs-value": 2450.0,
+    "fedresurs-display": "2 450,00",
     "gsm": 950.0,
     "gsm-value": 950.0,
     "gsm-display": "950,00",
